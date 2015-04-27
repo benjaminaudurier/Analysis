@@ -1,0 +1,47 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+AddTaskMuMu	Test1_PbPb2011/AddTaskMuMu.C	/^AliAnalysisTask* AddTaskMuMu(const char* outputname, $/;"	f
+AliAnalysisTaskMass	My_First_Task/AliAnalysisTaskMass.cxx	/^AliAnalysisTaskMass::AliAnalysisTaskMass(const char *name) $/;"	f	class:AliAnalysisTaskMass
+AliAnalysisTaskMass	My_First_Task/AliAnalysisTaskMass.h	/^class AliAnalysisTaskMass : public AliAnalysisTaskSE {$/;"	c
+AliAnalysisTaskMass_cxx	My_First_Task/AliAnalysisTaskMass.h	/^#define AliAnalysisTaskMass_cxx$/;"	d
+Background	My_First_Task/FittingFunctions.C	/^Double_t Background(Double_t *arg, Double_t *par)$/;"	f
+CreateAlienHandler	My_First_Task/CreateAlienHandler.C	/^AliAnalysisGrid* CreateAlienHandler()$/;"	f
+CreateAnalysisTrain	My_First_Task/runLocal.C	/^void CreateAnalysisTrain()$/;"	f
+CreateAnalysisTrain	My_First_Task/runProof.C	/^void CreateAnalysisTrain()$/;"	f
+CreateLocalChain	Test1_PbPb2011/runMuMu.C	/^TChain* CreateLocalChain(const char* filelist)$/;"	f
+CrystalBall	My_First_Task/FittingFunctions.C	/^Double_t CrystalBall(Double_t *arg, Double_t *par)$/;"	f
+FitMacro	My_First_Task/FitMacro.C	/^void FitMacro(void)$/;"	f
+GetInputType	Test1_PbPb2011/runMuMu.C	/^TString GetInputType(const TString& sds)$/;"	f
+LoadAlirootOnProof	My_First_Task/runProof.C	/^void LoadAlirootOnProof(TString& aaf, TString rootVersion, TString alirootVersion, TString& extraLibs,$/;"	f
+LoadAlirootOnProof	Test1_PbPb2011/runMuMu.C	/^void LoadAlirootOnProof(TString& aaf, TString rootVersion, TString alirootVersion, TString& extraLibs,$/;"	f
+LoadLocalLibs	Test1_PbPb2011/runMuMu.C	/^void LoadLocalLibs(Bool_t localAnalysis=kTRUE)$/;"	f
+Mbin	My_First_Task/AliAnalysisTaskMass.h	/^    int Mbin; \/\/ binning for rapidity$/;"	m	class:AliAnalysisTaskMass
+Mmax	My_First_Task/AliAnalysisTaskMass.h	/^    double Mmax; \/\/ max mass$/;"	m	class:AliAnalysisTaskMass
+Mmin	My_First_Task/AliAnalysisTaskMass.h	/^    double Mmin; \/\/ minimum mass$/;"	m	class:AliAnalysisTaskMass
+MyMacro	Test1_PbPb2011/MyMacro.C	/^void MyMacro(const char* filename="datasetfull.txt.saf.root",$/;"	f
+Ptbin	My_First_Task/AliAnalysisTaskMass.h	/^    int Ptbin; \/\/ binning for rapidity$/;"	m	class:AliAnalysisTaskMass
+Ptmax	My_First_Task/AliAnalysisTaskMass.h	/^    double Ptmax; \/\/ max pt$/;"	m	class:AliAnalysisTaskMass
+Ptmin	My_First_Task/AliAnalysisTaskMass.h	/^    double Ptmin; \/\/ minimum pt$/;"	m	class:AliAnalysisTaskMass
+Sum1	My_First_Task/FittingFunctions.C	/^Double_t Sum1(Double_t *arg, Double_t *par)$/;"	f
+Sum2	My_First_Task/FittingFunctions.C	/^Double_t Sum2(Double_t *arg, Double_t *par)$/;"	f
+Terminate	My_First_Task/AliAnalysisTaskMass.cxx	/^void AliAnalysisTaskMass::Terminate(Option_t *) $/;"	f	class:AliAnalysisTaskMass
+TriggerInputsForMuonEventCuts	Test1_PbPb2011/TriggerInputsForMuonEventCuts.C	/^void TriggerInputsForMuonEventCuts ( TString runListFilename, TString selectedInputs="", TString defaultStorage = "raw:\/\/" )$/;"	f
+UserCreateOutputObjects	My_First_Task/AliAnalysisTaskMass.cxx	/^void AliAnalysisTaskMass::UserCreateOutputObjects()$/;"	f	class:AliAnalysisTaskMass
+UserExec	My_First_Task/AliAnalysisTaskMass.cxx	/^void AliAnalysisTaskMass::UserExec(Option_t *) $/;"	f	class:AliAnalysisTaskMass
+fAOD	My_First_Task/AliAnalysisTaskMass.h	/^    AliAODEvent *fAOD;    \/\/! AOS object$/;"	m	class:AliAnalysisTaskMass
+fHist	My_First_Task/AliAnalysisTaskMass.h	/^    THnSparseF        *fHist; \/\/! Mass spectrum$/;"	m	class:AliAnalysisTaskMass
+fMuonPairCuts	My_First_Task/AliAnalysisTaskMass.h	/^    AliMuonPairCuts* fMuonPairCuts; \/\/! Cut for dimuons$/;"	m	class:AliAnalysisTaskMass
+fOutputList	My_First_Task/AliAnalysisTaskMass.h	/^    TList       *fOutputList; \/\/! Output list$/;"	m	class:AliAnalysisTaskMass
+gaus	My_First_Task/FittingFunctions.C	/^Double_t gaus(Double_t *arg, Double_t *par)$/;"	f
+ndim	My_First_Task/AliAnalysisTaskMass.h	/^    Int_t ndim; \/\/ number of dimension for fHistMass (3 here for M, pt and y)$/;"	m	class:AliAnalysisTaskMass
+runLocal	My_First_Task/runLocal.C	/^void runLocal()$/;"	f
+runMuMu	Test1_PbPb2011/runMuMu.C	/^AliAnalysisTask* runMuMu(const char* dataset="datasetfull.txt",$/;"	f
+runProof	My_First_Task/runProof.C	/^void runProof()$/;"	f
+ybin	My_First_Task/AliAnalysisTaskMass.h	/^    int ybin; \/\/ binning for rapidity$/;"	m	class:AliAnalysisTaskMass
+ymax	My_First_Task/AliAnalysisTaskMass.h	/^    double ymax; \/\/ max rapidity$/;"	m	class:AliAnalysisTaskMass
+ymin	My_First_Task/AliAnalysisTaskMass.h	/^    double ymin; \/\/ minimum rapidity$/;"	m	class:AliAnalysisTaskMass
+~AliAnalysisTaskMass	My_First_Task/AliAnalysisTaskMass.cxx	/^AliAnalysisTaskMass::~AliAnalysisTaskMass()$/;"	f	class:AliAnalysisTaskMass
