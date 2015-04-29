@@ -17,7 +17,7 @@ AliAnalysisTask* runMuMu(const char* dataset="datasetfull.txt",
     
     if ( sds.Length()>0 )
     {
-        LoadAlirootOnProof(where,"v5-34-08","vAN-20150111","","","",kFALSE,alirootMode); // Macro to connect to proof
+        LoadAlirootOnProof(where,"v5-34-08","vAN-20150422","","","",kFALSE,alirootMode); // Macro to connect to proof
     }
     
 
@@ -61,17 +61,17 @@ AliAnalysisTask* runMuMu(const char* dataset="datasetfull.txt",
 
        // triggers->Add(new TObjString("0VBA & 0VBC"));// MB 
        triggers->Add(new TObjString("CPBI2_B1-B-NOPF-ALLNOTRD"));// MB 
-       triggers->Add(new TObjString("CPBI2_B1-B-NOPF-ALLNOTRD & 0MUL"));// MB & 0MUL  
+       triggers->Add(new TObjString("CPBI2_B1-B-NOPF-ALLNOTRD&0MUL"));// MB & 0MUL  
 
 
        triggers->Add(new TObjString("CPBI1MSL-B-NOPF-MUON")); // single muon low pt
        triggers->Add(new TObjString("CPBI1MUL-B-NOPF-MUON")); // dimuon low pt
 
-       triggers->Add(new TObjString("CCENT_R2-B-NOPF-ALLNOTRD")); // central high treshold +TO vertex
-       triggers->Add(new TObjString("CCENT_R2-B-NOPF-ALLNOTRD & 0MUL")); // central high treshold +TO vertex
+       triggers->Add(new TObjString("CVHN-B-NOPF-ALLNOTRD|CVHN_R2-B-NOPF-ALLNOTRD|CCENT-B-NOPF-ALLNOTRD|CCENT_R2-B-NOPF-ALLNOTRD ")); // central high treshold (+ TO vertex)
+       triggers->Add(new TObjString("CVHN-B-NOPF-ALLNOTRD&0MUL|CVHN_R2-B-NOPF-ALLNOTRD&0MUL|CCENT-B-NOPF-ALLNOTRD&0MUL|CCENT_R2-B-NOPF-ALLNOTRD&0MUL")); // central high treshold +TO vertex
 
-       triggers->Add(new TObjString("CSEMI_R1-B-NOPF-ALLNOTRD")); // semicentral low treshold +TO vertex
-       triggers->Add(new TObjString("CSEMI_R1-B-NOPF-ALLNOTRD & 0MUL")); // semicentral low treshold +TO vertex
+       triggers->Add(new TObjString("CVLN-B_NOPF-ALLNOTRD|CVLN_R1-B-NOPF-ALLNOTRD|CSEMI-B-NOPF-ALLNOTRD|CSEMI_R1-B-NOPF-ALLNOTRD ")); // semicentral low treshold +TO vertex
+       triggers->Add(new TObjString("CVLN-B_NOPF-ALLNOTRD&0MUL|CVLN_R1-B-NOPF-ALLNOTRD&0MUL|CSEMI-B-NOPF-ALLNOTRD&0MUL|CSEMI_R1-B-NOPF-ALLNOTRD&0MUL")); // semicentral low treshold +TO vertex
     }
   
     TString outputname("test.MuMu.AOD.1.root"); // Create output name in case of no dataset selected
@@ -161,7 +161,7 @@ AliAnalysisTask* runMuMu(const char* dataset="datasetfull.txt",
 
 
 //______________________________________________________________________________
-void LoadAlirootOnProof(TString& aaf, TString rootVersion, TString alirootVersion, TString& extraLibs,
+void LoadAlirootOnProof(TString& aaf, TString rootVersion, TString aliphysicsVersion, TString& extraLibs,
                         TString& extraIncs, TString& extraTasks, Bool_t notOnClient = kFALSE, TString& alirootMode )
 {
     // Load aliroot packages and set environment on Proof
@@ -246,7 +246,7 @@ void LoadAlirootOnProof(TString& aaf, TString rootVersion, TString alirootVersio
         gProof->UploadPackage("$ALICE_ROOT/ANALYSIS/macros/AliRootProofLite.par");
         gProof->EnablePackage("$ALICE_ROOT/ANALYSIS/macros/AliRootProofLite.par", list);
         }
-    else gProof->EnablePackage(Form("VO_ALICE@AliRoot::%s",alirootVersion.Data()), list, notOnClient);
+    else gProof->EnablePackage(Form("VO_ALICE@AliPhysics::%s",aliphysicsVersion.Data()), list, notOnClient);
     
     
     // compile additional tasks on workers. To add tasks, use ":" (see in the main loop)

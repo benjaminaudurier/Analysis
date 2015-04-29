@@ -51,30 +51,45 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   triggerInputsMap = new TList();
   triggerInputsMap->SetOwner(kTRUE);
 
-  triggerInputsMap->Add(new TObjString("0VBA:0"));
-  triggerInputsMap->Add(new TObjString("0VBC:1"));    
-  triggerInputsMap->Add(new TObjString("0VLN:2"));
-  triggerInputsMap->Add(new TObjString("0ZAC:3"));
-  triggerInputsMap->Add(new TObjString("0BPC:4"));
-  triggerInputsMap->Add(new TObjString("0MUL:5"));
-  triggerInputsMap->Add(new TObjString("0MSL:6"));
-  triggerInputsMap->Add(new TObjString("0MLL:7"));
-  triggerInputsMap->Add(new TObjString("0MSH:8"));
-  // triggerInputsMap->Add(new TObjString("0OMU:9"));
-  // triggerInputsMap->Add(new TObjString("0MUH:10"));
-  // triggerInputsMap->Add(new TObjString("0SMB:11"));    
-  // triggerInputsMap->Add(new TObjString("0SM2:12"));
-  // triggerInputsMap->Add(new TObjString("0TVX:13"));
-  // triggerInputsMap->Add(new TObjString("0LSR:14"));
-  // triggerInputsMap->Add(new TObjString("0HWU:15"));
-  // triggerInputsMap->Add(new TObjString("0PH0:16"));
-  // triggerInputsMap->Add(new TObjString("0VHO:17"));
-  // triggerInputsMap->Add(new TObjString("0VHN:18"));
-  // triggerInputsMap->Add(new TObjString("0TCE:19"));
-  // triggerInputsMap->Add(new TObjString("0TSC:20"));
-  // triggerInputsMap->Add(new TObjString("0OM2:21"));
-  // triggerInputsMap->Add(new TObjString("0BPA:22"));
-  // triggerInputsMap->Add(new TObjString("0EMC:23"));
+  triggerInputsMap->Add(new TObjString("0VBA:0,"));
+  triggerInputsMap->Add(new TObjString("0VBC:1,"));    
+  triggerInputsMap->Add(new TObjString("0VLN:2,"));
+  triggerInputsMap->Add(new TObjString("0ZAC:3,"));
+  triggerInputsMap->Add(new TObjString("0BPC:4,"));
+  triggerInputsMap->Add(new TObjString("0MUL:5,"));
+  triggerInputsMap->Add(new TObjString("0MSL:6,"));
+  triggerInputsMap->Add(new TObjString("0MLL:7,"));
+  triggerInputsMap->Add(new TObjString("0MSH:8,"));
+  triggerInputsMap->Add(new TObjString("0OMU:9,"));
+  triggerInputsMap->Add(new TObjString("0MUH:10,"));
+  triggerInputsMap->Add(new TObjString("0SMB:11,"));
+  triggerInputsMap->Add(new TObjString("0SM2:12,"));
+  triggerInputsMap->Add(new TObjString("0TVX:13,"));
+  triggerInputsMap->Add(new TObjString("0LSR:14,"));
+  triggerInputsMap->Add(new TObjString("0HWU:15,"));
+  triggerInputsMap->Add(new TObjString("0PH0:16,"));
+  triggerInputsMap->Add(new TObjString("0VHO:17,"));
+  triggerInputsMap->Add(new TObjString("0VHN:18,"));
+  triggerInputsMap->Add(new TObjString("0TCE:19,"));
+  triggerInputsMap->Add(new TObjString("0TSC:20,"));
+  triggerInputsMap->Add(new TObjString("0OM2:21,"));
+  triggerInputsMap->Add(new TObjString("0BPA:22,"));
+  triggerInputsMap->Add(new TObjString("0EMC:23,"));
+
+  triggerInputsMap->Add(new TObjString("1EJE:0,"));
+  triggerInputsMap->Add(new TObjString("1EGA:1,"));    
+  triggerInputsMap->Add(new TObjString("1PHL:4,"));
+  triggerInputsMap->Add(new TObjString("1PHM:5,"));
+  triggerInputsMap->Add(new TObjString("1PHH:6,"));
+  triggerInputsMap->Add(new TObjString("1HCO:8,"));
+  triggerInputsMap->Add(new TObjString("1HJT:9,"));
+  triggerInputsMap->Add(new TObjString("1HSE:10,"));
+  triggerInputsMap->Add(new TObjString("1DUM:11,"));
+  triggerInputsMap->Add(new TObjString("1ZMD:14,"));
+  triggerInputsMap->Add(new TObjString("1ZMB:16,"));
+  triggerInputsMap->Add(new TObjString("1ZED:17,"));
+  triggerInputsMap->Add(new TObjString("1ZAC:18,"));
+
   //===========================================================================
 
   //  Configure task
@@ -90,7 +105,7 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   
   if (!simulations)
   {
-    ps = cr->AddEventCut(*eventCutter,"IsPhysicsSelected","const AliInputEventHandler&","");
+    ps = cr->AddEventCut(*eventCutter,"IsPhysicsS elected","const AliInputEventHandler&","");
   }
 
   // Apply default cut
@@ -155,7 +170,7 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
       cutElements.Add(matchlow);
       cutElements.Add(eta);
       cutElements.Add(pdca);
-      cutElements.Add(trackTrue);
+      // cutElements.Add(trackTrue);
       // add them
       cr->AddCutCombination(cutElements);    
       // Adding the sub analysis
@@ -222,17 +237,14 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   
   // Create containers for input/output
   AliAnalysisDataContainer *cinput = mgr->GetCommonInputContainer();  
- 
-  // Create countainer for histograms
+
   AliAnalysisDataContainer *coutputHC = 
   mgr->CreateContainer("OC",AliMergeableCollection::Class(),AliAnalysisManager::kOutputContainer,outputname);
 
-  // Create countainer for counters
   AliAnalysisDataContainer *coutputCC = 
   mgr->CreateContainer("CC",AliCounterCollection::Class(),AliAnalysisManager::kOutputContainer,outputname);
   
-  // Create countainer for bin
-  AliAnalysisDataContainer* cparam =
+  AliAnalysisDataContainer* cparam = 
   mgr->CreateContainer("BIN", AliAnalysisMuMuBinning::Class(),AliAnalysisManager::kParamContainer,outputname);
   
   // Connect input/output
