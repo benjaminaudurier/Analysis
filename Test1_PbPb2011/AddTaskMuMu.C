@@ -149,7 +149,7 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
     // Create combination of cuts to apply
     // cr->AddCutCombination(trackTrue);
     // cr->AddCutCombination(matchlow);
-    cr->AddCutCombination(rabs,eta,matchlow,pdca,trackTrue); 
+    cr->AddCutCombination(rabs,eta,matchlow,pdca,trackTrue,ps); 
     // Adding the sub analysis
     task->AdoptSubAnalysis(singleAnalysis); 
 
@@ -170,7 +170,8 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
       cutElements.Add(matchlow);
       cutElements.Add(eta);
       cutElements.Add(pdca);
-      // cutElements.Add(trackTrue);
+      cutElements.Add(ps);
+      cutElements.Add(trackTrue);
       // add them
       cr->AddCutCombination(cutElements);    
       // Adding the sub analysis
@@ -211,17 +212,20 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   }
 
   // v0 centrality binning
+  binning->AddBin("centrality","v0M",0.,7.5);
+  binning->AddBin("centrality","v0M",10.,50.);
   binning->AddBin("centrality","v0M",0.,90.); 
   binning->AddBin("centrality","v0M",0.,10.);
   binning->AddBin("centrality","v0M",10.,20.);
-  binning->AddBin("centrality","v0M",20,30);
-  binning->AddBin("centrality","v0M",30,40);
-  binning->AddBin("centrality","v0M",40,50);
-  binning->AddBin("centrality","v0M",50,60);
-  binning->AddBin("centrality","v0M",60,70);
-  binning->AddBin("centrality","v0M",70,90);
-  binning->AddBin("centrality","v0M",0.,7.5);
-  binning->AddBin("centrality","v0M",10.,50.);
+  binning->AddBin("centrality","v0M",20.,30.);
+  binning->AddBin("centrality","v0M",30.,40.);
+  binning->AddBin("centrality","v0M",40.,50.);
+  binning->AddBin("centrality","v0M",50.,60.);
+  binning->AddBin("centrality","v0M",60.,70.);
+  binning->AddBin("centrality","v0M",70.,80.);
+  binning->AddBin("centrality","v0M",80.,90.);
+  binning->AddBin("centrality","v0M",70.,90.);
+  
   // binning->AddBin("centrality","v0a",90,100);
 
 

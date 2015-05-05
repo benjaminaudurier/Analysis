@@ -7,8 +7,11 @@
 AddTaskMuMu	AddTaskMuMu.C	/^AliAnalysisTask* AddTaskMuMu(const char* outputname, $/;"	f
 CreateLocalChain	runMuMu.C	/^TChain* CreateLocalChain(const char* filelist)$/;"	f
 GetInputType	runMuMu.C	/^TString GetInputType(const TString& sds)$/;"	f
-LoadAlirootOnProof	runMuMu.C	/^void LoadAlirootOnProof(TString& aaf, TString rootVersion, TString alirootVersion, TString& extraLibs,$/;"	f
+LoadAlirootOnProof	runMuMu.C	/^void LoadAlirootOnProof(TString& aaf, TString rootVersion, TString aliphysicsVersion, TString& extraLibs,$/;"	f
 LoadLocalLibs	runMuMu.C	/^void LoadLocalLibs(Bool_t localAnalysis=kTRUE)$/;"	f
+MeanFnorm	MeanFnorm.C	/^void MeanFnorm($/;"	f
 MyMacro	MyMacro.C	/^void MyMacro(const char* filename="datasetfull.txt.saf.root",$/;"	f
+PrintCounters	MyMacro.C	/^void PrintCounters(AliAnalysisMuMu &ana)$/;"	f
+RAA	MyMacro.C	/^void RAA(AliAnalysisMuMu &ana)$/;"	f
 TriggerInputsForMuonEventCuts	TriggerInputsForMuonEventCuts.C	/^void TriggerInputsForMuonEventCuts ( TString runListFilename, TString selectedInputs="", TString defaultStorage = "raw:\/\/" )$/;"	f
 runMuMu	runMuMu.C	/^AliAnalysisTask* runMuMu(const char* dataset="datasetfull.txt",$/;"	f
