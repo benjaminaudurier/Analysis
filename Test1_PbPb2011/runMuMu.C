@@ -69,10 +69,10 @@ AliAnalysisTask* runMuMu(const char* dataset="datasetfull.txt",
 
        // triggers->Add(new TObjString("CVHN-B-NOPF-ALLNOTRD|CVHN_R2-B-NOPF-ALLNOTRD|CCENT-B-NOPF-ALLNOTRD|CCENT_R2-B-NOPF-ALLNOTRD ")); // central high treshold (+ TO vertex)
        triggers->Add(new TObjString("CVHN-B-NOPF-ALLNOTRD|CVHN_R2-B-NOPF-ALLNOTRD|CCENT-B-NOPF-ALLNOTRD|CCENT_R2-B-NOPF-ALLNOTRD")); // central high treshold +TO vertex
-       triggers->Add(new TObjString("CVHN-B-NOPF-ALLNOTRD|CVHN_R2-B-NOPF-ALLNOTRD|CCENT-B-NOPF-ALLNOTRD|CCENT_R2-B-NOPF-ALLNOTRD&0MUL")); // central high treshold +TO vertex
+       triggers->Add(new TObjString("(CVHN-B-NOPF-ALLNOTRD&0MUL)|(CVHN_R2-B-NOPF-ALLNOTRD&0MUL)|(CCENT-B-NOPF-ALLNOTRD&0MUL)|(CCENT_R2-B-NOPF-ALLNOTRD&0MUL)")); // central high treshold +TO vertex
 
        triggers->Add(new TObjString("CVLN_B2-B-NOPF-ALLNOTRD|CVLN-B-NOPF-ALLNOTRD|CVLN_R1-B-NOPF-ALLNOTRD|CSEMI-B-NOPF-ALLNOTRD|CSEMI_R1-B-NOPF-ALLNOTRD")); // semicentral low treshold +TO vertex
-       triggers->Add(new TObjString("CVLN_B2-B-NOPF-ALLNOTRD|CVLN-B-NOPF-ALLNOTRD|CVLN_R1-B-NOPF-ALLNOTRD|CSEMI-B-NOPF-ALLNOTRD|CSEMI_R1-B-NOPF-ALLNOTRD&0MUL")); // semicentral low treshold +TO vertex
+       triggers->Add(new TObjString("(CVLN_B2-B-NOPF-ALLNOTRD&0MUL)|(CVLN-B-NOPF-ALLNOTRD&0MUL)|(CVLN_R1-B-NOPF-ALLNOTRD&0MUL)|(CSEMI-B-NOPF-ALLNOTRD&0MUL)|(CSEMI_R1-B-NOPF-ALLNOTRD&0MUL)")); // semicentral low treshold +TO vertex
     }
   
     TString outputname("test.MuMu.AOD.1.root"); // Create output name in case of no dataset selected
