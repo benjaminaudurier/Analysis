@@ -25,10 +25,10 @@ void MyMacro(const char* filename="datasetfull.txt.saf.root",
     // analysis.Config()->Print();
     
     //_____ FNorm
-    analysis.ComputeIntFnormFromCounters("",kTRUE);
+    // analysis.ComputeIntFnormFromCounters("",kTRUE);
     // PrintCounters(analysis);
     // ComputeMeanIntFnormFromHisto(analysis);
-      
+      analysis.DrawMinv();
 
     //_____ 
     
