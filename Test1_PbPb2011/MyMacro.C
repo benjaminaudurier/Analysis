@@ -6,7 +6,7 @@
 //
 //
 
-// Macro loadded by runMuMUuResult.sh
+// Macro loadded by runMuMuResult.sh
 
 //_____________________________________________________________________________
 void MyMacro(const char* filename="datasetfull.txt.saf.root",
@@ -23,14 +23,14 @@ void MyMacro(const char* filename="datasetfull.txt.saf.root",
     // Perform fits and draw them   
     // analysis.CleanAllSpectra();
     // analysis.Config()->Print();
+    // 
     
-    //_____ FNorm
-    // analysis.ComputeIntFnormFromCounters("",kTRUE);
-    // PrintCounters(analysis);
-    // ComputeMeanIntFnormFromHisto(analysis);
-      analysis.DrawMinv();
-
-    //_____ 
+    
+    // //_____ FNorm
+    analysis.ComputeIntFnormFromCounters("",kFALSE);
+    // //_____ 
+    
+    analysis.ComputeJpsiYield("INTEGRATED");
     
     //_____ Plot ALl Fnorm
     // TH1* h = analysis.OC()->Histo("/FNORM-CPBI1MUL-B-NOPF-MUON/PSALL/V0M_00.00_10.00/hFNormIntVSrun_CCENT_R2-B-NOPF-ALLNOTRD");
@@ -40,16 +40,17 @@ void MyMacro(const char* filename="datasetfull.txt.saf.root",
      
     //_____ Fit 
     // analysis.Jpsi("integrated","",kFALSE,kFALSE);
-    // analysis.DrawJPsiResults("PSI","INTEGRATED","histo",kFALSE);
-    // // analysis.Jpsi("y","BENJ",kFALSE,kFALSE);
-    // analysis.DrawJPsiResults("PSI","Y","histo",kFALSE);
+    // analysis.DrawFitResults("PSI","INTEGRATED","histo",kFALSE);
+    
+    // analysis.Jpsi("y","BENJ",kFALSE,kFALSE);
+    // analysis.DrawFitResults("PSI","Y","histo",kFALSE);
 
     // analysis.Jpsi("pt","BENJ",kFALSE,kFALSE);
-    // analysis.DrawJPsiResults("PSI","PT","histo",kFALSE);
+    // analysis.DrawFitResults("PSI","PT","histo",kFALSE);
     
-    // analysis.PrintNofJpsi("PSI","INTEGRATED",kFALSE);
-    // analysis.PrintNofJpsi("PSI","Y");
-    // analysis.PrintNofJpsi("PSI","PT");
+    // analysis.PrintNofParticle("PSI","NofJPsi","INTEGRATED",kFALSE);
+    // analysis.PrintNofParticle("PSI","NofJPsi","Y",kFALSE);
+    // analysis.PrintNofParticle("PSI","NofJPsi","PT",kFALSE);
     //_____ 
 
     //_____ Raa
@@ -65,9 +66,9 @@ void MyMacro(const char* filename="datasetfull.txt.saf.root",
 //_____________________________________________________________________________
 void RAA(AliAnalysisMuMu &ana)
 {
-    ana.RAAasGraphic("PSI","Y","externFile_Y.txt","externFile_CENT.txt",kFALSE,kFALSE);
-    // ana.RAAasGraphic("PSI","INTEGRATED","externFile_PT.txt","externFile_CENT.txt",kTRUE,kFALSE);
-    // ana.RAAasGraphic("PSI","PT","externFile_PT.txt","externFile_CENT.txt",kFALSE,kFALSE);
+    ana.RAAasGraphic("PSI","Y","externFile_Y.txt","externFile_CENT.txt",kFALSE);
+    ana.RAAasGraphic("PSI","INTEGRATED","externFile_PT.txt","externFile_CENT.txt",kFALSE);
+    ana.RAAasGraphic("PSI","PT","externFile_PT.txt","externFile_CENT.txt",kFALSE);
 }
 
 //_____________________________________________________________________________

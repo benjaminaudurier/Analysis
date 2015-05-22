@@ -97,6 +97,8 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   AliAnalysisTaskMuMu       * task = new AliAnalysisTaskMuMu; // Call the task
   AliAnalysisMuMuEventCutter* eventCutter = new AliAnalysisMuMuEventCutter(triggerClassesToConsider,triggerInputsMap); // To handle cuts on event
   AliAnalysisMuMuCutRegistry* cr = task->CutRegistry(); // Set CutRegistry
+  task->SetCountInBins("psi","pt","BENJ");
+  task->SetCountInBins("psi","y","BENJ");
 
   // Default cuts on trigger and event level
   AliAnalysisMuMuCutElement * eventTrue = cr->AddEventCut(*eventCutter,"IsTrue","const AliVEvent&",""); 
