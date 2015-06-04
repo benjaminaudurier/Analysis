@@ -53,7 +53,11 @@ void runGenTunerLoop(TString smode = "saf", TString inputFileName = "Find;BasePa
   // Main loop 
   for (Int_t i = 0; i < nStep; i++) 
   {
-    cout << "i = " << i << endl;
+    cout << ""<< endl;
+    cout << "+++++++++++++++++++++++++" << endl;
+    cout << "Loop number " << i << endl;
+    cout << "+++++++++++++++++++++++++" << endl;
+    cout << ""<< endl;
 
     // resume or not
     TString inFileName = Form("Results_step%d.root",i);
@@ -72,8 +76,8 @@ void runGenTunerLoop(TString smode = "saf", TString inputFileName = "Find;BasePa
     // run the generator tuner
     if (resume != "y") 
     {
-      if (i == 0)gSystem->Exec(Form("root -b -q runGenTuner.C\\(\\\"%s\\\",\\\"Find\\;BasePath=/alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/\\;FileName=AliAOD.Muons.root\\\",%d\\)",smode.Data(),inputFileName.Data(),i));
-      else gSystem->Exec(Form("root -b -q runGenTuner.C\\(\\\"%s\\\",\\\"Find\\;BasePath=/alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/\\;FileName=AliAOD.Muons.root\\\",%d,\\\'k\\\'\\)",smode.Data(),inputFileName.Data(),i));
+      if (i == 0)gSystem->Exec(Form("root -b -q runGenTuner.C\\(\\\"%s\\\",\\\"Find\\;BasePath=/alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/\\;FileName=AliAOD.Muons.root\\\",%d\\)",smode.Data(),i));
+      else gSystem->Exec(Form("root -b -q runGenTuner.C\\(\\\"%s\\\",\\\"Find\\;BasePath=/alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/\\;FileName=AliAOD.Muons.root\\\",%d,\\\'k\\\'\\)",smode.Data(),i));
     }
     
     // get the new generator parameters and fill trending plots
@@ -117,19 +121,16 @@ void runGenTunerLoop(TString smode = "saf", TString inputFileName = "Find;BasePa
       {
         if (fOldYFunc) 
         {
-          cout << "toto 1" << endl;
-
           gOldYParam[j]->SetPoint(i, i, fOldYFunc->GetParameter(j));
           //gOldYParam[j]->SetPointError(i, 0., fOldYFunc->GetParError(j));
         }
         if (fOldYFuncMC) 
-        {cout << "toto 2" << endl;
+        {
           gOldYParamMC[j]->SetPoint(i, i, fOldYFuncMC->GetParameter(j));
           //gOldYParamMC[j]->SetPointError(i, 0., fOldYFuncMC->GetParError(j));
         }
         if (fNewYFunc) 
         {
-          cout << "toto 2" << endl;
           gNewYParam[j]->SetPoint(i, i+1, fNewYFunc->GetParameter(j));
           //gNewYParam[j]->SetPointError(i, 0., fNewYFunc->GetParError(j));
         }

@@ -1,6 +1,6 @@
-AliAnalysisTaskGenTuner* AddTaskGenTuner()
+AliAnalysisTaskGenTunerJpsi* AddTaskGenTuner()
 {
-  /// Add AliAnalysisTaskGenTuner to the train (Philippe Pillot)
+  /// Add AliAnalysisTaskGenTunerJpsi to the train (Philippe Pillot)
   
   // Get the pointer to the existing analysis manager via the static access method.
   AliAnalysisManager *mgr = AliAnalysisManager::GetAnalysisManager();
@@ -19,7 +19,7 @@ AliAnalysisTaskGenTuner* AddTaskGenTuner()
   }
   
   // Create and configure task
-  AliAnalysisTaskGenTuner *task = new AliAnalysisTaskGenTuner("GenTuner");
+  AliAnalysisTaskGenTunerJpsi *task = new AliAnalysisTaskGenTunerJpsi("GenTuner");
   if (!task) 
   {
     Error("AddTaskGenTuner", "Muon physics task cannot be created!");

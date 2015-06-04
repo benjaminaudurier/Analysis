@@ -1,10 +1,10 @@
-#ifndef ALIANALYSISTASKGENTUNER_H
-#define ALIANALYSISTASKGENTUNER_H
+#ifndef ALIANALYSISTASKGENTUNERJPSI_H
+#define ALIANALYSISTASKGENTUNERJPSI_H
 /* Copyright(c) 1998-1999, ALICE Experiment at CERN, All rights reserved. *
  * See cxx source for full Copyright notice                               */
 
 /// \ingroup muondep
-/// \class AliAnalysisTaskGenTuner
+/// \class AliAnalysisTaskGenTunerJpsi
 /// \brief task to tune the muon or JPsi pt/y generated distributions
 //Author: Philippe Pillot - SUBATECH Nantes
 
@@ -17,12 +17,12 @@ class TF1;
 class TCanvas;
 
 //________________________________________________________________________
-class AliAnalysisTaskGenTuner : public AliAnalysisTaskSE {
+class AliAnalysisTaskGenTunerJpsi : public AliAnalysisTaskSE {
 public:
   
-  AliAnalysisTaskGenTuner();
-  AliAnalysisTaskGenTuner(const char *name);
-  virtual ~AliAnalysisTaskGenTuner();
+  AliAnalysisTaskGenTunerJpsi();
+  AliAnalysisTaskGenTunerJpsi(const char *name);
+  virtual ~AliAnalysisTaskGenTunerJpsi();
   
   virtual void   UserCreateOutputObjects();
   virtual void   NotifyRun();
@@ -92,9 +92,9 @@ public:
 private:
   
   /// Not implemented
-  AliAnalysisTaskGenTuner(const AliAnalysisTaskGenTuner& rhs);
+  AliAnalysisTaskGenTunerJpsi(const AliAnalysisTaskGenTunerJpsi& rhs);
   /// Not implemented
-  AliAnalysisTaskGenTuner& operator = (const AliAnalysisTaskGenTuner& rhs);
+  AliAnalysisTaskGenTunerJpsi& operator = (const AliAnalysisTaskGenTunerJpsi& rhs);
   
   // Compute acc*eff and binomial errors by hand, i.e. not using TGraphAsymmErrors
   TH1* ComputeAccEff(TH1 &hGen, TH1 &hRec, const Char_t *name, const Char_t *title);
@@ -157,11 +157,11 @@ private:
   TF1 *fYCopyFunc;     //!< generated y fit function with current parameters
   TF1 *fYCopyFuncNew;  //!< generated y fit function with new parameters
   
-  ClassDef(AliAnalysisTaskGenTuner, 1);
+  ClassDef(AliAnalysisTaskGenTunerJpsi, 1);
 };
 
 //________________________________________________________________________
-inline void AliAnalysisTaskGenTuner::SetMuonTrackCuts(AliMuonTrackCuts &trackCuts)
+inline void AliAnalysisTaskGenTunerJpsi::SetMuonTrackCuts(AliMuonTrackCuts &trackCuts)
 {
   /// set standard cuts to select tracks to be considered
   delete fMuonTrackCuts;

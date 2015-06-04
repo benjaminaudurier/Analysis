@@ -18,7 +18,7 @@ TString outDir = "Data/LHC10h/pass2/Eff/pDCAChi2";
 // extra to be load on CF
 TString extraLibs="CORRFW:PWGmuon";
   TString extraIncs="include";
-TString extraTasks="AliAnalysisTaskGenTuner";
+TString extraTasks="AliAnalysisTaskGenTunerJpsi";
 
 Double_t yRange[2] = {-4.3, -2.3};
 Bool_t isMC = kTRUE;
@@ -116,8 +116,8 @@ void runGenTuner(TString smode = "saf", TString inputFileName = "Find;BasePath=/
   // TList fileList; fileList.SetOwner();
   // fileList.Add(new TObjString("runGenTuner.C"));
   // fileList.Add(new TObjString("AddTaskGenTuner.C"));
-  // fileList.Add(new TObjString("AliAnalysisTaskGenTuner.cxx"));
-  // fileList.Add(new TObjString("AliAnalysisTaskGenTuner.h"));
+  // fileList.Add(new TObjString("AliAnalysisTaskGenTunerJpsi.cxx"));
+  // fileList.Add(new TObjString("AliAnalysisTaskGenTunerJpsi.h"));
   // CopyFileLocally(pathList, fileList, overwrite);
   
   // --- prepare environment ---
@@ -134,7 +134,7 @@ void runGenTuner(TString smode = "saf", TString inputFileName = "Find;BasePath=/
   }
   
   // --- Create the analysis train ---
-  AliAnalysisTaskGenTuner *genTuner = static_cast<AliAnalysisTaskGenTuner*>(CreateAnalysisTrain(alienHandler, iStep));
+  AliAnalysisTaskGenTunerJpsi *genTuner = static_cast<AliAnalysisTaskGenTunerJpsi*>(CreateAnalysisTrain(alienHandler, iStep));
   if (!genTuner) return;
   
   // --- Create input object ---
@@ -148,7 +148,8 @@ void runGenTuner(TString smode = "saf", TString inputFileName = "Find;BasePath=/
   TFile *outFile = (TFile*)gROOT->GetListOfFiles()->FindObject(outFileName.Data());
   if (outFile) outFile->ReOpen("UPDATE");
   else outFile = TFile::Open(outFileName.Data(),"UPDATE");
-  if (outFile && outFile->IsOpen()) {
+  if (outFile && outFile->IsOpen()) 
+  {
     outFile->Cd(Form("%s:/MUON_GenTuner",outFileName.Data()));
     if (genTuner->GetOldPtFunc())   genTuner->GetOldPtFunc()->Write(0x0, TObject  ::kOverwrite);
     if (genTuner->GetOldPtFuncMC()) genTuner->GetOldPtFuncMC()->Write(0x0, TObject::kOverwrite);
@@ -194,10 +195,10 @@ TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)
   gROOT->LoadMacro("AddTaskGenTuner.C");
 
   //__________Config. Task
-  AliAnalysisTaskGenTuner* genTuner = AddTaskGenTuner();
+  AliAnalysisTaskGenTunerJpsi* genTuner = AddTaskGenTuner();
   if(!genTuner) 
   {
-    Error("CreateAnalysisTrain","AliAnalysisTaskGenTuner not created!");
+    Error("CreateAnalysisTrain","AliAnalysisTaskGenTunerJpsi not created!");
     return 0x0;
   }
   if (applyPhysicsSelection) genTuner->SelectCollisionCandidates(AliVEvent::kMUU7);

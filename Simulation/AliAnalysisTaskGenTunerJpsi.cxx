@@ -39,13 +39,13 @@
 #include "AliAnalysisTaskSE.h"
 #include "AliAnalysisManager.h"
 
-#include "AliAnalysisTaskGenTuner.h"
+#include "AliAnalysisTaskGenTunerJpsi.h"
 
 
-ClassImp(AliAnalysisTaskGenTuner)
+ClassImp(AliAnalysisTaskGenTunerJpsi)
 
 //________________________________________________________________________
-AliAnalysisTaskGenTuner::AliAnalysisTaskGenTuner() :
+AliAnalysisTaskGenTunerJpsi::AliAnalysisTaskGenTunerJpsi() :
 AliAnalysisTaskSE(),
 fList(0x0),
 fCentMin(-FLT_MAX),
@@ -75,7 +75,7 @@ fYCopyFuncNew(0x0)
 }
 
 //________________________________________________________________________
-AliAnalysisTaskGenTuner::AliAnalysisTaskGenTuner(const char *name) :
+AliAnalysisTaskGenTunerJpsi::AliAnalysisTaskGenTunerJpsi(const char *name) :
 AliAnalysisTaskSE(name),
 fList(0x0),
 fCentMin(-FLT_MAX),
@@ -109,7 +109,7 @@ fYCopyFuncNew(0x0)
 }
 
 //________________________________________________________________________
-AliAnalysisTaskGenTuner::~AliAnalysisTaskGenTuner()
+AliAnalysisTaskGenTunerJpsi::~AliAnalysisTaskGenTunerJpsi()
 {
   /// Destructor
   
@@ -135,7 +135,7 @@ AliAnalysisTaskGenTuner::~AliAnalysisTaskGenTuner()
 }
 
 //___________________________________________________________________________
-void AliAnalysisTaskGenTuner::UserCreateOutputObjects()
+void AliAnalysisTaskGenTunerJpsi::UserCreateOutputObjects()
 {
   /// Create histograms
   
@@ -188,7 +188,7 @@ void AliAnalysisTaskGenTuner::UserCreateOutputObjects()
 }
 
 //________________________________________________________________________
-void AliAnalysisTaskGenTuner::NotifyRun()
+void AliAnalysisTaskGenTunerJpsi::NotifyRun()
 {
   /// Prepare processing of new run: load corresponding OADB objects...
   
@@ -199,7 +199,7 @@ void AliAnalysisTaskGenTuner::NotifyRun()
 }
 
 //________________________________________________________________________
-void AliAnalysisTaskGenTuner::UserExec(Option_t *)
+void AliAnalysisTaskGenTunerJpsi::UserExec(Option_t *)
 {
   /// process event
   
@@ -288,14 +288,14 @@ void AliAnalysisTaskGenTuner::UserExec(Option_t *)
 }
 
 //________________________________________________________________________
-void AliAnalysisTaskGenTuner::Terminate(Option_t *)
+void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
 {
   /// post-processing
   
   //__________get current results
   Int_t hIndex[6] = {kPtGen, kYGen, kPhiGen, kPtRec, kYRec, kPhiRec};
   fList = static_cast<TObjArray*>(GetOutputData(1));
-  TH1 *h[6];
+  TH1 *h[6]; // List to store histo
   for (Int_t i = 0; i < 6; i++) 
   {
     h[i] = static_cast<TH1*>(fList->UncheckedAt(hIndex[i])->Clone());
@@ -334,8 +334,8 @@ void AliAnalysisTaskGenTuner::Terminate(Option_t *)
   //__________
   
   //__________get reference data if provided
-  TH1 *hRef[6] = {0x0,      0x0,    0x0,      0x0,    0x0,   0x0};
-  //              ptFinal  yFinal   phiFinal  kPtRec, kYRec, kPhiRec
+  TH1 *hRef[6] = {0x0,      0x0,      0x0,      0x0,          0x0,        0x0};
+  //              ptCorr.   yCorr.    phiCorr   RefPtHisto,   RefYHisto,  RefPhiHisto
   if (!fDataFile.IsNull()) 
   {
     TFile* dataFile = TFile::Open(fDataFile.Data(),"READ");
@@ -376,8 +376,9 @@ void AliAnalysisTaskGenTuner::Terminate(Option_t *)
   }
   //__________
   
-  //__________compute data/MC ratios
-  TH1 *hRat[6] = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
+  //__________compute dataCorr/MC ratios
+  TH1 *hRat[6] = {0x0,            0x0,          0x0,            0x0,              0x0,            0x0};
+  //              ptCorr./ptGen   yCorr./yGen   phiCorr/phiGen  RefPtHisto/RecPt  RefYHisto/RecY  RefPhiHisto/RecPhi
   for (Int_t i = 0; i < 6 && hRef[i]; i++) 
   {
     hRat[i] = static_cast<TH1*>(hRef[i]->Clone(Form("%sDataOverMC",hRef[i]->GetName())));
@@ -387,7 +388,7 @@ void AliAnalysisTaskGenTuner::Terminate(Option_t *)
   //__________
   
   //__________prepare fitting functions
-  if (hAccEff[0]) 
+  if (hAccEff[0]) // Pt AccEff histo
   {
     if (fPtFunc) 
     {
@@ -419,7 +420,7 @@ void AliAnalysisTaskGenTuner::Terminate(Option_t *)
     }
   }
   
-  if (hAccEff[1]) 
+  if (hAccEff[1]) // Y AccEff histo
   {
     if (fYFunc) 
     {
@@ -660,7 +661,7 @@ void AliAnalysisTaskGenTuner::Terminate(Option_t *)
 }
 
 //________________________________________________________________________
-void AliAnalysisTaskGenTuner::SetPtParam(const Double_t *pOld, const Bool_t *fixOld, const Double_t *pNew,
+void AliAnalysisTaskGenTunerJpsi::SetPtParam(const Double_t *pOld, const Bool_t *fixOld, const Double_t *pNew,
 					 const Bool_t *fixNew, Double_t min, Double_t max)
 {
   /// create the function(s) to fit the generated pT distribution with the given parameters
@@ -735,7 +736,7 @@ void AliAnalysisTaskGenTuner::SetPtParam(const Double_t *pOld, const Bool_t *fix
 }
 
 //________________________________________________________________________
-void AliAnalysisTaskGenTuner::SetYParam(const Double_t *pOld, const Bool_t *fixOld, const Double_t *pNew,
+void AliAnalysisTaskGenTunerJpsi::SetYParam(const Double_t *pOld, const Bool_t *fixOld, const Double_t *pNew,
 					const Bool_t *fixNew, Double_t min, Double_t max)
 {
   /// create the function(s) to fit the generated y distribution with the given parameters
@@ -810,14 +811,15 @@ void AliAnalysisTaskGenTuner::SetYParam(const Double_t *pOld, const Bool_t *fixO
 }
 
 //________________________________________________________________________
-TH1* AliAnalysisTaskGenTuner::ComputeAccEff(TH1 &hGen, TH1 &hRec, const Char_t *name, const Char_t *title)
+TH1* AliAnalysisTaskGenTunerJpsi::ComputeAccEff(TH1 &hGen, TH1 &hRec, const Char_t *name, const Char_t *title)
 {
   /// Compute acc*eff and binomial errors by hand, i.e. not using TGraphAsymmErrors
   /// Result is identical to divide histograms with option "B", except here error is forced > 1/gen
   
   Int_t nbins = hGen.GetNbinsX();
   TH1* hAcc = new TH1D(name,title, nbins, hGen.GetXaxis()->GetXmin(), hGen.GetXaxis()->GetXmax());
-  for (Int_t i = 1; i <= nbins; i++) 
+  for (Int_t i = 1; i <= nbins; i++)
+  { 
     Double_t accEff = 0.;
     Double_t accEffErr = 0.;
     Double_t gen = hGen.GetBinContent(i);
@@ -839,7 +841,7 @@ TH1* AliAnalysisTaskGenTuner::ComputeAccEff(TH1 &hGen, TH1 &hRec, const Char_t *
 }
 
 //________________________________________________________________________
-Double_t AliAnalysisTaskGenTuner::Pt(const Double_t *x, const Double_t *p)
+Double_t AliAnalysisTaskGenTunerJpsi::Pt(const Double_t *x, const Double_t *p)
 {
   /// generated pT fit function
   Double_t pT = *x;
@@ -847,7 +849,7 @@ Double_t AliAnalysisTaskGenTuner::Pt(const Double_t *x, const Double_t *p)
 }
 
 //________________________________________________________________________
-Double_t AliAnalysisTaskGenTuner::Y(const Double_t *x, const Double_t *p)
+Double_t AliAnalysisTaskGenTunerJpsi::Y(const Double_t *x, const Double_t *p)
 {
   /// generated y fit function
   Double_t y = *x;
@@ -857,7 +859,7 @@ Double_t AliAnalysisTaskGenTuner::Y(const Double_t *x, const Double_t *p)
 
 //________________________________________________________________________
 
-Double_t AliAnalysisTaskGenTuner::PtRat(const Double_t *x, const Double_t *p)
+Double_t AliAnalysisTaskGenTunerJpsi::PtRat(const Double_t *x, const Double_t *p)
 {
   /// generated pT fit function ratio
   const Double_t *p1 = &(p[0]);
@@ -866,7 +868,7 @@ Double_t AliAnalysisTaskGenTuner::PtRat(const Double_t *x, const Double_t *p)
 }
 
 //________________________________________________________________________
-Double_t AliAnalysisTaskGenTuner::YRat(const Double_t *x, const Double_t *p)
+Double_t AliAnalysisTaskGenTunerJpsi::YRat(const Double_t *x, const Double_t *p)
 {
   /// generated y fit function ratio
   const Double_t *p1 = &(p[0]);
@@ -875,7 +877,7 @@ Double_t AliAnalysisTaskGenTuner::YRat(const Double_t *x, const Double_t *p)
 }
 
 //________________________________________________________________________
-Double_t AliAnalysisTaskGenTuner::GetFitLowEdge(TH1 &h)
+Double_t AliAnalysisTaskGenTunerJpsi::GetFitLowEdge(TH1 &h)
 {
   /// adjust the lower edge of the fit range according to the content of the histogram
   Int_t binAbove0 = h.FindFirstBinAbove(0.);
@@ -884,7 +886,7 @@ Double_t AliAnalysisTaskGenTuner::GetFitLowEdge(TH1 &h)
 }
 
 //________________________________________________________________________
-Double_t AliAnalysisTaskGenTuner::GetFitUpEdge(TH1 &h)
+Double_t AliAnalysisTaskGenTunerJpsi::GetFitUpEdge(TH1 &h)
 {
   /// adjust the upper edge of the fit range according to the content of the histogram
   Int_t binAbove0 = h.FindLastBinAbove(0.);
@@ -893,7 +895,7 @@ Double_t AliAnalysisTaskGenTuner::GetFitUpEdge(TH1 &h)
 }
 
 //________________________________________________________________________
-void AliAnalysisTaskGenTuner::NormFunc(TF1 *f, Double_t min, Double_t max)
+void AliAnalysisTaskGenTunerJpsi::NormFunc(TF1 *f, Double_t min, Double_t max)
 {
   /// normalize the function to its integral in the given range
   Double_t integral = f->Integral(min, max);
