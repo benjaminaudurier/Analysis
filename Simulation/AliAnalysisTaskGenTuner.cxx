@@ -144,11 +144,11 @@ void AliAnalysisTaskGenTuner::UserCreateOutputObjects()
   fList->SetOwner();
   
   TH1* hPtGen = new TH1D("hPtGen","generated p_{T} distribution;p_{T} (GeV/c);dN/dp_{T}", 300, 0., 30.);
-  hPtGen->Sumw2();
-  fList->AddAtAndExpand(hPtGen, kPtGen);
+  hPtGen->Sumw2();// Create structure to store sum of squares of weights
+  fList->AddAtAndExpand(hPtGen, kPtGen);// Double array size if reach the end
   TH1* hPtRec = new TH1D("hPtRec","reconstructed p_{T} distribution;p_{T} (GeV/c);dN/dp_{T}", 300, 0., 30.);
-  hPtRec->Sumw2();
-  fList->AddAtAndExpand(hPtRec, kPtRec);
+  hPtRec->Sumw2();// Create structure to store sum of squares of weights
+  fList->AddAtAndExpand(hPtRec, kPtRec);// Double array size if reach the end
   
   TH1* hYGen = new TH1D("hYGen","generated y distribution;y;dN/dy", 250, -4.5, -2.);
   hYGen->Sumw2();
@@ -217,13 +217,14 @@ void AliAnalysisTaskGenTuner::UserExec(Option_t *)
   {
     
     weight.Set(MCEvent()->GetNumberOfTracks());
+    // Loop over tracks
     for (Int_t i = 0; i < MCEvent()->GetNumberOfTracks(); i++) 
     {
       // get MC particle track
       AliAODMCParticle *mctrack = static_cast<AliAODMCParticle*>(MCEvent()->GetTrack(i));
       
       // Cuts 
-      if (!mctrack->IsPrimary()) continue;
+      if (!mctrack->IsPrimary()) continue; // Only primary
 //      if (mctrack->Pt() > 0.9) continue;
 //      if (mctrack->Pt() < 0.9 || mctrack->Pt() > 1.) continue;
 //      if (mctrack->Y() < -4.4 || (mctrack->Y() > -4.3 && mctrack->Y() < -2.2) || mctrack->Y() > -2.1) continue;
@@ -235,7 +236,7 @@ void AliAnalysisTaskGenTuner::UserExec(Option_t *)
       Double_t pT = mctrack->Pt();
       if (fWeight) 
       {
-      	weight[i] = fPtCopyFuncNew->Eval(pT) / fPtCopyFunc->Eval(pT) * fYCopyFuncNew->Eval(y) / fYCopyFunc->Eval(y);
+      	weight[i] = fPtCopyFuncNew->Eval(pT) / fPtCopyFunc->Eval(pT) * fYCopyFuncNew->Eval(y) / fYCopyFunc->Eval(y);// Compute Weight
       	if (weight[i] < 0.) 
         {
       	  AliError(Form("negative weight: y = %g, pT = %g: w = %g", y, pT, weight[i]));
@@ -246,19 +247,19 @@ void AliAnalysisTaskGenTuner::UserExec(Option_t *)
       //__________
       
       Double_t w = weight[i];
-      ((TH1*)fList->UncheckedAt(kPtGen))->Fill(pT, w); // ??
-      ((TH1*)fList->UncheckedAt(kYGen))->Fill(y, w); // ??
-      ((TH1*)fList->UncheckedAt(kPhiGen))->Fill(mctrack->Phi()*TMath::RadToDeg(), w);// ??
+      ((TH1*)fList->UncheckedAt(kPtGen))->Fill(pT, w); // fill PtGenHisto
+      ((TH1*)fList->UncheckedAt(kYGen))->Fill(y, w); // fill YGenHisto
+      ((TH1*)fList->UncheckedAt(kPhiGen))->Fill(mctrack->Phi()*TMath::RadToDeg(), w);// fill PhiGenHisto
       
     }
   }
   //__________
   
   //__________fill the reconstructed part
-  for (Int_t i = 0; i < aod->GetNTracks(); i++)
+  for (Int_t i = 0; i < aod->GetNumberOfTracks(); i++)
   {
     
-    AliAODTrack *track = aod->GetTrack(i);
+    AliAODTrack *track = dynamic_cast<AliAODTrack*>(aod->GetTrack(i));
     
     Double_t pT = track->Pt();
     Int_t mcLabel = track->GetLabel();
@@ -291,7 +292,7 @@ void AliAnalysisTaskGenTuner::Terminate(Option_t *)
 {
   /// post-processing
   
-  // get current results
+  //__________get current results
   Int_t hIndex[6] = {kPtGen, kYGen, kPhiGen, kPtRec, kYRec, kPhiRec};
   fList = static_cast<TObjArray*>(GetOutputData(1));
   TH1 *h[6];
@@ -300,8 +301,9 @@ void AliAnalysisTaskGenTuner::Terminate(Option_t *)
     h[i] = static_cast<TH1*>(fList->UncheckedAt(hIndex[i])->Clone());
     h[i]->SetDirectory(0);
   }
+  //__________
   
-  // get the fit ranges
+  //__________get the fit ranges
   Double_t fitRangeMC[3][2];
   fitRangeMC[0][0] = GetFitLowEdge(*(h[0]));
   fitRangeMC[0][1] = 999.;
@@ -316,9 +318,12 @@ void AliAnalysisTaskGenTuner::Terminate(Option_t *)
   fitRange[1][1] = -2.5;
   fitRange[2][0] = h[5]->GetXaxis()->GetXmin();
   fitRange[2][1] = h[5]->GetXaxis()->GetXmax();
+  //__________
   
-  // compute acc*eff corrections if it is simulated data
-  TH1 *hAccEff[3] = {0x0, 0x0, 0x0};
+  //__________compute acc*eff corrections if it is simulated data
+  TH1 *hAccEff[3] = {0x0,       0x0,      0x0};
+  //                 AccEffPt   AccEffY   AccEffPhi
+
   for (Int_t i = 0; i < 3 && h[i]->GetEntries() > 0; i++) 
   {
     hAccEff[i] = ComputeAccEff(*(h[i]), *(h[i+3]), Form("%sOverGen",h[i+3]->GetName()), "Acc#{times}Eff");
@@ -326,9 +331,11 @@ void AliAnalysisTaskGenTuner::Terminate(Option_t *)
     //hAccEff[i]->SetTitle("Acc#{times}Eff");
     //hAccEff[i]->Divide(h[i]);
   }
+  //__________
   
-  // get reference data if provided
-  TH1 *hRef[6] = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
+  //__________get reference data if provided
+  TH1 *hRef[6] = {0x0,      0x0,    0x0,      0x0,    0x0,   0x0};
+  //              ptFinal  yFinal   phiFinal  kPtRec, kYRec, kPhiRec
   if (!fDataFile.IsNull()) 
   {
     TFile* dataFile = TFile::Open(fDataFile.Data(),"READ");
@@ -342,16 +349,18 @@ void AliAnalysisTaskGenTuner::Terminate(Option_t *)
     }
     dataFile->Close();
   }
+  //__________
   
-  // compute corrected data
+  //__________compute corrected data
   for (Int_t i = 0; i < 3 && hRef[i+3] && hAccEff[i]; i++) 
   {
     hRef[i] = static_cast<TH1*>(hRef[i+3]->Clone(Form("%sCorr",hRef[i+3]->GetName())));
     hRef[i]->SetTitle("corrected data");
     hRef[i]->Divide(hAccEff[i]);
   }
+  //__________
   
-  // normalize histograms
+  //__________normalize histograms
   Bool_t normalized = kFALSE;
   for (Int_t i = 0; i < 3 && hRef[i]; i++) 
   {
@@ -365,8 +374,9 @@ void AliAnalysisTaskGenTuner::Terminate(Option_t *)
     hRef[i+3]->Scale(norm);
     normalized = kTRUE;
   }
+  //__________
   
-  // compute data/MC ratios
+  //__________compute data/MC ratios
   TH1 *hRat[6] = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
   for (Int_t i = 0; i < 6 && hRef[i]; i++) 
   {
@@ -374,20 +384,21 @@ void AliAnalysisTaskGenTuner::Terminate(Option_t *)
     hRat[i]->SetTitle("data / MC");
     hRat[i]->Divide(h[i]);
   }
+  //__________
   
-  // prepare fitting functions
+  //__________prepare fitting functions
   if (hAccEff[0]) 
   {
     if (fPtFunc) 
     {
       fPtFunc->SetRange(fitRange[0][0], fitRange[0][1]);
-      if (fWeight && fPtFuncNew) fPtFunc->SetParameters(fPtFuncNew->GetParameters());
+      if (fWeight && fPtFuncNew) fPtFunc->SetParameters(fPtFuncNew->GetParameters());// Change old fit param. with new fit param.
       NormFunc(fPtFunc, fitRange[0][0], fitRange[0][1]);
     }
     if (fPtFuncMC) 
     {
       fPtFuncMC->SetRange(fitRangeMC[0][0], fitRangeMC[0][1]);
-      if (fWeight && fPtFuncNew) fPtFuncMC->SetParameters(fPtFuncNew->GetParameters());
+      if (fWeight && fPtFuncNew) fPtFuncMC->SetParameters(fPtFuncNew->GetParameters());// Change old fit param. with new fit param.
       NormFunc(fPtFuncMC, fitRange[0][0], fitRange[0][1]);
     }
     if (hRef[0] && fPtFuncNew) 
@@ -407,18 +418,19 @@ void AliAnalysisTaskGenTuner::Terminate(Option_t *)
       }
     }
   }
+  
   if (hAccEff[1]) 
   {
     if (fYFunc) 
     {
       fYFunc->SetRange(fitRange[1][0], fitRange[1][1]);
-      if (fWeight && fYFuncNew) fYFunc->SetParameters(fYFuncNew->GetParameters());
+      if (fWeight && fYFuncNew) fYFunc->SetParameters(fYFuncNew->GetParameters());// Change old fit param. with new fit param.
       NormFunc(fYFunc, fitRange[1][0], fitRange[1][1]);
     }
     if (fYFuncMC) 
     {
       fYFuncMC->SetRange(fitRangeMC[1][0], fitRangeMC[1][1]);
-      if (fWeight && fYFuncNew) fYFuncMC->SetParameters(fYFuncNew->GetParameters());
+      if (fWeight && fYFuncNew) fYFuncMC->SetParameters(fYFuncNew->GetParameters());// Change old fit param. with new fit param.
       NormFunc(fYFuncMC, fitRange[1][0], fitRange[1][1]);
     }
     if (hRef[1] && fYFuncNew) 
@@ -430,16 +442,17 @@ void AliAnalysisTaskGenTuner::Terminate(Option_t *)
     {
       Double_t integral = h[1]->Integral(h[1]->FindBin(fitRange[1][0]), h[1]->FindBin(fitRange[1][1]), "width");
       if (fYFunc) fYFunc->SetParameter(0, fYFunc->GetParameter(0)*integral);
-      if (fYFuncMC) fYFuncMC->SetParameter(0, fYFuncMC->GetParameter(0)*integral);
+      if (fYFuncMC) fYFuncMC->SetParameter(0, fYFuncMC->GetParameter(0)*integral);// Change old fit param. with new fit param.
       if (fYFuncNew) 
       {
       	integral = hRef[1]->Integral(hRef[1]->FindBin(fitRange[1][0]), hRef[1]->FindBin(fitRange[1][1]), "width");
-      	fYFuncNew->SetParameter(0, fYFuncNew->GetParameter(0)*integral);
+      	fYFuncNew->SetParameter(0, fYFuncNew->GetParameter(0)*integral);// Change old fit param. with new fit param.
       }
     }
   }
+  //__________
   
-  // plot results
+  //__________plot results
   fcRes = new TCanvas("cRes", "results", 900, 600);
   fcRes->Divide(3,2);
   fcRes->cd(1);
@@ -507,8 +520,9 @@ void AliAnalysisTaskGenTuner::Terminate(Option_t *)
       hRef[i]->Draw("e0sames");
     }
   }
+  //__________
   
-  // normalize functions to their integral in the range used in MC
+  //__________normalize functions to their integral in the range used in MC
   if (hAccEff[0] && fPtFunc) 
   {
     fPtFunc->SetRange(fitRangeMC[0][0], fitRangeMC[0][1]);
@@ -542,8 +556,9 @@ void AliAnalysisTaskGenTuner::Terminate(Option_t *)
     fYFuncNew->SetRange(fitRangeMC[1][0], fitRangeMC[1][1]);
     NormFunc(fYFuncNew, fitRangeMC[1][0], fitRangeMC[1][1]);
   }
+  //__________
   
-  // prepare data/MC function ratios
+  //__________prepare data/MC function ratios
   TF1 *ptRat = 0x0;
   if (hRat[0] && fPtFunc && fPtFuncNew) 
   {
@@ -563,8 +578,9 @@ void AliAnalysisTaskGenTuner::Terminate(Option_t *)
     fYFunc->GetParameters(&(p[fgkNYParam]));
     yRat->SetParameters(p);
   }
+  //__________
   
-  // plot ratios
+  //__________plot ratios
   fcRat = new TCanvas("cRat", "ratios", 900, 600);
   fcRat->Divide(3,2);
   
@@ -575,8 +591,9 @@ void AliAnalysisTaskGenTuner::Terminate(Option_t *)
     if (i == 0 && ptRat) ptRat->Draw("sames");
     else if (i == 1 && yRat) yRat->Draw("sames");
   }
+  //__________
   
-  // print fitting ranges
+  //__________print fitting ranges
   if (fPtFuncMC && fYFuncMC) 
   {
     printf("\npT fitting range MC = [%g, %g]\n", fitRangeMC[0][0], fitRangeMC[0][1]);
@@ -588,8 +605,9 @@ void AliAnalysisTaskGenTuner::Terminate(Option_t *)
     printf("pT fitting range = [%g, %g]\n", fitRange[0][0], fitRange[0][1]);
     printf("y fitting range = [%g, %g]\n\n", fitRange[1][0], fitRange[1][1]);
   }
+  //__________
   
-  // print parameters
+  //__________print parameters
   Double_t *param = GetOldPtParamMC();
   
   if (param) 
@@ -638,7 +656,7 @@ void AliAnalysisTaskGenTuner::Terminate(Option_t *)
     for (Int_t i = 0; i < fgkNYParam-1; i++) printf("%g, ", param[i]);
     printf("%g};\n\n", param[fgkNYParam-1]);
   }
-  
+  //__________
 }
 
 //________________________________________________________________________
@@ -800,7 +818,6 @@ TH1* AliAnalysisTaskGenTuner::ComputeAccEff(TH1 &hGen, TH1 &hRec, const Char_t *
   Int_t nbins = hGen.GetNbinsX();
   TH1* hAcc = new TH1D(name,title, nbins, hGen.GetXaxis()->GetXmin(), hGen.GetXaxis()->GetXmax());
   for (Int_t i = 1; i <= nbins; i++) 
-  {
     Double_t accEff = 0.;
     Double_t accEffErr = 0.;
     Double_t gen = hGen.GetBinContent(i);

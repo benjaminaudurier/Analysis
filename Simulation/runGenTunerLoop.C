@@ -7,19 +7,27 @@
  *
  */
 
+// Sim :
+// Find;BasePath=/alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/;FileName=AliAOD.Muons.root
+// 
+// Data:
+// Find;BasePath=/alice/data/2013/LHC13d/000195760/ESDs/muon_pass2/AOD134;FileName=AliAOD.root
 
 //______________________________________________________________________________
-void runGenTunerLoop(TString smode = "local", TString inputFileName = "AliAOD.root", Int_t nStep)
+void runGenTunerLoop(TString smode = "saf", TString inputFileName = "Find;BasePath=/alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/;FileName=AliAOD.Muons.root", Int_t nStep)
 {
   /// run the generator tuner in a loop
-  
+
   if (nStep <= 0) return;
   
   // prepare trending plots
   TGraphErrors *gOldPtParam[6];
   TGraphErrors *gOldPtParamMC[6];
   TGraphErrors *gNewPtParam[6];
-  for (Int_t i = 0; i < 6; i++) {
+
+  // Fill graph with 0
+  for (Int_t i = 0; i < 6; i++) 
+  {
     gOldPtParam[i] = new TGraphErrors(nStep);
     gOldPtParam[i]->SetNameTitle(Form("gOldPtParam%d",i), Form("p%d",i));
     gOldPtParamMC[i] = new TGraphErrors(nStep);
@@ -30,7 +38,8 @@ void runGenTunerLoop(TString smode = "local", TString inputFileName = "AliAOD.ro
   TGraphErrors *gOldYParam[8];
   TGraphErrors *gOldYParamMC[8];
   TGraphErrors *gNewYParam[8];
-  for (Int_t i = 0; i < 8; i++) {
+  for (Int_t i = 0; i < 8; i++) 
+  {
     gOldYParam[i] = new TGraphErrors(nStep);
     gOldYParam[i]->SetNameTitle(Form("gOldYParam%d",i), Form("p%d",i));
     gOldYParamMC[i] = new TGraphErrors(nStep);
@@ -40,66 +49,90 @@ void runGenTunerLoop(TString smode = "local", TString inputFileName = "AliAOD.ro
   }
   
   TString resume = "";
-  for (Int_t i = 0; i < nStep; i++) {
-    
+
+  // Main loop 
+  for (Int_t i = 0; i < nStep; i++) 
+  {
+    cout << "i = " << i << endl;
+
     // resume or not
     TString inFileName = Form("Results_step%d.root",i);
     if (resume != "n") {
-      if (!gSystem->AccessPathName(inFileName.Data())) {
-	if (resume != "y") {
-	  cout<<"Results already exist. Do you want to resume? [y/n] (if not previous results will be deleted) "<<flush;
-	  do {resume.Gets(stdin,kTRUE);} while (resume != "y" && resume != "n");
-	  if (resume == "n") gSystem->Exec("rm -f Results_step*.root");
-	}
+      if (!gSystem->AccessPathName(inFileName.Data())) 
+      {
+      	if (resume != "y") 
+        {
+      	  cout<<"Results already exist. Do you want to resume? [y/n] (if not previous results will be deleted) "<<flush;
+      	  do {resume.Gets(stdin,kTRUE);} while (resume != "y" && resume != "n");
+      	  if (resume == "n") gSystem->Exec("rm -f Results_step*.root");
+      	}
       } else resume = "n";
     }
     
     // run the generator tuner
-    if (resume != "y") {
-      if (i == 0)
-	gSystem->Exec(Form("root -b -q $WORK/Macros/MuonEfficiency/GenTuner/runGenTuner.C\\(\\\"%s\\\",\\\"%s\\\",%d\\)",
-			   smode.Data(), inputFileName.Data(), i));
-      else
-	gSystem->Exec(Form("root -b -q runGenTuner.C\\(\\\"%s\\\",\\\"%s\\\",%d,\\\'k\\\'\\)",
-			   smode.Data(), inputFileName.Data(), i));
+    if (resume != "y") 
+    {
+      if (i == 0)gSystem->Exec(Form("root -b -q runGenTuner.C\\(\\\"%s\\\",\\\"Find\\;BasePath=/alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/\\;FileName=AliAOD.Muons.root\\\",%d\\)",smode.Data(),inputFileName.Data(),i));
+      else gSystem->Exec(Form("root -b -q runGenTuner.C\\(\\\"%s\\\",\\\"Find\\;BasePath=/alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/\\;FileName=AliAOD.Muons.root\\\",%d,\\\'k\\\'\\)",smode.Data(),inputFileName.Data(),i));
     }
     
     // get the new generator parameters and fill trending plots
     TFile *inFile = TFile::Open(inFileName.Data(),"READ");
-    if (inFile && inFile->IsOpen()) {
-      TF1 *fOldPtFunc = static_cast<TF1*>(inFile->FindObjectAny("fPtFunc"));
-      TF1 *fOldPtFuncMC = static_cast<TF1*>(inFile->FindObjectAny("fPtFuncMC"));
-      TF1 *fNewPtFunc = static_cast<TF1*>(inFile->FindObjectAny("fPtFuncNew"));
-      for (Int_t j = 0; j < 6; j++) {
-	if (fOldPtFunc) {
-	  gOldPtParam[j]->SetPoint(i, i, fOldPtFunc->GetParameter(j));
-	  //gOldPtParam[j]->SetPointError(i, 0., fOldPtFunc->GetParError(j));
-	}
-	if (fOldPtFuncMC) {
-	  gOldPtParamMC[j]->SetPoint(i, i, fOldPtFuncMC->GetParameter(j));
-	  //gOldPtParamMC[j]->SetPointError(i, 0., fOldPtFuncMC->GetParError(j));
-	}
-	if (fNewPtFunc) {
-	  gNewPtParam[j]->SetPoint(i, i+1, fNewPtFunc->GetParameter(j));
-	  //gNewPtParam[j]->SetPointError(i, 0., fNewPtFunc->GetParError(j));
-	}
+    if (inFile && inFile->IsOpen()) 
+    {
+      cout << "files "<< inFileName.Data() << " opened " <<endl;
+
+      // Get pt fitting functions
+      TF1*fOldPtFunc = static_cast<TF1*>(inFile->FindObjectAny("fPtFunc"));
+      TF1*fOldPtFuncMC = static_cast<TF1*>(inFile->FindObjectAny("fPtFuncMC"));
+      TF1*fNewPtFunc = static_cast<TF1*>(inFile->FindObjectAny("fPtFuncNew"));
+      
+      // Loop over pt function param. and store them in corresponding graphics.
+      for (Int_t j = 0; j < 6; j++) 
+      {
+        if (fOldPtFunc) 
+        {
+          gOldPtParam[j]->SetPoint(i, i, fOldPtFunc->GetParameter(j));
+          //gOldPtParam[j]->SetPointError(i, 0., fOldPtFunc->GetParError(j));
+        }
+        if (fOldPtFuncMC) 
+        {
+          gOldPtParamMC[j]->SetPoint(i, i, fOldPtFuncMC->GetParameter(j));
+          //gOldPtParamMC[j]->SetPointError(i, 0., fOldPtFuncMC->GetParError(j));
+        }
+        if (fNewPtFunc) 
+        {
+          gNewPtParam[j]->SetPoint(i, i+1, fNewPtFunc->GetParameter(j));
+          //gNewPtParam[j]->SetPointError(i, 0., fNewPtFunc->GetParError(j));
+        }
       }
+
+      // Get y fitting functions
       TF1 *fOldYFunc = static_cast<TF1*>(inFile->FindObjectAny("fYFunc"));
       TF1 *fOldYFuncMC = static_cast<TF1*>(inFile->FindObjectAny("fYFuncMC"));
       TF1 *fNewYFunc = static_cast<TF1*>(inFile->FindObjectAny("fYFuncNew"));
-      for (Int_t j = 0; j < 8; j++) {
-	if (fOldYFunc) {
-	  gOldYParam[j]->SetPoint(i, i, fOldYFunc->GetParameter(j));
-	  //gOldYParam[j]->SetPointError(i, 0., fOldYFunc->GetParError(j));
-	}
-	if (fOldYFuncMC) {
-	  gOldYParamMC[j]->SetPoint(i, i, fOldYFuncMC->GetParameter(j));
-	  //gOldYParamMC[j]->SetPointError(i, 0., fOldYFuncMC->GetParError(j));
-	}
-	if (fNewYFunc) {
-	  gNewYParam[j]->SetPoint(i, i+1, fNewYFunc->GetParameter(j));
-	  //gNewYParam[j]->SetPointError(i, 0., fNewYFunc->GetParError(j));
-	}
+
+      // Loop over y function param. and store them in corresponding graphics.
+      for (Int_t j = 0; j < 8; j++) 
+      {
+        if (fOldYFunc) 
+        {
+          cout << "toto 1" << endl;
+
+          gOldYParam[j]->SetPoint(i, i, fOldYFunc->GetParameter(j));
+          //gOldYParam[j]->SetPointError(i, 0., fOldYFunc->GetParError(j));
+        }
+        if (fOldYFuncMC) 
+        {cout << "toto 2" << endl;
+          gOldYParamMC[j]->SetPoint(i, i, fOldYFuncMC->GetParameter(j));
+          //gOldYParamMC[j]->SetPointError(i, 0., fOldYFuncMC->GetParError(j));
+        }
+        if (fNewYFunc) 
+        {
+          cout << "toto 2" << endl;
+          gNewYParam[j]->SetPoint(i, i+1, fNewYFunc->GetParameter(j));
+          //gNewYParam[j]->SetPointError(i, 0., fNewYFunc->GetParError(j));
+        }
       }
       inFile->Close();
     }
@@ -109,7 +142,8 @@ void runGenTunerLoop(TString smode = "local", TString inputFileName = "AliAOD.ro
 // display trending plots
   TCanvas *cPtParams = new TCanvas("cPtParams", "cPtParams", 600, 400);
   cPtParams->Divide(3,2);
-  for (Int_t i = 0; i < 6; i++) {
+  for (Int_t i = 0; i < 6; i++) 
+  {
     cPtParams->cd(i+1);
     gOldPtParam[i]->SetMarkerStyle(kFullDotMedium);
     gOldPtParam[i]->SetMarkerColor(4);
@@ -127,7 +161,8 @@ void runGenTunerLoop(TString smode = "local", TString inputFileName = "AliAOD.ro
   }
   TCanvas *cYParams = new TCanvas("cYParams", "cYParams", 800, 400);
   cYParams->Divide(4,2);
-  for (Int_t i = 0; i < 8; i++) {
+  for (Int_t i = 0; i < 8; i++) 
+  {
     cYParams->cd(i+1);
     gOldYParam[i]->SetMarkerStyle(kFullDotMedium);
     gOldYParam[i]->SetMarkerColor(4);
@@ -145,12 +180,14 @@ void runGenTunerLoop(TString smode = "local", TString inputFileName = "AliAOD.ro
   }
   
   // print and plot last results and save trending plots
-  TString inFileName = Form("Results_step%d.root",nStep-1);
+  TString inFileName = Form("Results_step%d.root",nStep-1);// Previous step
   TFile *inFile = TFile::Open(inFileName.Data(),"UPDATE");
-  if (inFile && inFile->IsOpen()) {
+  if (inFile && inFile->IsOpen()) 
+  {
     TF1 *fPtFuncMC = static_cast<TF1*>(inFile->FindObjectAny("fPtFuncMC"));
     TF1 *fYFuncMC = static_cast<TF1*>(inFile->FindObjectAny("fYFuncMC"));
-    if (fPtFuncMC && fYFuncMC) {
+    if (fPtFuncMC && fYFuncMC) 
+    {
       Double_t *param = fPtFuncMC->GetParameters();
       printf("\npT parameters for single muon generator:\n");
       printf("Double_t p[6] = {%g, %g, %g, %g, %g, %g};\n",

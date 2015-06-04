@@ -27,10 +27,10 @@ void MyMacro(const char* filename="datasetfull.txt.saf.root",
     
     
     // //_____ FNorm
-    analysis.ComputeIntFnormFromCounters("",kFALSE);
+    // analysis.ComputeIntFnormFromCounters("",kFALSE);
     // //_____ 
     
-    analysis.ComputeJpsiYield("INTEGRATED");
+    // analysis.ComputeJpsiYield("INTEGRATED");
     
     //_____ Plot ALl Fnorm
     // TH1* h = analysis.OC()->Histo("/FNORM-CPBI1MUL-B-NOPF-MUON/PSALL/V0M_00.00_10.00/hFNormIntVSrun_CCENT_R2-B-NOPF-ALLNOTRD");
@@ -54,7 +54,7 @@ void MyMacro(const char* filename="datasetfull.txt.saf.root",
     //_____ 
 
     //_____ Raa
-    // RAA(analysis);
+    RAA(analysis);
 
     //_____ 
 

@@ -4,21 +4,24 @@ AliAnalysisTaskGenTuner* AddTaskGenTuner()
   
   // Get the pointer to the existing analysis manager via the static access method.
   AliAnalysisManager *mgr = AliAnalysisManager::GetAnalysisManager();
-  if(!mgr) { 
+  if(!mgr) 
+  { 
     Error("AddTaskGenTuner","AliAnalysisManager not set!");
     return NULL;
   }
   
   // This task run on ESDs or AODs
   TString type = mgr->GetInputEventHandler()->GetDataType();
-  if (!type.Contains("AOD")) {
+  if (!type.Contains("AOD")) 
+  {
     Error("AddTaskGenTuner", "ESD input handler needed!");
     return NULL;
   }
   
   // Create and configure task
   AliAnalysisTaskGenTuner *task = new AliAnalysisTaskGenTuner("GenTuner");
-  if (!task) {
+  if (!task) 
+  {
     Error("AddTaskGenTuner", "Muon physics task cannot be created!");
     return NULL;
   }
@@ -31,7 +34,8 @@ AliAnalysisTaskGenTuner* AddTaskGenTuner()
   
   // Define output file directory
   TString outputfile = AliAnalysisManager::GetCommonFileName();
-  if ( outputfile.IsNull() ) {
+  if ( outputfile.IsNull() ) 
+  {
     Error("AddTaskGenTuner", "Common output file is not defined!");
     return NULL;
   }

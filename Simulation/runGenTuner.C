@@ -7,19 +7,32 @@
  *
  */
 
-
-TString rootVersion = "v5-34-05";
-TString alirootVersion = "v5-04-38-AN";
+//__________Global Settings
+TString rootVersion = "v5-34-08";
+TString aliphysicsVersion = "vAN-20150422";
 TString dataDir = "/alice/data/2010/LHC10h";
 TString dataPattern = "pass2/*AliESDs.root";
 TString runFormat = "%09d";
 TString outDir = "Data/LHC10h/pass2/Eff/pDCAChi2";
+
+// extra to be load on CF
+TString extraLibs="CORRFW:PWGmuon";
+  TString extraIncs="include";
+TString extraTasks="AliAnalysisTaskGenTuner";
+
+Double_t yRange[2] = {-4.3, -2.3};
+Bool_t isMC = kTRUE;
+Bool_t applyPhysicsSelection = kFALSE;
+//__________
+
+//__________Config. Param. for grid macro.
 Int_t ttl = 30000;
 Int_t maxFilesPerJob = 100;
 Int_t maxMergeFiles = 10;
 Int_t maxMergeStages = 2;
+//__________
 
-// generator parameters used in the simulation
+//__________generator parameters used in the simulation
 /*
 // tune0 LHC13de
 Double_t oldPtParam[6] = {371.909, 0.84614, 0.560486, 9.34831, 0.000474983, -0.853963};
@@ -40,9 +53,9 @@ Double_t newPtParam[6] = {522.811, 0.997725, 0.705636, 8.52259, 0.0001, -1.};
 Bool_t newFixPtParam[6] = {kFALSE, kFALSE, kFALSE, kFALSE, kFALSE, kFALSE};
 */
 // tune1 LHC13f
-Double_t oldPtParam[6] = {455.614, 0.942071, 0.706755, 8.69856, 0.000168775, -0.925487};
+Double_t oldPtParam[6] = {445.614, 0.940071, 0.606755, 8.89856, 0.000188775, -0.927487};
 Bool_t oldFixPtParam[6] = {kFALSE, kFALSE, kFALSE, kFALSE, kFALSE, kFALSE};
-Double_t newPtParam[6] = {455.614, 0.942071, 0.706755, 8.69856, 0.000168775, -0.925487};
+Double_t newPtParam[6] = {445.614, 0.940071, 0.606755, 8.89856, 0.000188775, -0.927487};
 Bool_t newFixPtParam[6] = {kFALSE, kFALSE, kFALSE, kFALSE, kFALSE, kFALSE};
 
 Double_t ptRange[2] = {0.8, 999.};
@@ -73,48 +86,50 @@ Double_t oldYParam[8] = {1.29511, 1., 0., -0.0767846, 0., 0.00176313, 0., 2.};
 Bool_t oldFixYParam[8] = {kFALSE, kTRUE, kTRUE, kFALSE, kTRUE, kFALSE, kTRUE, kTRUE};
 Double_t newYParam[8] = {1.29511, 1., 0., -0.0767846, 0., 0.00176313, 0., 2.};
 Bool_t newFixYParam[8] = {kFALSE, kTRUE, kTRUE, kFALSE, kTRUE, kFALSE, kTRUE, kTRUE};
+//__________
 
-Double_t yRange[2] = {-4.3, -2.3};
-
-
-Bool_t isMC = kTRUE;
-Bool_t applyPhysicsSelection = kFALSE;
+// Sim :
+// Find;BasePath=/alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/;FileName=AliAOD.Muons.root
+// 
+// Data:
+// Find;BasePath=/alice/data/2013/LHC13d/000195760/ESDs/muon_pass2/AOD134;FileName=AliAOD.root
 
 //______________________________________________________________________________
-void runGenTuner(TString smode = "local", TString inputFileName = "AliAOD.root",
+void runGenTuner(TString smode = "saf", TString inputFileName = "Find;BasePath=/alice/data/2013/LHC13d/000195760/ESDs/muon_pass2/AOD134;FileName=AliAOD.root",
 		 Int_t iStep = -1, char overwrite = '\0')
 {
   /// Study the MUON performances
   
-  gROOT->LoadMacro("$WORK/Macros/Facilities/runTaskFacilities.C");
+  gROOT->LoadMacro("runTaskFacilities.C");
   
   // --- Check runing mode ---
   Int_t mode = GetMode(smode, inputFileName);
-  if(mode < 0) {
+  if(mode < 0) 
+  {
     Error("runGenTuner","Please provide either an AOD root file a collection of AODs or a dataset.");
     return;
   }
   
-  // --- copy files needed for this analysis ---
-  TList pathList; pathList.SetOwner();
-  pathList.Add(new TObjString("$WORK/Macros/MuonEfficiency/GenTuner"));
-  TList fileList; fileList.SetOwner();
-  fileList.Add(new TObjString("runGenTuner.C"));
-  fileList.Add(new TObjString("AddTaskGenTuner.C"));
-  fileList.Add(new TObjString("AliAnalysisTaskGenTuner.cxx"));
-  fileList.Add(new TObjString("AliAnalysisTaskGenTuner.h"));
-  CopyFileLocally(pathList, fileList, overwrite);
+  // // --- copy files needed for this analysis ---
+  // TList pathList; pathList.SetOwner();
+  // pathList.Add(new TObjString("$WORK/Macros/MuonEfficiency/GenTuner"));
+  // TList fileList; fileList.SetOwner();
+  // fileList.Add(new TObjString("runGenTuner.C"));
+  // fileList.Add(new TObjString("AddTaskGenTuner.C"));
+  // fileList.Add(new TObjString("AliAnalysisTaskGenTuner.cxx"));
+  // fileList.Add(new TObjString("AliAnalysisTaskGenTuner.h"));
+  // CopyFileLocally(pathList, fileList, overwrite);
   
   // --- prepare environment ---
-  TString extraLibs="CORRFW:PWGmuon";
-  TString extraIncs="include";
-  TString extraTasks="AliAnalysisTaskGenTuner";
   LoadAlirootLocally(extraLibs, extraIncs, extraTasks);
+  
+  // Choose the CF
   AliAnalysisGrid *alienHandler = 0x0;
-  if (mode == kProof || mode == kProofLite) LoadAlirootOnProof(smode, rootVersion, alirootVersion, extraLibs, extraIncs, extraTasks, kTRUE);
-  else if (mode == kGrid || mode == kTerminate) {
+  if (mode == kProof || mode == kProofLite) LoadAlirootOnProof(smode, rootVersion, aliphysicsVersion, extraLibs, extraIncs, extraTasks, kTRUE);
+  else if (mode == kGrid || mode == kTerminate) 
+  {
     TString analysisMacroName = "GenTuner";
-    alienHandler = static_cast<AliAnalysisGrid*>(CreateAlienHandler(smode, rootVersion, alirootVersion, inputFileName, dataDir, dataPattern, outDir, extraLibs, extraIncs, extraTasks, analysisMacroName, runFormat, ttl, maxFilesPerJob, maxMergeFiles, maxMergeStages));
+    alienHandler = static_cast<AliAnalysisGrid*>(CreateAlienHandler(smode, rootVersion, aliphysicsVersion, inputFileName, dataDir, dataPattern, outDir, extraLibs, extraIncs, extraTasks, analysisMacroName, runFormat, ttl, maxFilesPerJob, maxMergeFiles, maxMergeStages));
     if (!alienHandler) return;
   }
   
@@ -135,14 +150,14 @@ void runGenTuner(TString smode = "local", TString inputFileName = "AliAOD.root",
   else outFile = TFile::Open(outFileName.Data(),"UPDATE");
   if (outFile && outFile->IsOpen()) {
     outFile->Cd(Form("%s:/MUON_GenTuner",outFileName.Data()));
-    if (genTuner->GetOldPtFunc()) genTuner->GetOldPtFunc()->Write(0x0, TObject::kOverwrite);
+    if (genTuner->GetOldPtFunc())   genTuner->GetOldPtFunc()->Write(0x0, TObject  ::kOverwrite);
     if (genTuner->GetOldPtFuncMC()) genTuner->GetOldPtFuncMC()->Write(0x0, TObject::kOverwrite);
-    if (genTuner->GetNewPtFunc()) genTuner->GetNewPtFunc()->Write(0x0, TObject::kOverwrite);
-    if (genTuner->GetOldYFunc()) genTuner->GetOldYFunc()->Write(0x0, TObject::kOverwrite);
-    if (genTuner->GetOldYFuncMC()) genTuner->GetOldYFuncMC()->Write(0x0, TObject::kOverwrite);
-    if (genTuner->GetNewYFunc()) genTuner->GetNewYFunc()->Write(0x0, TObject::kOverwrite);
-    if (genTuner->GetResults()) genTuner->GetResults()->Write(0x0, TObject::kOverwrite);
-    if (genTuner->GetRatios()) genTuner->GetRatios()->Write(0x0, TObject::kOverwrite);
+    if (genTuner->GetNewPtFunc())   genTuner->GetNewPtFunc()->Write(0x0, TObject  ::kOverwrite);
+    if (genTuner->GetOldYFunc())    genTuner->GetOldYFunc()->Write(0x0, TObject   ::kOverwrite);
+    if (genTuner->GetOldYFuncMC())  genTuner->GetOldYFuncMC()->Write(0x0, TObject ::kOverwrite);
+    if (genTuner->GetNewYFunc())    genTuner->GetNewYFunc()->Write(0x0, TObject   ::kOverwrite);
+    if (genTuner->GetResults())     genTuner->GetResults()->Write(0x0, TObject    ::kOverwrite);
+    if (genTuner->GetRatios())      genTuner->GetRatios()->Write(0x0, TObject     ::kOverwrite);
     outFile->Close();
   }
   
@@ -177,8 +192,11 @@ TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)
   
   // generator tuner
   gROOT->LoadMacro("AddTaskGenTuner.C");
+
+  //__________Config. Task
   AliAnalysisTaskGenTuner* genTuner = AddTaskGenTuner();
-  if(!genTuner) {
+  if(!genTuner) 
+  {
     Error("CreateAnalysisTrain","AliAnalysisTaskGenTuner not created!");
     return 0x0;
   }
@@ -187,26 +205,29 @@ TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)
   //genTuner->SelectCentrality(0., 90.);
   genTuner->SetMuonTrackCuts(trackCuts);
   genTuner->SetMuonPtCut(1.);
+  // Set datafile associated with simulation
 //  if (isMC) genTuner->SetDataFile("/Users/pillot/Work/Alice/Work/Data/2013/LHC13d/muon_pass2/AOD/GenTuner/pT1GeV/AnalysisResults.root");
 //  if (isMC) genTuner->SetDataFile("/Users/pillot/Work/Alice/Work/Data/2013/LHC13d/muon_pass2/AOD/GenTuner/pT2GeV/AnalysisResults.root");
 //  if (isMC) genTuner->SetDataFile("/Users/pillot/Work/Alice/Work/Data/2013/LHC13e/muon_pass2/AOD/GenTuner/pT1GeV/AnalysisResults.root");
 //  if (isMC) genTuner->SetDataFile("/Users/pillot/Work/Alice/Work/Data/2013/LHC13e/muon_pass2/AOD/GenTuner/pT2GeV/AnalysisResults.root");
 //  if (isMC) genTuner->SetDataFile("/Users/pillot/Work/Alice/Work/Data/2013/LHC13de/muon_pass2/AOD/GenTuner/pT1GeV/AnalysisResults.root");
 //  if (isMC) genTuner->SetDataFile("/Users/pillot/Work/Alice/Work/Data/2013/LHC13de/muon_pass2/AOD/GenTuner/pT2GeV/AnalysisResults.root");
-  if (isMC) genTuner->SetDataFile("/Users/pillot/Work/Alice/Work/Data/2013/LHC13f/muon_calo/AOD127/GenTuner/pT1GeV/AnalysisResults.root");
+  if (isMC) genTuner->SetDataFile("AnalysisResults.root");
 //  if (isMC) genTuner->SetDataFile("/Users/pillot/Work/Alice/Work/Data/2013/LHC13f/muon_calo/AOD127/GenTuner/pT2GeV/AnalysisResults.root");
 //  if (isMC) genTuner->SetDataFile("/Users/pillot/Work/Alice/Work/Data/2013/LHC13f/muon_calo/AOD127/GenTuner/pT4GeV/AnalysisResults.root");
 //  if (isMC) genTuner->SetDataFile("/Users/pillot/Work/Alice/Work/Data/2013/LHC13f/muon_calo/AOD127/GenTuner/pT6GeV/AnalysisResults.root");
 //  if (isMC) genTuner->SetDataFile("/Users/pillot/Work/Alice/Work/Data/2013/LHC13f/muon_calo/AOD127/GenTuner/pT1GeV_y2.5-3/AnalysisResults.root");
 //  if (isMC) genTuner->SetDataFile("/Users/pillot/Work/Alice/Work/Data/2013/LHC13f/muon_calo/AOD127/GenTuner/pT1GeV_y3-4/AnalysisResults.root");
   
-  if (iStep == 0) {
-    
+
+  if (iStep == 0) // Set param. for fitting functions from this file
+  {
     // set the generator parameters used in simulation
     genTuner->SetPtParam(oldPtParam, oldFixPtParam, newPtParam, newFixPtParam, ptRange[0], ptRange[1]);
-    genTuner->SetYParam(oldYParam, oldFixYParam, newYParam, newFixYParam, yRange[0], yRange[1]);
-    
-  } else if (iStep > 0) {
+    genTuner->SetYParam(oldYParam, oldFixYParam, newYParam, newFixYParam, yRange[0], yRange[1]); 
+  } 
+  else if (iStep > 0) // Set param. from precedent fitting results
+  {
     /*
     // get the original generator parameters from first step if any
     TFile *inFile = TFile::Open("Results_step0.root","READ");
@@ -223,18 +244,21 @@ TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)
     // get the new generator parameters from previous step if any and configure the tuner
     TString inFileName = Form("Results_step%d.root",iStep-1);
     inFile = TFile::Open(inFileName.Data(),"READ");
-    if (inFile && inFile->IsOpen()) {
+    if (inFile && inFile->IsOpen()) 
+    { 
+      cout << "I'm in the file !" << endl;
       TF1 *fNewPtFunc = static_cast<TF1*>(inFile->FindObjectAny("fPtFuncNew"));
       TF1 *fNewYFunc = static_cast<TF1*>(inFile->FindObjectAny("fYFuncNew"));
-      if (fNewPtFunc && fNewYFunc) {
-	genTuner->SetPtParam(oldPtParam, newFixPtParam, fNewPtFunc->GetParameters(), newFixPtParam, fNewPtFunc->GetXmin(), fNewPtFunc->GetXmax());
-	genTuner->SetYParam(oldYParam, newFixYParam, fNewYFunc->GetParameters(), newFixYParam, fNewYFunc->GetXmin(), fNewYFunc->GetXmax());
+      if (fNewPtFunc && fNewYFunc) 
+      {
+      	genTuner->SetPtParam(oldPtParam, newFixPtParam, fNewPtFunc->GetParameters(), newFixPtParam, fNewPtFunc->GetXmin(), fNewPtFunc->GetXmax());
+      	genTuner->SetYParam(oldYParam, newFixYParam, fNewYFunc->GetParameters(), newFixYParam, fNewYFunc->GetXmin(), fNewYFunc->GetXmax());
       }
       inFile->Close();
     }
-    
     // enable the weighing
     genTuner->Weight(kTRUE);
+    //__________
     
   }
   

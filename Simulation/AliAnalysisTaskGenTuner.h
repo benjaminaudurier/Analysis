@@ -44,7 +44,7 @@ public:
   // set the name of the data file used in terminate to tune the generated distributions
   void SetDataFile(const Char_t* name) {fDataFile = name;}
   
-  // set the parameters of the current (and new pT generated distribution
+  // set the parameters of the current (and new) pT generated distribution
   void SetPtParam(const Double_t *pOld, const Bool_t *fixOld, const Double_t *pNew,
 		  const Bool_t *fixNew, Double_t min, Double_t max);
   /// get the current parameters of the pT generated distribution
