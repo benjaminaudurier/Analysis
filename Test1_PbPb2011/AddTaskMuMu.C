@@ -95,10 +95,10 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   //  Configure task
   //===========================================================================
   AliAnalysisTaskMuMu       * task = new AliAnalysisTaskMuMu; // Call the task
-  AliAnalysisMuMuEventCutter* eventCutter = new AliAnalysisMuMuEventCutter(triggerClassesToConsider,triggerInputsMap); // To handle cuts on event
+  AliAnalysisMuMuEventCutter* eventCutter = new AliAnalysisMuMuEventCutter(triggerClassesToConsiderM,triggerInputsMap); // To handle cuts on event
   AliAnalysisMuMuCutRegistry* cr = task->CutRegistry(); // Set CutRegistry
-  task->SetCountInBins("psi","pt","BENJ");
-  task->SetCountInBins("psi","y","BENJ");
+  // task->SetCountInBins("psi","pt","BENJ");
+  // task->SetCountInBins("psi","y","BENJ");
 
   // Default cuts on trigger and event level
   AliAnalysisMuMuCutElement * eventTrue = cr->AddEventCut(*eventCutter,"IsTrue","const AliVEvent&",""); 
@@ -107,7 +107,7 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   
   if (!simulations)
   {
-    ps = cr->AddEventCut(*eventCutter,"IsPhysicsS elected","const AliInputEventHandler&","");
+    ps = cr->AddEventCut(*eventCutter,"IsPhysicsSelected","const AliInputEventHandler&","");
   }
 
   // Apply default cut
@@ -173,7 +173,6 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
       cutElements.Add(eta);
       cutElements.Add(pdca);
       cutElements.Add(ps);
-      cutElements.Add(trackTrue);
       // add them
       cr->AddCutCombination(cutElements);    
       // Adding the sub analysis
@@ -204,29 +203,44 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
     binning->AddBin("psi","pt", 5.0, 6.0,"BENJ");
     binning->AddBin("psi","pt", 6.0, 8.0,"BENJ");
   
-    // y binning
+   //  // y binning
    binning->AddBin("psi","y",-4,-3.75,"BENJ");
    binning->AddBin("psi","y",-3.75,-3.5,"BENJ");
    binning->AddBin("psi","y",-3.5,-3.25,"BENJ");
    binning->AddBin("psi","y",-3.25,-3,"BENJ");
    binning->AddBin("psi","y",-3,-2.75,"BENJ");
    binning->AddBin("psi","y",-2.75,-2.5,"BENJ");
+
+    // phi binning
+   // binning->AddBin("psi","phi",0,0.4,"BENJ");
+   // binning->AddBin("psi","phi",0.4,0.8,"BENJ");
+   // binning->AddBin("psi","phi",0.8,1.2,"BENJ");
+   // binning->AddBin("psi","phi",1.2,1.6,"BENJ");
+   // binning->AddBin("psi","phi",1.6,2,"BENJ");
+   // binning->AddBin("psi","phi",2,2.4,"BENJ");
+   // binning->AddBin("psi","phi",2.4,2.8,"BENJ");
+   // binning->AddBin("psi","phi",2.4,2.8,"BENJ");
+   // binning->AddBin("psi","phi",2.8,3.14,"BENJ");
   }
 
   // v0 centrality binning
-  binning->AddBin("centrality","v0M",0.,7.5);
-  binning->AddBin("centrality","v0M",10.,50.);
-  binning->AddBin("centrality","v0M",0.,90.); 
-  binning->AddBin("centrality","v0M",0.,10.);
-  binning->AddBin("centrality","v0M",10.,20.);
-  binning->AddBin("centrality","v0M",20.,30.);
-  binning->AddBin("centrality","v0M",30.,40.);
-  binning->AddBin("centrality","v0M",40.,50.);
-  binning->AddBin("centrality","v0M",50.,60.);
-  binning->AddBin("centrality","v0M",60.,70.);
-  binning->AddBin("centrality","v0M",70.,80.);
-  binning->AddBin("centrality","v0M",80.,90.);
-  binning->AddBin("centrality","v0M",70.,90.);
+  
+  // binning->AddBin("centrality","v0a"); 
+  
+  // binning->AddBin("centrality","v0M",0.,7.5);
+  // binning->AddBin("centrality","v0M",10.,50.);
+  binning->AddBin("centrality","v0M",0.,90.);
+
+  // binning->AddBin("centrality","v0M",0.,10.);
+  // binning->AddBin("centrality","v0M",10.,20.);
+  // binning->AddBin("centrality","v0M",20.,30.);
+  // binning->AddBin("centrality","v0M",30.,40.);
+  // binning->AddBin("centrality","v0M",40.,50.);
+  // binning->AddBin("centrality","v0M",50.,60.);
+  // binning->AddBin("centrality","v0M",60.,70.);
+  // binning->AddBin("centrality","v0M",70.,80.);
+  // binning->AddBin("centrality","v0M",80.,90.);
+  // binning->AddBin("centrality","v0M",70.,90.);
   
   // binning->AddBin("centrality","v0a",90,100);
 

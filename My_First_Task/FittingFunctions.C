@@ -91,5 +91,39 @@ Double_t Sum2(Double_t *arg, Double_t *par)
     return f ;
 }
 
+//_____________________________________________________________________________
+Double_t FitFunctionMeanPtACCEFF(Double_t* x, Double_t* par)
+{
+  // Fit function for Jpsi mean pt for AccEff
+  
+  if (par[1]<= 0.) return 0.;
+
+  Double_t Deno = 1 + TMath::Power(x[0]/par[1],2);
+
+  return par[0]*x[0]/TMath::Power(Deno ,par[2]);
+}
+
+//________________________________________________________________________
+Double_t normPol12Par(Double_t *x, Double_t *par)
+{
+  //2 parameters
+  Double_t arg1 = 0;
+  
+  arg1 = par[0] * ( 1 + par[1]*x[0] );
+  
+  
+  return arg1;
+}
+
+//________________________________________________________________________
+Double_t powerLaw3Par(Double_t *x, Double_t *par)
+{
+  //3 parameters
+  Double_t arg = 0;
+  
+  arg = par[0]*x[0] / TMath::Power( 1 + par[1]*x[0]*x[0], par[2]);
+  
+  return arg;
+}
 
 

@@ -61,18 +61,24 @@ AliAnalysisTask* runMuMu(const char* dataset="datasetfull.txt",
 
        // triggers->Add(new TObjString("0VBA & 0VBC"));// MB 
        triggers->Add(new TObjString("CPBI2_B1-B-NOPF-ALLNOTRD"));// MB 
-       triggers->Add(new TObjString("CPBI2_B1-B-NOPF-ALLNOTRD&0MUL"));// MB & 0MUL  
+       // triggers->Add(new TObjString("CPBI2_B1-B-NOPF-ALLNOTRD&0MUL"));// MB & 0MUL  
 
 
        triggers->Add(new TObjString("CPBI1MSL-B-NOPF-MUON")); // single muon low pt
        triggers->Add(new TObjString("CPBI1MUL-B-NOPF-MUON")); // dimuon low pt
 
        // triggers->Add(new TObjString("CVHN-B-NOPF-ALLNOTRD|CVHN_R2-B-NOPF-ALLNOTRD|CCENT-B-NOPF-ALLNOTRD|CCENT_R2-B-NOPF-ALLNOTRD ")); // central high treshold (+ TO vertex)
-       triggers->Add(new TObjString("CVHN-B-NOPF-ALLNOTRD|CVHN_R2-B-NOPF-ALLNOTRD|CCENT-B-NOPF-ALLNOTRD|CCENT_R2-B-NOPF-ALLNOTRD")); // central high treshold +TO vertex
-       triggers->Add(new TObjString("(CVHN-B-NOPF-ALLNOTRD&0MUL)|(CVHN_R2-B-NOPF-ALLNOTRD&0MUL)|(CCENT-B-NOPF-ALLNOTRD&0MUL)|(CCENT_R2-B-NOPF-ALLNOTRD&0MUL)")); // central high treshold +TO vertex
+       // triggers->Add(new TObjString("CVHN-B-NOPF-ALLNOTRD|CVHN_R2-B-NOPF-ALLNOTRD|CCENT-B-NOPF-ALLNOTRD|CCENT_R2-B-NOPF-ALLNOTRD")); // central high treshold +TO vertex
+       // triggers->Add(new TObjString("(CVHN-B-NOPF-ALLNOTRD&0MUL)|(CVHN_R2-B-NOPF-ALLNOTRD&0MUL)|(CCENT-B-NOPF-ALLNOTRD&0MUL)|(CCENT_R2-B-NOPF-ALLNOTRD&0MUL)")); // central high treshold +TO vertex
 
-       triggers->Add(new TObjString("CVLN_B2-B-NOPF-ALLNOTRD|CVLN-B-NOPF-ALLNOTRD|CVLN_R1-B-NOPF-ALLNOTRD|CSEMI-B-NOPF-ALLNOTRD|CSEMI_R1-B-NOPF-ALLNOTRD")); // semicentral low treshold +TO vertex
-       triggers->Add(new TObjString("(CVLN_B2-B-NOPF-ALLNOTRD&0MUL)|(CVLN-B-NOPF-ALLNOTRD&0MUL)|(CVLN_R1-B-NOPF-ALLNOTRD&0MUL)|(CSEMI-B-NOPF-ALLNOTRD&0MUL)|(CSEMI_R1-B-NOPF-ALLNOTRD&0MUL)")); // semicentral low treshold +TO vertex
+       // triggers->Add(new TObjString("CVLN_B2-B-NOPF-ALLNOTRD|CVLN-B-NOPF-ALLNOTRD|CVLN_R1-B-NOPF-ALLNOTRD|CSEMI-B-NOPF-ALLNOTRD|CSEMI_R1-B-NOPF-ALLNOTRD")); // semicentral low treshold +TO vertex
+       // triggers->Add(new TObjString("(CVLN_B2-B-NOPF-ALLNOTRD&0MUL)|(CVLN-B-NOPF-ALLNOTRD&0MUL)|(CVLN_R1-B-NOPF-ALLNOTRD&0MUL)|(CSEMI-B-NOPF-ALLNOTRD&0MUL)|(CSEMI_R1-B-NOPF-ALLNOTRD&0MUL)")); // semicentral low treshold +TO vertex
+    
+        // pA trigger
+        // triggers.Add(new TObjString("CINT7-B-NOPF-ALLNOTRD"));//MB
+        // triggers.Add(new TObjString("CMUL7-B-NOPF-MUON"));// Dimuon
+        // triggers.Add(new TObjString("CINT7-B-NOPF-ALLNOTRD & 0MSL"));
+        // triggers.Add(new TObjString("CMSL7-B-NOPF-MUON & 0MUL"));
     }
   
     TString outputname("test.MuMu.AOD.1.root"); // Create output name in case of no dataset selected
