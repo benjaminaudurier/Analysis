@@ -20,8 +20,6 @@ TString extraLibs="CORRFW:PWGmuon";
   TString extraIncs="include";
 TString extraTasks="AliAnalysisTaskGenTunerJpsi";
 
-
-Bool_t isMC = kTRUE;
 Bool_t applyPhysicsSelection = kFALSE;
 //__________
 
@@ -39,15 +37,15 @@ Bool_t oldFixPtParam[3] = {kFALSE, kFALSE, kFALSE};
 Double_t newPtParam[3] = {266.150, 0.0300432 , 5.18424};
 Bool_t newFixPtParam[3] = {kFALSE, kFALSE, kFALSE};
 
-Double_t ptRange[2] = {0.8, 7.};
+Double_t ptRange[2] = {0.1, 7.};
 
 // tune1 LHC13d y param. (see AliAnalysisTaskGenTunerJpsi::Y)
-Double_t oldYParam[2] = {167.2390, 0.0517770};
+Double_t oldYParam[2] =  {2.34196, 0.220104};
 Bool_t oldFixYParam[2] = {kFALSE, kFALSE};
-Double_t newYParam[2] = {167.2390, 0.0517770};
+Double_t newYParam[2] =  {2.34196, 0.220104};
 Bool_t newFixYParam[2] = {kFALSE, kFALSE};
 
-Double_t yRange[2] = {-4.3, -2.3};
+Double_t yRange[2] = {-3.8, -2.3};
 //__________
 
 //__________Setting for spectra path
@@ -156,9 +154,8 @@ TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)
   trackCuts.SetAllowDefaultParams();
   trackCuts.SetFilterMask(AliMuonTrackCuts::kMuMatchLpt | AliMuonTrackCuts::kMuEta |
 			  AliMuonTrackCuts::kMuThetaAbs | AliMuonTrackCuts::kMuPdca);
-//  trackCuts.SetFilterMask(AliMuonTrackCuts::kMuMatchHpt | AliMuonTrackCuts::kMuEta |
-//			  AliMuonTrackCuts::kMuThetaAbs | AliMuonTrackCuts::kMuPdca);
-  if (isMC) trackCuts.SetIsMC(kTRUE);
+
+  trackCuts.SetIsMC(kTRUE);
   
   // generator tuner
   gROOT->LoadMacro("AddTaskGenTuner.C");
@@ -171,14 +168,12 @@ TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)
     return 0x0;
   }
   if (applyPhysicsSelection) genTuner->SelectCollisionCandidates(AliVEvent::kMUU7);
-//  if (applyPhysicsSelection) genTuner->SelectCollisionCandidates(AliVEvent::kMUSH7);
-  //genTuner->SelectCentrality(0., 90.);
+  // genTuner->SelectCentrality(0., 90.);
   genTuner->SetMuonTrackCuts(trackCuts);
-  genTuner->SetMuonPtCut(1.);
 
   //___________Set Bin
   // Open file
-  TFile* dataFile = TFile::Open("../AnalysisResults.root","READ");
+  TFile* dataFile = TFile::Open("../DataPart/AnalysisResultsReference.root","READ");
   if (!dataFile || !dataFile->IsOpen()) return;
 
   // Get HistoCollection
@@ -200,28 +195,12 @@ TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)
       return;
   }
 
-  Double_t *ptbin= spectraPT->Binning()->CreateBinArray();
-  Double_t *ybin= spectraY->Binning()->CreateBinArray();
-
   Int_t ptnofbin= spectraPT->Binning()->GetNBinsX();
   Int_t ynofbin= spectraY->Binning()->GetNBinsX();
 
-  // for (int i = 0; i < ptnofbin+1; ++i)
-  // {
-  //   cout << "ptbin = " << ptbin[i] << endl;
-  // }
-  // for (int i = 0; i < ynofbin+1; ++i)
-  // {
-  //   cout << "ybin = " << ybin[i] << endl;
-  // }
-  
-
-  // cout << "ptnofbin = " << ptnofbin << endl;
-  // cout << "ynofbin = " << ynofbin << endl;
-
   dataFile->Close();
-  if (isMC) genTuner->SetPtBin(ptbin,ptnofbin);
-  if (isMC) genTuner->SetYBin(ybin,ynofbin);
+  genTuner->SetPtBin(ptnofbin);
+  genTuner->SetYBin(ynofbin);
   //___________
   
   
@@ -233,8 +212,8 @@ TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)
 
   if(hpt && hy)
   {
-    if (isMC) genTuner->SetPtRefHisto(hpt);
-    if (isMC) genTuner->SetYRefHisto(hy);
+    genTuner->SetPtRefHisto(hpt);
+    genTuner->SetYRefHisto(hy);
   }
   else 
   {
@@ -274,10 +253,17 @@ TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)
       cout << "I'm in the file !" << endl;
       TF1 *fNewPtFunc = static_cast<TF1*>(inFile->FindObjectAny("fPtFuncNew"));
       TF1 *fNewYFunc = static_cast<TF1*>(inFile->FindObjectAny("fYFuncNew"));
-      if (fNewPtFunc && fNewYFunc) 
+      TF1 *fPtFunc = static_cast<TF1*>(inFile->FindObjectAny("fPtFunc"));
+      TF1 *fYFunc = static_cast<TF1*>(inFile->FindObjectAny("fYFunc"));
+
+      if (fNewPtFunc && fNewYFunc && fPtFunc && fYFunc ) 
       {
-      	genTuner->SetPtParam(oldPtParam, newFixPtParam, fNewPtFunc->GetParameters(), newFixPtParam, fNewPtFunc->GetXmin(), fNewPtFunc->GetXmax());
-      	genTuner->SetYParam(oldYParam, newFixYParam, fNewYFunc->GetParameters(), newFixYParam, fNewYFunc->GetXmin(), fNewYFunc->GetXmax());
+      	genTuner->SetPtParam(fPtFunc->GetParameters(), newFixPtParam, fNewPtFunc->GetParameters(), newFixPtParam, fNewPtFunc->GetXmin(), fNewPtFunc->GetXmax());
+      	genTuner->SetYParam(fYFunc->GetParameters(), newFixYParam, fNewYFunc->GetParameters(), newFixYParam, fNewYFunc->GetXmin(), fNewYFunc->GetXmax());
+      }
+      else
+      {
+        cout << "Cannot acces to fit functions " << endl;
       }
       inFile->Close();
     }

@@ -87,13 +87,13 @@ fWeight(kFALSE),
 // fDataFile(""),
 fPtNofBin(0),
 fYNofBin(0),
-fPtBin(0x0),                 
+// fPtBin(0x0),                 
 fPtFunc(0x0),
 fPtFuncMC(0x0),
 fPtFix(0x0),
 fPtFuncNew(0x0),
 fPtFixNew(0x0),
-fYBin(0x0),                  
+// fYBin(0x0),                  
 fYFunc(0x0),
 fYFuncMC(0x0),
 fYFix(0x0),
@@ -114,42 +114,6 @@ fHyRef(0x0)
   DefineOutput(1,TObjArray::Class());
   
 }
-
-// //______________________________________________________________________________
-// AliAnalysisTaskGenTunerJpsi::AliAnalysisTaskGenTunerJpsi(const AliAnalysisTaskGenTunerJpsi& rhs) :
-// AliAnalysisTaskSE(rhs),
-// fList(rhs.fList),
-// fCentMin(rhs.fCentMin),
-// fCentMax(rhs.fCentMax),
-// fMuonTrackCuts(rhs.fMuonTrackCuts),
-// fPtCut(rhs.fPtCut),
-// fWeight(rhs.fWeight),
-// // fDataFile(""),
-// fPtNofBin(rhs.fPtNofBin),
-// fYNofBin(rhs.fYNofBin),
-// fPtBin(rhs.fPtBin),
-// fPtFunc(rhs.fPtFunc),
-// fPtFuncMC(rhs.fPtFuncMC),
-// fPtFix(rhs.fPtFix),
-// fPtFuncNew(rhs.fPtFuncNew),
-// fPtFixNew(rhs.fPtFixNew),
-// fYBin(rhs.fYBin),                  
-// fYFunc(rhs.fYFunc),
-// fYFuncMC(rhs.fYFuncMC),
-// fYFix(rhs.fYFix),
-// fYFuncNew(rhs.fYFuncNew),
-// fYFixNew(rhs.fYFixNew),
-// fcRes(rhs.fcRes),
-// fcRat(rhs.fcRat),
-// fPtCopyFunc(rhs.fPtCopyFunc),
-// fPtCopyFuncNew(rhs.fPtCopyFuncNew),
-// fYCopyFunc(rhs.fYCopyFunc),
-// fYCopyFuncNew(rhs.fYCopyFuncNew),
-// fHptRef(rhs.fHptRef),
-// fHyRef(rhs.fHyRef)
-// {
-//   // copy ctor
-// }
 
 //________________________________________________________________________
 AliAnalysisTaskGenTunerJpsi::~AliAnalysisTaskGenTunerJpsi()
@@ -173,7 +137,9 @@ AliAnalysisTaskGenTunerJpsi::~AliAnalysisTaskGenTunerJpsi()
   delete fPtCopyFunc;
   delete fPtCopyFuncNew;
   delete fYCopyFunc;
-  delete fYCopyFuncNew;                 
+  delete fYCopyFuncNew;
+  delete fHptRef;
+  delete fHyRef;                 
 }
 
 //___________________________________________________________________________
@@ -185,34 +151,25 @@ void AliAnalysisTaskGenTunerJpsi::UserCreateOutputObjects()
   fList = new TObjArray(2000);
   fList->SetOwner();
   
-  printf("fPtBin=%p\n",fPtBin);
-  printf("fYBin=%p\n",fYBin);
-  printf("fPtBin=%d\n",fPtNofBin);
-  printf("fYNofBin=%d\n",fYNofBin);
+ const Double_t ptbin[17] ={0.,0.5,1.,1.5,2.,2.5,3.,3.5,4.,4.5,5.,5.5,6.,6.5,7.,7.5,8.};
+ const Double_t ybin[7] ={-4,-3.75,-3.5,-3.25,-3.0,-2.75,-2.5};
 
-  TH1* hPtGen = new TH1D("hPtGen","generated p_{T} distribution;p_{T} (GeV/c);dN/dp_{T}",fPtNofBin,fPtBin);
+  TH1* hPtGen = new TH1D("hPtGen","generated p_{T} distribution;p_{T} (GeV/c);dN/dp_{T}",fPtNofBin,ptbin);
   hPtGen->Sumw2();// Create structure to store sum of squares of weights
   fList->AddAtAndExpand(hPtGen, kPtGen);// Double array size if reach the end
-  TH1* hPtRec = new TH1D("hPtRec","reconstructed p_{T} distribution;p_{T} (GeV/c);dN/dp_{T}",fPtNofBin,fPtBin);
+  TH1* hPtRec = new TH1D("hPtRec","reconstructed p_{T} distribution;p_{T} (GeV/c);dN/dp_{T}",fPtNofBin,ptbin);
   hPtRec->Sumw2();// Create structure to store sum of squares of weights
   fList->AddAtAndExpand(hPtRec, kPtRec);// Double array size if reach the end
   
-  TH1* hYGen = new TH1D("hYGen","generated y distribution;y;dN/dy",fYNofBin,fYBin);
+  TH1* hYGen = new TH1D("hYGen","generated y distribution;y;dN/dy",fYNofBin,ybin);
   hYGen->Sumw2();
   fList->AddAtAndExpand(hYGen, kYGen);
-  TH1* hYRec = new TH1D("hYRec","reconstructed y distribution;y;dN/dy",fYNofBin,fYBin);
+  TH1* hYRec = new TH1D("hYRec","reconstructed y distribution;y;dN/dy",fYNofBin,ybin);
   hYRec->Sumw2();
   fList->AddAtAndExpand(hYRec, kYRec);
 
   if(fHptRef)fHptRef->Sumw2();// Set histo error
   if(fHyRef)fHyRef->Sumw2();// set histo error
-  
-  // TH1* hPhiGen = new TH1D("hPhiGen","generated #phi distribution;#phi (deg);dN/d#phi", 360, 0., 360.);
-  // hPhiGen->Sumw2();
-  // fList->AddAtAndExpand(hPhiGen, kPhiGen);
-  // TH1* hPhiRec = new TH1D("hPhiRec","reconstructed #phi distribution;#phi (deg);dN/d#phi", 360, 0., 360.);
-  // hPhiRec->Sumw2();
-  // fList->AddAtAndExpand(hPhiRec, kPhiRec);
   
   // recreate the functions for weighting particles because they are lost when streamed to a file (proof and grid mode)
   if (fWeight && fPtFunc && fPtFuncNew && fYFunc && fYFuncNew) 
@@ -231,10 +188,9 @@ void AliAnalysisTaskGenTunerJpsi::UserCreateOutputObjects()
     // or disable the weighting
     fWeight = kFALSE;
   }
-  
+
   // Post data at least once per task to ensure data synchronisation (required for merging)
   PostData(1, fList);
-  
 }
 
 //________________________________________________________________________
@@ -261,10 +217,9 @@ void AliAnalysisTaskGenTunerJpsi::UserExec(Option_t *)
   Float_t centrality = aod->GetCentrality()->GetCentralityPercentileUnchecked("V0M");
   if (centrality <= fCentMin || centrality > fCentMax) return;
   
-  
-  TArrayD weight;
+  Double_t  weight =1.;
+
   if (!MCEvent()) return; 
-  weight.Set(MCEvent()->GetNumberOfTracks());
   
   //__________Generated tracks part
   for (Int_t i = 0; i < MCEvent()->GetNumberOfTracks(); i++) 
@@ -279,33 +234,28 @@ void AliAnalysisTaskGenTunerJpsi::UserExec(Option_t *)
     {
       // Only J/psi
       if(mctrackPID!=443) continue; 
-
-      //      if (mctrack->Pt() > 0.9) continue;
-      //      if (mctrack->Pt() < 0.9 || mctrack->Pt() > 1.) continue;
-      //      if (mctrack->Y() < -4.4 || (mctrack->Y() > -4.3 && mctrack->Y() < -2.2) || mctrack->Y() > -2.1) continue;
-      //      if (mctrack->Y() > -4.2 && mctrack->Y() < -2.3) continue;
-      //      if (mctrack->Y() < -4. || mctrack->Y() > -2.5) continue;
       
-      Double_t y = mctrack->Y();
+      Double_t y  = mctrack->Y();
       Double_t pT = mctrack->Pt();
+
+      if( pT>8 || pT<0 || y < -4 || y>-2.5 ) continue; 
 
       //________compute weight
       if (fWeight) 
       {
-        weight[i] = fPtCopyFuncNew->Eval(pT) / fPtCopyFunc->Eval(pT) * fYCopyFuncNew->Eval(y) / fYCopyFunc->Eval(y);// Compute Weight
-        if (weight[i] < 0.) 
+        weight = (fPtCopyFuncNew->Eval(pT) / fPtCopyFunc->Eval(pT)) * (fYCopyFuncNew->Eval(y) / fYCopyFunc->Eval(y));// Compute Weight
+        if (weight < 0.) 
         {
-          AliError(Form("negative weight: y = %g, pT = %g: w = %g", y, pT, weight[i]));
-          weight[i] = 0.;
+          AliError(Form("negative weight: y = %g, pT = %g: w = %g", y, pT, weight));
+          weight = 0.;
         }
       } 
-      else weight[i] = 1.;
+      else weight = 1.;
       //________
 
-    Double_t w = weight[i];
-    ((TH1*)fList->UncheckedAt(kPtGen))->Fill(pT, w); // fill PtGenHisto
-    ((TH1*)fList->UncheckedAt(kYGen))->Fill(y, w); // fill YGenHisto
-    // ((TH1*)fList->UncheckedAt(kPhiGen))->Fill(mctrack->Phi()*TMath::RadToDeg(), w);// fill PhiGenHisto
+    ((TH1*)fList->UncheckedAt(kPtGen))->Fill(pT, weight); // fill PtGenHisto
+    ((TH1*)fList->UncheckedAt(kYGen))->Fill(y, weight); // fill YGenHisto
+    // ((TH1*)fList->UncheckedAt(kPhiGen))->Fill(mctrack->Phi()*TMath::RadToDeg(), weight);// fill PhiGenHisto
     }
   }
   //__________
@@ -315,10 +265,9 @@ void AliAnalysisTaskGenTunerJpsi::UserExec(Option_t *)
   {
     AliAODTrack *track1 = static_cast<AliAODTrack*>(aod->GetTrack(i)); // track 1
     
-    Double_t pT = track1->Pt();
     Int_t mcLabel1 = track1->GetLabel();
-    if (!fMuonTrackCuts->IsSelected(track1) || (fPtCut > 0. && pT < fPtCut) || (MCEvent() && mcLabel1 < 0)) continue;
-    //    Physic selection                       Pt cut                         track associated with mc
+    if (!fMuonTrackCuts->IsSelected(track1) || (MCEvent() && mcLabel1 < 0)) continue;
+    //    Physic selection                      track associated with mc
 
     AliAODMCParticle *mctrack = static_cast<AliAODMCParticle*>(MCEvent()->GetTrack(mcLabel1)); // MC info associated with track1
     if((mctrack->PdgCode()!=13 && mctrack->PdgCode()!=-13)) continue; // Cut on muons
@@ -331,21 +280,21 @@ void AliAnalysisTaskGenTunerJpsi::UserExec(Option_t *)
 
       // Get 4-Vector  
       TLorentzVector vec(track1->Px(),track1->Py(),track1->Pz(),track1->E());
+      // cout << "vec.M() = " <<vec.M()<< endl;
     
     for (Int_t j = i+1; j < aod->GetNumberOfTracks(); j++)// Loop over second paricles 
     {
       AliAODTrack *track2 = static_cast<AliAODTrack*>(aod->GetTrack(j)); // track 2
     
-      Double_t pT = track2->Pt();
       Int_t mcLabel2 = track2->GetLabel();
-      if (!fMuonTrackCuts->IsSelected(track2) || (fPtCut > 0. && pT < fPtCut) || (MCEvent() && mcLabel2 < 0)   ) continue;
-      //    Physic selection                       Pt cut                        track associated with mc part.   
+      if (!fMuonTrackCuts->IsSelected(track2) || (MCEvent() && mcLabel2 < 0) || (track2->Charge()*track1->Charge()>=0)   ) continue;
+      //    Physic selection                      track associated with mc part.    opposite sign  
       
       // MC info associated with track2    
       AliAODMCParticle *mctrack2 = static_cast<AliAODMCParticle*>(MCEvent()->GetTrack(mcLabel2)); 
       
-      if((mctrack2->PdgCode()!=13 && mctrack2->PdgCode()!=-13) || (mctrack2->PdgCode()==mctrack->PdgCode()) ) continue; 
-      //                  Cut muons                                     // Muons of opposite sign
+      if((mctrack2->PdgCode()!=13 && mctrack2->PdgCode()!=-13)  ) continue; 
+      //                  Cut muons                               
 
       //Check mother
       Int_t mother2 = mctrack2->GetMother(); // mother label
@@ -357,18 +306,18 @@ void AliAnalysisTaskGenTunerJpsi::UserExec(Option_t *)
       TLorentzVector vec2(track2->Px(),track2->Py(),track2->Pz(),track2->E());
 
       // Add the two 4-vectors.
-      vec2+=vec;
+      TLorentzVector Dimu = vec2+vec;
 
       // Cut on paire
-      if( vec2.Pt()>8 || vec2.Pt()<0 || vec2.Y() < -4 || vec2.Y()>-2.5 ) continue; 
+      if( Dimu.Pt()>8 || Dimu.Pt()<0 || Dimu.Rapidity() < -4 || Dimu.Rapidity()>-2.5 ) continue; 
 
-      Double_t w = /*(weight.GetSize() > 0) ? weight[mcLabel2] :*/ 1.; // <- Demander à philippe ce que ça fou là 
+      
 
-      // cout << "vec2.Pt() = " <<vec2.Pt()<< endl; 
+      // cout << "Dimu.Pt() = " <<Dimu.Pt()<< endl; 
+      // cout << "Diff = " << Dimu.Rapidity() -y << endl; 
       // cout << "vec2.Y() = " <<vec2.Y()<< endl; 
-      ((TH1*)fList->UncheckedAt(kPtRec))->Fill(vec2.Pt(), w);
-      ((TH1*)fList->UncheckedAt(kYRec))->Fill(vec2.Y(), w);
-      // ((TH1*)fList->UncheckedAt(kPhiRec))->Fill(vec2->Phi()*TMath::RadToDeg(), w);
+      ((TH1*)fList->UncheckedAt(kPtRec))->Fill(Dimu.Pt(),weight);
+      ((TH1*)fList->UncheckedAt(kYRec))->Fill(Dimu.Rapidity(),weight);
     } 
   } 
   //__________
@@ -377,17 +326,12 @@ void AliAnalysisTaskGenTunerJpsi::UserExec(Option_t *)
   // Post final data. It will be written to a file with option "RECREATE"
 
   PostData(1, fList);
-  // ((TH1*)fList->UncheckedAt(kPtRec))->Draw();
 }
 
 //________________________________________________________________________
 void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
 {
   /// post-processing
-  
-  /**
-   * Note : phi histo commented
-   */
   
   //__________get current results
   Int_t hIndex[4] = {kPtGen, kYGen, /*kPhiGen,*/ kPtRec, kYRec/*, kPhiRec*/};
@@ -398,10 +342,17 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     h[i] = static_cast<TH1*>(fList->UncheckedAt(hIndex[i])->Clone());
     h[i]->SetDirectory(0);
   }
-  // h[3]->Draw();
   //__________
   
-
+  // new TCanvas;
+  // h[0]->Draw("");
+  // new TCanvas;
+  // h[1]->Draw("");
+  // new TCanvas;
+  // h[2]->Draw("");
+  // new TCanvas;
+  // h[3]->Draw("");
+  // return;
   
   
   //__________get the fit ranges
@@ -410,15 +361,11 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
   fitRangeMC[0][1] = 999.;
   fitRangeMC[1][0] = GetFitLowEdge(*(h[1]));
   fitRangeMC[1][1] = GetFitUpEdge(*(h[1]));
-  // fitRangeMC[2][0] = h[2]->GetXaxis()->GetXmin();
-  // fitRangeMC[2][1] = h[2]->GetXaxis()->GetXmax();
   Double_t fitRange[2][2];
-  fitRange[0][0] = (fPtCut > 0.) ? TMath::Max(fitRangeMC[0][0], fPtCut) : fitRangeMC[0][0];
+  fitRange[0][0] = 0.;
   fitRange[0][1] = 7.;
   fitRange[1][0] = -3.98; // not -4. because to the influence of the eta cut
   fitRange[1][1] = -2.5;
-  // fitRange[2][0] = h[5]->GetXaxis()->GetXmin();
-  // fitRange[2][1] = h[5]->GetXaxis()->GetXmax();
   //__________
   
   //__________compute acc*eff corrections if it is simulated data
@@ -428,53 +375,20 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
   for (Int_t i = 0; i < 2 && h[i]->GetEntries() > 0; i++) 
   {
     hAccEff[i] = ComputeAccEff(*(h[i]), *(h[i+2]), Form("%sOverGen",h[i+2]->GetName()), "Acc#{times}Eff");
-    //hAccEff[i] = static_cast<TH1*>(h[i+3]->Clone(Form("%sOverGen",h[i+3]->GetName())));
     hAccEff[i]->SetTitle("Acc#{times}Eff");
-    hAccEff[i]->Divide(h[i]);
-
-    // if(hAccEff[i]) cout << "number of bin in hAccEff " << i << " = " << hAccEff[i]->GetNbinsX() << endl;
-    // cout <<""<< endl;
   }
   //__________
   
-  
-
   //__________get reference data if provided
-  TH1 *hRef[4] = {0x0,      0x0,      /*0x0,*/      0x0,          0x0/*,        0x0*/};
-  //              ptCorr.   yCorr.    phiCorr   RefPtHisto,   RefYHisto,  RefPhiHisto
+  TH1 *hRef[4] = {0x0,            0x0,             0x0,          0x0};
+  //              ptAccEffCorr.   yAccEffCorr.     RefPtHisto,   RefYHisto, 
 
   // J/psi vs PT histo
-  if(fHptRef) hRef[2] = fHptRef;
+  if(fHptRef) hRef[2] = static_cast<TH1*>(fHptRef->Clone());
   // J/psi vs Y histo
-  if(fHyRef) hRef[3]  = fHyRef;
-
-  // if(hRef[2] && hRef[3])
-  // {
-  //   cout <<""<< endl;
-  //   cout << "number of bin in RefPtHisto = " << hRef[2]->GetNbinsX() << endl;
-  //   cout << "number of bin in RefYHisto = " << hRef[3]->GetNbinsX() << endl;
-  //   cout <<""<< endl;
-  // }
-
-  // TObjArray* data = static_cast<TObjArray*>(dataFile->FindObjectAny("Histograms"));
-  // if (!data) return;
-  // for (Int_t i = 2; i < 3; i++)
-  // {
-  // //   hRef[i] = static_cast<TH1*>(data->UncheckedAt(hIndex[i])->Clone());
-  //   hRef[i]->SetDirectory(0);
-  // }
+  if(fHyRef) hRef[3]  = static_cast<TH1*>(fHyRef->Clone());
   //__________
   
-  // for (int i = 0; i < hRef[2]->GetNbinsX(); ++i)
-  // {
-  //   cout << "hRef[2]->GetBinLowEdge("<< i <<") =" << hRef[2]->GetBinLowEdge(i) << endl;
-  // }
-
-  // for (int i = 0; i < hAccEff[0]->GetNbinsX(); ++i)
-  // {
-  //   cout << "hAccEff[0]->GetBinLowEdge("<< i <<") =" << hAccEff[0]->GetBinLowEdge(i) << endl;
-  // }
-
 
   //__________compute corrected data
   for (Int_t i = 0; i < 2 && hRef[i+2] && hAccEff[i]; i++) 
@@ -492,15 +406,8 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
       cout << "Can't divide " << i << endl;
       continue;
     }
-    // hRef[i]->Draw();
   }
   //__________
-  
-  
-
-
-
-
 
   //__________normalize histograms
   Bool_t normalized = kFALSE;
@@ -515,28 +422,23 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     hRef[i]->Scale(norm);
     hRef[i+2]->Scale(norm);
     normalized = kTRUE;
-
-    // if(hRef[i]) cout << "normalized histo " << i << endl;
   }
   //__________
   
   //__________compute dataCorr/MC ratios
-  TH1 *hRat[4] = {0x0,            0x0,          /*0x0,*/            0x0,              0x0            /*0x0*/};
-  //              ptCorr./ptGen   yCorr./yGen   phiCorr/phiGen  RefPtHisto/RecPt  RefYHisto/RecY  RefPhiHisto/RecPhi
+  TH1 *hRat[4] = {0x0,                  0x0,                 0x0,              0x0            };
+  //              ptAccEffCorr./ptGen   yAccEffCorr./yGen    RefPtHisto/RecPt  RefYHisto/RecY 
   for (Int_t i = 0; i < 4 && hRef[i]; i++) 
   {
     hRat[i] = static_cast<TH1*>(hRef[i]->Clone());
     hRat[i]->SetTitle("data / MC");
     hRat[i]->Divide(h[i]);
-    
-    // if(hRat[i]) cout << "compute dataCorr/MC ratios for " << i << endl;
   }
   //__________
   
   //__________prepare fitting functions
   if (hAccEff[0]) // Pt AccEff histo
   {
-
     cout << "prepare fitting functions for Pt AccEff histo... " << endl;
 
     if (fPtFunc) 
@@ -565,9 +467,6 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     }
     if (!normalized) 
     {
-      cout <<""<< endl;
-      cout << "!normalized ok" << endl;
-
       Double_t integral = h[0]->Integral(h[0]->FindBin(fitRange[0][0]), h[0]->FindBin(fitRange[0][1]), "width");
       if (fPtFunc) fPtFunc->SetParameter(0, fPtFunc->GetParameter(0)*integral);
       if (fPtFuncMC) fPtFuncMC->SetParameter(0, fPtFuncMC->GetParameter(0)*integral);
@@ -633,7 +532,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     {
       fPtFuncMC->SetLineColor(3);// Green
       fPtFuncMC->SetLineWidth(3);
-      h[0]->Fit(fPtFuncMC, "IWLMR", "e0sames");
+      h[0]->Fit(fPtFuncMC, "IWLMR", "e0sames");// AccEff corrected Gen. pt histo.
     } else h[0]->Draw("");
     if (fPtFunc) 
     {
@@ -641,7 +540,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
       h[0]->Fit(fPtFunc, "IWLMR+");
     }
   }
-  if (hRef[0]) 
+  if (hRef[0]) // AccEff corrected Data pt histo. 
   {
     hRef[0]->SetLineColor(2); // Red
     if (fPtFuncNew) 
@@ -657,7 +556,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     {
       fYFuncMC->SetLineColor(3);// Green
       fYFuncMC->SetLineWidth(3);
-      h[1]->Fit(fYFuncMC, "IWLMR", "sames");
+      h[1]->Fit(fYFuncMC, "IWLMR", "sames");// AccEff corrected Gen. y histo.
     } 
     else h[1]->Draw("");
     
@@ -667,7 +566,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
       h[1]->Fit(fYFunc, "IWLMR+");
     }
   }
-  if (hRef[1]) 
+  if (hRef[1])  // AccEff corrected Data pt histo. 
   {
     hRef[1]->SetLineColor(2);// Red
     if (fYFuncNew) 
@@ -682,12 +581,12 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     fcRes->cd(i+1);
     
     if (i == 2) gPad->SetLogy();
-    h[i]->Draw("");
+    h[i]->Draw(""); // AccEff corrected Rec.  histo.
     
     if (hRef[i]) 
     {
       hRef[i]->SetLineColor(2);// Red
-      hRef[i]->Draw("sames");
+      hRef[i]->Draw("sames");// data histo.
     }
   }
   //__________
@@ -758,8 +657,8 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
   {
     fcRat->cd(i+1);
     hRat[i]->Draw("e0");
-    if (i == 0 && ptRat) ptRat->Draw("sames");
-    else if (i == 1 && yRat) yRat->Draw("sames");
+    if (i == 0 && ptRat) ptRat->Draw("same");
+    else if (i == 1 && yRat) yRat->Draw("same");
   }
   // __________
   
@@ -835,14 +734,6 @@ void AliAnalysisTaskGenTunerJpsi::SetPtParam(const Double_t *pOld, const Bool_t 
 {
   /// create the function(s) to fit the generated pT distribution with the given parameters
   /// if the new parameters are given, the new function is used to weight the tracks
-  
-  // // protection on parameters
-  // if( sizeof(pOld)/ sizeof(pOld[0])!= fgkNPtParam || sizeof(pNew)/ sizeof(pNew[0])!= fgkNPtParam)
-  // {
-  //   cout << "Wrong number of input pt parameter. For old : " << sizeof(pOld)/ sizeof(pOld[0]) << ", need " << fgkNPtParam << endl;
-  //   cout << "Wrong number of input pt parameter. For new : " << sizeof(pNew)/ sizeof(pNew[0]) << ", need " << fgkNPtParam << endl;
-  //   return;
-  // }
 
   // prepare the old fitting functions
   if (!fPtFunc) fPtFunc = new TF1("fPtFunc", Pt, min, max, fgkNPtParam);
@@ -918,13 +809,6 @@ void AliAnalysisTaskGenTunerJpsi::SetYParam(const Double_t *pOld, const Bool_t *
 {
   /// create the function(s) to fit the generated y distribution with the given parameters
   /// if the new parameters are given, the new function is used to weight the tracks
-  
-  // if( sizeof(pOld)/ sizeof(pOld[0])!= fgkNYParam || sizeof(pNew)/ sizeof(pNew[0])!= fgkNYParam) 
-  // {
-  //   cout << "Wrong number of input y parameter. For old : " << sizeof(pOld)/ sizeof(pOld[0]) << ", need " << fgkNYParam << endl;
-  //   cout << "Wrong number of input y parameter. For new : " << sizeof(pNew)/ sizeof(pNew[0]) << ", need " << fgkNYParam << endl;
-  //   return;
-  // }
   
   // prepare the old fitting functions
   if (!fYFunc) fYFunc = new TF1("fYFunc", Y, min, max, fgkNYParam);

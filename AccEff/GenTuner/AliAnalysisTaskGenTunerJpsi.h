@@ -40,10 +40,7 @@ public:
   
   /// weight simulated/reconstructed particles using using given functions
   void Weight(Bool_t flag) {fWeight = flag;}
-  
-  // // set the name of the data file used in terminate to tune the generated distributions
-  // void SetDataFile(const Char_t* name) {fDataFile = name;}
-  
+ 
   // set the parameters of the current (and new) pT generated distribution
   void SetPtParam(const Double_t *pOld, const Bool_t *fixOld, const Double_t *pNew,
 		  const Bool_t *fixNew, Double_t min, Double_t max);
@@ -54,11 +51,11 @@ public:
   // set the Y ref. histo to reweight MC
   void SetYRefHisto(TH1* hyRef) {if(hyRef) fHyRef = static_cast<TH1*>(hyRef->Clone());}
 
-  // set the name of the spectra used in terminate to tune the generated distributions
-  void SetPtBin(Double_t *bin,Int_t nofbin ) {fPtBin = bin; fPtNofBin = nofbin;}
+  // set pt binning
+  void SetPtBin(Int_t nofbin) { fPtNofBin = nofbin;}
 
-  // set the name of the spectra used in terminate to tune the generated distributions
-  void SetYBin(Double_t *bin,Int_t nofbin ) {fYBin = bin; fYNofBin = nofbin;}
+  // set y binning
+  void SetYBin(Int_t nofbin) { fYNofBin = nofbin;}
   
   /// get the current parameters of the pT generated distribution
   Double_t* GetOldPtParam() {return fPtFunc ? fPtFunc->GetParameters() : 0x0;}
@@ -111,6 +108,9 @@ private:
   
   // Compute acc*eff and binomial errors by hand, i.e. not using TGraphAsymmErrors
   TH1* ComputeAccEff(TH1 &hGen, TH1 &hRec, const Char_t *name, const Char_t *title);
+
+  // // Used to fill data members
+  // Double_t* CreateBin(Double_t* bin,Int_t nofbin );
   
   // generated pT fit function
   static Double_t Pt(const Double_t *x, const Double_t *p);
@@ -139,16 +139,12 @@ private:
     kPtRec   = 1, ///< pT distribution of reconstructed particle
     kYGen    = 2, ///< y distribution of generated particle
     kYRec    = 3,  ///< y distribution of reconstructed particle
-    // kPhiGen  = 4, ///< phi distribution of generated particle
-    // kPhiRec  = 5  ///< phi distribution of reconstructed particle
   };
   
   TObjArray*  fList; //!< List of output object
   
   Double_t  fCentMin;               ///< select centrality > fCentMin
   Double_t  fCentMax;               ///< select centrality <= fCentMax
-  Double_t*  fPtBin;                 //< select Pt bin
-  Double_t*  fYBin;                  ///< select Y bin
   Int_t     fPtNofBin;              ///< Number of Pt bin
   Int_t     fYNofBin;               ///< Number of Y bin
   TH1*       fHptRef;                //!< pt ref. data histo        

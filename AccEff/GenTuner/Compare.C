@@ -9,21 +9,30 @@
 
 //General note : x variable = P_t and p[] variables = parameter array.
 
-//______________________________________________________________________________
+//________________________________________________________________________
 Double_t Pt(const Double_t *x, const Double_t *p)
 {
-  /// generated pT fit function a * 1/(b+ (c*x)^d + e + Exp(f*x) )
+  /// generated pT fit function
+  
   Double_t pT = *x;
-  return p[0] * (1. / TMath::Power(p[1] + TMath::Power(pT,p[2]), p[3]) + p[4] * TMath::Exp(p[5]*pT));
+  Double_t arg = 0;
+  
+  arg = p[0]*x[0] / TMath::Power( 1 + p[1]*pT*pT, p[2]);
+  
+  return arg;
 }
 
-//______________________________________________________________________________
+//________________________________________________________________________
 Double_t Y(const Double_t *x, const Double_t *p)
 {
   /// generated y fit function
   Double_t y = *x;
-  Double_t arg = y/p[7];
-  return p[0] * (p[1] * (1. + p[2]*y + p[3]*y*y + p[4]*y*y*y + p[5]*y*y*y*y) + p[6]*TMath::Exp(-0.5*arg*arg));
+  Double_t arg1 = 0;
+    
+  arg1 = p[0] * ( 1 + p[1]*y );
+  
+  
+  return arg1;
 }
 
 //______________________________________________________________________________
@@ -31,7 +40,7 @@ Double_t PtRat(const Double_t *x, const Double_t *p)
 {
   /// generated pT fit function ratio
   const Double_t *p1 = &(p[0]);
-  const Double_t *p2 = &(p[6]);
+  const Double_t *p2 = &(p[3]);
   return Pt(x,p1) / Pt(x,p2);
 }
 
@@ -40,7 +49,7 @@ Double_t YRat(const Double_t *x, const Double_t *p)
 {
   /// generated y fit function ratio
   const Double_t *p1 = &(p[0]);
-  const Double_t *p2 = &(p[8]);
+  const Double_t *p2 = &(p[2]);
   return Y(x,p1) / Y(x,p2);
 }
 
@@ -54,9 +63,9 @@ void Compare(TString sfile1, TString sfile2)
   sfile[1] = sfile2.Data(); // Set file 2
 
   //__________Configure first set of parameter
-  TString sRes[6] = {"hPtGen", "hYGen", "hPhiGen", "hPtRec", "hYRec", "hPhiRec"};
-  TH1 *hRes[6][3];
-  for (Int_t i = 0; i < 6; i++) for (Int_t j = 0; j < 3; j++) hRes[i][j] = 0x0;
+  TString sRes[4] = {"hPtGen", "hYGen", /*"hPhiGen",*/ "hPtRec", "hYRec"/* "hPhiRec"*/};
+  TH1 *hRes[4][3];
+  for (Int_t i = 0; i < 4; i++) for (Int_t j = 0; j < 3; j++) hRes[i][j] = 0x0;
   
   TString sfunc[2][2] = {"fPtFuncMC", "fPtFuncMC", "fYFuncMC", "fYFuncMC"};
   void *func[4] = {Pt, Y, PtRat, YRat};

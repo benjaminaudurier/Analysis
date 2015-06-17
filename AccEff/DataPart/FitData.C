@@ -10,7 +10,7 @@
 
 TString striggerDimuon  ="CMUL7-B-NOPF-MUON";
 TString seventType      ="PSALL";
-TString spairCut        ="pALLPAIRYPAIRPTIN0.0-18.0RABSMATCHLOWETAPDCAPSALL";
+TString spairCut        ="pPAIRYPAIRPTIN0.0-18.0RABSMATCHLOWETAPDCAPSALL";
 TString sbinType        ="PT,Y";
 TString scentrality     ="V0A";
 TString sResName        ="";
@@ -20,8 +20,8 @@ Double_t Pol12Par[2] = {1.,1.};
 
 
 //_____________________________________________________________________________
-void FitMacro(
-char           * sfile="../AnalysisResults.root",
+void FitData(
+char           * sfile="AnalysisResultsReference.root",
 char           * sasso="",
 char           * sasso2="",
 char           * beamYear="PbPb2011",

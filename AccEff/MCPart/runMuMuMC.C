@@ -13,8 +13,8 @@
 
 
 //______________________________________________________________________________
-AliAnalysisTask* runMuMu(const char* dataset="Find;BasePath=/alice/data/2013/LHC13d/000195760/ESDs/muon_pass2/AOD134;FileName=AliAOD.root",
-                         Bool_t simulations=kFALSE,
+AliAnalysisTask* runMuMuMC(const char* dataset="Find;BasePath=/alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/;FileName=AliAOD.Muons.root",
+                         Bool_t simulations=kTRUE,
                          Bool_t baseline=kFALSE,
                          const char* where="saf",const char* alirootMode="")
 {
@@ -27,7 +27,7 @@ AliAnalysisTask* runMuMu(const char* dataset="Find;BasePath=/alice/data/2013/LHC
     }
     
 
-    LoadLocalLibs(kTRUE); // Macro to load Local Libraries
+    LoadLocalLibs(kTRUE); // Macro to load Local Libraries and tasks
   
     AliAnalysisManager *mgr = new AliAnalysisManager("MuMu"); // Create the manager
   
@@ -58,8 +58,6 @@ AliAnalysisTask* runMuMu(const char* dataset="Find;BasePath=/alice/data/2013/LHC
     TList* triggers = new TList; // Create pointer for trigger list
     triggers->SetOwner(kTRUE); // Give rights to trigger liser
     
-
-    
     // Fill the trigger list with desired trigger combinations (See on ALICE log book for denomination)
     //==============================================================================
     if (!simulations)
@@ -73,8 +71,6 @@ AliAnalysisTask* runMuMu(const char* dataset="Find;BasePath=/alice/data/2013/LHC
   
     TString outputname("test.MuMu.AOD.1.root"); // Create output name in case of no dataset selected
   
-
-    
     // Loop to configure the .root output file's name
     //==============================================================================
     if ( sds.Length()>0 )
@@ -90,7 +86,7 @@ AliAnalysisTask* runMuMu(const char* dataset="Find;BasePath=/alice/data/2013/LHC
         if (master.Contains("skaf")) af = "skaf";
         if (master.Contains("localhost:2093")) af="laf";
       }
-  	  outputname = Form("AnalysisResults.root");
+  	  outputname = Form("AnalysisResultsReferenceMC.JPsi.4.root");
   	  cout << outputname << endl;
     }
 
@@ -150,11 +146,8 @@ AliAnalysisTask* runMuMu(const char* dataset="Find;BasePath=/alice/data/2013/LHC
     }
   
     delete triggers;
-  
     return task;
 }
-
-
 
 //______________________________________________________________________________
 void LoadAlirootOnProof(TString& aaf, TString rootVersion, TString aliphysicsVersion, TString& extraLibs,
@@ -244,7 +237,6 @@ void LoadAlirootOnProof(TString& aaf, TString rootVersion, TString aliphysicsVer
         }
     else gProof->EnablePackage(Form("VO_ALICE@AliPhysics::%s",aliphysicsVersion.Data()), list, notOnClient);
     
-    
     // compile additional tasks on workers. To add tasks, use ":" (see in the main loop)
     TObjArray* tasks = extraTasks.Tokenize(":");
     for (Int_t i = 0; i < tasks->GetEntriesFast(); i++)
@@ -269,20 +261,21 @@ void LoadLocalLibs(Bool_t localAnalysis=kTRUE)
     gSystem->Load("libCORRFW");
     
     if (!localAnalysis)
-        {
-        //    gSystem->Load("libCORRFW");
-        }
+    {
+    //    gSystem->Load("libCORRFW");
+    }
     else
-        {
+    {
+        //Local library and local task
         gSystem->Load("libPWGmuon");
-        }
+        gROOT->LoadMacro("AliAnalysisMuMuMinv.cxx+g");
+    }
 }
 
 //______________________________________________________________________________
 TChain* CreateLocalChain(const char* filelist)
 {
     TChain* c = new TChain("aodTree");
-    
     char line[1024];
     
     ifstream in(filelist);

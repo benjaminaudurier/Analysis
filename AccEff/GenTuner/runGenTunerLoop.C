@@ -21,12 +21,12 @@ void runGenTunerLoop(TString smode = "saf", TString inputFileName = "Find;BasePa
   if (nStep <= 0) return;
   
   // prepare trending plots
-  TGraphErrors *gOldPtParam[6];
-  TGraphErrors *gOldPtParamMC[6];
-  TGraphErrors *gNewPtParam[6];
+  TGraphErrors *gOldPtParam[3];
+  TGraphErrors *gOldPtParamMC[3];
+  TGraphErrors *gNewPtParam[3];
 
   // Fill graph with 0
-  for (Int_t i = 0; i < 6; i++) 
+  for (Int_t i = 0; i < 3; i++) 
   {
     gOldPtParam[i] = new TGraphErrors(nStep);
     gOldPtParam[i]->SetNameTitle(Form("gOldPtParam%d",i), Form("p%d",i));
@@ -35,10 +35,10 @@ void runGenTunerLoop(TString smode = "saf", TString inputFileName = "Find;BasePa
     gNewPtParam[i] = new TGraphErrors(nStep);
     gNewPtParam[i]->SetNameTitle(Form("gNewPtParam%d",i), Form("p%d",i));
   }
-  TGraphErrors *gOldYParam[8];
-  TGraphErrors *gOldYParamMC[8];
-  TGraphErrors *gNewYParam[8];
-  for (Int_t i = 0; i < 8; i++) 
+  TGraphErrors *gOldYParam[2];
+  TGraphErrors *gOldYParamMC[2];
+  TGraphErrors *gNewYParam[2];
+  for (Int_t i = 0; i < 2; i++) 
   {
     gOldYParam[i] = new TGraphErrors(nStep);
     gOldYParam[i]->SetNameTitle(Form("gOldYParam%d",i), Form("p%d",i));
@@ -78,6 +78,8 @@ void runGenTunerLoop(TString smode = "saf", TString inputFileName = "Find;BasePa
     {
       if (i == 0)gSystem->Exec(Form("root -b -q runGenTuner.C\\(\\\"%s\\\",\\\"Find\\;BasePath=/alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/\\;FileName=AliAOD.Muons.root\\\",%d\\)",smode.Data(),i));
       else gSystem->Exec(Form("root -b -q runGenTuner.C\\(\\\"%s\\\",\\\"Find\\;BasePath=/alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/\\;FileName=AliAOD.Muons.root\\\",%d,\\\'k\\\'\\)",smode.Data(),i));
+      // if (i == 0)gSystem->Exec(Form("root -b -q runGenTuner.C\\(\\\"%s\\\",\\\"AliAOD.root\\\",%d,\\\'k\\\'\\)",smode.Data(),i));
+      // else gSystem->Exec(Form("root -b -q runGenTuner.C\\(\\\"%s\\\",\\\"AliAOD.root\\\",%d,\\\'k\\\'\\)",smode.Data(),i));
     }
     
     // get the new generator parameters and fill trending plots
@@ -92,7 +94,7 @@ void runGenTunerLoop(TString smode = "saf", TString inputFileName = "Find;BasePa
       TF1*fNewPtFunc = static_cast<TF1*>(inFile->FindObjectAny("fPtFuncNew"));
       
       // Loop over pt function param. and store them in corresponding graphics.
-      for (Int_t j = 0; j < 6; j++) 
+      for (Int_t j = 0; j < 3; j++) 
       {
         if (fOldPtFunc) 
         {
@@ -112,12 +114,12 @@ void runGenTunerLoop(TString smode = "saf", TString inputFileName = "Find;BasePa
       }
 
       // Get y fitting functions
-      TF1 *fOldYFunc = static_cast<TF1*>(inFile->FindObjectAny("fYFunc"));
-      TF1 *fOldYFuncMC = static_cast<TF1*>(inFile->FindObjectAny("fYFuncMC"));
-      TF1 *fNewYFunc = static_cast<TF1*>(inFile->FindObjectAny("fYFuncNew"));
+      TF1*fOldYFunc = static_cast<TF1*>(inFile->FindObjectAny("fYFunc"));
+      TF1*fOldYFuncMC = static_cast<TF1*>(inFile->FindObjectAny("fYFuncMC"));
+      TF1*fNewYFunc = static_cast<TF1*>(inFile->FindObjectAny("fYFuncNew"));
 
       // Loop over y function param. and store them in corresponding graphics.
-      for (Int_t j = 0; j < 8; j++) 
+      for (Int_t j = 0; j < 2; j++) 
       {
         if (fOldYFunc) 
         {
@@ -142,41 +144,41 @@ void runGenTunerLoop(TString smode = "saf", TString inputFileName = "Find;BasePa
   
 // display trending plots
   TCanvas *cPtParams = new TCanvas("cPtParams", "cPtParams", 600, 400);
-  cPtParams->Divide(3,2);
-  for (Int_t i = 0; i < 6; i++) 
+  cPtParams->Divide(3);
+  for (Int_t i = 0; i < 3; i++) 
   {
     cPtParams->cd(i+1);
     gOldPtParam[i]->SetMarkerStyle(kFullDotMedium);
-    gOldPtParam[i]->SetMarkerColor(4);
-    gOldPtParam[i]->SetLineColor(4);
+    gOldPtParam[i]->SetMarkerColor(4);// blue
+    gOldPtParam[i]->SetLineColor(4);// blue
     gOldPtParam[i]->Draw("ap");
     gOldPtParam[i]->GetXaxis()->SetLimits(-1., nStep+1.);
     gOldPtParamMC[i]->SetMarkerStyle(kFullDotMedium);
-    gOldPtParamMC[i]->SetMarkerColor(3);
-    gOldPtParamMC[i]->SetLineColor(3);
+    gOldPtParamMC[i]->SetMarkerColor(3);// Green
+    gOldPtParamMC[i]->SetLineColor(3);// Green
     gOldPtParamMC[i]->Draw("p");
     gNewPtParam[i]->SetMarkerStyle(kFullDotMedium);
-    gNewPtParam[i]->SetMarkerColor(2);
-    gNewPtParam[i]->SetLineColor(2);
+    gNewPtParam[i]->SetMarkerColor(2); // red
+    gNewPtParam[i]->SetLineColor(2); //red 
     gNewPtParam[i]->Draw("p");
   }
   TCanvas *cYParams = new TCanvas("cYParams", "cYParams", 800, 400);
-  cYParams->Divide(4,2);
-  for (Int_t i = 0; i < 8; i++) 
+  cYParams->Divide(2);
+  for (Int_t i = 0; i < 2; i++) 
   {
     cYParams->cd(i+1);
     gOldYParam[i]->SetMarkerStyle(kFullDotMedium);
-    gOldYParam[i]->SetMarkerColor(4);
-    gOldYParam[i]->SetLineColor(4);
+    gOldYParam[i]->SetMarkerColor(4);// blue
+    gOldYParam[i]->SetLineColor(4);// blue
     gOldYParam[i]->Draw("ap");
     gOldYParam[i]->GetXaxis()->SetLimits(-1., nStep+1.);
     gOldYParamMC[i]->SetMarkerStyle(kFullDotMedium);
-    gOldYParamMC[i]->SetMarkerColor(3);
-    gOldYParamMC[i]->SetLineColor(3);
+    gOldYParamMC[i]->SetMarkerColor(3);// Green
+    gOldYParamMC[i]->SetLineColor(3);// Green
     gOldYParamMC[i]->Draw("p");
     gNewYParam[i]->SetMarkerStyle(kFullDotMedium);
-    gNewYParam[i]->SetMarkerColor(2);
-    gNewYParam[i]->SetLineColor(2);
+    gNewYParam[i]->SetMarkerColor(2);// Red
+    gNewYParam[i]->SetLineColor(2);//Red
     gNewYParam[i]->Draw("p");
   }
   
@@ -191,12 +193,12 @@ void runGenTunerLoop(TString smode = "saf", TString inputFileName = "Find;BasePa
     {
       Double_t *param = fPtFuncMC->GetParameters();
       printf("\npT parameters for single muon generator:\n");
-      printf("Double_t p[6] = {%g, %g, %g, %g, %g, %g};\n",
-	     param[0], param[1], param[2], param[3], param[4], param[5]);
+      printf("Double_t p[3] = {%g, %g, %g};\n",
+	     param[0], param[1], param[2]);
       param = fYFuncMC->GetParameters();
       printf("\ny parameters for single muon generator:\n");
-      printf("Double_t p[8] = {%g, %g, %g, %g, %g, %g, %g, %g};\n\n",
-	     param[0], param[1], param[2], param[3], param[4], param[5], param[6], param[7]);
+      printf("Double_t p[2] = {%g, %g};\n\n",
+	     param[0], param[1]);
     }
     TCanvas *cRes = static_cast<TCanvas*>(inFile->FindObjectAny("cRes"));
     if (cRes) cRes->DrawClone();

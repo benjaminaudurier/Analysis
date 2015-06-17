@@ -1,12 +1,12 @@
 F 	EType 						Simulation 	name
-T 	kDimuonTriggerList  		kFALSE 		CMUL7-B-NOPF-MUON
+T 	kDimuonTriggerList  		kFALSE 		CMUL7-B-NOPF-MUON,ANY
 T	kMuonTriggerList    		kFALSE 		CMSL7-B-NOPF-MUON
 T	kMinbiasTriggerList 		kFALSE 		CINT7-B-NOPF-ALLNOTRD
 T	kMinbiasAndMULTriggerList 	kFALSE 		CPBI2_B1-B-NOPF-ALLNOTRD&0MUL
 T	kMinbiasAndMSLTriggerList 	kFALSE 		EMPTY
 T	kMSLAndMULTriggerList   	kFALSE 		EMPTY
-T	kEventSelectionList 	 	kFALSE 		PSALL
-T	kPairSelectionList 		 	kFALSE 		pALLPAIRYPAIRPTIN0.0-18.0RABSMATCHLOWETAPDCAPSALL
+T	kEventSelectionList 	 	kFALSE 		PSALL,ALL
+T	kPairSelectionList 		 	kFALSE 		pPAIRYPAIRPTIN0.0-18.0RABSMATCHLOWETAPDCAPSALL
 T	kCentralitySelectionList 	kFALSE 		V0A
 T	kFitTypeList			 	kFALSE     	func=PSIPSIPRIMECB2VWG:histoType=minv:alJPsi=1.01:nlJPsi=4.86:auJPsi=2.18:nuJPsi=2.68:range=2.06;4.8
 
