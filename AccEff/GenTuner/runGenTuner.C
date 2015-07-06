@@ -51,7 +51,7 @@ Double_t yRange[2] = {-3.8, -2.3};
 //__________Setting for spectra path
 TString striggerDimuon  ="CMUL7-B-NOPF-MUON";
 TString seventType      ="PSALL";
-TString spairCut        ="pALLPAIRYPAIRPTIN0.0-18.0RABSMATCHLOWETAPDCAPSALL";
+TString spairCut        ="pPAIRYPAIRPTIN0.0-18.0RABSMATCHLOWETAPDCAPSALL";
 TString scentrality     ="V0A";
 //__________
 
@@ -185,30 +185,53 @@ TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)
   AliAnalysisMuMuSpectra * spectraPT = static_cast<AliAnalysisMuMuSpectra*>(oc->GetObject(Form("/%s/%s/%s/%s/PSI-PT",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data())));
   if(!spectraPT)
   {
-      cout << Form("Cannot find PT spectra in %s",fSpectraPath->Data()) <<endl;
+      cout << Form("Cannot find PT spectra in /%s/%s/%s/%s/PSI-PT",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data()) << endl;
       return;
   }
   AliAnalysisMuMuSpectra * spectraY = static_cast<AliAnalysisMuMuSpectra*>(oc->GetObject(Form("/%s/%s/%s/%s/PSI-Y",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data())));
   if(!spectraY)
   {
-      cout << Form("Cannot find Y spectra in %s",fSpectraPath->Data()) <<endl;
+      cout << Form("Cannot find Y spectra in /%s/%s/%s/%s/PSI-Y",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data()) <<endl;
       return;
   }
+
+  Double_t* ptbin= spectraPT->Binning()->CreateBinArray();
+  Double_t* ybin= spectraY->Binning()->CreateBinArray();
 
   Int_t ptnofbin= spectraPT->Binning()->GetNBinsX();
   Int_t ynofbin= spectraY->Binning()->GetNBinsX();
 
-  dataFile->Close();
-  genTuner->SetPtBin(ptnofbin);
-  genTuner->SetYBin(ynofbin);
-  //___________
-  
-  
   //___________Set ref.Spectra
   // Pt spectra
   TH1* hpt= spectraPT->Plot("NofJPsi","",kTRUE);// new
   //Y spectra
   TH1* hy= spectraY->Plot("NofJPsi","",kTRUE);// new
+
+  dataFile->Close();
+
+  // cout << "ptnofbin =" << ptnofbin << endl;
+
+  // for (int i = 0; i < ptnofbin+1; ++i)
+  // {
+  //   cout << "ptbin " << i << "=" << ptbin[i] << endl;
+  // }
+
+  // for (int i = 0; i < ynofbin+1; ++i)
+  // {
+  //   cout << "ybin " << i << "=" << ybin[i] << endl;
+  // }
+
+  genTuner->SetPtBin(ptnofbin+1,ptbin);
+  genTuner->SetYBin(ynofbin+1,ybin);
+  //___________
+  
+
+  // new TCanvas;
+  // hpt->Draw();
+  // new TCanvas;
+  // hy->Draw();
+  // return;
+
 
   if(hpt && hy)
   {
@@ -230,21 +253,18 @@ TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)
   } 
   else if (iStep > 0) // Set param. from precedent fitting results
   {
-   
-    /*
     // get the original generator parameters from first step if any
-    TFile *inFile = TFile::Open("Results_step0.root","READ");
-    if (inFile && inFile->IsOpen()) {
-      TF1 *fOldPtFunc = static_cast<TF1*>(inFile->FindObjectAny("fPtFunc"));
-      TF1 *fOldYFunc = static_cast<TF1*>(inFile->FindObjectAny("fYFunc"));
-      if (fOldPtFunc && fOldYFunc) {
-	fOldPtFunc->GetParameters(oldPtParam);
-	fOldYFunc->GetParameters(oldYParam);
-      }
-      inFile->Close();
-    }
-    */
-   
+    //    TFile *inFile = TFile::Open("Results_step0.root","READ");
+    //    if (inFile && inFile->IsOpen()) {
+    //      TF1 *fOldPtFunc = static_cast<TF1*>(inFile->FindObjectAny("fPtFunc"));
+    //      TF1 *fOldYFunc = static_cast<TF1*>(inFile->FindObjectAny("fYFunc"));
+    //      if (fOldPtFunc && fOldYFunc) {
+    // fOldPtFunc->GetParameters(oldPtParam);
+    // fOldYFunc->GetParameters(oldYParam);
+    //      }
+    //      inFile->Close();
+    //    }
+    
     // get the new generator parameters from previous step if any and configure the tuner
     TString inFileName = Form("Results_step%d.root",iStep-1);
     inFile = TFile::Open(inFileName.Data(),"READ");
@@ -258,8 +278,8 @@ TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)
 
       if (fNewPtFunc && fNewYFunc && fPtFunc && fYFunc ) 
       {
-      	genTuner->SetPtParam(fPtFunc->GetParameters(), newFixPtParam, fNewPtFunc->GetParameters(), newFixPtParam, fNewPtFunc->GetXmin(), fNewPtFunc->GetXmax());
-      	genTuner->SetYParam(fYFunc->GetParameters(), newFixYParam, fNewYFunc->GetParameters(), newFixYParam, fNewYFunc->GetXmin(), fNewYFunc->GetXmax());
+      	genTuner->SetPtParam(oldPtParam, newFixPtParam, fNewPtFunc->GetParameters(), newFixPtParam, fNewPtFunc->GetXmin(), fNewPtFunc->GetXmax());
+      	genTuner->SetYParam(oldYParam, newFixYParam, fNewYFunc->GetParameters(), newFixYParam, fNewYFunc->GetXmin(), fNewYFunc->GetXmax());
       }
       else
       {

@@ -52,10 +52,10 @@ public:
   void SetYRefHisto(TH1* hyRef) {if(hyRef) fHyRef = static_cast<TH1*>(hyRef->Clone());}
 
   // set pt binning
-  void SetPtBin(Int_t nofbin) { fPtNofBin = nofbin;}
+  void SetPtBin(Int_t nofbin,Double_t* bin); 
 
   // set y binning
-  void SetYBin(Int_t nofbin) { fYNofBin = nofbin;}
+  void SetYBin(Int_t nofbin,Double_t* bin ); 
   
   /// get the current parameters of the pT generated distribution
   Double_t* GetOldPtParam() {return fPtFunc ? fPtFunc->GetParameters() : 0x0;}
@@ -145,10 +145,11 @@ private:
   
   Double_t  fCentMin;               ///< select centrality > fCentMin
   Double_t  fCentMax;               ///< select centrality <= fCentMax
-  Int_t     fPtNofBin;              ///< Number of Pt bin
-  Int_t     fYNofBin;               ///< Number of Y bin
-  TH1*       fHptRef;                //!< pt ref. data histo        
-  TH1*       fHyRef;                 //!< y ref. data histo 
+  Int_t     fPtNofBin;              // Number of Pt bin
+  Int_t     fYNofBin;               // Number of Y bin
+  
+  TH1*      fHptRef;                //!< pt ref. data histo        
+  TH1*      fHyRef;                 //!< y ref. data histo 
   AliMuonTrackCuts* fMuonTrackCuts; ///< cuts to select tracks to be considered
   Double_t fPtCut;                  ///< muon low pT cut
   Bool_t   fWeight;                 ///< weight simulated/reconstructed particles using using given functions
@@ -165,6 +166,9 @@ private:
   Bool_t  *fYFixNew;                //!< flags to fix or not the new parameters
   TCanvas *fcRes;                   //!< generated and reconstructed distributions
   TCanvas *fcRat;                   //!< data/MC ratios
+
+  Double_t* fPtBin;                 //[fPtNofBin]
+  Double_t* fYBin;                  //[fYNofBin]
   
   // copy functions for weighting particles because they are lost when streamed to a file (proof and grid mode)
   TF1 *fPtCopyFunc;    //!< generated pT fit function with current parameters

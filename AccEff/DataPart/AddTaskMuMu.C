@@ -58,7 +58,6 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
 
   // Apply default cut
   cr->AddCutCombination(triggerSelection);
-  cr->AddCutCombination(eventTrue);
   cr->AddCutCombination(ps,triggerSelection);
 
   task->SetBeamYear(beamYear);
@@ -129,22 +128,13 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
     binning->AddBin("psi","integrated");
 
     // pt binning
-    binning->AddBin("psi","pt", 0.0, 0.5,"BENJ");
-    binning->AddBin("psi","pt", 0.5, 1.0,"BENJ");
-    binning->AddBin("psi","pt", 1.0, 1.5,"BENJ");
-    binning->AddBin("psi","pt", 1.5, 2.0,"BENJ");
-    binning->AddBin("psi","pt", 2.0, 2.5,"BENJ");
-    binning->AddBin("psi","pt", 2.5, 3.0,"BENJ");
-    binning->AddBin("psi","pt", 3.0, 3.5,"BENJ");
-    binning->AddBin("psi","pt", 3.5, 4.0,"BENJ");
-    binning->AddBin("psi","pt", 4.0, 4.5,"BENJ");
-    binning->AddBin("psi","pt", 4.5, 5.0,"BENJ");
-    binning->AddBin("psi","pt", 5.0, 5.5,"BENJ");
-    binning->AddBin("psi","pt", 5.5, 6.0,"BENJ");
-    binning->AddBin("psi","pt", 6.0, 6.5,"BENJ");
-    binning->AddBin("psi","pt", 6.5, 7.0,"BENJ");
-    binning->AddBin("psi","pt", 7.0, 7.5,"BENJ");
-    binning->AddBin("psi","pt", 7.5, 8.0,"BENJ");
+    binning->AddBin("psi","pt", 0.0, 0.1,"BENJ");
+    binning->AddBin("psi","pt", 1.0, 2.0,"BENJ");
+    binning->AddBin("psi","pt", 2.0, 3.0,"BENJ");
+    binning->AddBin("psi","pt", 3.0, 4.0,"BENJ");
+    binning->AddBin("psi","pt", 4.0, 5.0,"BENJ");
+    binning->AddBin("psi","pt", 5.0, 6.0,"BENJ");
+    binning->AddBin("psi","pt", 6.0, 8.0,"BENJ");
   
    // y binning
    binning->AddBin("psi","y",-4,-3.75,"BENJ");

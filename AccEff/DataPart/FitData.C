@@ -11,7 +11,7 @@
 TString striggerDimuon  ="CMUL7-B-NOPF-MUON";
 TString seventType      ="PSALL";
 TString spairCut        ="pPAIRYPAIRPTIN0.0-18.0RABSMATCHLOWETAPDCAPSALL";
-TString sbinType        ="PT,Y";
+TString sbinType        ="Y";
 TString scentrality     ="V0A";
 TString sResName        ="";
 Bool_t divideByBinWidth =kTRUE; 
@@ -22,10 +22,8 @@ Double_t Pol12Par[2] = {1.,1.};
 //_____________________________________________________________________________
 void FitData(
 char           * sfile="AnalysisResultsReference.root",
-char           * sasso="",
-char           * sasso2="",
 char           * beamYear="PbPb2011",
-char           * what ="pt,y,integrated",
+char           * what ="pt,y",
 Bool_t FitDist = kTRUE)
 {    
     
@@ -39,20 +37,28 @@ Bool_t FitDist = kTRUE)
     TObjString* sWHAT;
 	
     // main object
-    AliAnalysisMuMu analysis(sfile,sasso,sasso2,beamYear);
+    AliAnalysisMuMu analysis(sfile,"","",beamYear);
+
+
 
     // // Clean   
     // analysis.CleanAllSpectra();    
 
-    //_____ Fit 
-    while ( ( swhat = static_cast<TObjString*>(nextWhat()) ) )
-    {
-        if(swhat->String().Contains("integrated")) analysis.Jpsi(swhat->String().Data(),"",kFALSE,kFALSE);
 
-        else analysis.Jpsi(swhat->String().Data(),"BENJ",kFALSE,kFALSE);
-    }
 
-    // analysis.PrintNofParticle("PSI","NofJPsi","INTEGRATED",kFALSE);
+    // //_____ Fit 
+    // while ( ( swhat = static_cast<TObjString*>(nextWhat()) ) )
+    // {
+    //     if(swhat->String().Contains("integrated")) analysis.Jpsi(swhat->String().Data(),"",kFALSE,kFALSE);
+
+    //     else analysis.Jpsi(swhat->String().Data(),"BENJ",kFALSE,kFALSE);
+    // }
+    
+    // analysis.DrawMinv();
+    // return;
+
+
+    
     // analysis.PrintNofParticle("PSI","NofJPsi","Y",kFALSE);
     // analysis.PrintNofParticle("PSI","NofJPsi","PT",kFALSE);
  
@@ -71,9 +77,9 @@ Bool_t FitDist = kTRUE)
                 cout << Form("Cannot find spectra with name %s",spectraPath.Data()) <<endl;
                 return;
             }
-            TObject* o= static_cast<TObject*>(spectra->Plot("NofJPsi",sResName,divideByBinWidth));
-            cout << o << endl;
-            TH1* h= static_cast<TH1*>(o->Clone());
+            spectra->Print("-");
+
+            TH1* h= static_cast<TH1*>(spectra->Plot("NofJPsi",sResName,divideByBinWidth)->Clone());
             cout << h<< endl;
             TCanvas *c = new TCanvas;
             c->SetLogy();

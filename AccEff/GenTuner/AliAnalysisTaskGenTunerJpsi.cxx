@@ -54,7 +54,10 @@ fCentMax(FLT_MAX),
 fMuonTrackCuts(0x0),
 fPtCut(-1.),
 fWeight(kFALSE),
-// fDataFile(""),
+fPtNofBin(0),
+fYNofBin(0),
+fPtBin(0),
+fYBin(0),
 fPtFunc(0x0),
 fPtFuncMC(0x0),
 fPtFix(0x0),
@@ -84,16 +87,15 @@ fCentMax(FLT_MAX),
 fMuonTrackCuts(0x0),
 fPtCut(-1.),
 fWeight(kFALSE),
-// fDataFile(""),
 fPtNofBin(0),
 fYNofBin(0),
-// fPtBin(0x0),                 
+fPtBin(0),                 
 fPtFunc(0x0),
 fPtFuncMC(0x0),
 fPtFix(0x0),
 fPtFuncNew(0x0),
 fPtFixNew(0x0),
-// fYBin(0x0),                  
+fYBin(0),                  
 fYFunc(0x0),
 fYFuncMC(0x0),
 fYFix(0x0),
@@ -139,7 +141,9 @@ AliAnalysisTaskGenTunerJpsi::~AliAnalysisTaskGenTunerJpsi()
   delete fYCopyFunc;
   delete fYCopyFuncNew;
   delete fHptRef;
-  delete fHyRef;                 
+  delete fHyRef;
+  delete[] fPtBin;                 
+  delete[] fYBin;                 
 }
 
 //___________________________________________________________________________
@@ -151,20 +155,31 @@ void AliAnalysisTaskGenTunerJpsi::UserCreateOutputObjects()
   fList = new TObjArray(2000);
   fList->SetOwner();
   
- const Double_t ptbin[17] ={0.,0.5,1.,1.5,2.,2.5,3.,3.5,4.,4.5,5.,5.5,6.,6.5,7.,7.5,8.};
- const Double_t ybin[7] ={-4,-3.75,-3.5,-3.25,-3.0,-2.75,-2.5};
+Int_t nofptbin = fPtNofBin-1;
+Int_t nofybin = fYNofBin-1;
 
-  TH1* hPtGen = new TH1D("hPtGen","generated p_{T} distribution;p_{T} (GeV/c);dN/dp_{T}",fPtNofBin,ptbin);
+if (nofptbin==0 || nofybin==0 )
+{
+  AliError("I don't have the number of bin ...");
+  return;
+}
+
+// if(!fPtBin || !fYBin) return;
+
+ // const Double_t* ptbin[fPtNofBin] ={0.,1,2.,3.,4.,5.,6.,8.};
+ // const Double_t* ybin[fYNofBin] ={-4,-3.75,-3.5,-3.25,-3.0,-2.75,-2.5};
+
+  TH1* hPtGen = new TH1D("hPtGen","generated p_{T} distribution;p_{T} (GeV/c);dN/dp_{T}",nofptbin,fPtBin);
   hPtGen->Sumw2();// Create structure to store sum of squares of weights
   fList->AddAtAndExpand(hPtGen, kPtGen);// Double array size if reach the end
-  TH1* hPtRec = new TH1D("hPtRec","reconstructed p_{T} distribution;p_{T} (GeV/c);dN/dp_{T}",fPtNofBin,ptbin);
+  TH1* hPtRec = new TH1D("hPtRec","reconstructed p_{T} distribution;p_{T} (GeV/c);dN/dp_{T}",nofptbin,fPtBin);
   hPtRec->Sumw2();// Create structure to store sum of squares of weights
   fList->AddAtAndExpand(hPtRec, kPtRec);// Double array size if reach the end
   
-  TH1* hYGen = new TH1D("hYGen","generated y distribution;y;dN/dy",fYNofBin,ybin);
+  TH1* hYGen = new TH1D("hYGen","generated y distribution;y;dN/dy",nofybin,fYBin);
   hYGen->Sumw2();
   fList->AddAtAndExpand(hYGen, kYGen);
-  TH1* hYRec = new TH1D("hYRec","reconstructed y distribution;y;dN/dy",fYNofBin,ybin);
+  TH1* hYRec = new TH1D("hYRec","reconstructed y distribution;y;dN/dy",nofybin,fYBin);
   hYRec->Sumw2();
   fList->AddAtAndExpand(hYRec, kYRec);
 
@@ -727,6 +742,50 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
   }
   //__________
 }
+
+//________________________________________________________________________
+void AliAnalysisTaskGenTunerJpsi::SetPtBin(Int_t nofbin,Double_t* bin)
+{
+  fPtNofBin = nofbin ;
+
+  if(nofbin==0)
+  {
+
+    fPtBin = 0x0;
+    return;
+  } 
+
+  fPtBin = new Double_t[fPtNofBin];
+
+  for (int i = 0; i < fPtNofBin; ++i)
+  {
+    fPtBin[i]=bin[i];
+    // cout << "fPtBin " << i << "=" << fPtBin[i] << endl;
+  }
+  return;
+} 
+
+//________________________________________________________________________
+void AliAnalysisTaskGenTunerJpsi::SetYBin(Int_t nofbin,Double_t* bin)
+{
+  fYNofBin = nofbin;
+
+  if(nofbin==0)
+  {
+    fYBin = 0x0;
+    return;
+  } 
+
+  fYBin = new Double_t[fYNofBin];
+
+  for (int i = 0; i < fYNofBin; ++i)
+  {
+    fYBin[i]=bin[i];
+    // cout << "fYBin " << i << "=" << fYBin[i] << endl;
+  }
+  return;
+} 
+
 
 //________________________________________________________________________
 void AliAnalysisTaskGenTunerJpsi::SetPtParam(const Double_t *pOld, const Bool_t *fixOld, const Double_t *pNew,
