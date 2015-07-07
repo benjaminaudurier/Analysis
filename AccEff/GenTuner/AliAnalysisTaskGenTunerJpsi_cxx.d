@@ -68,6 +68,9 @@
 ./AliAnalysisTaskGenTunerJpsi_cxx.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TMap.h
 ./AliAnalysisTaskGenTunerJpsi_cxx.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/THashTable.h
 ./AliAnalysisTaskGenTunerJpsi_cxx.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TUrl.h
+./AliAnalysisTaskGenTunerJpsi_cxx.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TLegend.h
+./AliAnalysisTaskGenTunerJpsi_cxx.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TPave.h
+./AliAnalysisTaskGenTunerJpsi_cxx.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TBox.h
 ./AliAnalysisTaskGenTunerJpsi_cxx.so: /Users/audurier/alicesw/aliroot/v5-06-19/inst/include/AliLog.h
 ./AliAnalysisTaskGenTunerJpsi_cxx.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TClass.h
 ./AliAnalysisTaskGenTunerJpsi_cxx.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TDictionary.h

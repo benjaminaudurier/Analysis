@@ -41,12 +41,12 @@ Bool_t FitDist = kTRUE)
 
 
 
-    // // Clean   
+    //______Clean   
     // analysis.CleanAllSpectra();    
 
 
 
-    // //_____ Fit 
+    // //______Fit 
     // while ( ( swhat = static_cast<TObjString*>(nextWhat()) ) )
     // {
     //     if(swhat->String().Contains("integrated")) analysis.Jpsi(swhat->String().Data(),"",kFALSE,kFALSE);
@@ -54,13 +54,10 @@ Bool_t FitDist = kTRUE)
     //     else analysis.Jpsi(swhat->String().Data(),"BENJ",kFALSE,kFALSE);
     // }
     
-    // analysis.DrawMinv();
-    // return;
-
-
     
     // analysis.PrintNofParticle("PSI","NofJPsi","Y",kFALSE);
     // analysis.PrintNofParticle("PSI","NofJPsi","PT",kFALSE);
+    // analysis.DrawFitResults("PSI","PT");
  
     //_______Fit  J/psi vs pt or J/psi vs y 
     if(FitDist)

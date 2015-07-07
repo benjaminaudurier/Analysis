@@ -32,17 +32,17 @@ Int_t maxMergeStages = 2;
 
 //__________generator parameters used in the simulation
 // tune1 LHC13d pt param. (see AliAnalysisTaskGenTunerJpsi::Pt)
-Double_t oldPtParam[3] = { 266.150, 0.0300432 , 5.18424};
+Double_t oldPtParam[3] = { 180, 0.1 , 6.};
 Bool_t oldFixPtParam[3] = {kFALSE, kFALSE, kFALSE};
-Double_t newPtParam[3] = {266.150, 0.0300432 , 5.18424};
+Double_t newPtParam[3] = { 180, 0.1 , 6.};
 Bool_t newFixPtParam[3] = {kFALSE, kFALSE, kFALSE};
 
 Double_t ptRange[2] = {0.1, 7.};
 
 // tune1 LHC13d y param. (see AliAnalysisTaskGenTunerJpsi::Y)
-Double_t oldYParam[2] =  {2.34196, 0.220104};
+Double_t oldYParam[2] =  {2.5, 0.28};
 Bool_t oldFixYParam[2] = {kFALSE, kFALSE};
-Double_t newYParam[2] =  {2.34196, 0.220104};
+Double_t newYParam[2] =  {2.5, 0.28};
 Bool_t newFixYParam[2] = {kFALSE, kFALSE};
 
 Double_t yRange[2] = {-3.8, -2.3};
@@ -225,13 +225,11 @@ TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)
   genTuner->SetYBin(ynofbin+1,ybin);
   //___________
   
-
   // new TCanvas;
   // hpt->Draw();
   // new TCanvas;
   // hy->Draw();
   // return;
-
 
   if(hpt && hy)
   {
@@ -278,8 +276,8 @@ TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)
 
       if (fNewPtFunc && fNewYFunc && fPtFunc && fYFunc ) 
       {
-      	genTuner->SetPtParam(oldPtParam, newFixPtParam, fNewPtFunc->GetParameters(), newFixPtParam, fNewPtFunc->GetXmin(), fNewPtFunc->GetXmax());
-      	genTuner->SetYParam(oldYParam, newFixYParam, fNewYFunc->GetParameters(), newFixYParam, fNewYFunc->GetXmin(), fNewYFunc->GetXmax());
+      	genTuner->SetPtParam(oldPtParam, oldFixPtParam, fNewPtFunc->GetParameters(), newFixPtParam, fNewPtFunc->GetXmin(), fNewPtFunc->GetXmax());
+      	genTuner->SetYParam(oldYParam, oldFixYParam, fNewYFunc->GetParameters(), newFixYParam, fNewYFunc->GetXmin(), fNewYFunc->GetXmax());
       }
       else
       {

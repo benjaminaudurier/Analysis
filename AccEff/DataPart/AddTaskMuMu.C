@@ -128,13 +128,17 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
     binning->AddBin("psi","integrated");
 
     // pt binning
-    binning->AddBin("psi","pt", 0.0, 0.1,"BENJ");
+    binning->AddBin("psi","pt", 0.0, 1.0,"BENJ");
     binning->AddBin("psi","pt", 1.0, 2.0,"BENJ");
     binning->AddBin("psi","pt", 2.0, 3.0,"BENJ");
     binning->AddBin("psi","pt", 3.0, 4.0,"BENJ");
     binning->AddBin("psi","pt", 4.0, 5.0,"BENJ");
     binning->AddBin("psi","pt", 5.0, 6.0,"BENJ");
     binning->AddBin("psi","pt", 6.0, 8.0,"BENJ");
+
+
+    // binning->AddBin("psi","ptvsy", 0.0, 1.0,-4,-2.5,"BENJ");
+
   
    // y binning
    binning->AddBin("psi","y",-4,-3.75,"BENJ");

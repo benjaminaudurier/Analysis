@@ -25,6 +25,7 @@
 #include <TFile.h>
 #include <TString.h>
 #include <TObjArray.h>
+#include <TLegend.h>
 
 // STEER includes
 #include "AliLog.h"
@@ -356,19 +357,8 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
   {
     h[i] = static_cast<TH1*>(fList->UncheckedAt(hIndex[i])->Clone());
     h[i]->SetDirectory(0);
+    h[i]->Scale(1,"width");// Normalize
   }
-  //__________
-  
-  // new TCanvas;
-  // h[0]->Draw("");
-  // new TCanvas;
-  // h[1]->Draw("");
-  // new TCanvas;
-  // h[2]->Draw("");
-  // new TCanvas;
-  // h[3]->Draw("");
-  // return;
-  
   
   //__________get the fit ranges
   Double_t fitRangeMC[2][2];
@@ -423,6 +413,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     }
   }
   //__________
+  
 
   //__________normalize histograms
   Bool_t normalized = kFALSE;
@@ -439,7 +430,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     normalized = kTRUE;
   }
   //__________
-  
+
   //__________compute dataCorr/MC ratios
   TH1 *hRat[4] = {0x0,                  0x0,                 0x0,              0x0            };
   //              ptAccEffCorr./ptGen   yAccEffCorr./yGen    RefPtHisto/RecPt  RefYHisto/RecY 
@@ -450,7 +441,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     hRat[i]->Divide(h[i]);
   }
   //__________
-  
+
   //__________prepare fitting functions
   if (hAccEff[0]) // Pt AccEff histo
   {
@@ -458,25 +449,18 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
 
     if (fPtFunc) 
     { 
-      cout <<""<< endl;
-      cout << "fPtFunc ok" << endl;
       fPtFunc->SetRange(fitRange[0][0], fitRange[0][1]);
       if (fWeight && fPtFuncNew) fPtFunc->SetParameters(fPtFuncNew->GetParameters());// Change old fit param. with new fit param.
       NormFunc(fPtFunc, fitRange[0][0], fitRange[0][1]);
     }
     if (fPtFuncMC) 
     { 
-      cout <<""<< endl;
-      cout << "fPtFuncMC ok" << endl;
       fPtFuncMC->SetRange(fitRangeMC[0][0], fitRangeMC[0][1]);
       if (fWeight && fPtFuncNew) fPtFuncMC->SetParameters(fPtFuncNew->GetParameters());// Change old fit param. with new fit param.
       NormFunc(fPtFuncMC, fitRange[0][0], fitRange[0][1]);
     }
     if (hRef[0] && fPtFuncNew) 
     {
-      cout <<""<< endl;
-      cout << "hRef[0] && fPtFuncNew ok" << endl;
-
       fPtFuncNew->SetRange(fitRange[0][0], fitRange[0][1]);
       NormFunc(fPtFuncNew, fitRange[0][0], fitRange[0][1]);
     }
@@ -495,35 +479,35 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
   
   if (hAccEff[1]) // Y AccEff histo
   {
-    cout << "prepare fitting functions for Pt AccEff histo..." << endl;
+    cout << "prepare fitting functions for Y AccEff histo..." << endl;
 
     if (fYFunc) 
     { 
-      cout <<""<< endl;
-      cout << "fYFunc ok" << endl;
+      // cout <<""<< endl;
+      // cout << "fYFunc ok" << endl;
       fYFunc->SetRange(fitRange[1][0], fitRange[1][1]);
       if (fWeight && fYFuncNew) fYFunc->SetParameters(fYFuncNew->GetParameters());// Change old fit param. with new fit param.
       NormFunc(fYFunc, fitRange[1][0], fitRange[1][1]);
     }
     if (fYFuncMC) 
     { 
-      cout <<""<< endl;
-      cout << "fYFuncMC ok" << endl;
+      // cout <<""<< endl;
+      // cout << "fYFuncMC ok" << endl;
       fYFuncMC->SetRange(fitRangeMC[1][0], fitRangeMC[1][1]);
       if (fWeight && fYFuncNew) fYFuncMC->SetParameters(fYFuncNew->GetParameters());// Change old fit param. with new fit param.
       NormFunc(fYFuncMC, fitRange[1][0], fitRange[1][1]);
     }
     if (hRef[1] && fYFuncNew) 
     { 
-      cout <<""<< endl;
-      cout << "hRef[1] && fYFuncNew ok" << endl;
+      // cout <<""<< endl;
+      // cout << "hRef[1] && fYFuncNew ok" << endl;
       fYFuncNew->SetRange(fitRange[1][0], fitRange[1][1]);
       NormFunc(fYFuncNew, fitRange[1][0], fitRange[1][1]);
     }
     if (!normalized) 
     { 
-      cout <<""<< endl;
-      cout << "!normalized ok" << endl;
+      // cout <<""<< endl;
+      // cout << "!normalized ok" << endl;
       Double_t integral = h[1]->Integral(h[1]->FindBin(fitRange[1][0]), h[1]->FindBin(fitRange[1][1]), "width");
       if (fYFunc) fYFunc->SetParameter(0, fYFunc->GetParameter(0)*integral);
       if (fYFuncMC) fYFuncMC->SetParameter(0, fYFuncMC->GetParameter(0)*integral);// Change old fit param. with new fit param.
@@ -539,22 +523,33 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
   //__________plot results
   fcRes = new TCanvas("cRes", "results", 900, 600);
   fcRes->Divide(2,2);
+
+//------Pad 1
   fcRes->cd(1);
   gPad->SetLogy();
+  TLegend*leg = new TLegend(0.48,0.7,0.70,0.9);
+
   if (hAccEff[0]) 
   {
+
     if (fPtFuncMC) 
     {
       fPtFuncMC->SetLineColor(3);// Green
       fPtFuncMC->SetLineWidth(3);
-      h[0]->Fit(fPtFuncMC, "IWLMR", "e0sames");// AccEff corrected Gen. pt histo.
-    } else h[0]->Draw("");
+      h[0]->Fit(fPtFuncMC, "IWLMR", "e0sames");// Gen. pt histo.
+      leg->AddEntry(fPtFuncMC,"MC fit function","l");
+    } 
+    else h[0]->Draw("");
+    leg->AddEntry(h[0],"MC Generated tracks ","lep");
+    
     if (fPtFunc) 
     {
       fPtFunc->SetLineColor(4); // Blue
       h[0]->Fit(fPtFunc, "IWLMR+");
+      leg->AddEntry(fPtFunc,"Old Data fit function","l");
     }
   }
+  
   if (hRef[0]) // AccEff corrected Data pt histo. 
   {
     hRef[0]->SetLineColor(2); // Red
@@ -562,23 +557,34 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     {
       fPtFuncNew->SetLineColor(2);// Red
       hRef[0]->Fit(fPtFuncNew, "IWLMR", "sames");
-    } else hRef[0]->Draw("sames");
+      leg->AddEntry(fPtFuncNew,"New Data Fit function","l");
+    } 
+    else hRef[0]->Draw("sames");
+    leg->AddEntry(hRef[0],"AccEff corrected Data","lep");
   }
+  leg->Draw("same");
+
+//------Pad 2
   fcRes->cd(2);
+  TLegend*leg2 = new TLegend(0.48,0.7,0.70,0.9);
+
   if (hAccEff[1]) 
   {
     if (fYFuncMC) 
     {
       fYFuncMC->SetLineColor(3);// Green
       fYFuncMC->SetLineWidth(3);
-      h[1]->Fit(fYFuncMC, "IWLMR", "sames");// AccEff corrected Gen. y histo.
+      h[1]->Fit(fYFuncMC, "IWLMR", "sames");//  Gen. y histo.
+      leg2->AddEntry(fYFuncMC,"MC fit function","l");
     } 
     else h[1]->Draw("");
+    leg2->AddEntry(h[1],"MC Generated tracks ","lep");
     
     if (fYFunc) 
     {
       fYFunc->SetLineColor(4);// Blue
       h[1]->Fit(fYFunc, "IWLMR+");
+      leg2->AddEntry(fYFunc,"Old Data fit function","l");
     }
   }
   if (hRef[1])  // AccEff corrected Data pt histo. 
@@ -588,21 +594,30 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     {
       fYFuncNew->SetLineColor(2); // Red
       hRef[1]->Fit(fYFuncNew, "IWLMR", "sames");
+      leg2->AddEntry(fYFuncNew,"New Data Fit function","l");
     } 
     else hRef[1]->Draw("sames");
+    leg2->AddEntry(hRef[1],"AccEff corrected Data","lep");
   }
+  leg2->Draw("same");
+
+//------Pad 3 and 4
   for (Int_t i = 2; i < 4; i++) 
   {
     fcRes->cd(i+1);
-    
+    TLegend*legend = new TLegend(0.48,0.7,0.70,0.9);
+
     if (i == 2) gPad->SetLogy();
     h[i]->Draw(""); // AccEff corrected Rec.  histo.
+    legend->AddEntry(h[i],"Rec. MC Track","lep");
     
     if (hRef[i]) 
     {
       hRef[i]->SetLineColor(2);// Red
       hRef[i]->Draw("sames");// data histo.
+      legend->AddEntry(hRef[i],"Data Track","lep");
     }
+    legend->Draw("same");
   }
   //__________
   
@@ -671,9 +686,20 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
   for (Int_t i = 0; i < 4 && hRat[i]; i++) 
   {
     fcRat->cd(i+1);
+    TLegend*leg= new TLegend(0.48,0.8,0.70,0.9);
     hRat[i]->Draw("e0");
-    if (i == 0 && ptRat) ptRat->Draw("same");
-    else if (i == 1 && yRat) yRat->Draw("same");
+    if (i == 0 && ptRat) 
+    {
+      ptRat->Draw("same");
+      leg->AddEntry(ptRat,"MC-Data fit function","l");
+    }
+    else if (i == 1 && yRat)
+    {
+      yRat->Draw("same");
+      leg->AddEntry(ptRat,"MC-Data fit function","l");
+    }
+    leg->AddEntry(hRat[i],"Scaled and AccEff Corr.","leg"); 
+    leg->Draw("same");
   }
   // __________
   
@@ -944,8 +970,11 @@ TH1* AliAnalysisTaskGenTunerJpsi::ComputeAccEff(TH1 &hGen, TH1 &hRec, const Char
   /// Result is identical to divide histograms with option "B", except here error is forced > 1/gen
   
   Int_t nbins = hGen.GetNbinsX();
-  TH1* hAcc = new TH1D(name,title, nbins, hGen.GetXaxis()->GetXmin(), hGen.GetXaxis()->GetXmax());
-  for (Int_t i = 1; i <= nbins; i++)
+  TH1* hAcc = static_cast<TH1*>(hGen.Clone());
+  hAcc->SetName(name);
+  hAcc->SetTitle(title);
+
+  for (Int_t i = 1; i <nbins+1; i++)
   { 
     Double_t accEff = 0.;
     Double_t accEffErr = 0.;
