@@ -134,7 +134,8 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
     binning->AddBin("psi","pt", 3.0, 4.0,"BENJ");
     binning->AddBin("psi","pt", 4.0, 5.0,"BENJ");
     binning->AddBin("psi","pt", 5.0, 6.0,"BENJ");
-    binning->AddBin("psi","pt", 6.0, 8.0,"BENJ");
+    binning->AddBin("psi","pt", 6.0, 7.0,"BENJ");
+    binning->AddBin("psi","pt", 7.0, 8.0,"BENJ");
 
 
     // binning->AddBin("psi","ptvsy", 0.0, 1.0,-4,-2.5,"BENJ");

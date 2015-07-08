@@ -233,13 +233,18 @@ void AliAnalysisTaskGenTunerJpsi::UserExec(Option_t *)
   Float_t centrality = aod->GetCentrality()->GetCentralityPercentileUnchecked("V0M");
   if (centrality <= fCentMin || centrality > fCentMax) return;
   
-  Double_t  weight =1.;
+  TArrayD weight; 
 
   if (!MCEvent()) return; 
-  
+
+  weight.Set(MCEvent()->GetNumberOfTracks());
+
   //__________Generated tracks part
   for (Int_t i = 0; i < MCEvent()->GetNumberOfTracks(); i++) 
-  {
+  { 
+    //Set size
+    
+
     // get MC particle track
     AliAODMCParticle *mctrack = static_cast<AliAODMCParticle*>(MCEvent()->GetTrack(i));
 
@@ -254,23 +259,39 @@ void AliAnalysisTaskGenTunerJpsi::UserExec(Option_t *)
       Double_t y  = mctrack->Y();
       Double_t pT = mctrack->Pt();
 
-      if( pT>8 || pT<0 || y < -4 || y>-2.5 ) continue; 
+      if( pT>7 || pT<0 || y < -4 || y>-2.5 ) continue; 
 
       //________compute weight
       if (fWeight) 
       {
-        weight = (fPtCopyFuncNew->Eval(pT) / fPtCopyFunc->Eval(pT)) * (fYCopyFuncNew->Eval(y) / fYCopyFunc->Eval(y));// Compute Weight
-        if (weight < 0.) 
+        weight[i] = (fPtCopyFuncNew->Eval(pT) / fPtCopyFunc->Eval(pT) )*( fYCopyFuncNew->Eval(y) / fYCopyFunc->Eval(y));// Compute Weight
+        if (weight[i] < 0.) 
         {
-          AliError(Form("negative weight: y = %g, pT = %g: w = %g", y, pT, weight));
-          weight = 0.;
+          AliError(Form("negative weight: y = %g, pT = %g: w = %g", y, pT, weight[i]));
+          weight[i] = 0.;
         }
       } 
-      else weight = 1.;
+      else weight[i] = 1.;
       //________
+      Double_t w = weight[i];
+      // if (pT>6)
+      // {
+      //   cout << "Pt               : " << pT << endl;
+      //   cout << "Y                : " << y << endl;
+      //   // // cout << "w          : " << w << endl;
+      //   // cout << "fPtCopyFuncNew: " << fPtCopyFuncNew->Eval(pT) << endl;
+      //   if(!fPtCopyFunc)cout << "fPtCopyFunc is nul  " << endl;
+      //   if(!fPtCopyFuncNew)cout << "fPtCopyFuncNew is nul  " << endl;
+      //   if(!fYCopyFuncNew)cout << "fYCopyFuncNew is nul  " << endl;
+      //   if(!fYCopyFunc)cout << "fYCopyFunc is nul  " << endl;
+      //   // cout << "fYCopyFuncNew : " << fYCopyFuncNew->Eval(y) << endl;
+      //   // cout << "fYCopyFunc    : " << fYCopyFunc->Eval(y) << endl;
+      //   // cout << "" << endl;
+      // }
 
-    ((TH1*)fList->UncheckedAt(kPtGen))->Fill(pT, weight); // fill PtGenHisto
-    ((TH1*)fList->UncheckedAt(kYGen))->Fill(y, weight); // fill YGenHisto
+      
+    ((TH1*)fList->UncheckedAt(kPtGen))->Fill(pT, w); // fill PtGenHisto
+    ((TH1*)fList->UncheckedAt(kYGen))->Fill(y, w); // fill YGenHisto
     // ((TH1*)fList->UncheckedAt(kPhiGen))->Fill(mctrack->Phi()*TMath::RadToDeg(), weight);// fill PhiGenHisto
     }
   }
@@ -325,15 +346,27 @@ void AliAnalysisTaskGenTunerJpsi::UserExec(Option_t *)
       TLorentzVector Dimu = vec2+vec;
 
       // Cut on paire
-      if( Dimu.Pt()>8 || Dimu.Pt()<0 || Dimu.Rapidity() < -4 || Dimu.Rapidity()>-2.5 ) continue; 
-
+      if( Dimu.Pt()>7 || Dimu.Pt()<0 || Dimu.Rapidity() < -4 || Dimu.Rapidity()>-2.5 ) continue; 
       
+      //________compute weight
+      if (fWeight) 
+      {
+        weight[i] = fPtCopyFuncNew->Eval(Dimu.Pt()) / fPtCopyFunc->Eval(Dimu.Pt()) * fYCopyFuncNew->Eval(Dimu.Rapidity()) / fYCopyFunc->Eval(Dimu.Rapidity());// Compute Weight
+        if (weight[i] < 0.) 
+        {
+          AliError(Form("negative weight: Dimu.Rapidity() = %g, Dimu.Pt() = %g: w = %g", Dimu.Rapidity(), Dimu.Pt(), weight[i]));
+          weight[i] = 0.;
+        }
+      } 
+      else weight[i] = 1.;
+      //________
+      Double_t w = weight[i];
 
       // cout << "Dimu.Pt() = " <<Dimu.Pt()<< endl; 
       // cout << "Diff = " << Dimu.Rapidity() -y << endl; 
       // cout << "vec2.Y() = " <<vec2.Y()<< endl; 
-      ((TH1*)fList->UncheckedAt(kPtRec))->Fill(Dimu.Pt(),weight);
-      ((TH1*)fList->UncheckedAt(kYRec))->Fill(Dimu.Rapidity(),weight);
+      ((TH1*)fList->UncheckedAt(kPtRec))->Fill(Dimu.Pt(),w);
+      ((TH1*)fList->UncheckedAt(kYRec))->Fill(Dimu.Rapidity(),w);
     } 
   } 
   //__________
@@ -359,7 +392,16 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     h[i]->SetDirectory(0);
     h[i]->Scale(1,"width");// Normalize
   }
-  
+  //  new TCanvas;
+  // h[0]->Draw("");
+  // new TCanvas;
+  // h[1]->Draw("");
+  // new TCanvas;
+  // h[2]->Draw("");
+  // new TCanvas;
+  // h[3]->Draw("");
+  // return; 
+
   //__________get the fit ranges
   Double_t fitRangeMC[2][2];
   fitRangeMC[0][0] = GetFitLowEdge(*(h[0]));
@@ -429,8 +471,8 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     hRef[i+2]->Scale(norm);
     normalized = kTRUE;
   }
-  //__________
-
+  //_________
+   
   //__________compute dataCorr/MC ratios
   TH1 *hRat[4] = {0x0,                  0x0,                 0x0,              0x0            };
   //              ptAccEffCorr./ptGen   yAccEffCorr./yGen    RefPtHisto/RecPt  RefYHisto/RecY 
@@ -439,6 +481,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     hRat[i] = static_cast<TH1*>(hRef[i]->Clone());
     hRat[i]->SetTitle("data / MC");
     hRat[i]->Divide(h[i]);
+    if(!hRat[i]) cout << Form("Cannot divide histo %d",i) << endl;
   }
   //__________
 
@@ -692,13 +735,16 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     {
       ptRat->Draw("same");
       leg->AddEntry(ptRat,"MC-Data fit function","l");
+      leg->AddEntry(hRat[i],"Data Dist. / MC Gen. ","leg"); 
     }
     else if (i == 1 && yRat)
     {
       yRat->Draw("same");
       leg->AddEntry(ptRat,"MC-Data fit function","l");
+      leg->AddEntry(hRat[i],"Data Dist. / MC Gen. ","leg");
     }
-    leg->AddEntry(hRat[i],"Scaled and AccEff Corr.","leg"); 
+    leg->AddEntry(hRat[i],"Data/Rec","leg"); 
+    
     leg->Draw("same");
   }
   // __________
@@ -973,7 +1019,6 @@ TH1* AliAnalysisTaskGenTunerJpsi::ComputeAccEff(TH1 &hGen, TH1 &hRec, const Char
   TH1* hAcc = static_cast<TH1*>(hGen.Clone());
   hAcc->SetName(name);
   hAcc->SetTitle(title);
-
   for (Int_t i = 1; i <nbins+1; i++)
   { 
     Double_t accEff = 0.;
@@ -1014,7 +1059,7 @@ Double_t AliAnalysisTaskGenTunerJpsi::Pt(const Double_t *x, const Double_t *p)
   Double_t pT = *x;
   Double_t arg = 0;
   
-  arg = p[0]*x[0] / TMath::Power( 1 + p[1]*pT*pT, p[2]);
+  arg = p[0]*pT / TMath::Power( 1 + p[1]*pT*pT, p[2]);
   
   return arg;
 }

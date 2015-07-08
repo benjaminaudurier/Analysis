@@ -58,6 +58,7 @@ Bool_t FitDist = kTRUE)
     // analysis.PrintNofParticle("PSI","NofJPsi","Y",kFALSE);
     // analysis.PrintNofParticle("PSI","NofJPsi","PT",kFALSE);
     // analysis.DrawFitResults("PSI","PT");
+    // analysis.DrawFitResults("PSI","Y");
  
     //_______Fit  J/psi vs pt or J/psi vs y 
     if(FitDist)
