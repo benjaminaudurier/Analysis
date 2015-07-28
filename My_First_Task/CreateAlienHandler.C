@@ -28,7 +28,7 @@ AliAnalysisGrid* CreateAlienHandler()
 // Set versions of used packages
    plugin->SetAPIVersion("V1.1x");
 
-   // plugin->SetROOTVersion("v5-22-00");
+   plugin->SetROOTVersion("v5-34-30");
    plugin->SetAliROOTVersion("vAN-20140923");
 
 // Declare input data to be processed.

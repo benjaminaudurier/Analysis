@@ -1,0 +1,137 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+ALIANALYSISTASKGENTUNERJPSI_H	AliAnalysisTaskGenTunerJpsi.h	/^#define ALIANALYSISTASKGENTUNERJPSI_H$/;"	d
+AddTaskGenTuner	AddTaskGenTuner.C	/^AliAnalysisTaskGenTunerJpsi* AddTaskGenTuner()$/;"	f
+AliAnalysisTaskGenTunerJpsi	AliAnalysisTaskGenTunerJpsi.cxx	/^AliAnalysisTaskGenTunerJpsi::AliAnalysisTaskGenTunerJpsi() :$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+AliAnalysisTaskGenTunerJpsi	AliAnalysisTaskGenTunerJpsi.cxx	/^AliAnalysisTaskGenTunerJpsi::AliAnalysisTaskGenTunerJpsi(const char *name) :$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+AliAnalysisTaskGenTunerJpsi	AliAnalysisTaskGenTunerJpsi.h	/^class AliAnalysisTaskGenTunerJpsi : public AliAnalysisTaskSE {$/;"	c
+Compare	Compare.C	/^void Compare(TString sfile1, TString sfile2)$/;"	f
+ComputeAccEff	AliAnalysisTaskGenTunerJpsi.cxx	/^TH1* AliAnalysisTaskGenTunerJpsi::ComputeAccEff(TH1 &hGen, TH1 &hRec, const Char_t *name, const Char_t *title)$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+CopyFileLocally	runTaskFacilities.C	/^void CopyFileLocally(TList &pathList, TList &fileList, char overwrite = '\\0')$/;"	f
+CreateAlienHandler	runTaskFacilities.C	/^TObject* CreateAlienHandler(TString runMode, TString& alirootVersion, TString& aliphysicsVersion, TString& runListName,$/;"	f
+CreateAnalysisTrain	runGenTuner.C	/^TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)$/;"	f
+CreateChainFromFile	runTaskFacilities.C	/^TChain* CreateChainFromFile(const char *rootfile)$/;"	f
+CreateInputObject	runTaskFacilities.C	/^TObject* CreateInputObject(Int_t mode, TString &inputName)$/;"	f
+GetDataType	runTaskFacilities.C	/^TString GetDataType(TString input)$/;"	f
+GetFitLowEdge	AliAnalysisTaskGenTunerJpsi.cxx	/^Double_t AliAnalysisTaskGenTunerJpsi::GetFitLowEdge(TH1 &h)$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+GetFitUpEdge	AliAnalysisTaskGenTunerJpsi.cxx	/^Double_t AliAnalysisTaskGenTunerJpsi::GetFitUpEdge(TH1 &h)$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+GetMode	runTaskFacilities.C	/^Int_t GetMode(TString smode, TString input)$/;"	f
+GetNewFixPtParam	AliAnalysisTaskGenTunerJpsi.h	/^  Bool_t* GetNewFixPtParam() {return fPtFixNew;}$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+GetNewFixYParam	AliAnalysisTaskGenTunerJpsi.h	/^  Bool_t* GetNewFixYParam() {return fYFixNew;}$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+GetNewPtFunc	AliAnalysisTaskGenTunerJpsi.h	/^  TF1* GetNewPtFunc() {return fPtFuncNew;}$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+GetNewPtParam	AliAnalysisTaskGenTunerJpsi.h	/^  Double_t* GetNewPtParam() {return fPtFuncNew ? fPtFuncNew->GetParameters() : 0x0;}$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+GetNewYFunc	AliAnalysisTaskGenTunerJpsi.h	/^  TF1* GetNewYFunc() {return fYFuncNew;}$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+GetNewYParam	AliAnalysisTaskGenTunerJpsi.h	/^  Double_t* GetNewYParam() {return fYFuncNew ? fYFuncNew->GetParameters() : 0x0;}$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+GetOldFixPtParam	AliAnalysisTaskGenTunerJpsi.h	/^  Bool_t* GetOldFixPtParam() {return fPtFix;}$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+GetOldFixYParam	AliAnalysisTaskGenTunerJpsi.h	/^  Bool_t* GetOldFixYParam() {return fYFix;}$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+GetOldPtFunc	AliAnalysisTaskGenTunerJpsi.h	/^  TF1* GetOldPtFunc() {return fPtFunc;}$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+GetOldPtFuncMC	AliAnalysisTaskGenTunerJpsi.h	/^  TF1* GetOldPtFuncMC() {return fPtFuncMC;}$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+GetOldPtParam	AliAnalysisTaskGenTunerJpsi.h	/^  Double_t* GetOldPtParam() {return fPtFunc ? fPtFunc->GetParameters() : 0x0;}$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+GetOldPtParamMC	AliAnalysisTaskGenTunerJpsi.h	/^  Double_t* GetOldPtParamMC() {return fPtFuncMC ? fPtFuncMC->GetParameters() : 0x0;}$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+GetOldYFunc	AliAnalysisTaskGenTunerJpsi.h	/^  TF1* GetOldYFunc() {return fYFunc;}$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+GetOldYFuncMC	AliAnalysisTaskGenTunerJpsi.h	/^  TF1* GetOldYFuncMC() {return fYFuncMC;}$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+GetOldYParam	AliAnalysisTaskGenTunerJpsi.h	/^  Double_t* GetOldYParam() {return fYFunc ? fYFunc->GetParameters() : 0x0;}$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+GetOldYParamMC	AliAnalysisTaskGenTunerJpsi.h	/^  Double_t* GetOldYParamMC() {return fYFuncMC ? fYFuncMC->GetParameters() : 0x0;}$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+GetRatios	AliAnalysisTaskGenTunerJpsi.h	/^  TCanvas* GetRatios() {return fcRat;}$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+GetResults	AliAnalysisTaskGenTunerJpsi.h	/^  TCanvas* GetResults() {return fcRes;}$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+LoadAlirootLocally	runTaskFacilities.C	/^void LoadAlirootLocally(TString& extraLibs, TString& extraIncs, TString& extraTasks)$/;"	f
+LoadAlirootOnProof	runTaskFacilities.C	/^void LoadAlirootOnProof(TString& aaf, TString rootVersion, TString aliphysicsVersion, TString& extraLibs,$/;"	f
+NormFunc	AliAnalysisTaskGenTunerJpsi.cxx	/^void AliAnalysisTaskGenTunerJpsi::NormFunc(TF1 *f, Double_t min, Double_t max)$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+NotifyRun	AliAnalysisTaskGenTunerJpsi.cxx	/^void AliAnalysisTaskGenTunerJpsi::NotifyRun()$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+Pt	AliAnalysisTaskGenTunerJpsi.cxx	/^Double_t AliAnalysisTaskGenTunerJpsi::Pt(const Double_t *x, const Double_t *p)$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+Pt	Compare.C	/^Double_t Pt(const Double_t *x, const Double_t *p)$/;"	f
+PtRat	AliAnalysisTaskGenTunerJpsi.cxx	/^Double_t AliAnalysisTaskGenTunerJpsi::PtRat(const Double_t *x, const Double_t *p)$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+PtRat	Compare.C	/^Double_t PtRat(const Double_t *x, const Double_t *p)$/;"	f
+SelectCentrality	AliAnalysisTaskGenTunerJpsi.h	/^  void SelectCentrality(Double_t min, Double_t max) {fCentMin = min; fCentMax = max;}$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+SetMuonPtCut	AliAnalysisTaskGenTunerJpsi.h	/^  void SetMuonPtCut(Double_t cut) {fPtCut = cut;}$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+SetMuonTrackCuts	AliAnalysisTaskGenTunerJpsi.h	/^inline void AliAnalysisTaskGenTunerJpsi::SetMuonTrackCuts(AliMuonTrackCuts &trackCuts)$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+SetPtBin	AliAnalysisTaskGenTunerJpsi.cxx	/^void AliAnalysisTaskGenTunerJpsi::SetPtBin(Int_t nofbin,Double_t* bin)$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+SetPtParam	AliAnalysisTaskGenTunerJpsi.cxx	/^void AliAnalysisTaskGenTunerJpsi::SetPtParam(const Double_t *pOld, const Bool_t *fixOld, const Double_t *pNew,$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+SetPtRefHisto	AliAnalysisTaskGenTunerJpsi.h	/^  void SetPtRefHisto(TH1* hptRef) {if(hptRef) fHptRef = static_cast<TH1*>(hptRef->Clone());}$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+SetYBin	AliAnalysisTaskGenTunerJpsi.cxx	/^void AliAnalysisTaskGenTunerJpsi::SetYBin(Int_t nofbin,Double_t* bin)$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+SetYParam	AliAnalysisTaskGenTunerJpsi.cxx	/^void AliAnalysisTaskGenTunerJpsi::SetYParam(const Double_t *pOld, const Bool_t *fixOld, const Double_t *pNew,$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+SetYRefHisto	AliAnalysisTaskGenTunerJpsi.h	/^  void SetYRefHisto(TH1* hyRef) {if(hyRef) fHyRef = static_cast<TH1*>(hyRef->Clone());}$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+StartAnalysis	runTaskFacilities.C	/^void StartAnalysis(Int_t mode, TObject* inputObj)$/;"	f
+Terminate	AliAnalysisTaskGenTunerJpsi.cxx	/^void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+UserCreateOutputObjects	AliAnalysisTaskGenTunerJpsi.cxx	/^void AliAnalysisTaskGenTunerJpsi::UserCreateOutputObjects()$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+UserExec	AliAnalysisTaskGenTunerJpsi.cxx	/^void AliAnalysisTaskGenTunerJpsi::UserExec(Option_t *)$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+Weight	AliAnalysisTaskGenTunerJpsi.h	/^  void Weight(Bool_t flag) {fWeight = flag;}$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+Y	AliAnalysisTaskGenTunerJpsi.cxx	/^Double_t AliAnalysisTaskGenTunerJpsi::Y(const Double_t *x, const Double_t *p)$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+Y	Compare.C	/^Double_t Y(const Double_t *x, const Double_t *p)$/;"	f
+YRat	AliAnalysisTaskGenTunerJpsi.cxx	/^Double_t AliAnalysisTaskGenTunerJpsi::YRat(const Double_t *x, const Double_t *p)$/;"	f	class:AliAnalysisTaskGenTunerJpsi
+YRat	Compare.C	/^Double_t YRat(const Double_t *x, const Double_t *p)$/;"	f
+aliphysicsVersion	runGenTuner.C	/^TString aliphysicsVersion = "vAN-20150422";$/;"	v
+applyPhysicsSelection	runGenTuner.C	/^Bool_t applyPhysicsSelection = kFALSE;$/;"	v
+dataDir	runGenTuner.C	/^TString dataDir = "\/alice\/data\/2010\/LHC10h";$/;"	v
+dataPattern	runGenTuner.C	/^TString dataPattern = "pass2\/*AliESDs.root";$/;"	v
+eList	AliAnalysisTaskGenTunerJpsi.h	/^  enum eList {$/;"	g	class:AliAnalysisTaskGenTunerJpsi
+extraIncs	runGenTuner.C	/^  TString extraIncs="include";$/;"	v
+extraLibs	runGenTuner.C	/^TString extraLibs="CORRFW:PWGmuon";$/;"	v
+extraTasks	runGenTuner.C	/^TString extraTasks="AliAnalysisTaskGenTunerJpsi";$/;"	v
+fCentMax	AliAnalysisTaskGenTunerJpsi.h	/^  Double_t  fCentMax;               \/\/\/< select centrality <= fCentMax$/;"	m	class:AliAnalysisTaskGenTunerJpsi
+fCentMin	AliAnalysisTaskGenTunerJpsi.h	/^  Double_t  fCentMin;               \/\/\/< select centrality > fCentMin$/;"	m	class:AliAnalysisTaskGenTunerJpsi
+fHptRef	AliAnalysisTaskGenTunerJpsi.h	/^  TH1*      fHptRef;                \/\/!< pt ref. data histo        $/;"	m	class:AliAnalysisTaskGenTunerJpsi
+fHyRef	AliAnalysisTaskGenTunerJpsi.h	/^  TH1*      fHyRef;                 \/\/!< y ref. data histo $/;"	m	class:AliAnalysisTaskGenTunerJpsi
+fList	AliAnalysisTaskGenTunerJpsi.h	/^  TObjArray*  fList; \/\/!< List of output object$/;"	m	class:AliAnalysisTaskGenTunerJpsi
+fMuonTrackCuts	AliAnalysisTaskGenTunerJpsi.h	/^  AliMuonTrackCuts* fMuonTrackCuts; \/\/\/< cuts to select tracks to be considered$/;"	m	class:AliAnalysisTaskGenTunerJpsi
+fPtBin	AliAnalysisTaskGenTunerJpsi.h	/^  Double_t* fPtBin;                 \/\/[fPtNofBin]$/;"	m	class:AliAnalysisTaskGenTunerJpsi
+fPtCopyFunc	AliAnalysisTaskGenTunerJpsi.h	/^  TF1 *fPtCopyFunc;    \/\/!< generated pT fit function with current parameters$/;"	m	class:AliAnalysisTaskGenTunerJpsi
+fPtCopyFuncNew	AliAnalysisTaskGenTunerJpsi.h	/^  TF1 *fPtCopyFuncNew; \/\/!< generated pT fit function with new parameters$/;"	m	class:AliAnalysisTaskGenTunerJpsi
+fPtCut	AliAnalysisTaskGenTunerJpsi.h	/^  Double_t fPtCut;                  \/\/\/< muon low pT cut$/;"	m	class:AliAnalysisTaskGenTunerJpsi
+fPtFix	AliAnalysisTaskGenTunerJpsi.h	/^  Bool_t  *fPtFix;                  \/\/!< flags to fix or not the current parameters$/;"	m	class:AliAnalysisTaskGenTunerJpsi
+fPtFixNew	AliAnalysisTaskGenTunerJpsi.h	/^  Bool_t  *fPtFixNew;               \/\/!< flags to fix or not the new parameters$/;"	m	class:AliAnalysisTaskGenTunerJpsi
+fPtFunc	AliAnalysisTaskGenTunerJpsi.h	/^  TF1     *fPtFunc;                 \/\/\/< generated pT fit function with current parameters$/;"	m	class:AliAnalysisTaskGenTunerJpsi
+fPtFuncMC	AliAnalysisTaskGenTunerJpsi.h	/^  TF1     *fPtFuncMC;               \/\/!< generated pT fit function with current parameters in the MC range$/;"	m	class:AliAnalysisTaskGenTunerJpsi
+fPtFuncNew	AliAnalysisTaskGenTunerJpsi.h	/^  TF1     *fPtFuncNew;              \/\/\/< generated pT fit function with new parameters$/;"	m	class:AliAnalysisTaskGenTunerJpsi
+fPtNofBin	AliAnalysisTaskGenTunerJpsi.h	/^  Int_t     fPtNofBin;              \/\/\/< Number of Pt bin$/;"	m	class:AliAnalysisTaskGenTunerJpsi
+fWeight	AliAnalysisTaskGenTunerJpsi.h	/^  Bool_t   fWeight;                 \/\/\/< weight simulated\/reconstructed particles using using given functions$/;"	m	class:AliAnalysisTaskGenTunerJpsi
+fYBin	AliAnalysisTaskGenTunerJpsi.h	/^  Double_t* fYBin;                  \/\/[fYNofBin]$/;"	m	class:AliAnalysisTaskGenTunerJpsi
+fYCopyFunc	AliAnalysisTaskGenTunerJpsi.h	/^  TF1 *fYCopyFunc;     \/\/!< generated y fit function with current parameters$/;"	m	class:AliAnalysisTaskGenTunerJpsi
+fYCopyFuncNew	AliAnalysisTaskGenTunerJpsi.h	/^  TF1 *fYCopyFuncNew;  \/\/!< generated y fit function with new parameters$/;"	m	class:AliAnalysisTaskGenTunerJpsi
+fYFix	AliAnalysisTaskGenTunerJpsi.h	/^  Bool_t  *fYFix;                   \/\/!< flags to fix or not the current parameters$/;"	m	class:AliAnalysisTaskGenTunerJpsi
+fYFixNew	AliAnalysisTaskGenTunerJpsi.h	/^  Bool_t  *fYFixNew;                \/\/!< flags to fix or not the new parameters$/;"	m	class:AliAnalysisTaskGenTunerJpsi
+fYFunc	AliAnalysisTaskGenTunerJpsi.h	/^  TF1     *fYFunc;                  \/\/\/< generated y fit function with current parameters$/;"	m	class:AliAnalysisTaskGenTunerJpsi
+fYFuncMC	AliAnalysisTaskGenTunerJpsi.h	/^  TF1     *fYFuncMC;                \/\/!< generated y fit function with current parameters in the MC range$/;"	m	class:AliAnalysisTaskGenTunerJpsi
+fYFuncNew	AliAnalysisTaskGenTunerJpsi.h	/^  TF1     *fYFuncNew;               \/\/\/< generated y fit function with new parameters$/;"	m	class:AliAnalysisTaskGenTunerJpsi
+fYNofBin	AliAnalysisTaskGenTunerJpsi.h	/^  Int_t     fYNofBin;               \/\/\/< Number of Y bin$/;"	m	class:AliAnalysisTaskGenTunerJpsi
+fcRat	AliAnalysisTaskGenTunerJpsi.h	/^  TCanvas *fcRat;                   \/\/!< data\/MC ratios$/;"	m	class:AliAnalysisTaskGenTunerJpsi
+fcRes	AliAnalysisTaskGenTunerJpsi.h	/^  TCanvas *fcRes;                   \/\/!< generated and reconstructed distributions$/;"	m	class:AliAnalysisTaskGenTunerJpsi
+fgkNPtParam	AliAnalysisTaskGenTunerJpsi.h	/^  static const Int_t fgkNPtParam = 3;$/;"	m	class:AliAnalysisTaskGenTunerJpsi
+fgkNYParam	AliAnalysisTaskGenTunerJpsi.h	/^  static const Int_t fgkNYParam  = 2;$/;"	m	class:AliAnalysisTaskGenTunerJpsi
+kGrid	runTaskFacilities.C	/^enum {kLocal, kProof, kProofLite, kGrid, kTerminate};$/;"	e	enum:__anon1	file:
+kLocal	runTaskFacilities.C	/^enum {kLocal, kProof, kProofLite, kGrid, kTerminate};$/;"	e	enum:__anon1	file:
+kProof	runTaskFacilities.C	/^enum {kLocal, kProof, kProofLite, kGrid, kTerminate};$/;"	e	enum:__anon1	file:
+kProofLite	runTaskFacilities.C	/^enum {kLocal, kProof, kProofLite, kGrid, kTerminate};$/;"	e	enum:__anon1	file:
+kPtGen	AliAnalysisTaskGenTunerJpsi.h	/^    kPtGen   = 0, \/\/\/< pT distribution of generated particle$/;"	e	enum:AliAnalysisTaskGenTunerJpsi::eList
+kPtRec	AliAnalysisTaskGenTunerJpsi.h	/^    kPtRec   = 1, \/\/\/< pT distribution of reconstructed particle$/;"	e	enum:AliAnalysisTaskGenTunerJpsi::eList
+kTerminate	runTaskFacilities.C	/^enum {kLocal, kProof, kProofLite, kGrid, kTerminate};$/;"	e	enum:__anon1	file:
+kYGen	AliAnalysisTaskGenTunerJpsi.h	/^    kYGen    = 2, \/\/\/< y distribution of generated particle$/;"	e	enum:AliAnalysisTaskGenTunerJpsi::eList
+kYRec	AliAnalysisTaskGenTunerJpsi.h	/^    kYRec    = 3,  \/\/\/< y distribution of reconstructed particle$/;"	e	enum:AliAnalysisTaskGenTunerJpsi::eList
+maxFilesPerJob	runGenTuner.C	/^Int_t maxFilesPerJob = 100;$/;"	v
+maxMergeFiles	runGenTuner.C	/^Int_t maxMergeFiles = 10;$/;"	v
+maxMergeStages	runGenTuner.C	/^Int_t maxMergeStages = 2;$/;"	v
+newFixPtParam	runGenTuner.C	/^Bool_t newFixPtParam[3] = {kFALSE, kFALSE, kFALSE};$/;"	v
+newFixYParam	runGenTuner.C	/^Bool_t newFixYParam[2] = {kFALSE, kFALSE};$/;"	v
+newPtParam	runGenTuner.C	/^Double_t newPtParam[3] = {266.150, 0.0300432 , 5.18424};$/;"	v
+newYParam	runGenTuner.C	/^Double_t newYParam[2] =  {2.34196, 0.220104};$/;"	v
+oldFixPtParam	runGenTuner.C	/^Bool_t oldFixPtParam[3] = {kFALSE, kFALSE, kFALSE};$/;"	v
+oldFixYParam	runGenTuner.C	/^Bool_t oldFixYParam[2] = {kFALSE, kFALSE};$/;"	v
+oldPtParam	runGenTuner.C	/^Double_t oldPtParam[3] = { 266.150, 0.0300432 , 5.18424};$/;"	v
+oldYParam	runGenTuner.C	/^Double_t oldYParam[2] =  {2.34196, 0.220104};$/;"	v
+outDir	runGenTuner.C	/^TString outDir = "Data\/LHC10h\/pass2\/Eff\/pDCAChi2";$/;"	v
+ptRange	runGenTuner.C	/^Double_t ptRange[2] = {0.1, 7.};$/;"	v
+rootVersion	runGenTuner.C	/^TString rootVersion = "v5-34-08";$/;"	v
+runFormat	runGenTuner.C	/^TString runFormat = "%09d";$/;"	v
+runGenTuner	runGenTuner.C	/^void runGenTuner(TString smode = "saf", TString inputFileName = "Find;BasePath=\/alice\/cern.ch\/user\/l\/laphecet\/Analysis\/LHC13d\/simjpsi\/CynthiaTuneWithRejectList\/195760\/;FileName=AliAOD.Muons.root",$/;"	f
+runGenTunerLoop	runGenTunerLoop.C	/^void runGenTunerLoop(TString smode = "saf", TString inputFileName = "Find;BasePath=\/alice\/cern.ch\/user\/l\/laphecet\/Analysis\/LHC13d\/simjpsi\/CynthiaTuneWithRejectList\/195760\/;FileName=AliAOD.Muons.root", Int_t nStep)$/;"	f
+scentrality	runGenTuner.C	/^TString scentrality     ="V0A";$/;"	v
+seventType	runGenTuner.C	/^TString seventType      ="PSALL";$/;"	v
+spairCut	runGenTuner.C	/^TString spairCut        ="pPAIRYPAIRPTIN0.0-18.0RABSMATCHLOWETAPDCAPSALL";$/;"	v
+striggerDimuon	runGenTuner.C	/^TString striggerDimuon  ="CMUL7-B-NOPF-MUON";$/;"	v
+ttl	runGenTuner.C	/^Int_t ttl = 30000;$/;"	v
+yRange	runGenTuner.C	/^Double_t yRange[2] = {-3.8, -2.3};$/;"	v
+~AliAnalysisTaskGenTunerJpsi	AliAnalysisTaskGenTunerJpsi.cxx	/^AliAnalysisTaskGenTunerJpsi::~AliAnalysisTaskGenTunerJpsi()$/;"	f	class:AliAnalysisTaskGenTunerJpsi
