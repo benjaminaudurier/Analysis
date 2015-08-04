@@ -10,10 +10,10 @@
 TString rootVersion = "v5-34-30-1";
 TString alirootVersion = "v5-06-30";
 TString aliphysicsVersion = "v5-06-31-01";
-TString dataDir = "/alice/data/2015/LHC15g";
-TString dataPattern = "muon_calo_pass1/*AliESDs.root";
-TString runFormat = "%09d";
-TString outDir = "Data/LHC15g/Eff";
+TString dataDir = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/simjpsi/pp503";
+TString dataPattern = "/*AliESDs.root";
+TString runFormat = "%06d";
+TString outDir = "Data/LHC15g/Eff/MonteCarlo";
 Int_t ttl = 30000;
 Int_t maxFilesPerJob = 9000;
 Int_t maxMergeFiles = 5000;
@@ -24,9 +24,8 @@ Int_t maxMergeStages = 4;
  TString extraIncs="";
  TString extraTasks="";
 
-//TString alignStorage = "alien://folder=/alice/simulation/2008/v4-15-Release/Residual";
-TString alignStorage = "alien://folder=/alice/cern.ch/user/p/ppillot/OCDB_PbPbSim";
-TString alignStorage = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/simjpsi/pp503";
+TString alignStorage = "alien://folder=/alice/simulation/2008/v4-15-Release/Residual";
+// TString alignStorage = "alien://folder=/alice/simulation/2008/v4-15-Release/Residual";
 
 //______________________________________________________________________________
 void runMuonEfficiency(TString smode = "terminate", TString inputFileName = "runlist_15-07-2015-ESD.txt",

@@ -94,10 +94,10 @@ void SetRunLabel(TObjArray& array, Int_t irun, const TList& runs);
 
 
 //---------------------------------------------------------------------------
-void MuonTrackingEfficiency(TString runList = "runList.txt",
+void MuonTrackingEfficiency(TString runList = "runlist_15-07-2015-ESD.txt",
                             TString fileNameWeights = "",
-                            TString fileNameData ="AnalysisResults.root",
-                            TString fileNameSave = "efficiency_new.root")
+                            TString fileNameData ="AnalysisResultsMC.root",
+                            TString fileNameSave = "efficiency_MC.root")
 {
   /// main function to compute, print and plot efficiencies
   

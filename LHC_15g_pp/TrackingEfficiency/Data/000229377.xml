@@ -64,7 +64,7 @@
     <event name="9">
       <file name="AliESDs.root" aclId="" broken="0" ctime="2015-07-09 03:36:49" dir="104131119" entryId="104131346" expiretime="" gowner="alidaq" guid="E49A27B8-25DA-11E5-AF28-6B1FC03B8B4B" guidtime="11E525DA" jobid="524722532" lfn="/alice/data/2015/LHC15g/000229377/muon_calo_pass1/15000229377029.109/AliESDs.root" md5="231e00855d595d78e778ab857c0ec2bb" owner="alidaq" perm="755" replicated="0" selist="" size="151639649" turl="alien:///alice/data/2015/LHC15g/000229377/muon_calo_pass1/15000229377029.109/AliESDs.root" type="f" />
     </event>
-    <info command="[/alice/cern.ch/user/b/baudurie/Data/LHC15g/Eff/]: find -z -x collection -l 15000 -o 0 /alice/data/2015/LHC15g/000229377 muon_calo_pass1/*AliESDs.root" creator="admin" date="Sat Jul 25 10:16:56 CEST 2015" timestamp="1437812216" />
+    <info command="[/alice/cern.ch/user/b/baudurie/Data/LHC15g/Eff/Data/]: find -z -x collection -l 15000 -o 0 /alice/data/2015/LHC15g/000229377 muon_calo_pass1/*AliESDs.root" creator="admin" date="Wed Jul 29 08:43:02 CEST 2015" timestamp="1438152182" />
   </collection>
 </alien>
 

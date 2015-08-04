@@ -149,8 +149,8 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
     AliAnalysisMuMuCutElement* eta = cr->AddTrackCut(*singleAnalysis,"IsEtaInRange","const AliVParticle&","");
     AliAnalysisMuMuCutElement* pdca = cr->AddTrackCut(*singleAnalysis,"IsPDCAOK","const AliVParticle&","");
     // Create combination of cuts to apply
-    // cr->AddCutCombination(trackTrue);
-    // cr->AddCutCombination(matchlow);
+    cr->AddCutCombination(trackTrue);
+    cr->AddCutCombination(matchlow);
     cr->AddCutCombination(rabs,eta,matchlow,pdca,trackTrue,ps); 
     // Adding the sub analysis
     task->AdoptSubAnalysis(singleAnalysis); 
