@@ -15,7 +15,7 @@ TString dataPattern = "muon_calo_pass1/*AliESDs.root";
 TString runFormat = "%09d";
 TString outDir = "Data/LHC15g/Eff/Data";
 Int_t ttl = 30000;
-Int_t maxFilesPerJob = 9000;
+Int_t maxFilesPerJob = 7000;
 Int_t maxMergeFiles = 5000;
 Int_t maxMergeStages = 4;
 

@@ -26,7 +26,7 @@ Split = "se";
 # Time after which the job is killed (500 min.)
 TTL = "30000";
 # Maximum number of input files to be processed per subjob
-SplitMaxInputFileNumber = "9000";
+SplitMaxInputFileNumber = "7000";
 # Format of input data
 InputDataListFormat = "xml-single";
 # Collection name to be processed on each worker node
