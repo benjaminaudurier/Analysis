@@ -1,8 +1,12 @@
 ///
 /// Example macro to run the AliAnalysisTaskMuMu task
+/// This one is implemented for mixing event analysis.
 ///
 /// \author L. Aphecetche
 ///
+///
+const Int_t bufferSize = 1;
+const Int_t mixNum = 20;  // 6
 
 // dataset on caf : /default/ilakomov/LHC13f_muon_pass2_AliAOD_000196721
 // dataset on saf : Find;FileName=AliAOD.Muons.root;BasePath=/alice/data/2011/LHC11h/000170040/ESDs/pass2_muon/AOD119
@@ -28,11 +32,14 @@ AliAnalysisTask* runMuMu(const char* dataset="",
     AliInputEventHandler* input(0x0); // Pointer for imputs
 
     TString inputType = GetInputType(sds); // Get input type via macro GetInputType
-  
     
-    
-    // Checkout input and select the correct input handler
+    // Configure MultiHandler 
     //==============================================================================
+  
+    AliMultiInputEventHandler *inputHandler = new AliMultiInputEventHandler(); // For several handlers ine the file
+    mgr->SetInputEventHandler(inputHandler);
+
+    // Select input type
     if ( inputType == "AOD" )
     {
       input = new AliAODInputHandler;
@@ -46,8 +53,29 @@ AliAnalysisTask* runMuMu(const char* dataset="",
       std::cout << "Cannot get input type !" << std::endl;
       return 0;
     }
+    inputHandler->AddInputEventHandler(input); // Set the input handler
 
-    mgr->SetInputEventHandler(input); // Set the input handler
+    // Configure for Mix Event handler 
+    AliMixInputEventHandler *mixHandler = new AliMixInputEventHandler ( bufferSize, mixNum );
+    mixHandler->SetInputHandlerForMixing ( dynamic_cast<AliMultiInputEventHandler*> ( mgr->GetInputEventHandler() ) );
+    
+    // Configure Pool
+    AliMixEventPool *evPool = new AliMixEventPool();
+    AliMixEventCutObj *centrality = new AliMixEventCutObj(AliMixEventCutObj::kCentrality, 0., 90., 10., "V0M");
+    evPool->AddCut(centrality);
+    evPool->Print();
+    return;  
+  
+    // adds event pool (comment it and u will have default mixing)
+    mixHandler->SetEventPool(evPool);
+
+    // mixHandler->SelectCollisionCandidates(AliVEvent::kMUSPB);
+    mixHandler->DoMixIfNotEnoughEvents(kTRUE);
+
+    inputHandler->AddInputEventHandler(mixHandler);
+
+
+
   
     TList* triggers = new TList; // Create pointer for trigger list
     triggers->SetOwner(kTRUE); // Give rights to trigger liser
@@ -145,7 +173,7 @@ AliAnalysisTask* runMuMu(const char* dataset="",
 //   	mgr->SetNSysInfo(10);
       TStopwatch timer;
 //    mgr->SetDebugLevel(10);
-      mgr->StartAnalysis("local",c);
+      mgr->StartAnalysis("mix",c);
       timer.Print();
 //    mgr->ProfileTask("AliAnalysisTaskMuMu");
 //    if (baseline) mgr->ProfileTask("baseline");
@@ -354,3 +382,5 @@ TString GetInputType(const TString& sds)
     
     return "BUG";   
 }
+
+

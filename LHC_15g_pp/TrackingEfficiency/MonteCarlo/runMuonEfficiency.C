@@ -11,7 +11,7 @@ TString rootVersion = "v5-34-30-1";
 TString alirootVersion = "v5-06-30";
 TString aliphysicsVersion = "v5-06-31-01";
 TString dataDir = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/simjpsi/pp503";
-TString dataPattern = "/*AliESDs.root";
+TString dataPattern = "/*AliESDs.root"; 
 TString runFormat = "%06d";
 TString outDir = "Data/LHC15g/Eff/MonteCarlo";
 Int_t ttl = 30000;
@@ -33,7 +33,7 @@ void runMuonEfficiency(TString smode = "terminate", TString inputFileName = "run
 {
   /// Study the MUON performances
   
-  gROOT->LoadMacro("/Users/audurier/Documents/Analysis/runTaskFacilities.C");
+  gROOT->LoadMacro("/Users/audurier/Documents/Analysis/Macro_Utile/runTaskFacilities.C");
   
   // --- Check runing mode ---
   Int_t mode = GetMode(smode, inputFileName);

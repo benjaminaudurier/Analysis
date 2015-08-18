@@ -33,7 +33,7 @@ void runMuonEfficiency(TString smode = "full", TString inputFileName = "runlist_
 {
   /// Study the MUON performances
   
-  gROOT->LoadMacro("/Users/audurier/Documents/Analysis/runTaskFacilities.C");
+  gROOT->LoadMacro("/Users/audurier/Documents/Analysis/Macro_Utile/runTaskFacilities.C");
   
   // --- Check runing mode ---
   Int_t mode = GetMode(smode, inputFileName);

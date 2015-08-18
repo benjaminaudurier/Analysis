@@ -4,6 +4,8 @@
 /// \author: L. Aphecetche (Subatech) (laurent.aphecetche - at - subatech.in2p3.fr)
 ///
 
+  
+
 AliAnalysisTask* AddTaskMuMu(const char* outputname, 
                              TList* triggerClassesToConsider,
                              const char* beamYear,
@@ -151,8 +153,7 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
     AliAnalysisMuMuCutElement* pdca = cr->AddTrackCut(*singleAnalysis,"IsPDCAOK","const AliVParticle&","");
     // Create combination of cuts to apply
     cr->AddCutCombination(trackTrue);
-    cr->AddCutCombination(matchlow);
-    cr->AddCutCombination(trackTrue,ps); 
+    // cr->AddCutCombination(matchlow);
     // Adding the sub analysis
     task->AdoptSubAnalysis(singleAnalysis); 
 
@@ -173,15 +174,17 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
       // cutElements.Add(matchlow);
       // cutElements.Add(eta);
       // cutElements.Add(pdca);
-      cutElements.Add(ps);
+      // cutElements.Add(ps);
       // add them
       cr->AddCutCombination(cutElements);    
       // Adding the sub analysis
       task->AdoptSubAnalysis(minvAnalysis); 
     }
+
+    if (mixevent) task->AdoptSubAnalysis(mixevent); 
   }
 
-  task->AdoptSubAnalysis(mixevent); 
+  
 
   /// below are the kind of configurations that can be performed :
   /// - adding cuts (at event, track or pair level)

@@ -1,0 +1,54 @@
+
+# DO NOT DELETE
+
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/Riostream.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/RConfig.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/RVersion.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TString.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/Riosfwd.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TMathBase.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/Rtypes.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/DllImport.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/Rtypeinfo.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/snprintf.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/strlcpy.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TGenericClassInfo.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TSchemaHelper.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TSystem.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TNamed.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TObject.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TStorage.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TVersionCheck.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TBuffer.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TInetAddress.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TTimer.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TSysEvtHandler.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TQObject.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TTime.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/ThreadLocalStorage.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/RConfigure.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TGrid.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TGridJob.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TGridResult.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TList.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TSeqCollection.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TCollection.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TIterator.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TROOT.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TDirectory.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TDatime.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TUUID.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TObjArray.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TObjString.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TMap.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/THashTable.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TFile.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TDirectoryFile.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TUrl.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TRegexp.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/Match.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/THashList.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TArrayI.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TArray.h
+./gridCommands_C.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/include/cintdictversion.h /Users/audurier/alicesw/root/v5-34-30/inst/include/include/RVersion.h
+gridCommands_C__ROOTBUILDVERSION= 5.34/30
