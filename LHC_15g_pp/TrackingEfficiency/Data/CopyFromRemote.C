@@ -33,7 +33,7 @@ void CopyFromRemote(const char* txtfile="grid.esd.txt")
     
     TString dir(gSystem->DirName(file));
     
-    gSystem->mkdir(Form("/Users/audurier/Documents/Analysis/LHC_15g_pp/TrackingEfficiency/MonteCarlo/%s",dir.Data()),kTRUE);
+    gSystem->mkdir(Form("/Users/audurier/Documents/Analysis/LHC_15g_pp/TrackingEfficiency/Data/%s",dir.Data()),kTRUE);
 
     if ( gSystem->AccessPathName(file.Data())==kFALSE)
     {
@@ -41,7 +41,7 @@ void CopyFromRemote(const char* txtfile="grid.esd.txt")
     }
     else
     {
-      if(TFile::Cp(line,Form("/Users/audurier/Documents/Analysis/LHC_15g_pp/TrackingEfficiency/MonteCarlo/%s",file.Data())))
+      if(TFile::Cp(line,Form("/Users/audurier/Documents/Analysis/LHC_15g_pp/TrackingEfficiency/Data/%s",file.Data())))
       {
         if ( TString(line).Contains("root_archive.zip") )
         {
@@ -49,7 +49,7 @@ void CopyFromRemote(const char* txtfile="grid.esd.txt")
           gSystem->Exec(Form("rm %s",file.Data()));
         }
       }
-      else gSystem->Exec(Form("rm -rf /Users/audurier/Documents/Analysis/LHC_15g_pp/TrackingEfficiency/MonteCarlo/%s",dir.Data()));
+      else gSystem->Exec(Form("rm -rf /Users/audurier/Documents/Analysis/LHC_15g_pp/TrackingEfficiency/Data/%s",dir.Data()));
 
     }
   }

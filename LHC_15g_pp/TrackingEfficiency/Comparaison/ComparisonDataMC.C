@@ -292,7 +292,7 @@ TCanvas* DrawRatio(TString name, TString title, TGraphAsymmErrors* GraphData, TG
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------
-void ComparisonDataMC(TString fileNameData = "/opt/Efficiency/Data/UCEfficiency/Pass2/LHC13dNew/EfficiencyResultsPt1.root", TString fileNameSim = "/opt/Efficiency/MC/LHC13d/tune1reject/EfficiencyMCResultsTune1RejectPt1.root")
+void ComparisonDataMC(TString fileNameData = "efficiency_newData.root", TString fileNameSim = "efficiency_newMC.root")
 {
   // Open input Data files
   TFile *fileData = new TFile(fileNameData.Data(), "read");
@@ -492,34 +492,34 @@ void ComparisonDataMC(TString fileNameData = "/opt/Efficiency/Data/UCEfficiency/
   //--------
   
   // Get Chamber and DE Data and Sim graphs
-  TObjArray *listChEffVSrunData = static_cast<TObjArray*>(fileData->FindObjectAny("ChambersEffVSrun"));
+  TObjArray *listChEffVSrunData = static_cast<TObjArray*>(fileData->FindObjectAny("ChamberEffVsRun"));
   if (!listChEffVSrunData) {
     printf("list of Chamber efficiencies vs run from data not found\n");
     return;
   }
-  TObjArray *listChEffVSrunSim = static_cast<TObjArray*>(fileSim->FindObjectAny("ChambersEffVSrun"));
+  TObjArray *listChEffVSrunSim = static_cast<TObjArray*>(fileSim->FindObjectAny("ChamberEffVsRun"));
   if (!listChEffVSrunSim) {
     printf("list of Chamber efficiencies vs run from sim not found\n");
     return;
   }
 
-  TObjArray *listChEffVSDEData = static_cast<TObjArray*>(fileData->FindObjectAny("ChambersEffVSDE"));
+  TObjArray *listChEffVSDEData = static_cast<TObjArray*>(fileData->FindObjectAny("ChamberEffVsDE"));
   if (!listChEffVSDEData) {
     printf("list of Chamber efficiencies per DE from data not found\n");
     return;
   }
-  TObjArray *listChEffVSDESim = static_cast<TObjArray*>(fileSim->FindObjectAny("ChambersEffVSDE"));
+  TObjArray *listChEffVSDESim = static_cast<TObjArray*>(fileSim->FindObjectAny("ChamberEffVsDE"));
   if (!listChEffVSDESim) {
     printf("list of Chamber efficiencies per DE from sim not found\n");
     return;
   }
   
-  TObjArray *listDEEffVSrunData = static_cast<TObjArray*>(fileData->FindObjectAny("DEEffVSrun"));
+  TObjArray *listDEEffVSrunData = static_cast<TObjArray*>(fileData->FindObjectAny("DEEffVsRun"));
   if (!listDEEffVSrunData) {
     printf("list of DE efficiencies vs run from data not found\n");
     return;
   }
-  TObjArray *listDEEffVSrunSim = static_cast<TObjArray*>(fileSim->FindObjectAny("DEEffVSrun"));
+  TObjArray *listDEEffVSrunSim = static_cast<TObjArray*>(fileSim->FindObjectAny("DEEffVsRun"));
   if (!listDEEffVSrunSim) {
     printf("list of DE efficiencies vs run from sim not found\n");
     return;
@@ -591,7 +591,7 @@ void ComparisonDataMC(TString fileNameData = "/opt/Efficiency/Data/UCEfficiency/
   
     while ( !deit.IsDone() )
     {
-      TString currentDEName = Form("EffDE%dVSrun",deit.CurrentDEId());
+      TString currentDEName = Form("effDE%dVsRun",deit.CurrentDEId());
       gData = static_cast<TGraphAsymmErrors*>(listDEEffVSrunData->FindObject(currentDEName.Data()));
       gSim = static_cast<TGraphAsymmErrors*>(listDEEffVSrunSim->FindObject(currentDEName.Data()));
       
@@ -617,8 +617,8 @@ void ComparisonDataMC(TString fileNameData = "/opt/Efficiency/Data/UCEfficiency/
     }
   
     // Compute the ratios for Ch vs DE
-    gData = static_cast<TGraphAsymmErrors*>(listChEffVSDEData->FindObject(Form("Ch%dEffVSDE",ich+1)));
-    gSim = static_cast<TGraphAsymmErrors*>(listChEffVSDESim->FindObject(Form("Ch%dEffVSDE",ich+1)));
+    gData = static_cast<TGraphAsymmErrors*>(listChEffVSDEData->FindObject(Form("effCh%dVsDE",ich+1)));
+    gSim = static_cast<TGraphAsymmErrors*>(listChEffVSDESim->FindObject(Form("effCh%dVsDE",ich+1)));
     
     if (!gData || !gSim )
     {

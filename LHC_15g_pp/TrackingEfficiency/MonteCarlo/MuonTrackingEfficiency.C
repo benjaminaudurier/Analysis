@@ -119,7 +119,7 @@ void MuonTrackingEfficiency(TString runList = "runList.txt",
   PlotMuonEfficiencyVsXY("phi", "y", fileNameData, fileNameSave, kTRUE, kTRUE);
   
   PlotMuonEfficiency(fileNameData, fileNameSave, kFALSE, kTRUE, kTRUE);
-  PlotMuonEfficiencyVsRun(runList, fileNameData, fileNameSave, kFALSE, kTRUE);
+  PlotMuonEfficiencyVsRun(runList, fileNameData, fileNameSave, kTRUE, kTRUE);
   PlotIntegratedMuonEfficiency(fileNameWeights, fileNameSave, kTRUE, kTRUE);
   
   PlotMuonEfficiencyPerDE(fileNameData, fileNameSave, kFALSE);

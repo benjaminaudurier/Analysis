@@ -97,7 +97,7 @@ void SetRunLabel(TObjArray& array, Int_t irun, const TList& runs);
 void MuonTrackingEfficiency(TString runList = "runList.txt",
                             TString fileNameWeights = "",
                             TString fileNameData ="AnalysisResults.root",
-                            TString fileNameSave = "efficiency_new.root")
+                            TString fileNameSave = "efficiency_newData.root")
 {
   /// main function to compute, print and plot efficiencies
   
@@ -279,8 +279,8 @@ void PlotIntegratedMuonEfficiencyVsX(TString var, TString runList, TString fileN
     printf("run %d: ", run);
     
     // compute efficiency vs var
-    TString dataFile = Form("runs/%d/%s", run, fileNameData.Data());
-    TString outFile = Form("runs/%d/%s", run, fileNameSave.Data());
+    TString dataFile = Form("alice/cern.ch/user/b/baudurie/Data/LHC15g/Eff/Data/results/%09d/%s", run, fileNameData.Data());
+    TString outFile = Form("alice/cern.ch/user/b/baudurie/Data/LHC15g/Eff/Data/results/%09d/%s", run, fileNameSave.Data());
     PlotMuonEfficiencyVsX(var, dataFile, outFile, kTRUE, print, kFALSE);
     
     // get run weight
@@ -699,8 +699,8 @@ void PlotMuonEfficiencyVsRun(TString runList, TString fileNameData, TString file
     printf("run %d: ", run);
     
     // compute efficiencies for this run
-    TString dataFile = Form("runs/%d/%s", run, fileNameData.Data());
-    TString outFile = Form("runs/%d/%s", run, fileNameSave.Data());
+    TString dataFile = Form("alice/cern.ch/user/b/baudurie/Data/LHC15g/Eff/Data/results/%09d/%s", run, fileNameData.Data());
+    TString outFile = Form("alice/cern.ch/user/b/baudurie/Data/LHC15g/Eff/Data/results/%09d/%s", run, fileNameSave.Data());
     PlotMuonEfficiency(dataFile, outFile, kTRUE, print, kFALSE);
     
     TFile *file = new TFile(outFile.Data(), "read");
@@ -1057,8 +1057,8 @@ void PlotMuonEfficiencyPerDEVsRun(TString runList, TString fileNameData, TString
     printf("run %d: ", run);
     
     // compute efficiencies for this run
-    TString dataFile = Form("runs/%d/%s", run, fileNameData.Data());
-    TString outFile = Form("runs/%d/%s", run, fileNameSave.Data());
+    TString dataFile = Form("alice/cern.ch/user/b/baudurie/Data/LHC15g/Eff/Data/results/%09d/%s", run, fileNameData.Data());
+    TString outFile = Form("alice/cern.ch/user/b/baudurie/Data/LHC15g/Eff/Data/results/%09d/%s", run, fileNameSave.Data());
     PlotMuonEfficiencyPerDE(dataFile, outFile, kTRUE);
     
     TFile *file = new TFile(outFile.Data(), "read");

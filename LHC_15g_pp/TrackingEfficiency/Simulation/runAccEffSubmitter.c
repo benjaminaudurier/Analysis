@@ -4,7 +4,7 @@
 
 
 TString Trigger = "CMUL7-B-NOPF-MUON";
-TString remoteDir = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/simjpsi/pp503";
+TString remoteDir = "/alice/cern.ch/user/b/baudurie/LHC15g/TrackingEfficiency/simjpsi/pp";
 
 void runAccEffSubmitter(const char* mode)
 {
