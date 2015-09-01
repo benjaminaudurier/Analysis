@@ -1,5 +1,5 @@
 F 	EType 						Simulation 	name
-T 	kDimuonTriggerList  		kFALSE 		CINT7-B-NOPF-MUON|CINT7-B-NOPF-CENTNOTRD
+T 	kDimuonTriggerList  		kFALSE 		CMUL7-B-NOPF-MUON
 T	kMuonTriggerList    		kFALSE 		EMPTY
 T	kMinbiasTriggerList 		kFALSE 		CINT7-B-NOPF-MUON|CINT7-B-NOPF-CENTNOTRD
 T	kMinbiasAndMULTriggerList 	kFALSE 		EMPTY

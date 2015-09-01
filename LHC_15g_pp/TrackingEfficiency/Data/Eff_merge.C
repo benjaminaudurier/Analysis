@@ -39,12 +39,14 @@ void Eff_merge(const char *dir, Int_t stage=0)
       gSystem->AddIncludePath(current);
    }
    if (listpaths) delete listpaths;
-   gSystem->AddIncludePath("-I. ");
+   gSystem->AddIncludePath("-I$ALICE_ROOT/include -I$ALICE_PHYSICS/include -I. ");
    gROOT->ProcessLine(".include $ALICE_ROOT/include");
    printf("Include path: %s\n", gSystem->GetIncludePath());
 
+// Add aditional AliRoot libraries
 
 // Analysis source to be compiled at runtime (if any)
+   gROOT->ProcessLine(".L AliAnalysisTaskMuonTrackingEffLocal.cxx+g");
 
 // Connect to AliEn
    if (!TGrid::Connect("alien://")) return;
@@ -78,7 +80,7 @@ void Eff_merge(const char *dir, Int_t stage=0)
          continue;
       }
       if (mergeExcludes.Contains(outputFile.Data())) continue;
-      merged = AliAnalysisAlien::MergeOutput(outputFile, outputDir, 5000, stage);
+      merged = AliAnalysisAlien::MergeOutput(outputFile, outputDir, 10, stage);
       if (!merged) {
          printf("ERROR: Cannot merge %s\n", outputFile.Data());
          return;

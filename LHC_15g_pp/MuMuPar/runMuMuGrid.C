@@ -6,12 +6,12 @@
 
 //__________Global Settings
 TString rootVersion = "v5-34-30";
-TString alirootVersion = "v5-06-30";
-TString aliphysicsVersion = "v5-06-31-01";
-TString dataDir = "/alice/data/2015/LHC15g";
-TString dataPattern = "muon_calo_pass1/*AliAOD.Muons.root";
-TString runFormat = "%09d";
-TString outDir = "Data/LHC15g/Minv";
+TString alirootVersion = "v5-06-33";
+TString aliphysicsVersion = "vAN-20150722";
+TString dataDir = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/simjpsi/pp/";
+TString dataPattern = "AliAOD.Muons.root";
+TString runFormat = "%06d";
+TString outDir = "Analysis/LHC15g/Minv/";
 
 // extra to be load on CF
 TString extraLibs="";
@@ -30,12 +30,13 @@ Int_t maxMergeStages = 2;
 //__________
 
 //______________________________________________________________________________
-AliAnalysisTask* runMuMuGrid(const char* dataset="dataset_15-07-2015-AOD.txt",
+AliAnalysisTask* runMuMuGrid(const char* dataset="datasetfull.AOD.txt",
+                         TString where="saf",
                          Bool_t simulations=kFALSE,
                          Bool_t baseline=kFALSE,
-                         TString where="saf",const char* alirootMode="")
+                         const char* alirootMode="")
 {
-  gROOT->LoadMacro("/Users/audurier/Documents/Analysis/runTaskFacilities.C");
+  gROOT->LoadMacro("/Users/audurier/Documents/Analysis/Macro_Utile/runTaskFacilities.C");// where are macros to load on grid, caf etc.
 
   TString sds(dataset); // To work with dataset
 
@@ -196,6 +197,20 @@ AliAnalysisTask* runMuMuGrid(const char* dataset="dataset_15-07-2015-AOD.txt",
   delete triggers;
 }
 
+//______________________________________________________________________________
+TChain* CreateLocalChain(const char* filelist)
+{
+    TChain* c = new TChain("aodTree");
+    
+    char line[1024];
+    
+    ifstream in(filelist);
+    while ( in.getline(line,1024,'\n') )
+        {
+        c->Add(line);
+        }
+    return c;
+}
 
 
 

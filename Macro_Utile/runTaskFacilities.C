@@ -100,6 +100,7 @@ void LoadAlirootLocally(TString& extraLibs, TString& extraIncs, TString& extraTa
   gSystem->Load("libAOD");
   gSystem->Load("libANALYSIS");
   gSystem->Load("libANALYSISalice");
+   gSystem->Load("libPWGmuon");
   
   // Load additional libraries
   gSystem->Load("libProofPlayer");
@@ -119,7 +120,7 @@ void LoadAlirootLocally(TString& extraLibs, TString& extraIncs, TString& extraTa
   // Compile additional tasks
   TObjArray* tasks = extraTasks.Tokenize(":");
   for (Int_t i = 0; i < tasks->GetEntriesFast(); i++)
-    gROOT->LoadMacro(Form("%s.cxx+",static_cast<TObjString*>(tasks->UncheckedAt(i))->GetName()));
+    gROOT->LoadMacro(Form("%s.cxx+g",static_cast<TObjString*>(tasks->UncheckedAt(i))->GetName()));
   delete tasks;
   
 }
@@ -244,7 +245,7 @@ TObject* CreateAlienHandler(TString runMode, TString& rootVersion,TString& aliro
   
   // Set versions of used packages
   plugin->SetAPIVersion("V1.1x");
-  plugin->SetROOTVersion(rootVersion.Data());
+  // plugin->SetROOTVersion(rootVersion.Data());
   plugin->SetAliROOTVersion(alirootVersion.Data());
   plugin->SetAliPhysicsVersion(aliphysicsVersion.Data());
   

@@ -11,12 +11,12 @@
 
 //_____________________________________________________________________________
 void PrintFitMacro(
-char         * sfile="../dataset_light.txt.saf.root",
+char         * sfile="../test.MuMu.AOD.1.root",
 char         * sasso="",
 char         * sasso2="",
 char         * beamYear="PbPb2011",
-char         * what ="PT,PHI",
-Bool_t Raa   = kTRUE, 
+char         * what ="INTEGRATED,PT,Y",
+Bool_t Raa   = kFALSE, 
 Bool_t print = kFALSE)
 {    
     

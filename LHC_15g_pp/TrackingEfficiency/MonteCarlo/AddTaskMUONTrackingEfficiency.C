@@ -1,4 +1,4 @@
-AliAnalysisTaskMuonTrackingEff *AddTaskMUONTrackingEfficiency(AliMuonTrackCuts &trackCuts, TString extension = "") 
+AliAnalysisTaskMuonTrackingEffLocal *AddTaskMUONTrackingEfficiency(AliMuonTrackCuts &trackCuts, TString extension = "") 
 {
   //
   // Task for the determination of the MUON tracking chamber efficiency
@@ -34,7 +34,7 @@ AliAnalysisTaskMuonTrackingEff *AddTaskMUONTrackingEfficiency(AliMuonTrackCuts &
   
   // Create and configure task
   TString name = Form("MuonTrackingEfficiency%s",extension.Data());
-  AliAnalysisTaskMuonTrackingEff* taskMuonTrackingEff = new AliAnalysisTaskMuonTrackingEff(name.Data());
+  AliAnalysisTaskMuonTrackingEffLocal* taskMuonTrackingEff = new AliAnalysisTaskMuonTrackingEffLocal(name.Data());
   taskMuonTrackingEff->SetMuonTrackCuts(trackCuts);
   
   // Add to the manager
@@ -45,15 +45,17 @@ AliAnalysisTaskMuonTrackingEff *AddTaskMUONTrackingEfficiency(AliMuonTrackCuts &
   
   // Create and connect output containers
   AliAnalysisDataContainer *coutput1 = mgr->CreateContainer(Form("ClustersCounters%s",suffix.Data()), AliCounterCollection::Class(), AliAnalysisManager::kOutputContainer, fileName);
-  AliAnalysisDataContainer *coutput2 = mgr->CreateContainer(Form("TracksDetectedPerChamber%s",suffix.Data()), TList::Class(), AliAnalysisManager::kOutputContainer, fileName);
-  AliAnalysisDataContainer *coutput3 = mgr->CreateContainer(Form("TotalTracksPerChamber%s",suffix.Data()), TList::Class(), AliAnalysisManager::kOutputContainer, fileName);
-  AliAnalysisDataContainer *coutput4 = mgr->CreateContainer(Form("SingleDetectedPerChamber%s",suffix.Data()), TList::Class(), AliAnalysisManager::kOutputContainer, fileName);
-  AliAnalysisDataContainer *coutput5 = mgr->CreateContainer(Form("ExtraHistos%s",suffix.Data()), TList::Class(), AliAnalysisManager::kOutputContainer, fileName);
+  AliAnalysisDataContainer *coutput2 = mgr->CreateContainer(Form("EventCounters%s",suffix.Data()), AliCounterCollection::Class(), AliAnalysisManager::kOutputContainer, fileName);
+  AliAnalysisDataContainer *coutput3 = mgr->CreateContainer(Form("TracksDetectedPerChamber%s",suffix.Data()), TList::Class(), AliAnalysisManager::kOutputContainer, fileName);
+  AliAnalysisDataContainer *coutput4 = mgr->CreateContainer(Form("TotalTracksPerChamber%s",suffix.Data()), TList::Class(), AliAnalysisManager::kOutputContainer, fileName);
+  AliAnalysisDataContainer *coutput5 = mgr->CreateContainer(Form("SingleDetectedPerChamber%s",suffix.Data()), TList::Class(), AliAnalysisManager::kOutputContainer, fileName);
+  AliAnalysisDataContainer *coutput6 = mgr->CreateContainer(Form("ExtraHistos%s",suffix.Data()), TList::Class(), AliAnalysisManager::kOutputContainer, fileName);
   mgr->ConnectOutput(taskMuonTrackingEff, 1, coutput1);
   mgr->ConnectOutput(taskMuonTrackingEff, 2, coutput2);
   mgr->ConnectOutput(taskMuonTrackingEff, 3, coutput3);
   mgr->ConnectOutput(taskMuonTrackingEff, 4, coutput4);
   mgr->ConnectOutput(taskMuonTrackingEff, 5, coutput5);
+  mgr->ConnectOutput(taskMuonTrackingEff, 6, coutput6);
   
   return taskMuonTrackingEff;
 }

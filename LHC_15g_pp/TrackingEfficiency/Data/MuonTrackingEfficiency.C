@@ -29,6 +29,7 @@
 #include <TROOT.h>
 #include <TH1.h>
 #include <TH2.h>
+#include <TGraph.h>
 #include <THnSparse.h>
 #include <TAxis.h>
 #include <TString.h>
@@ -43,6 +44,7 @@
 #include <TStyle.h>
 #include <THashList.h>
 #include <TParameter.h>
+ #include <AliCounterCollection.h>
 
 //const Char_t *effErrMode = "cp"; // Clopper-Pearson
 const Char_t *effErrMode = "b(1,1)mode"; // Bayesian with uniform prior
@@ -66,11 +68,11 @@ void PlotMuonEfficiencyVsXY(TString xVar, TString yVar, TString fileNameData, TS
 
 void PlotMuonEfficiency(TString fileNameData, TString fileNameSave, Bool_t saveEdges, Bool_t print, Bool_t draw);
 void PlotMuonEfficiencyVsRun(TString runList, TString fileNameData, TString fileNameSave, Bool_t print, Bool_t draw);
-void PlotIntegratedMuonEfficiency(TString fileNameWeights, TString fileNameSave, Bool_t print, Bool_t draw);
+void PlotIntegratedMuonEfficiency(TString fileNameWeights, TString fileNameData, TString fileNameSave, Bool_t print, Bool_t draw);
 
 void PlotMuonEfficiencyPerDE(TString fileNameData, TString fileNameSave, Bool_t saveEdges);
 void PlotMuonEfficiencyPerDEVsRun(TString runList, TString fileNameData, TString fileNameSave);
-void PlotIntegratedMuonEfficiencyPerDE(TString fileNameWeights, TString fileNameSave);
+void PlotIntegratedMuonEfficiencyPerDE(TString fileNameWeights,TString fileNameData, TString fileNameSave);
 
 Bool_t GetChamberEfficiency(THnSparse &TT, THnSparse &TD, TArrayD &chEff, TArrayD chEffErr[2], Bool_t printError = kFALSE);
 void GetDEEfficiency(THnSparse &TT, THnSparse &TD, TGraphAsymmErrors &effVsDE);
@@ -82,7 +84,7 @@ void ComputeTrackingEfficiency(Double_t stEff[6], Double_t stEffErr[6][2], Doubl
 void GetTrackingEfficiency(TArrayD &chEff, TArrayD chEffErr[2], TGraphAsymmErrors *effVsSt[3],
                            TGraphAsymmErrors *effVsX[3], Int_t ip, Double_t xp, Bool_t print = kFALSE);
 void IntegrateMuonEfficiency(TGraphAsymmErrors &effVsRunLow, TGraphAsymmErrors &effVsRunUp,
-                             TGraphAsymmErrors &effVsX, Int_t ip, Double_t xp);
+                             TGraphAsymmErrors &effVsX, Int_t ip, Double_t xp, TString fileNameData);
 
 void LoadRunWeights(TString fileName);
 void SetCentPtCh(THnSparse& SparseData);
@@ -92,12 +94,14 @@ void BeautifyGraphs(TObjArray& array, const char* xAxisName, const char* yAxisNa
 void SetRunLabel(TGraphAsymmErrors &g, Int_t irun, const TList& runs);
 void SetRunLabel(TObjArray& array, Int_t irun, const TList& runs);
 
+void GetInnerRunCounts(TString runList, TString fileNameData, TString fileNameSave, Bool_t print);
+
 
 //---------------------------------------------------------------------------
 void MuonTrackingEfficiency(TString runList = "runList.txt",
                             TString fileNameWeights = "",
                             TString fileNameData ="AnalysisResults.root",
-                            TString fileNameSave = "efficiency_newData.root")
+                            TString fileNameSave = "efficiency_new.root")
 {
   /// main function to compute, print and plot efficiencies
   
@@ -120,11 +124,14 @@ void MuonTrackingEfficiency(TString runList = "runList.txt",
   
   PlotMuonEfficiency(fileNameData, fileNameSave, kFALSE, kTRUE, kTRUE);
   PlotMuonEfficiencyVsRun(runList, fileNameData, fileNameSave, kFALSE, kTRUE);
-  PlotIntegratedMuonEfficiency(fileNameWeights, fileNameSave, kTRUE, kTRUE);
+  PlotIntegratedMuonEfficiency(fileNameWeights,fileNameData, fileNameSave, kTRUE, kTRUE);
   
   PlotMuonEfficiencyPerDE(fileNameData, fileNameSave, kFALSE);
   PlotMuonEfficiencyPerDEVsRun(runList, fileNameData, fileNameSave);
-  PlotIntegratedMuonEfficiencyPerDE(fileNameWeights, fileNameSave);
+  PlotIntegratedMuonEfficiencyPerDE(fileNameWeights, fileNameData, fileNameSave);
+
+  GetInnerRunCounts( runList, fileNameData, fileNameSave,kTRUE);
+
   
 }
 
@@ -242,12 +249,14 @@ void PlotIntegratedMuonEfficiencyVsX(TString var, TString runList, TString fileN
   /// plot the tracking efficiency versus X for each run and integrated
   
   printf("plotting integrated efficiency versus %s...\n", var.Data());
+
+  // get input hists
+  TFile *f =0x0;
   
   // load run weights
   if (!fileNameWeights.IsNull()) LoadRunWeights(fileNameWeights);
   if (!runWeights) {
-    printf("Cannot compute integrated efficiency without run-by-run weights\n");
-    return;
+    printf("Compute integrated efficiency without run-by-run weights\n");
   }
   
   // open run list
@@ -279,17 +288,30 @@ void PlotIntegratedMuonEfficiencyVsX(TString var, TString runList, TString fileN
     printf("run %d: ", run);
     
     // compute efficiency vs var
-    TString dataFile = Form("alice/cern.ch/user/b/baudurie/Data/LHC15g/Eff/Data/results/%09d/%s", run, fileNameData.Data());
-    TString outFile = Form("alice/cern.ch/user/b/baudurie/Data/LHC15g/Eff/Data/results/%09d/%s", run, fileNameSave.Data());
+    TString dataFile = Form("alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/results/%09d/%s", run, fileNameData.Data());
+    TString outFile = Form("alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/results/%09d/%s", run, fileNameSave.Data());
     PlotMuonEfficiencyVsX(var, dataFile, outFile, kTRUE, print, kFALSE);
+    // get input hists
+    f = new TFile(dataFile.Data(), "read");
+    if (!f || !f->IsOpen()) {
+      printf("cannot open f %s \n",dataFile.Data());
+      return;
+    }
     
     // get run weight
-    TParameter<Double_t> *weight = static_cast<TParameter<Double_t>*>(runWeights->FindObject(currRun.Data()));
-    if (!weight) {
+    Double_t w ;
+    
+    if (runWeights){
+      TParameter<Double_t> *weight;
+      weight = static_cast<TParameter<Double_t>*>(runWeights->FindObject(currRun.Data()));
+      w = weight->GetVal();
+    } else {
+      w = static_cast<AliCounterCollection*>(f->FindObjectAny("EventCounters"))->GetSum("COUNTS:NOFEVENT");
+    }
+    if (!w) {
       printf("weight not found for run %s\n", currRun.Data());
       continue;
-    }
-    Double_t w = weight->GetVal();
+    } 
     Double_t w2 = w*w;
     
     // get result
@@ -370,6 +392,7 @@ void PlotIntegratedMuonEfficiencyVsX(TString var, TString runList, TString fileN
   // save output
   TFile *file = new TFile(fileNameSave.Data(),"update");
   intEffVsX->Write(0x0, TObject::kOverwrite);
+  f->Close();
   file->Close();
   
   // clean memory
@@ -699,8 +722,8 @@ void PlotMuonEfficiencyVsRun(TString runList, TString fileNameData, TString file
     printf("run %d: ", run);
     
     // compute efficiencies for this run
-    TString dataFile = Form("alice/cern.ch/user/b/baudurie/Data/LHC15g/Eff/Data/results/%09d/%s", run, fileNameData.Data());
-    TString outFile = Form("alice/cern.ch/user/b/baudurie/Data/LHC15g/Eff/Data/results/%09d/%s", run, fileNameSave.Data());
+    TString dataFile = Form("alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/results/%09d/%s", run, fileNameData.Data());
+    TString outFile = Form("alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/results/%09d/%s", run, fileNameSave.Data());
     PlotMuonEfficiency(dataFile, outFile, kTRUE, print, kFALSE);
     
     TFile *file = new TFile(outFile.Data(), "read");
@@ -778,19 +801,18 @@ void PlotMuonEfficiencyVsRun(TString runList, TString fileNameData, TString file
 
 
 //---------------------------------------------------------------------------
-void PlotIntegratedMuonEfficiency(TString fileNameWeights, TString fileNameSave, Bool_t print, Bool_t draw)
+void PlotIntegratedMuonEfficiency(TString fileNameWeights, TString fileNameData, TString fileNameSave, Bool_t print, Bool_t draw)
 {
   /// plot chamber, station and overall tracking efficiency integrated over runs
   
   printf("plotting integrated efficiency...\n");
-  
+    
   // load run weights
   if (!fileNameWeights.IsNull()) LoadRunWeights(fileNameWeights);
   if (!runWeights) {
-    printf("Cannot compute integrated efficiency without run-by-run weights\n");
-    return;
+    printf("Compute integrated efficiency without run-by-run weights\n");
   }
-  
+
   // get input hists
   TFile *file = new TFile(fileNameSave.Data(), "update");
   if (!file || !file->IsOpen()) {
@@ -814,19 +836,19 @@ void PlotIntegratedMuonEfficiency(TString fileNameWeights, TString fileNameSave,
   TGraphAsymmErrors *effVsSt = CreateGraph("integratedStationEff", "Integrated efficiency per station (6 = st4&5)");
   
   // integrate spectrometer efficiency
-  IntegrateMuonEfficiency(*trkVsRun[0], *trkVsRun[1], *effVsCh, 0, 0.);
+  IntegrateMuonEfficiency(*trkVsRun[0], *trkVsRun[1], *effVsCh, 0, 0.,fileNameData);
   
   // integrate chamber efficiency
   for ( Int_t iCh = 0; iCh < 10; ++iCh) {
     TGraphAsymmErrors *g = static_cast<TGraphAsymmErrors*>(chamberVsRunGraphs->UncheckedAt(iCh));
-    IntegrateMuonEfficiency(*g, *g, *effVsCh, iCh+1, iCh+1);
+    IntegrateMuonEfficiency(*g, *g, *effVsCh, iCh+1, iCh+1,fileNameData);
   }
   
   // integrate station efficiency
   for ( Int_t iSt = 0; iSt < 6; ++iSt) {
     TGraphAsymmErrors *gLow = static_cast<TGraphAsymmErrors*>(stationVsRunGraphs[0]->UncheckedAt(iSt));
     TGraphAsymmErrors *gUp = static_cast<TGraphAsymmErrors*>(stationVsRunGraphs[1]->UncheckedAt(iSt));
-    IntegrateMuonEfficiency(*gLow, *gUp, *effVsSt, iSt, iSt+1);
+    IntegrateMuonEfficiency(*gLow, *gUp, *effVsSt, iSt, iSt+1,fileNameData);
   }
   
   // print results
@@ -1057,8 +1079,8 @@ void PlotMuonEfficiencyPerDEVsRun(TString runList, TString fileNameData, TString
     printf("run %d: ", run);
     
     // compute efficiencies for this run
-    TString dataFile = Form("alice/cern.ch/user/b/baudurie/Data/LHC15g/Eff/Data/results/%09d/%s", run, fileNameData.Data());
-    TString outFile = Form("alice/cern.ch/user/b/baudurie/Data/LHC15g/Eff/Data/results/%09d/%s", run, fileNameSave.Data());
+    TString dataFile = Form("alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/results/%09d/%s", run, fileNameData.Data());
+    TString outFile = Form("alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/results/%09d/%s", run, fileNameSave.Data());
     PlotMuonEfficiencyPerDE(dataFile, outFile, kTRUE);
     
     TFile *file = new TFile(outFile.Data(), "read");
@@ -1165,7 +1187,7 @@ void PlotMuonEfficiencyPerDEVsRun(TString runList, TString fileNameData, TString
 
 
 //---------------------------------------------------------------------------
-void PlotIntegratedMuonEfficiencyPerDE(TString fileNameWeights, TString fileNameSave)
+void PlotIntegratedMuonEfficiencyPerDE(TString fileNameWeights, TString fileNameData, TString fileNameSave)
 {
   /// plot chamber and station efficiency per DE integrated over runs
   
@@ -1173,10 +1195,6 @@ void PlotIntegratedMuonEfficiencyPerDE(TString fileNameWeights, TString fileName
   
   // load run weights
   if (!fileNameWeights.IsNull()) LoadRunWeights(fileNameWeights);
-  if (!runWeights) {
-    printf("Cannot compute integrated efficiency without run-by-run weights\n");
-    return;
-  }
   
   // get input hists
   TFile *file = new TFile(fileNameSave.Data(), "update");
@@ -1218,8 +1236,7 @@ void PlotIntegratedMuonEfficiencyPerDE(TString fileNameWeights, TString fileName
     
     // integrate DE efficiency
     TGraphAsymmErrors *g = static_cast<TGraphAsymmErrors*>(chamberVsDEGraphs.UncheckedAt(iCh));
-    IntegrateMuonEfficiency(*gDE, *gDE, *g, iDE, iDE);
-    
+    IntegrateMuonEfficiency(*gDE, *gDE, *g, iDE, iDE,fileNameData);
   }
   
   // Loop over DE per station
@@ -1241,8 +1258,7 @@ void PlotIntegratedMuonEfficiencyPerDE(TString fileNameWeights, TString fileName
     
     // Integrate DE efficiency per station
     TGraphAsymmErrors *g = static_cast<TGraphAsymmErrors*>(stationVsDEGraphs.UncheckedAt(iSt));
-    IntegrateMuonEfficiency(*gDELow, *gDEUp, *g, iDE, iDE);
-    
+    IntegrateMuonEfficiency(*gDELow, *gDEUp, *g, iDE, iDE,fileNameData); 
   }
   
   // display
@@ -1265,7 +1281,6 @@ void PlotIntegratedMuonEfficiencyPerDE(TString fileNameWeights, TString fileName
   chamberVsDEGraphs.Write("IntegratedChamberEffVsDE", TObject::kOverwrite | TObject::kSingleKey);
   stationVsDEGraphs.Write("IntegratedStationEffVsDE", TObject::kOverwrite | TObject::kSingleKey);
   file->Close();
-  
 }
 
 
@@ -1405,6 +1420,114 @@ void ComputeStationEfficiency(TArrayD &chEff, TArrayD chEffErr[2], Int_t iSt, Do
   
 }
 
+//---------------------------------------------------------------------------
+void GetInnerRunCounts(TString runList, TString fileNameData, TString fileNameSave, Bool_t print)
+{
+  /// Show counts vs run
+  
+  // get input hists
+  TFile *f =0x0;
+  TFile *f1 =0x0;
+  
+  // load run weights
+
+  // get input hists
+  f = new TFile(fileNameData.Data(), "read");
+  if (!f || !f->IsOpen()) {
+    printf("cannot open f %s \n",fileNameData.Data());
+    return;
+  }
+  
+  
+  // open run list
+  ifstream inFile(runList.Data());
+  if (!inFile.is_open()) {
+    printf("cannot open file %s\n",runList.Data());
+    return;
+  }
+
+//  // Get number of line
+//   int numLines = 0;
+// ;  string unused;
+//   while ( getline(inFile, unused) ){
+//      ++numLines;
+//   }
+//   inFile.close()
+
+//   cout << "numline =" << numLines << endl;
+  
+  // output graph
+  TGraph* h = new TGraph();
+  h->SetTitle("NofCounts vs run");
+
+  Int_t i = 0;
+  TString label[1000];
+
+  
+  // loop over runs
+  while (!inFile.eof()) {
+    
+    // get current run number
+    TString currRun;
+    currRun.ReadLine(inFile,kTRUE);
+    if(currRun.IsNull() || !currRun.IsDec()) continue;
+    Int_t run = currRun.Atoi();
+    label[i]=currRun;
+    
+    
+    
+    // compute efficiency vs var
+    TString dataFile = Form("alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/singleMuon/results/%09d/%s", run, fileNameData.Data());
+
+    // get input hists
+    f1 = new TFile(dataFile.Data(), "read");
+    if (!f1 || !f1->IsOpen()) {
+      printf("cannot open f %s \n",dataFile.Data());
+      return;
+    }
+    
+    // get run weight
+    Double_t w = static_cast<AliCounterCollection*>(f1->FindObjectAny("EventCounters"))->GetSum("COUNTS:NOFEVENT");
+    
+    if (!w) {
+      printf("weight not found for run %s\n", currRun.Data());
+      continue;
+    } 
+    h->SetPoint(i,i, w); 
+    f1->Close();
+    i++;
+
+  }
+  f->Close();
+    
+  if(print){
+    new TCanvas;
+    h->Print("");
+
+    h->SetMarkerColor(4);
+    h->SetMarkerSize(1.5);
+    h->SetMarkerStyle(21);
+    h->GetXaxis()->SetTitle("RUN");
+    h->GetYaxis()->SetTitle("COUNTS"); 
+    h->Draw("AP"); 
+    
+    // loop to change bin label
+    Float_t x;
+    TText t;
+    t.SetTextAngle(60);
+    t.SetTextSize(0.02);
+    t.SetTextAlign(33);
+    for (int j = 0; j < i+2; j++){
+      // x = h->GetXaxis()->GetBin(j);
+      t.DrawText(j,0,label[j].Data());
+    } 
+  } 
+
+  // save output
+  TFile* file = new TFile(fileNameSave.Data(),"update");
+  h->Write("COUNTS", TObject::kOverwrite | TObject::kSingleKey);
+
+  file->Close();
 
 //---------------------------------------------------------------------------
 void GetStationEfficiency(TArrayD &chEff, TArrayD chEffErr[2], Int_t iSt, TGraphAsymmErrors *effVsX[3], Int_t ip, Double_t xp)
@@ -1718,15 +1841,15 @@ void GetTrackingEfficiency(TArrayD &chEff, TArrayD chEffErr[2], TGraphAsymmError
 
 //---------------------------------------------------------------------------
 void IntegrateMuonEfficiency(TGraphAsymmErrors &effVsRunLow, TGraphAsymmErrors &effVsRunUp,
-                             TGraphAsymmErrors &effVsX, Int_t ip, Double_t xp)
+                             TGraphAsymmErrors &effVsX, Int_t ip, Double_t xp, TString fileNameData)
 {
   /// integrate efficiency over runs
   /// return kFALSE if efficiency unknown in all runs
   
+  TFile* f =0x0;
+
   if (!runWeights) {
-    effVsX.SetPoint(ip,xp,-1.);
-    effVsX.SetPointError(ip,0.,0.,0.,0.);
-    return;
+    printf("Compute integrated efficiency without run-by-run weights\n");
   }
   
   // initialize
@@ -1741,12 +1864,27 @@ void IntegrateMuonEfficiency(TGraphAsymmErrors &effVsRunLow, TGraphAsymmErrors &
     
     // get run weight
     TString sRun = effVsRunLow.GetXaxis()->GetBinLabel(iRun+1);
-    TParameter<Double_t> *weight = static_cast<TParameter<Double_t>*>(runWeights->FindObject(sRun.Data()));
-    if (!weight) {
+    TString dataFile = Form("alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/results/000%s/%s", sRun.Data(), fileNameData.Data());
+
+    f = new TFile(dataFile.Data(), "read");
+    if (!f || !f->IsOpen()) {
+      printf("cannot open f %s \n",dataFile.Data());
+      return;
+    }
+        
+    Double_t w ;
+    
+    if (runWeights){
+      TParameter<Double_t> *weight;
+      weight = static_cast<TParameter<Double_t>*>(runWeights->FindObject(sRun.Data()));
+      w = weight->GetVal();
+    } else {
+      w = static_cast<AliCounterCollection*>(f->FindObjectAny("EventCounters"))->GetSum("COUNTS:NOFEVENT");
+    }
+    if (!w) {
       printf("weight not found for run %s\n", sRun.Data());
       continue;
-    }
-    Double_t w = weight->GetVal();
+    } 
     Double_t w2 = w*w;
     
     // get efficiency and error
@@ -1766,6 +1904,7 @@ void IntegrateMuonEfficiency(TGraphAsymmErrors &effVsRunLow, TGraphAsymmErrors &
       rec[i] += w*eff[i];
       intEffErr[i] += w2*effErr[i]*effErr[i];
     }
+  f->Close();
     
   }
   
@@ -1966,5 +2105,6 @@ void SetRunLabel(TObjArray& array, Int_t irun, const TList& runs)
     SetRunLabel(*static_cast<TGraphAsymmErrors*>(array.UncheckedAt(i)), irun, runs);
   
 }
+
 
 

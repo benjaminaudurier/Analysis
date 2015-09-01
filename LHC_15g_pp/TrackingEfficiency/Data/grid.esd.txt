@@ -1,6 +1,2 @@
-alien:///alice/cern.ch/user/b/baudurie/Data/LHC15g/Eff/Data/results/000228936/AnalysisResults.root
-alien:///alice/cern.ch/user/b/baudurie/Data/LHC15g/Eff/Data/results/000228943/AnalysisResults.root
-alien:///alice/cern.ch/user/b/baudurie/Data/LHC15g/Eff/Data/results/000228948/AnalysisResults.root
-alien:///alice/cern.ch/user/b/baudurie/Data/LHC15g/Eff/Data/results/000228977/AnalysisResults.root
-alien:///alice/cern.ch/user/b/baudurie/Data/LHC15g/Eff/Data/results/000228978/AnalysisResults.root
-alien:///alice/cern.ch/user/b/baudurie/Data/LHC15g/Eff/Data/results/000228979/AnalysisResults.root
+alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/results/000229386/AnalysisResults.root
+alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/results/000229389/AnalysisResults.root

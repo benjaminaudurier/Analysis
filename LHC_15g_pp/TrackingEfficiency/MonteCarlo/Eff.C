@@ -50,12 +50,14 @@ void Eff()
       gSystem->AddIncludePath(current);
    }
    if (listpaths) delete listpaths;
-   gSystem->AddIncludePath("-I. ");
+   gSystem->AddIncludePath("-I$ALICE_ROOT/include -I$ALICE_PHYSICS/include -I. ");
    gROOT->ProcessLine(".include $ALICE_ROOT/include");
    printf("Include path: %s\n", gSystem->GetIncludePath());
 
+// Add aditional AliRoot libraries
 
 // analysis source to be compiled at runtime (if any)
+   gROOT->ProcessLine(".L AliAnalysisTaskMuonTrackingEffLocal.cxx+g");
 
 // read the analysis manager from file
    AliAnalysisManager *mgr = AliAnalysisAlien::LoadAnalysisManager("Eff.root");

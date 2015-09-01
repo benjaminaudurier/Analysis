@@ -9,8 +9,8 @@
 // Macro loadded by runMuMuResult.sh
 
 TString striggerDimuon  ="CMUL7-B-NOPF-MUON";
-TString seventType      ="PSALL";
-TString spairCut        ="pALLPAIRYPAIRPTIN0.0-18.0RABSMATCHLOWETAPDCA";
+TString seventType      ="ALL";
+TString spairCut        ="pALLPAIRYRABSETA";
 TString sbinType        ="YVSPT";
 TString scentrality     ="V0A";
 TString sResName        ="";

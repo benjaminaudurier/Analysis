@@ -51,10 +51,10 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   AliAnalysisMuMuCutElement * triggerSelection = cr->AddTriggerClassCut(*eventCutter,"SelectTriggerClass","const TString&,TString&,UInt_t,UInt_t,UInt_t","");
   AliAnalysisMuMuCutElement* ps = eventTrue;
   
-  if (!simulations)
-  {
-    ps = cr->AddEventCut(*eventCutter,"IsPhysicsSelected","const AliInputEventHandler&","");
-  }
+  // if (!simulations)
+  // {
+  //   ps = cr->AddEventCut(*eventCutter,"IsPhysicsSelected","const AliInputEventHandler&","");
+  // }
 
   // Apply default cut
   cr->AddCutCombination(triggerSelection);
@@ -85,7 +85,7 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
     AliAnalysisMuMuCutElement* eta = cr->AddTrackCut(*singleAnalysis,"IsEtaInRange","const AliVParticle&","");
     AliAnalysisMuMuCutElement* pdca = cr->AddTrackCut(*singleAnalysis,"IsPDCAOK","const AliVParticle&","");
     // Create combination of cuts to apply
-    cr->AddCutCombination(rabs,eta,matchlow,pdca,trackTrue); 
+    cr->AddCutCombination(eta,matchlow,trackTrue); 
     // Adding the sub analysis
     task->AdoptSubAnalysis(singleAnalysis); 
 
@@ -101,11 +101,11 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
       
        cutElements.Add(pairTrue);
       cutElements.Add(pairy);
-      cutElements.Add(ptRange);
-      cutElements.Add(rabs);
+      // cutElements.Add(ptRange);
+      // cutElements.Add(rabs);
       cutElements.Add(matchlow);
       cutElements.Add(eta);
-      cutElements.Add(pdca);
+      // cutElements.Add(pdca);
       // add them
       cr->AddCutCombination(cutElements);    
       // Adding the sub analysis

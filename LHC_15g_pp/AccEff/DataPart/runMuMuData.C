@@ -1,5 +1,10 @@
 ///
-/// Example macro to run the AliAnalysisTaskMuMu task
+/// Example macro to run the AliAnalysisTaskMuMu task 
+/// 
+/// 
+/// 
+/// 
+/// RUN ONLY ON ESDs !""
 ///
 /// \author L. Aphecetche
 ///
@@ -13,7 +18,7 @@
 
 
 //______________________________________________________________________________
-AliAnalysisTask* runMuMuData(const char* dataset="Find;BasePath=/alice/data/2013/LHC13d/000195760/ESDs/muon_pass2/AOD134;FileName=AliAOD.root",
+AliAnalysisTask* runMuMuData(const char* dataset="Find;BasePath=/alice/data/2015/LHC15g/000228936/muon_calo_pass1/AOD/*;FileName=AliAOD.Muons.root",
                          Bool_t simulations=kFALSE,
                          Bool_t baseline=kFALSE,
                          const char* where="saf",const char* alirootMode="")
@@ -65,8 +70,8 @@ AliAnalysisTask* runMuMuData(const char* dataset="Find;BasePath=/alice/data/2013
         // pA trigger
         triggers->Add(new TObjString("CINT7-B-NOPF-ALLNOTRD"));//MB
         triggers->Add(new TObjString("CMUL7-B-NOPF-MUON"));// Dimuon
-        triggers->Add(new TObjString("CINT7-B-NOPF-ALLNOTRD & 0MSL"));
-        triggers->Add(new TObjString("CMSL7-B-NOPF-MUON & 0MUL"));
+        // triggers->Add(new TObjString("CINT7-B-NOPF-ALLNOTRD & 0MSL"));
+        // triggers->Add(new TObjString("CMSL7-B-NOPF-MUON & 0MUL"));
     }
   
     TString outputname("test.MuMu.AOD.1.root"); // Create output name in case of no dataset selected
