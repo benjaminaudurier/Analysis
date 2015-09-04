@@ -51,7 +51,7 @@ Bool_t FitDist = kTRUE)
         else analysis.Jpsi(swhat->String().Data(),"BENJ",kFALSE,kFALSE);
     }
 
-    // analysis.PrintNofParticle("PSI","NofJPsi","INTEGRATED",kFALSE);
+    analysis.PrintNofParticle("PSI","NofJPsi","INTEGRATED",kFALSE);
     // analysis.PrintNofParticle("PSI","NofJPsi","Y",kFALSE);
     // analysis.PrintNofParticle("PSI","NofJPsi","PT",kFALSE);
  

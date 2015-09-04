@@ -106,20 +106,20 @@ void MuonTrackingEfficiency(TString runList = "runList.txt",
 {
   /// main function to compute, print and plot efficiencies
   
-  PlotMuonEfficiencyVsX("centrality", fileNameData, fileNameSave, kFALSE, kFALSE, kTRUE);
+  // PlotMuonEfficiencyVsX("centrality", fileNameData, fileNameSave, kFALSE, kFALSE, kTRUE);
   PlotMuonEfficiencyVsX("pt", fileNameData, fileNameSave, kFALSE, kFALSE, kTRUE);
   PlotMuonEfficiencyVsX("y", fileNameData, fileNameSave, kFALSE, kFALSE, kTRUE);
   PlotMuonEfficiencyVsX("phi", fileNameData, fileNameSave, kFALSE, kFALSE, kTRUE);
   PlotMuonEfficiencyVsX("charge", fileNameData, fileNameSave, kFALSE, kFALSE, kTRUE);
   
-  PlotIntegratedMuonEfficiencyVsX("centrality", runList, fileNameWeights, fileNameData, fileNameSave, kFALSE, kTRUE);
+  // PlotIntegratedMuonEfficiencyVsX("centrality", runList, fileNameWeights, fileNameData, fileNameSave, kFALSE, kTRUE);
   PlotIntegratedMuonEfficiencyVsX("pt", runList, fileNameWeights, fileNameData, fileNameSave, kFALSE, kTRUE);
   PlotIntegratedMuonEfficiencyVsX("y", runList, fileNameWeights, fileNameData, fileNameSave, kFALSE, kTRUE);
   PlotIntegratedMuonEfficiencyVsX("phi", runList, fileNameWeights, fileNameData, fileNameSave, kFALSE, kTRUE);
   PlotIntegratedMuonEfficiencyVsX("charge", runList, fileNameWeights, fileNameData, fileNameSave, kFALSE, kTRUE);
   
-  PlotMuonEfficiencyVsXY("pt", "centrality", fileNameData, fileNameSave, kTRUE);
-  PlotMuonEfficiencyVsXY("y", "centrality", fileNameData, fileNameSave, kTRUE);
+  // PlotMuonEfficiencyVsXY("pt", "centrality", fileNameData, fileNameSave, kTRUE);
+  // PlotMuonEfficiencyVsXY("y", "centrality", fileNameData, fileNameSave, kTRUE);
   PlotMuonEfficiencyVsXY("pt", "y", fileNameData, fileNameSave, kTRUE);
   PlotMuonEfficiencyVsXY("phi", "y", fileNameData, fileNameSave, kTRUE, kTRUE);
   
@@ -882,10 +882,17 @@ void PlotIntegratedMuonEfficiency(TString fileNameWeights, TString fileNameData,
     effVsSt->DrawClone("ap");
   }
   
-  // save output
-  effVsCh->Write(0x0, TObject::kOverwrite);
-  effVsSt->Write(0x0, TObject::kOverwrite);
   file->Close();
+  
+  // save output
+  TFile *file2 = new TFile(fileNameSave.Data(), "update");
+  if (!file2 || !file2->IsOpen()) {
+    printf("cannot open file\n");
+    return;
+  }
+  effVsCh->Write(0x0, TObject::kOverwrite | TObject::kSingleKey);
+  effVsSt->Write(0x0, TObject::kOverwrite | TObject::kSingleKey);
+  file2->Close();
   
   // clean memory
   delete effVsCh;
@@ -1276,10 +1283,18 @@ void PlotIntegratedMuonEfficiencyPerDE(TString fileNameWeights, TString fileName
   }
   BeautifyGraphs(stationVsDEGraphs,"Detection Element","efficiency");
 
+  file->Close();
+
+
   // save Output
+  TFile *file2 = new TFile(fileNameSave.Data(), "update");
+  if (!file2 || !file2->IsOpen()) {
+    printf("cannot open file\n");
+    return;
+  }
   chamberVsDEGraphs.Write("IntegratedChamberEffVsDE", TObject::kOverwrite | TObject::kSingleKey);
   stationVsDEGraphs.Write("IntegratedStationEffVsDE", TObject::kOverwrite | TObject::kSingleKey);
-  file->Close();
+  file2->Close();
 }
 
 
@@ -1511,10 +1526,10 @@ void GetInnerRunCounts(TString runList, TString fileNameData, TString fileNameSa
   } 
 
   // save output
-  TFile* file = new TFile(fileNameSave.Data(),"update");
-  h->Write("COUNTS", TObject::kOverwrite | TObject::kSingleKey);
+  f = new TFile(fileNameSave.Data(),"update");
+  h->Write("COUNTS", TObject::kOverwrite);
 
-  file->Close();
+  f->Close();
 }
 
 //---------------------------------------------------------------------------

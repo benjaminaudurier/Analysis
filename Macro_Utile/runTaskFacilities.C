@@ -211,7 +211,9 @@ void LoadAlirootOnProof(TString& aaf, TString rootVersion, TString aliphysicsVer
         gProof->UploadPackage("$ALICE_ROOT/ANALYSIS/macros/AliRootProofLite.par");
         gProof->EnablePackage("$ALICE_ROOT/ANALYSIS/macros/AliRootProofLite.par", list);
         }
-    else gProof->EnablePackage(Form("VO_ALICE@AliPhysics::%s",aliphysicsVersion.Data()), list, notOnClient);
+    else {
+      gProof->EnablePackage(Form("VO_ALICE@AliPhysics::%s",aliphysicsVersion.Data()), list, notOnClient);
+    }
     
     
     // compile additional tasks on workers. To add tasks, use ":" (see in the main loop)

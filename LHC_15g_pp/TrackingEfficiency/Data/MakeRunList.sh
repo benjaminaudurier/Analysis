@@ -2,6 +2,8 @@
 
 rm grid.esd.txt
 
+rm -dr alice
+
 for line in $(cat runlist_15-07-2015-ESD.txt)
 	
 	do

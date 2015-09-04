@@ -3,7 +3,7 @@ void sim(Int_t nev=5000)
 
 #if defined(__CINT__)
   gSystem->Load("liblhapdf");      // Parton density functions
-  if ( TString("GenParamCustomSingle").Contains("pythia6",TString::kIgnoreCase) )
+  if ( TString("GenParamCustom").Contains("pythia6",TString::kIgnoreCase) )
   {
     std::cout << "Setting up Pythia6 required env. variables" << std::endl;
     gSystem->AddIncludePath("-I$ALICE_ROOT/include");
@@ -11,7 +11,7 @@ void sim(Int_t nev=5000)
   }
   else  gSystem->Load("libpythia6");     // Pythia 6.2 (for decayer)
 
-  if ( TString("GenParamCustomSingle").Contains("pythia8",TString::kIgnoreCase) )
+  if ( TString("GenParamCustom").Contains("pythia8",TString::kIgnoreCase) )
   {
     std::cout << "Setting up Pythia8 required libraries and env. variables" << std::endl;
     //    gSystem->Load("libpythia8");

@@ -10,7 +10,7 @@
 TString rootVersion = "v5-34-30-1";
 TString alirootVersion = "v5-06-33";
 TString aliphysicsVersion = "vAN-20150722";
-TString dataDir = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/simsinglemuon/pp/CMUL7-B-NOPF-MUON";
+TString dataDir = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/simsinglemuon/pp/CMSL7-B-NOPF-MUON";
 TString dataPattern = "*AliESDs.root";
 TString runFormat = "%06d";
 TString outDir = "Analysis/LHC15g/TrackingEfficiency/MonteCarlo/singleMuon";
@@ -92,7 +92,7 @@ void CreateAnalysisTrain(Bool_t applyPhysSel, Bool_t mc, Bool_t embedding, TObje
   esdH->SetActiveBranches("MuonTracks MuonClusters MuonPads AliESDRun. AliESDHeader. AliMultiplicity. AliESDFMD. AliESDVZERO. SPDVertex. PrimaryVertex. AliESDZDC. AliESDTZERO.");
   mgr->SetInputEventHandler(esdH);
 
-  // event selection
+  // event selectionMuon
   UInt_t offlineTriggerMask;
   if (applyPhysSel) {
     gROOT->LoadMacro("$ALICE_ROOT/ANALYSIS/macros/AddTaskPhysicsSelection.C");
@@ -123,7 +123,7 @@ void CreateAnalysisTrain(Bool_t applyPhysSel, Bool_t mc, Bool_t embedding, TObje
 //  trackCuts.SetCustomParamFromRun(169099, "pass2_muon");
 //  trackCuts.CustomParam()->SetChi2NormCut(3.5);
   trackCuts.SetFilterMask(AliMuonTrackCuts::kMuMatchLpt | AliMuonTrackCuts::kMuEta |
-			  AliMuonTrackCuts::kMuThetaAbs);
+			  AliMuonTrackCuts::kMuThetaAbs | AliMuonTrackCuts::kMuPdca);
   trackCuts.SetIsMC(mc && !embedding);
 
   // Muon efficiency analysis

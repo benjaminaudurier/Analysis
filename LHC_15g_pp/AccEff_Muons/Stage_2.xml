@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<alien>
+  <collection name="Stage_2">
+    <event name="1">
+      <file name="root_archive.zip" aclId="" broken="0" ctime="2015-09-03 13:32:19" dir="16840289" entryId="16840313" expiretime="" gowner="baudurie" guid="213755D0-522F-11E5-A970-3700F648CAFF" guidtime="11E5522F" jobid="545935623" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muon/results/229355/Stage_1/001/root_archive.zip" md5="7d1e4bd551e23ec355b06c065a925ae6" owner="baudurie" perm="755" replicated="0" size="4768" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muon/results/229355/Stage_1/001/root_archive.zip" type="f" />
+    </event>
+    <event name="2">
+      <file name="root_archive.zip" aclId="" broken="0" ctime="2015-09-03 13:30:28" dir="16840290" entryId="16840304" expiretime="" gowner="baudurie" guid="23233C60-522F-11E5-91DC-C773F550980E" guidtime="11E5522F" jobid="545935624" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muon/results/229355/Stage_1/002/root_archive.zip" md5="a6fcd0816ed8e99514981fda761d36c5" owner="baudurie" perm="755" replicated="0" size="4758" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muon/results/229355/Stage_1/002/root_archive.zip" type="f" />
+    </event>
+    <event name="3">
+      <file name="root_archive.zip" aclId="" broken="0" ctime="2015-09-03 13:39:14" dir="16840406" entryId="16840410" expiretime="" gowner="baudurie" guid="522AD0EE-5230-11E5-87B4-27B89D089FED" guidtime="11E55230" jobid="545935625" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muon/results/229355/Stage_1/003/root_archive.zip" md5="aeab20f7a341447de8daca50a8c0b7e2" owner="baudurie" perm="755" replicated="0" size="4758" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muon/results/229355/Stage_1/003/root_archive.zip" type="f" />
+    </event>
+    <info command="[/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muon/results/]: find -z -x Stage_2 /alice/cern.ch/user/b/baudurie//Analysis/LHC15g/AccEff/Muon/results/229355 Stage_1/*root_archive.zip" creator="admin" date="Thu Sep  3 13:44:09 CEST 2015" timestamp="1441280649" />
+  </collection>
+</alien>
+
+
+

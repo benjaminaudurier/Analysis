@@ -18,7 +18,7 @@ TString outDir = "Data/LHC10h/pass2/Eff/pDCAChi2";
 // extra to be load on CF
 TString extraLibs="CORRFW:PWGmuon";
 TString extraIncs="include";
-TString extraTasks="AliAnalysisTaskGenTunerJpsi";
+TString extraTasks="";
 
 Bool_t applyPhysicsSelection = kFALSE;
 //__________
@@ -31,7 +31,7 @@ Int_t maxMergeStages = 2;
 //__________
 
 //__________generator parameters used in the simulation
-// tune1 LHC13d pt param. (see AliAnalysisTaskGenTunerJpsi::Pt)
+// tune1 LHC13d pt param. (see AliAnalysisTaskGenTuner::Pt)
 Double_t oldPtParam[3] = {0.288315, 0.0593389, 3.42939};
 Bool_t oldFixPtParam[3] = {kFALSE, kFALSE, kFALSE};
 Double_t newPtParam[3] = {0.288315, 0.0593389, 3.42939};
@@ -39,7 +39,7 @@ Bool_t newFixPtParam[3] = {kFALSE, kFALSE, kFALSE};
 
 Double_t ptRange[2] = {0.1, 6.5};
 
-// tune1 LHC13d y param. (see AliAnalysisTaskGenTunerJpsi::Y)
+// tune1 LHC13d y param. (see AliAnalysisTaskGenTuner::Y)
 Double_t oldYParam[2] = {1.50913, 0.171768};
 Bool_t oldFixYParam[2] = {kFALSE, kFALSE};
 Double_t newYParam[2] =  {1.50913, 0.171768};
@@ -78,15 +78,13 @@ void runGenTuner(TString smode = "saf", TString inputFileName = "Find;BasePath=/
     return;
   }
   
-  // // --- copy files needed for this analysis ---
+  // --- copy files needed for this analysis ---
   // TList pathList; pathList.SetOwner();
-  // pathList.Add(new TObjString("$WORK/Macros/MuonEfficiency/GenTuner"));
+  // pathList.Add(new TObjString("/Users/audurier/Documents/Analysis/Tasks"));
+
   // TList fileList; fileList.SetOwner();
-  // fileList.Add(new TObjString("runGenTuner.C"));
-  // fileList.Add(new TObjString("AddTaskGenTuner.C"));
-  // fileList.Add(new TObjString("AliAnalysisTaskGenTunerJpsi.cxx"));
-  // fileList.Add(new TObjString("AliAnalysisTaskGenTunerJpsi.h"));
-  // CopyFileLocally(pathList, fileList, overwrite);
+  // fileList.Add(new TObjString("AliAnalysisTaskGenTuner.cxx"));
+  // fileList.Add(new TObjString("AliAnalysisTaskGenTuner.h"));
   
   // --- prepare environment ---
   LoadAlirootLocally(extraLibs, extraIncs, extraTasks);
@@ -102,7 +100,7 @@ void runGenTuner(TString smode = "saf", TString inputFileName = "Find;BasePath=/
   }
   
   // --- Create the analysis train ---
-  AliAnalysisTaskGenTunerJpsi *genTuner = static_cast<AliAnalysisTaskGenTunerJpsi*>(CreateAnalysisTrain(alienHandler, iStep));
+  AliAnalysisTaskGenTuner *genTuner = static_cast<AliAnalysisTaskGenTuner*>(CreateAnalysisTrain(alienHandler, iStep));
   if (!genTuner) return;
   
   // --- Create input object ---
@@ -147,8 +145,8 @@ TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)
   if (alienHandler) mgr->SetGridHandler(static_cast<AliAnalysisGrid*>(alienHandler));
   
   // AOD handler
-  AliInputEventHandler* aodH = new AliAODInputHandler;
-  mgr->SetInputEventHandler(aodH);
+  AliInputEventHandler* esdH = new AliESDInputHandler;
+  mgr->SetInputEventHandler(esdH);
   
   // track selection
   AliMuonTrackCuts trackCuts("stdCuts", "stdCuts");
@@ -162,10 +160,10 @@ TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)
   gROOT->LoadMacro("AddTaskGenTuner.C");
 
   //__________Config. Task
-  AliAnalysisTaskGenTunerJpsi* genTuner = AddTaskGenTuner();
+  AliAnalysisTaskGenTuner* genTuner = AddTaskGenTuner();
   if(!genTuner) 
   {
-    Error("CreateAnalysisTrain","AliAnalysisTaskGenTunerJpsi not created!");
+    Error("CreateAnalysisTrain","AliAnalysisTaskGenTuner not created!");
     return 0x0;
   }
   if (applyPhysicsSelection) genTuner->SelectCollisionCandidates(AliVEvent::kMUU7);

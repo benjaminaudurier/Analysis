@@ -44,7 +44,8 @@
 #include <TStyle.h>
 #include <THashList.h>
 #include <TParameter.h>
- #include <AliCounterCollection.h>
+#include <AliCounterCollection.h>
+#include <TText.h>
 
 //const Char_t *effErrMode = "cp"; // Clopper-Pearson
 const Char_t *effErrMode = "b(1,1)mode"; // Bayesian with uniform prior
@@ -105,20 +106,20 @@ void MuonTrackingEfficiency(TString runList = "runList.txt",
 {
   /// main function to compute, print and plot efficiencies
   
-  PlotMuonEfficiencyVsX("centrality", fileNameData, fileNameSave, kFALSE, kFALSE, kTRUE);
+  // PlotMuonEfficiencyVsX("centrality", fileNameData, fileNameSave, kFALSE, kFALSE, kTRUE);
   PlotMuonEfficiencyVsX("pt", fileNameData, fileNameSave, kFALSE, kFALSE, kTRUE);
   PlotMuonEfficiencyVsX("y", fileNameData, fileNameSave, kFALSE, kFALSE, kTRUE);
   PlotMuonEfficiencyVsX("phi", fileNameData, fileNameSave, kFALSE, kFALSE, kTRUE);
   PlotMuonEfficiencyVsX("charge", fileNameData, fileNameSave, kFALSE, kFALSE, kTRUE);
   
-  PlotIntegratedMuonEfficiencyVsX("centrality", runList, fileNameWeights, fileNameData, fileNameSave, kFALSE, kTRUE);
+  // PlotIntegratedMuonEfficiencyVsX("centrality", runList, fileNameWeights, fileNameData, fileNameSave, kFALSE, kTRUE);
   PlotIntegratedMuonEfficiencyVsX("pt", runList, fileNameWeights, fileNameData, fileNameSave, kFALSE, kTRUE);
   PlotIntegratedMuonEfficiencyVsX("y", runList, fileNameWeights, fileNameData, fileNameSave, kFALSE, kTRUE);
   PlotIntegratedMuonEfficiencyVsX("phi", runList, fileNameWeights, fileNameData, fileNameSave, kFALSE, kTRUE);
   PlotIntegratedMuonEfficiencyVsX("charge", runList, fileNameWeights, fileNameData, fileNameSave, kFALSE, kTRUE);
   
-  PlotMuonEfficiencyVsXY("pt", "centrality", fileNameData, fileNameSave, kTRUE);
-  PlotMuonEfficiencyVsXY("y", "centrality", fileNameData, fileNameSave, kTRUE);
+  // PlotMuonEfficiencyVsXY("pt", "centrality", fileNameData, fileNameSave, kTRUE);
+  // PlotMuonEfficiencyVsXY("y", "centrality", fileNameData, fileNameSave, kTRUE);
   PlotMuonEfficiencyVsXY("pt", "y", fileNameData, fileNameSave, kTRUE);
   PlotMuonEfficiencyVsXY("phi", "y", fileNameData, fileNameSave, kTRUE, kTRUE);
   
@@ -255,9 +256,7 @@ void PlotIntegratedMuonEfficiencyVsX(TString var, TString runList, TString fileN
   
   // load run weights
   if (!fileNameWeights.IsNull()) LoadRunWeights(fileNameWeights);
-  if (!runWeights) {
-    printf("Compute integrated efficiency without run-by-run weights\n");
-  }
+
   
   // open run list
   ifstream inFile(runList.Data());
@@ -809,9 +808,7 @@ void PlotIntegratedMuonEfficiency(TString fileNameWeights, TString fileNameData,
     
   // load run weights
   if (!fileNameWeights.IsNull()) LoadRunWeights(fileNameWeights);
-  if (!runWeights) {
-    printf("Compute integrated efficiency without run-by-run weights\n");
-  }
+
 
   // get input hists
   TFile *file = new TFile(fileNameSave.Data(), "update");
@@ -882,11 +879,17 @@ void PlotIntegratedMuonEfficiency(TString fileNameWeights, TString fileNameData,
     gROOT->SetSelectedPad(c->cd(2));
     effVsSt->DrawClone("ap");
   }
+  file->Close();
   
   // save output
-  effVsCh->Write(0x0, TObject::kOverwrite);
-  effVsSt->Write(0x0, TObject::kOverwrite);
-  file->Close();
+  TFile *file2 = new TFile(fileNameSave.Data(), "update");
+  if (!file2 || !file2->IsOpen()) {
+    printf("cannot open file\n");
+    return;
+  }
+  effVsCh->Write(0x0, TObject::kOverwrite | TObject::kSingleKey);
+  effVsSt->Write(0x0, TObject::kOverwrite | TObject::kSingleKey);
+  file2->Close();
   
   // clean memory
   delete effVsCh;
@@ -1276,11 +1279,18 @@ void PlotIntegratedMuonEfficiencyPerDE(TString fileNameWeights, TString fileName
     g->GetXaxis()->SetNdivisions(nDE);
   }
   BeautifyGraphs(stationVsDEGraphs,"Detection Element","efficiency");
+  file->Close();
+
 
   // save Output
+  TFile *file2 = new TFile(fileNameSave.Data(), "update");
+  if (!file2 || !file2->IsOpen()) {
+    printf("cannot open file\n");
+    return;
+  }
   chamberVsDEGraphs.Write("IntegratedChamberEffVsDE", TObject::kOverwrite | TObject::kSingleKey);
   stationVsDEGraphs.Write("IntegratedStationEffVsDE", TObject::kOverwrite | TObject::kSingleKey);
-  file->Close();
+  file2->Close();
 }
 
 
@@ -1445,16 +1455,6 @@ void GetInnerRunCounts(TString runList, TString fileNameData, TString fileNameSa
     printf("cannot open file %s\n",runList.Data());
     return;
   }
-
-//  // Get number of line
-//   int numLines = 0;
-// ;  string unused;
-//   while ( getline(inFile, unused) ){
-//      ++numLines;
-//   }
-//   inFile.close()
-
-//   cout << "numline =" << numLines << endl;
   
   // output graph
   TGraph* h = new TGraph();
@@ -1477,7 +1477,7 @@ void GetInnerRunCounts(TString runList, TString fileNameData, TString fileNameSa
     
     
     // compute efficiency vs var
-    TString dataFile = Form("alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/singleMuon/results/%09d/%s", run, fileNameData.Data());
+    TString dataFile = Form("alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/results/%09d/%s", run, fileNameData.Data());
 
     // get input hists
     f1 = new TFile(dataFile.Data(), "read");
@@ -1505,8 +1505,7 @@ void GetInnerRunCounts(TString runList, TString fileNameData, TString fileNameSa
     h->Print("");
 
     h->SetMarkerColor(4);
-    h->SetMarkerSize(1.5);
-    h->SetMarkerStyle(21);
+    h->SetMarkerStyle(20);
     h->GetXaxis()->SetTitle("RUN");
     h->GetYaxis()->SetTitle("COUNTS"); 
     h->Draw("AP"); 
@@ -1518,16 +1517,16 @@ void GetInnerRunCounts(TString runList, TString fileNameData, TString fileNameSa
     t.SetTextSize(0.02);
     t.SetTextAlign(33);
     for (int j = 0; j < i+2; j++){
-      // x = h->GetXaxis()->GetBin(j);
       t.DrawText(j,0,label[j].Data());
     } 
   } 
 
   // save output
-  TFile* file = new TFile(fileNameSave.Data(),"update");
-  h->Write("COUNTS", TObject::kOverwrite | TObject::kSingleKey);
+  f = new TFile(fileNameSave.Data(),"update");
+  h->Write("COUNTS", TObject::kOverwrite);
 
-  file->Close();
+  f->Close();
+}
 
 //---------------------------------------------------------------------------
 void GetStationEfficiency(TArrayD &chEff, TArrayD chEffErr[2], Int_t iSt, TGraphAsymmErrors *effVsX[3], Int_t ip, Double_t xp)
@@ -1847,10 +1846,6 @@ void IntegrateMuonEfficiency(TGraphAsymmErrors &effVsRunLow, TGraphAsymmErrors &
   /// return kFALSE if efficiency unknown in all runs
   
   TFile* f =0x0;
-
-  if (!runWeights) {
-    printf("Compute integrated efficiency without run-by-run weights\n");
-  }
   
   // initialize
   Double_t rec[2] = {0., 0.};

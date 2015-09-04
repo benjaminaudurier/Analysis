@@ -1,29 +1,16 @@
- root://nansaf02.in2p3.fr//alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/001/AliAOD.Muons.root
- root://nansaf03.in2p3.fr//alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/002/AliAOD.Muons.root
- root://nansaf04.in2p3.fr//alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/003/AliAOD.Muons.root
- root://nansaf05.in2p3.fr//alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/004/AliAOD.Muons.root
- root://nansaf06.in2p3.fr//alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/005/AliAOD.Muons.root
- root://nansaf07.in2p3.fr//alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/006/AliAOD.Muons.root
- root://nansaf09.in2p3.fr//alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/007/AliAOD.Muons.root
- root://nansaf08.in2p3.fr//alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/008/AliAOD.Muons.root
- root://nansaf10.in2p3.fr//alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/009/AliAOD.Muons.root
- root://nansaf11.in2p3.fr//alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/010/AliAOD.Muons.root
- root://nansaf01.in2p3.fr//alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/011/AliAOD.Muons.root
- root://nansaf02.in2p3.fr//alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/012/AliAOD.Muons.root
- root://nansaf03.in2p3.fr//alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/013/AliAOD.Muons.root
- root://nansaf04.in2p3.fr//alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/014/AliAOD.Muons.root
- root://nansaf05.in2p3.fr//alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/015/AliAOD.Muons.root
- root://nansaf06.in2p3.fr//alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/016/AliAOD.Muons.root
- root://nansaf07.in2p3.fr//alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/017/AliAOD.Muons.root
- root://nansaf09.in2p3.fr//alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/018/AliAOD.Muons.root
- root://nansaf08.in2p3.fr//alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/019/AliAOD.Muons.root
- root://nansaf10.in2p3.fr//alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/020/AliAOD.Muons.root
- root://nansaf11.in2p3.fr//alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/021/AliAOD.Muons.root
- root://nansaf01.in2p3.fr//alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/022/AliAOD.Muons.root
- root://nansaf02.in2p3.fr//alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/023/AliAOD.Muons.root
- root://nansaf03.in2p3.fr//alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/024/AliAOD.Muons.root
- root://nansaf04.in2p3.fr//alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/025/AliAOD.Muons.root
- root://nansaf05.in2p3.fr//alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/026/AliAOD.Muons.root
- root://nansaf06.in2p3.fr//alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/027/AliAOD.Muons.root
- root://nansaf07.in2p3.fr//alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/028/AliAOD.Muons.root
- root://nansaf09.in2p3.fr//alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/029/AliAOD.Muons.root
+Find;BasePath=/alice/data/2015/LHC15g/000228936/muon_calo_pass1/AOD/*;FileName=AliAOD.Muons.root
+Find;BasePath=/alice/data/2015/LHC15g/000228939/muon_calo_pass1/AOD/*;FileName=AliAOD.Muons.root
+Find;BasePath=/alice/data/2015/LHC15g/000228943/muon_calo_pass1/AOD/*;FileName=AliAOD.Muons.root
+Find;BasePath=/alice/data/2015/LHC15g/000228948/muon_calo_pass1/AOD/*;FileName=AliAOD.Muons.root
+Find;BasePath=/alice/data/2015/LHC15g/000228978/muon_calo_pass1/AOD/*;FileName=AliAOD.Muons.root
+Find;BasePath=/alice/data/2015/LHC15g/000228979/muon_calo_pass1/AOD/*;FileName=AliAOD.Muons.root
+Find;BasePath=/alice/data/2015/LHC15g/000229101/muon_calo_pass1/AOD/*;FileName=AliAOD.Muons.root
+Find;BasePath=/alice/data/2015/LHC15g/000229355/muon_calo_pass1/AOD/*;FileName=AliAOD.Muons.root
+Find;BasePath=/alice/data/2015/LHC15g/000229360/muon_calo_pass1/AOD/*;FileName=AliAOD.Muons.root
+Find;BasePath=/alice/data/2015/LHC15g/000229371/muon_calo_pass1/AOD/*;FileName=AliAOD.Muons.root
+Find;BasePath=/alice/data/2015/LHC15g/000229376/muon_calo_pass1/AOD/*;FileName=AliAOD.Muons.root
+Find;BasePath=/alice/data/2015/LHC15g/000229398/muon_calo_pass1/AOD/*;FileName=AliAOD.Muons.root
+Find;BasePath=/alice/data/2015/LHC15g/000229409/muon_calo_pass1/AOD/*;FileName=AliAOD.Muons.root
+Find;BasePath=/alice/data/2015/LHC15g/000229410/muon_calo_pass1/AOD/*;FileName=AliAOD.Muons.root
+Find;BasePath=/alice/data/2015/LHC15g/000229423/muon_calo_pass1/AOD/*;FileName=AliAOD.Muons.root
+Find;BasePath=/alice/data/2015/LHC15g/000229431/muon_calo_pass1/AOD/*;FileName=AliAOD.Muons.root

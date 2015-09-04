@@ -14,6 +14,7 @@
 #include <TCanvas.h>
 #include <THashList.h>
 #include <TParameter.h>
+#include <TGraph.h>
 
 const Int_t nHist = 3;
 TString sRes[nHist] = {"fHistPt", "fHistY", "fHistPhi"};
@@ -57,8 +58,8 @@ void CompareMuonDistributions(TString dir1, TString dir2, TString fileNameWeight
     TGraph* sgaph[2];
 
     TString sfile2[2];
-    sfile2[0] = Form("%s/AnalysisResults_new.root", dir1.Data());
-    sfile2[1] = Form("%s/AnalysisResults_new.root", dir2.Data());
+    sfile2[0] = Form("%s/efficiency_new.root", dir1.Data());
+    sfile2[1] = Form("%s/efficiency_new.root", dir2.Data());
 
     // get couts histogrammes
     for (Int_t j = 0; j < 2; j++) {
@@ -67,18 +68,37 @@ void CompareMuonDistributions(TString dir1, TString dir2, TString fileNameWeight
         printf("cannot open file\n");
         return;
       }
-      sgaph[j] = static_cast<TGraph*>(file->FindObjectAny("COUNTS"))->Clone();
+      sgaph[j] = static_cast<TGraph*>(file->FindObjectAny("COUNTS")->Clone());
       if(!sgaph[j]){
-        Form("Cannot ind counts histo in %s",sfile2[i].Data())
+        Form("Cannot ind counts histo in %s",sfile2[j].Data());
         ok =kFALSE;
       }
+      file->Close();
     }
-    file->Close();
+    
 
     if(ok){
-      sgaph[0]->Divide(sgaph[1]);
-      new TCanvas;
+      TCanvas*c = new TCanvas();
+      c->Divide(1,2);
+      c->cd(1);
       sgaph[0]->Draw("AP");
+      sgaph[0]->SetMarkerColor(4);
+      sgaph[0]->SetMarkerStyle(20);
+      sgaph[0]->SetMarkerSize(0.7);
+      sgaph[0]->GetXaxis()->SetTitle("RUN");
+      sgaph[0]->GetYaxis()->SetTitle("COUNTS"); 
+      sgaph[0]->SetTitle("Data"); 
+      sgaph[0]->Draw("AP");
+
+      c->cd(2);
+      sgaph[1]->Draw("AP");
+      sgaph[1]->SetMarkerColor(2);
+      sgaph[1]->SetMarkerStyle(20);
+      sgaph[1]->SetMarkerSize(0.7);
+      sgaph[1]->GetXaxis()->SetTitle("RUN");
+      sgaph[1]->GetYaxis()->SetTitle("COUNTS"); 
+      sgaph[1]->SetTitle("Sim"); 
+      sgaph[1]->Draw("AP");
     }
   }
   

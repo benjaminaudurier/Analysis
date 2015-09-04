@@ -56,7 +56,7 @@ void runMuonEfficiency(TString smode = "full", TString inputFileName = "runlist_
 
   AliAnalysisGrid *alienHandler = 0x0;
   
-  if (mode == kProof || mode == kProofLite) LoadAlirootOnProof(smode, rootVersion, alirootVersion, extraLibs, extraIncs, extraTasks, kTRUE,"");
+  if (mode == kProof || mode == kProofLite) LoadAlirootOnProof(smode, rootVersion, aliphysicsVersion, extraLibs, extraIncs, extraTasks, kTRUE,"");
   else if (mode == kGrid || mode == kTerminate) {
     TString analysisMacroName = "Eff";
     alienHandler = static_cast<AliAnalysisGrid*>(CreateAlienHandler(smode, rootVersion, alirootVersion, aliphysicsVersion, inputFileName, dataDir, dataPattern, outDir, extraLibs, extraIncs, extraTasks, analysisMacroName, runFormat, ttl, maxFilesPerJob, maxMergeFiles, maxMergeStages));
@@ -125,7 +125,7 @@ void CreateAnalysisTrain(Bool_t applyPhysSel, Bool_t mc, Bool_t embedding, TObje
 //  trackCuts.SetCustomParamFromRun(169099, "pass2_muon");
 //  trackCuts.CustomParam()->SetChi2NormCut(3.5);
   trackCuts.SetFilterMask(AliMuonTrackCuts::kMuMatchLpt | AliMuonTrackCuts::kMuEta |
-			  AliMuonTrackCuts::kMuThetaAbs);
+			  AliMuonTrackCuts::kMuThetaAbs | AliMuonTrackCuts::kMuPdca);
   trackCuts.SetIsMC(mc && !embedding);
   
   // Muon efficiency analysis

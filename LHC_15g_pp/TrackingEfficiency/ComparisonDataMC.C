@@ -274,7 +274,7 @@ TCanvas* DrawRatio(TString name, TString title, TGraphAsymmErrors* GraphData, TG
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------
-void ComparisonDataMC(TString fileNameData = "Data/efficiency_newData.root", TString fileNameSim ="MonteCarlo/efficiency_newMC.root", Bool_t integrated = kFALSE)
+void ComparisonDataMC(TString fileNameData = "Data/efficiency_new.root", TString fileNameSim ="MonteCarlo/efficiency_new.root", Bool_t integrated = kFALSE)
 {
   // Open input Data files
   TFile *fileData = new TFile(fileNameData.Data(), "read");
