@@ -2,17 +2,41 @@
 <alien>
   <collection name="Stage_2">
     <event name="1">
-      <file name="root_archive.zip" aclId="" broken="0" ctime="2015-09-03 13:32:19" dir="16840289" entryId="16840313" expiretime="" gowner="baudurie" guid="213755D0-522F-11E5-A970-3700F648CAFF" guidtime="11E5522F" jobid="545935623" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muon/results/229355/Stage_1/001/root_archive.zip" md5="7d1e4bd551e23ec355b06c065a925ae6" owner="baudurie" perm="755" replicated="0" size="4768" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muon/results/229355/Stage_1/001/root_archive.zip" type="f" />
+      <file name="root_archive.zip" aclId="" broken="0" ctime="2015-09-08 21:46:12" dir="16903062" entryId="16903101" expiretime="" gowner="baudurie" guid="36C2F44A-5662-11E5-9864-4F054ADAD8BE" guidtime="11E55662" jobid="548587158" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muons/Data/results/000229409/Stage_1/001/root_archive.zip" md5="2443754f7de2009523f031bcaa5dd409" owner="baudurie" perm="755" replicated="0" size="6902" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muons/Data/results/000229409/Stage_1/001/root_archive.zip" type="f" />
     </event>
     <event name="2">
-      <file name="root_archive.zip" aclId="" broken="0" ctime="2015-09-03 13:30:28" dir="16840290" entryId="16840304" expiretime="" gowner="baudurie" guid="23233C60-522F-11E5-91DC-C773F550980E" guidtime="11E5522F" jobid="545935624" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muon/results/229355/Stage_1/002/root_archive.zip" md5="a6fcd0816ed8e99514981fda761d36c5" owner="baudurie" perm="755" replicated="0" size="4758" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muon/results/229355/Stage_1/002/root_archive.zip" type="f" />
+      <file name="root_archive.zip" aclId="" broken="0" ctime="2015-09-08 21:46:21" dir="16903067" entryId="16903138" expiretime="" gowner="baudurie" guid="38B49C0E-5662-11E5-8C2B-7B82BD1DE84D" guidtime="11E55662" jobid="548587159" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muons/Data/results/000229409/Stage_1/002/root_archive.zip" md5="d73c2fc728a379d75b8b3d9996b71f4a" owner="baudurie" perm="755" replicated="0" size="6195" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muons/Data/results/000229409/Stage_1/002/root_archive.zip" type="f" />
     </event>
     <event name="3">
-      <file name="root_archive.zip" aclId="" broken="0" ctime="2015-09-03 13:39:14" dir="16840406" entryId="16840410" expiretime="" gowner="baudurie" guid="522AD0EE-5230-11E5-87B4-27B89D089FED" guidtime="11E55230" jobid="545935625" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muon/results/229355/Stage_1/003/root_archive.zip" md5="aeab20f7a341447de8daca50a8c0b7e2" owner="baudurie" perm="755" replicated="0" size="4758" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muon/results/229355/Stage_1/003/root_archive.zip" type="f" />
+      <file name="root_archive.zip" aclId="" broken="0" ctime="2015-09-08 21:46:12" dir="16903028" entryId="16903106" expiretime="" gowner="baudurie" guid="3461B0A6-5662-11E5-824A-2B46185F7A25" guidtime="11E55662" jobid="548587160" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muons/Data/results/000229409/Stage_1/003/root_archive.zip" md5="4828bfa54d01376792edc940acd62141" owner="baudurie" perm="755" replicated="0" size="6955" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muons/Data/results/000229409/Stage_1/003/root_archive.zip" type="f" />
     </event>
-    <info command="[/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muon/results/]: find -z -x Stage_2 /alice/cern.ch/user/b/baudurie//Analysis/LHC15g/AccEff/Muon/results/229355 Stage_1/*root_archive.zip" creator="admin" date="Thu Sep  3 13:44:09 CEST 2015" timestamp="1441280649" />
+    <event name="4">
+      <file name="root_archive.zip" aclId="" broken="0" ctime="2015-09-08 21:46:22" dir="16903070" entryId="16903144" expiretime="" gowner="baudurie" guid="398EF6C4-5662-11E5-B9BB-1B73BA9214D2" guidtime="11E55662" jobid="548587161" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muons/Data/results/000229409/Stage_1/004/root_archive.zip" md5="9bdb99c1a3d3e667b905737c9e055e68" owner="baudurie" perm="755" replicated="0" size="6974" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muons/Data/results/000229409/Stage_1/004/root_archive.zip" type="f" />
+    </event>
+    <event name="5">
+      <file name="root_archive.zip" aclId="" broken="0" ctime="2015-09-08 21:46:22" dir="16903071" entryId="16903152" expiretime="" gowner="baudurie" guid="39ECEDA6-5662-11E5-9B7D-DBC777CAC6EC" guidtime="11E55662" jobid="548587162" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muons/Data/results/000229409/Stage_1/005/root_archive.zip" md5="f966abb485285d4dd888a38280ea93a7" owner="baudurie" perm="755" replicated="0" size="6882" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muons/Data/results/000229409/Stage_1/005/root_archive.zip" type="f" />
+    </event>
+    <event name="6">
+      <file name="root_archive.zip" aclId="" broken="0" ctime="2015-09-08 21:46:12" dir="16903061" entryId="16903111" expiretime="" gowner="baudurie" guid="3680BA26-5662-11E5-B5C0-6F0C667F651E" guidtime="11E55662" jobid="548587163" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muons/Data/results/000229409/Stage_1/006/root_archive.zip" md5="8a160566b014eb17a143110d642177e9" owner="baudurie" perm="755" replicated="0" size="6907" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muons/Data/results/000229409/Stage_1/006/root_archive.zip" type="f" />
+    </event>
+    <event name="7">
+      <file name="root_archive.zip" aclId="" broken="0" ctime="2015-09-08 21:46:22" dir="16903069" entryId="16903160" expiretime="" gowner="baudurie" guid="39177C34-5662-11E5-8A69-D751F88EAEAA" guidtime="11E55662" jobid="548587164" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muons/Data/results/000229409/Stage_1/007/root_archive.zip" md5="b7ba7e07241e4c81537b3277567b2033" owner="baudurie" perm="755" replicated="0" size="7014" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muons/Data/results/000229409/Stage_1/007/root_archive.zip" type="f" />
+    </event>
+    <event name="8">
+      <file name="root_archive.zip" aclId="" broken="0" ctime="2015-09-08 21:46:12" dir="16903031" entryId="16903116" expiretime="" gowner="baudurie" guid="35BA6E02-5662-11E5-915C-0B0F27C5FB58" guidtime="11E55662" jobid="548587165" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muons/Data/results/000229409/Stage_1/008/root_archive.zip" md5="bdfc1985e9d5fa73e035988343e8f437" owner="baudurie" perm="755" replicated="0" size="7125" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muons/Data/results/000229409/Stage_1/008/root_archive.zip" type="f" />
+    </event>
+    <event name="9">
+      <file name="root_archive.zip" aclId="" broken="0" ctime="2015-09-08 21:47:32" dir="16903273" entryId="16903341" expiretime="" gowner="baudurie" guid="5EECF074-5662-11E5-A28D-F32B73B973CE" guidtime="11E55662" jobid="548587166" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muons/Data/results/000229409/Stage_1/009/root_archive.zip" md5="6f9e0fcb2ca112029d51d8a0449990e3" owner="baudurie" perm="755" replicated="0" size="6856" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muons/Data/results/000229409/Stage_1/009/root_archive.zip" type="f" />
+    </event>
+    <info command="[/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muons/Data/results/]: find -z -x Stage_2 /alice/cern.ch/user/b/baudurie//Analysis/LHC15g/AccEff/Muons/Data/results/000229409 Stage_1/*root_archive.zip" creator="admin" date="Wed Sep  9 07:55:43 CEST 2015" timestamp="1441778143" />
   </collection>
 </alien>
+
+
+
+
+
+
 
 
 

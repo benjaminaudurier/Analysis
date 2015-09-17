@@ -17,14 +17,14 @@ Packages = {
 };
 # List of input files to be uploaded to workers
 InputFile = {
-   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muon/Eff_merge.C",
-   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muon/Eff.root",
-   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muon/AliAnalysisTaskGenTuner.cxx",
-   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muon/AliAnalysisTaskGenTuner.h",
+   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muons/Data/Eff_merge.C",
+   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muons/Data/Eff.root",
+   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muons/Data/AliAnalysisTaskGenTuner.cxx",
+   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muons/Data/AliAnalysisTaskGenTuner.h",
    "LF:$1/Stage_$2.xml"
 };
 # This is the startup script
-Executable = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muon/Eff_merge.sh";
+Executable = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muons/Data/Eff_merge.sh";
 # We split per SE for merging in stages
 # Time after which the job is killed (500 min.)
 TTL = "30000";
@@ -40,6 +40,6 @@ Arguments = "Stage_$2.xml $2";
 # AliEn price for this job
 Price = "1";
 # Validation script to be run for each subjob
-Validationcommand = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muon/Eff_validation_merge.sh";
+Validationcommand = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muons/Data/Eff_validation_merge.sh";
 User = "baudurie";
 Workdirectorysize = {"5000MB"};

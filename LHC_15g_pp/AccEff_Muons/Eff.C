@@ -1,8 +1,8 @@
-const char *anatype = "ESD";
+const char *anatype = "AOD";
 
 void Eff()
 {
-// Analysis using ESD data
+// Analysis using AOD data
 // Automatically generated analysis steering macro executed in grid subjobs
 
    TStopwatch timer;
@@ -55,6 +55,7 @@ void Eff()
    printf("Include path: %s\n", gSystem->GetIncludePath());
 
 // Add aditional AliRoot libraries
+   gSystem->Load("libPWGmuon");
 
 // analysis source to be compiled at runtime (if any)
    gROOT->ProcessLine(".L AliAnalysisTaskGenTuner.cxx+g");

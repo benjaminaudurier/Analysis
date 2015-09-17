@@ -211,37 +211,34 @@ void AliAnalysisTaskGenTuner::UserExec(Option_t *)
   // fill the MC part if running on MC
   TArrayD weight;
   if (MCEvent()) {
-    
     weight.Set(MCEvent()->GetNumberOfTracks());
     for (Int_t i = 0; i < MCEvent()->GetNumberOfTracks(); i++) {
       
       AliAODMCParticle *mctrack = static_cast<AliAODMCParticle*>(MCEvent()->GetTrack(i));
       
       if (!mctrack->IsPrimary()) continue;
-//      if (mctrack->Pt() > 0.9) continue;
-//      if (mctrack->Pt() < 0.9 || mctrack->Pt() > 1.) continue;
-//      if (mctrack->Y() < -4.4 || (mctrack->Y() > -4.3 && mctrack->Y() < -2.2) || mctrack->Y() > -2.1) continue;
-//      if (mctrack->Y() > -4.2 && mctrack->Y() < -2.3) continue;
-//      if (mctrack->Y() < -4. || mctrack->Y() > -2.5) continue;
+      // if (mctrack->Pt() > 0.9) continue;
+      // if (mctrack->Pt() < 0.9 || mctrack->Pt() > 1.) continue;
+      // if (mctrack->Y() < -4.4 || (mctrack->Y() > -4.3 && mctrack->Y() < -2.2) || mctrack->Y() > -2.1) continue;
+      // if (mctrack->Y() > -4.2 && mctrack->Y() < -2.3) continue;
+      // if (mctrack->Y() < -4. || mctrack->Y() > -2.5) continue;
       
       // compute the weights for all primary particles (other weights are 0)
       Double_t y = mctrack->Y();
       Double_t pT = mctrack->Pt();
       if (fWeight) {
-	weight[i] = fPtCopyFuncNew->Eval(pT) / fPtCopyFunc->Eval(pT) * fYCopyFuncNew->Eval(y) / fYCopyFunc->Eval(y);
-	if (weight[i] < 0.) {
-	  AliError(Form("negative weight: y = %g, pT = %g: w = %g", y, pT, weight[i]));
-	  weight[i] = 0.;
-	}
+      	weight[i] = fPtCopyFuncNew->Eval(pT) / fPtCopyFunc->Eval(pT) * fYCopyFuncNew->Eval(y) / fYCopyFunc->Eval(y);
+      	if (weight[i] < 0.) {
+      	  AliError(Form("negative weight: y = %g, pT = %g: w = %g", y, pT, weight[i]));
+      	  weight[i] = 0.;
+      	}
       } else weight[i] = 1.;
       
       Double_t w = weight[i];
       ((TH1*)fList->UncheckedAt(kPtGen))->Fill(pT, w);
       ((TH1*)fList->UncheckedAt(kYGen))->Fill(y, w);
       ((TH1*)fList->UncheckedAt(kPhiGen))->Fill(mctrack->Phi()*TMath::RadToDeg(), w);
-      
     }
-    
   }
   
   // fill the reconstructed part
@@ -299,9 +296,9 @@ void AliAnalysisTaskGenTuner::Terminate(Option_t *)
   fitRangeMC[2][1] = h[2]->GetXaxis()->GetXmax();
   Double_t fitRange[3][2];
   fitRange[0][0] = (fPtCut > 0.) ? TMath::Max(fitRangeMC[0][0], fPtCut) : fitRangeMC[0][0];
-  fitRange[0][1] = 15.;
+  fitRange[0][1] = 10.;
   fitRange[1][0] = -3.98; // not -4. because to the influence of the eta cut
-  fitRange[1][1] = -2.5;
+  fitRange[1][1] = -2.4;
   fitRange[2][0] = h[5]->GetXaxis()->GetXmin();
   fitRange[2][1] = h[5]->GetXaxis()->GetXmax();
   
@@ -728,7 +725,7 @@ Double_t AliAnalysisTaskGenTuner::Pt(const Double_t *x, const Double_t *p)
 {
   /// generated pT fit function
   Double_t pT = *x;
-  return p[0] * (1. / TMath::Power(p[1] + TMath::Power(pT,p[2]), p[3]) + p[4] * TMath::Exp(p[5]*pT));
+  return p[0] * (1. / TMath::Power(p[1] + TMath::Power(pT,p[2]), p[3])) /*+ p[4] * TMath::Exp(p[5]*pT)*/;
 }
 
 //________________________________________________________________________
@@ -736,8 +733,8 @@ Double_t AliAnalysisTaskGenTuner::Y(const Double_t *x, const Double_t *p)
 {
   /// generated y fit function
   Double_t y = *x;
-  Double_t arg = y/p[7];
-  return p[0] * (p[1] * (1. + p[2]*y + p[3]*y*y + p[4]*y*y*y + p[5]*y*y*y*y) + p[6]*TMath::Exp(-0.5*arg*arg));
+  // Double_t arg = y/p[7];
+  return p[0] * (/*p[1] * (*/1. + p[1]*y + p[2]*y*y + p[3]*y*y*y /*+ p[5]*y*y*y*y)*/ /*+ p[6]*TMath::Exp(-0.5*arg*arg)*/);
 }
 
 //________________________________________________________________________

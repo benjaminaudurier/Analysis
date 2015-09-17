@@ -164,5 +164,9 @@
 ./AliAnalysisTaskGenTuner_cxx.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/TTask.h
 ./AliAnalysisTaskGenTuner_cxx.so: /Users/audurier/alicesw/aliroot/v5-06-33/inst/include/AliAnalysisManager.h
 ./AliAnalysisTaskGenTuner_cxx.so: AliAnalysisTaskGenTuner.h
-./AliAnalysisTaskGenTuner_cxx.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/cintdictversion.h /Users/audurier/alicesw/root/v5-34-30/inst/include/RVersion.h
+./AliAnalysisTaskGenTuner_cxx.so: /Users/audurier/alicesw/aliphysics/mumu/inst/include/AliMuonTrackCuts.h
+./AliAnalysisTaskGenTuner_cxx.so: /Users/audurier/alicesw/aliroot/v5-06-33/inst/include/AliAnalysisCuts.h
+./AliAnalysisTaskGenTuner_cxx.so: /Users/audurier/alicesw/aliroot/v5-06-33/inst/include/AliVCuts.h
+./AliAnalysisTaskGenTuner_cxx.so: /Users/audurier/alicesw/aliphysics/mumu/inst/include/AliOADBMuonTrackCutsParam.h
+./AliAnalysisTaskGenTuner_cxx.so: /Users/audurier/alicesw/root/v5-34-30/inst/include/include/cintdictversion.h /Users/audurier/alicesw/root/v5-34-30/inst/include/include/RVersion.h
 AliAnalysisTaskGenTuner_cxx__ROOTBUILDVERSION= 5.34/30

@@ -118,8 +118,8 @@ private:
   
 private:
   
-  static const Int_t fgkNPtParam = 6;
-  static const Int_t fgkNYParam  = 8;
+  static const Int_t fgkNPtParam = 4;
+  static const Int_t fgkNYParam  = 4;
   
   enum eList {
     kPtGen   = 0, ///< pT distribution of generated particle

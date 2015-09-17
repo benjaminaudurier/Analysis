@@ -245,9 +245,9 @@ void AliAnalysisTaskGenTuner::UserExec(Option_t *)
   }
   
   // fill the reconstructed part
-  for (Int_t i = 0; i < aod->GetNTracks(); i++){
+  for (Int_t i = 0; i < aod->GetNumberOfTracks(); i++){
     
-    AliAODTrack *track = aod->GetTrack(i);
+    AliAODTrack *track = static_cast<AliAODTrack *>(aod->GetTrack(i));
     
     Double_t pT = track->Pt();
     Int_t mcLabel = track->GetLabel();

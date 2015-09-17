@@ -16,10 +16,10 @@ void runGenTunerLoop(TString smode = "local", TString inputFileName = "AliAOD.ro
   if (nStep <= 0) return;
   
   // prepare trending plots
-  TGraphErrors *gOldPtParam[6];
-  TGraphErrors *gOldPtParamMC[6];
-  TGraphErrors *gNewPtParam[6];
-  for (Int_t i = 0; i < 6; i++) {
+  TGraphErrors *gOldPtParam[4];
+  TGraphErrors *gOldPtParamMC[4];
+  TGraphErrors *gNewPtParam[4];
+  for (Int_t i = 0; i < 4; i++) {
     gOldPtParam[i] = new TGraphErrors(nStep);
     gOldPtParam[i]->SetNameTitle(Form("gOldPtParam%d",i), Form("p%d",i));
     gOldPtParamMC[i] = new TGraphErrors(nStep);
@@ -27,10 +27,10 @@ void runGenTunerLoop(TString smode = "local", TString inputFileName = "AliAOD.ro
     gNewPtParam[i] = new TGraphErrors(nStep);
     gNewPtParam[i]->SetNameTitle(Form("gNewPtParam%d",i), Form("p%d",i));
   }
-  TGraphErrors *gOldYParam[8];
-  TGraphErrors *gOldYParamMC[8];
-  TGraphErrors *gNewYParam[8];
-  for (Int_t i = 0; i < 8; i++) {
+  TGraphErrors *gOldYParam[4];
+  TGraphErrors *gOldYParamMC[4];
+  TGraphErrors *gNewYParam[4];
+  for (Int_t i = 0; i < 4; i++) {
     gOldYParam[i] = new TGraphErrors(nStep);
     gOldYParam[i]->SetNameTitle(Form("gOldYParam%d",i), Form("p%d",i));
     gOldYParamMC[i] = new TGraphErrors(nStep);
@@ -57,7 +57,7 @@ void runGenTunerLoop(TString smode = "local", TString inputFileName = "AliAOD.ro
     // run the generator tuner
     if (resume != "y") {
       if (i == 0)
-	gSystem->Exec(Form("root -b -q $WORK/Macros/MuonEfficiency/GenTuner/runGenTuner.C\\(\\\"%s\\\",\\\"%s\\\",%d\\)",
+	gSystem->Exec(Form("root -b -q runGenTuner.C\\(\\\"%s\\\",\\\"%s\\\",%d\\)",
 			   smode.Data(), inputFileName.Data(), i));
       else
 	gSystem->Exec(Form("root -b -q runGenTuner.C\\(\\\"%s\\\",\\\"%s\\\",%d,\\\'k\\\'\\)",
@@ -70,7 +70,7 @@ void runGenTunerLoop(TString smode = "local", TString inputFileName = "AliAOD.ro
       TF1 *fOldPtFunc = static_cast<TF1*>(inFile->FindObjectAny("fPtFunc"));
       TF1 *fOldPtFuncMC = static_cast<TF1*>(inFile->FindObjectAny("fPtFuncMC"));
       TF1 *fNewPtFunc = static_cast<TF1*>(inFile->FindObjectAny("fPtFuncNew"));
-      for (Int_t j = 0; j < 6; j++) {
+      for (Int_t j = 0; j < 4; j++) {
 	if (fOldPtFunc) {
 	  gOldPtParam[j]->SetPoint(i, i, fOldPtFunc->GetParameter(j));
 	  //gOldPtParam[j]->SetPointError(i, 0., fOldPtFunc->GetParError(j));
@@ -87,7 +87,7 @@ void runGenTunerLoop(TString smode = "local", TString inputFileName = "AliAOD.ro
       TF1 *fOldYFunc = static_cast<TF1*>(inFile->FindObjectAny("fYFunc"));
       TF1 *fOldYFuncMC = static_cast<TF1*>(inFile->FindObjectAny("fYFuncMC"));
       TF1 *fNewYFunc = static_cast<TF1*>(inFile->FindObjectAny("fYFuncNew"));
-      for (Int_t j = 0; j < 8; j++) {
+      for (Int_t j = 0; j < 4; j++) {
 	if (fOldYFunc) {
 	  gOldYParam[j]->SetPoint(i, i, fOldYFunc->GetParameter(j));
 	  //gOldYParam[j]->SetPointError(i, 0., fOldYFunc->GetParError(j));
@@ -108,8 +108,8 @@ void runGenTunerLoop(TString smode = "local", TString inputFileName = "AliAOD.ro
   
 // display trending plots
   TCanvas *cPtParams = new TCanvas("cPtParams", "cPtParams", 600, 400);
-  cPtParams->Divide(3,2);
-  for (Int_t i = 0; i < 6; i++) {
+  cPtParams->Divide(2,2);
+  for (Int_t i = 0; i < 4; i++) {
     cPtParams->cd(i+1);
     gOldPtParam[i]->SetMarkerStyle(kFullDotMedium);
     gOldPtParam[i]->SetMarkerColor(4);
@@ -126,8 +126,8 @@ void runGenTunerLoop(TString smode = "local", TString inputFileName = "AliAOD.ro
     gNewPtParam[i]->Draw("p");
   }
   TCanvas *cYParams = new TCanvas("cYParams", "cYParams", 800, 400);
-  cYParams->Divide(4,2);
-  for (Int_t i = 0; i < 8; i++) {
+  cYParams->Divide(2,2);
+  for (Int_t i = 0; i < 4; i++) {
     cYParams->cd(i+1);
     gOldYParam[i]->SetMarkerStyle(kFullDotMedium);
     gOldYParam[i]->SetMarkerColor(4);
@@ -153,12 +153,12 @@ void runGenTunerLoop(TString smode = "local", TString inputFileName = "AliAOD.ro
     if (fPtFuncMC && fYFuncMC) {
       Double_t *param = fPtFuncMC->GetParameters();
       printf("\npT parameters for single muon generator:\n");
-      printf("Double_t p[6] = {%g, %g, %g, %g, %g, %g};\n",
-	     param[0], param[1], param[2], param[3], param[4], param[5]);
+      printf("Double_t p[4] = {%g, %g, %g, %g};\n",
+	     param[0], param[1], param[2], param[3]/*, param[4], param[5]*/);
       param = fYFuncMC->GetParameters();
       printf("\ny parameters for single muon generator:\n");
-      printf("Double_t p[8] = {%g, %g, %g, %g, %g, %g, %g, %g};\n\n",
-	     param[0], param[1], param[2], param[3], param[4], param[5], param[6], param[7]);
+      printf("Double_t p[5] = {%g, %g, %g, %g};\n\n",
+	     param[0], param[1], param[2], param[3]/*, param[4], param[5], param[6], param[7]*/);
     }
     TCanvas *cRes = static_cast<TCanvas*>(inFile->FindObjectAny("cRes"));
     if (cRes) cRes->DrawClone();

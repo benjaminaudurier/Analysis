@@ -8,7 +8,7 @@ T	kMSLAndMULTriggerList   	kFALSE 		EMPTY
 T	kEventSelectionList 	 	kFALSE 		ALL
 T	kPairSelectionList 		 	kFALSE 		pALLPAIRYRABSETA
 T	kCentralitySelectionList 	kFALSE 		V0A
-T	kFitTypeList			 	kFALSE     	func=PSIPSIPRIMECB2VWG:rebin=2:histoType=minv:alJPsi=0.984:nlJPsi=5.839:auJPsi=1.972:nuJPsi=3.444
+T	kFitTypeList			 	kFALSE     	func=PSIPSIPRIMECB2VWG:rebin=2:histoType=minv:alJPsi=1.05349:nlJPsi=3.28651:auJPsi=2.14782:nuJPsi=2.71848
 
 F EMPTY EMPTY (CVHN-B-NOPF-ALLNOTRD&0MUL)|(CVHN_R2-B-NOPF-ALLNOTRD&0MUL)|(CCENT-B-NOPF-ALLNOTRD&0MUL)|(CCENT_R2-B-NOPF-ALLNOTRD&0MUL) 
 

@@ -3,10 +3,10 @@ Jobtag = {
 };
 # Input xml collections
 InputDataCollection = {
-   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muon/$1,nodownload"
+   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muons/Data/$1,nodownload"
 };
 # Output directory
-OutputDir = "/alice/cern.ch/user/b/baudurie//Analysis/LHC15g/AccEff/Muon/results/$2/#alien_counter_03i#";
+OutputDir = "/alice/cern.ch/user/b/baudurie//Analysis/LHC15g/AccEff/Muons/Data/results/$2/#alien_counter_03i#";
 # List of requested packagesList of requested packages
 Packages = {
    "VO_ALICE@AliRoot::v5-06-33",
@@ -15,13 +15,13 @@ Packages = {
 };
 # List of input files to be uploaded to workers
 InputFile = {
-   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muon/Eff.C",
-   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muon/Eff.root",
-   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muon/AliAnalysisTaskGenTuner.cxx",
-   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muon/AliAnalysisTaskGenTuner.h"
+   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muons/Data/Eff.C",
+   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muons/Data/Eff.root",
+   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muons/Data/AliAnalysisTaskGenTuner.cxx",
+   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muons/Data/AliAnalysisTaskGenTuner.h"
 };
 # This is the startup script
-Executable = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muon/Eff.sh";
+Executable = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muons/Data/Eff.sh";
 # We split per SE or file
 Split = "se";
 # Time after which the job is killed (500 min.)
@@ -40,7 +40,7 @@ Output = {
 # AliEn price for this job
 Price = "1";
 # Validation script to be run for each subjob
-Validationcommand = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muon/Eff_validation.sh";
+Validationcommand = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/AccEff/Muons/Data/Eff_validation.sh";
 User = "baudurie";
 
 # JDL variables

@@ -11,7 +11,7 @@
 
 //_____________________________________________________________________________
 void PrintFitMacro(
-char         * sfile="../test.MuMu.AOD.1.root",
+char         * sfile="../test.MuMu.AOD.1.JPsi.root",
 char         * sasso="",
 char         * sasso2="",
 char         * beamYear="PbPb2011",
@@ -31,7 +31,7 @@ Bool_t print = kFALSE)
     //_____ Draw 
     while ( ( swhat = static_cast<TObjString*>(nextWhat()) ) )
     {
-        analysis.DrawFitResults("PSI",swhat->String().Data(),"../histo",print);
+        analysis.DrawFitResults("PSI",swhat->String().Data(),"histo",print);
         if (Raa)
         {
         	if(swhat->String().Contains("INTEGRATED")) analysis.RAAasGraphic("PSI",swhat->String().Data(),"externFile_PT.txt","externFile_CENT.txt",kFALSE);

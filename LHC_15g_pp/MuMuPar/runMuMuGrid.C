@@ -8,10 +8,10 @@
 TString rootVersion = "v5-34-30";
 TString alirootVersion = "v5-06-33";
 TString aliphysicsVersion = "vAN-20150722";
-TString dataDir = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/simjpsi/pp/";
+TString dataDir = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/simjpsi/pp/CMUL7-B-NOPF-MUON";
 TString dataPattern = "AliAOD.Muons.root";
 TString runFormat = "%06d";
-TString outDir = "Analysis/LHC15g/Minv/";
+TString outDir = "Analysis/LHC15g/Minv/MC/";
 
 // extra to be load on CF
 TString extraLibs="";
@@ -32,7 +32,7 @@ Int_t maxMergeStages = 2;
 //______________________________________________________________________________
 AliAnalysisTask* runMuMuGrid(const char* dataset="datasetfull.AOD.txt",
                          TString where="saf",
-                         Bool_t simulations=kFALSE,
+                         Bool_t simulations=kTRUE,
                          Bool_t baseline=kFALSE,
                          const char* alirootMode="")
 {

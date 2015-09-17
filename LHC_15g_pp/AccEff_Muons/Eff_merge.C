@@ -44,6 +44,7 @@ void Eff_merge(const char *dir, Int_t stage=0)
    printf("Include path: %s\n", gSystem->GetIncludePath());
 
 // Add aditional AliRoot libraries
+   gSystem->Load("libPWGmuon");
 
 // Analysis source to be compiled at runtime (if any)
    gROOT->ProcessLine(".L AliAnalysisTaskGenTuner.cxx+g");

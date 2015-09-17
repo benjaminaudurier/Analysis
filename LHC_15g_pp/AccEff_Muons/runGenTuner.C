@@ -13,10 +13,10 @@
 TString rootVersion = "v5-34-30";
 TString aliphysicsVersion = "vAN-20150902";
 TString alirootVersion = "v5-06-33";
-TString dataDir = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/simsinglemuon/pp/CMSL7-B-NOPF-MUON";
-TString dataPattern = "*AliESDs.root";
-TString runFormat = "%06d";
-TString outDir = "Analysis/LHC15g/AccEff/Muon";
+TString dataDir = "/alice/data/2015/LHC15g";
+TString dataPattern = "*AliAOD.Muons.root";
+TString runFormat = "%09d";
+TString outDir = "Analysis/LHC15g/AccEff/Muons/Data";
 Int_t ttl = 30000;
 Int_t maxFilesPerJob = 150;
 Int_t maxMergeFiles = 10;
@@ -25,18 +25,18 @@ Int_t maxMergeStages = 4;
 // generator parameters used in the simulation
 
 // tune1 LHC13f
-Double_t oldPtParam[6] = {455.614, 0.942071, 0.706755, 8.69856, 0.000168775, -0.925487};
-Bool_t oldFixPtParam[6] = {kFALSE, kFALSE, kFALSE, kFALSE, kFALSE, kFALSE};
-Double_t newPtParam[6] = {455.614, 0.942071, 0.706755, 8.69856, 0.000168775, -0.925487};
-Bool_t newFixPtParam[6] = {kFALSE, kFALSE, kFALSE, kFALSE, kFALSE, kFALSE};
+Double_t oldPtParam[4] = {0.80, 0.50, 5, 0.80};
+Bool_t oldFixPtParam[4] = {kFALSE, kFALSE, kFALSE, kFALSE/*, kFALSE, kFALSE*/};
+Double_t newPtParam[4] = {0.80, 0.50, 5, 0.80};
+Bool_t newFixPtParam[4] = {kFALSE, kFALSE, kFALSE, kFALSE/*, kFALSE, kFALSE*/};
 
-Double_t ptRange[2] = {0.8, 999.};
+Double_t ptRange[2] = {0.8, 20.};
 
 // tune1 LHC13f
-Double_t oldYParam[8] = {1.29511, 1., 0., -0.0767846, 0., 0.00176313, 0., 2.};
-Bool_t oldFixYParam[8] = {kFALSE, kTRUE, kTRUE, kFALSE, kTRUE, kFALSE, kTRUE, kTRUE};
-Double_t newYParam[8] = {1.29511, 1., 0., -0.0767846, 0., 0.00176313, 0., 2.};
-Bool_t newFixYParam[8] = {kFALSE, kTRUE, kTRUE, kFALSE, kTRUE, kFALSE, kTRUE, kTRUE};
+Double_t oldYParam[4] = {0.02, -12.5, 2.3, 0.8};
+Bool_t oldFixYParam[4] = {kFALSE, kFALSE, kFALSE, kFALSE/*, kFALSE, kFALSE, kTRUE, kTRUE*/};
+Double_t newYParam[4] = {0.02, -12.5, 2.3, 0.8};
+Bool_t newFixYParam[4] = {kFALSE, kFALSE, kFALSE, kFALSE/*, kFALSE, kFALSE, kTRUE, kTRUE*/};
 
 Double_t yRange[2] = {-4.3, -2.3};
 
@@ -45,8 +45,8 @@ Bool_t isMC = kTRUE;
 Bool_t applyPhysicsSelection = kFALSE;
 
  // --- prepare environment ---
- TString extraLibs="";
-TString extraIncs="";
+ TString extraLibs="PWGmuon";
+TString extraIncs="include";
 TString extraTasks="AliAnalysisTaskGenTuner";
 
 //______________________________________________________________________________
@@ -65,13 +65,14 @@ void runGenTuner(TString smode = "saf", TString inputFileName = "Find;BasePath=/
   }
   
  // --- copy files needed for this analysis ---
-  TList pathList; pathList.SetOwner();
-  pathList.Add(new TObjString("/Users/audurier/Documents/Analysis/Tasks"));
+  // TList pathList; pathList.SetOwner();
+  // pathList.Add(new TObjString("/Users/audurier/Documents/Analysis/Tasks"));
 
-  TList fileList; fileList.SetOwner();
-  fileList.Add(new TObjString("AliAnalysisTaskGenTuner.cxx"));
-  fileList.Add(new TObjString("AliAnalysisTaskGenTuner.h"));
+  // TList fileList; fileList.SetOwner();
+  // fileList.Add(new TObjString("AliAnalysisTaskGenTuner.cxx"));
+  // fileList.Add(new TObjString("AliAnalysisTaskGenTuner.h"));
 
+  // CopyFileLocally(pathList, fileList);
   
 
   LoadAlirootLocally(extraLibs, extraIncs, extraTasks);
@@ -126,16 +127,13 @@ TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)
   
   // Connect plugin to the analysis manager if any
   if (alienHandler) mgr->SetGridHandler(static_cast<AliAnalysisGrid*>(alienHandler));
-  
-  // // AOD handler
-  // AliInputEventHandler* aodH = new AliAODInputHandler;
-  // mgr->SetInputEventHandler(aodH);
 
-
-  // ESD input
-  AliESDInputHandler* esdH = new AliESDInputHandler();
-  mgr->SetInputEventHandler(esdH);
   
+  // AOD handler
+  AliInputEventHandler* aodH = new AliAODInputHandler;
+  mgr->SetInputEventHandler(aodH);
+  
+
   // track selection
   AliMuonTrackCuts trackCuts("stdCuts", "stdCuts");
   trackCuts.SetAllowDefaultParams();
