@@ -4,7 +4,7 @@
     <event name="1">
       <file name="AliAOD.Muons.root" aclId="" broken="0" ctime="2015-07-06 06:30:22" dir="103384044" entryId="103436518" expiretime="" gowner="alidaq" guid="E197707A-2396-11E5-B693-9391F5FC49E8" guidtime="11E52396" jobid="523693585" lfn="/alice/data/2015/LHC15g/000228936/muon_calo_pass1/15000228936019.100/AliAOD.Muons.root" md5="bd9c2f975426e2a0436cad9144b2ee93" owner="alidaq" perm="755" replicated="0" selist="" size="689906" turl="alien:///alice/data/2015/LHC15g/000228936/muon_calo_pass1/15000228936019.100/AliAOD.Muons.root" type="f" />
     </event>
-    <info command="[/alice/cern.ch/user/b/baudurie/]: find -z -x collection -l 1 -o 0 /alice/data/2015/LHC15g/000228936 *AliAOD.Muons.root" creator="admin" date="Tue Sep  8 11:12:57 CEST 2015" timestamp="1441703577" />
+    <info command="[/alice/cern.ch/user/b/baudurie/]: find -z -x collection -l 1 -o 0 /alice/data/2015/LHC15g/000228936 *AliAOD.Muons.root" creator="admin" date="Thu Sep 17 16:57:27 CEST 2015" timestamp="1442501847" />
   </collection>
 </alien>
 

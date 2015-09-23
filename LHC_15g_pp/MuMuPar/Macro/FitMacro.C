@@ -8,7 +8,7 @@
 
 // Macro to fit Minv Spectra and draw J/psi distribution vs pt and y
 
-TString striggerDimuon  ="ANY";
+TString striggerDimuon  ="CMUL7-B-NOPF-MUON";
 TString seventType      ="ALL";
 TString spairCut        ="pALLPAIRYRABSETA";
 TString sbinType        ="PT,Y";
@@ -20,12 +20,12 @@ Double_t parPOWLAW[3] = {80.,1.,1.};
 
 //_____________________________________________________________________________
 void FitMacro(
-char           * sfile="../test.MuMu.AOD.1.JPsi.root",
+char           * sfile="../datasetfull.AOD.txt.saf.root",
 char           * sasso="",
 char           * sasso2="",
 char           * beamYear="PbPb2011",
 char           * what ="integrated,pt,y",
-Bool_t FitDist = kFALSE)
+Bool_t FitDist = kTRUE)
 {    
     
     //General conf.

@@ -11260,7 +11260,7 @@
     <event name="999">
       <file name="AliESDs.root" aclId="" broken="0" ctime="2015-07-09 07:19:46" dir="104201929" entryId="104203889" expiretime="" gowner="alidaq" guid="010B3EAE-25FA-11E5-BA8B-FBBC4D78BD3A" guidtime="11E525FA" jobid="524783514" lfn="/alice/data/2015/LHC15g/000229409/muon_calo_pass1/15000229409021.416/AliESDs.root" md5="99af2ef7f0de98cef591eff8f7993f1e" owner="alidaq" perm="755" replicated="0" selist="" size="14132347" turl="alien:///alice/data/2015/LHC15g/000229409/muon_calo_pass1/15000229409021.416/AliESDs.root" type="f" />
     </event>
-    <info command="[/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/]: find -z -x collection -l 15000 -o 0 /alice/data/2015/LHC15g/000229409 muon_calo_pass1/*AliESDs.root" creator="admin" date="Tue Sep 15 09:24:24 CEST 2015" timestamp="1442301864" />
+    <info command="[/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/]: find -z -x collection -l 15000 -o 0 /alice/data/2015/LHC15g/000229409 muon_calo_pass1/*AliESDs.root" creator="admin" date="Thu Sep 17 17:21:28 CEST 2015" timestamp="1442503288" />
   </collection>
 </alien>
 

@@ -415,18 +415,18 @@ void AliAnalysisTaskGenTuner::Terminate(Option_t *)
     if (fPtFuncMC) {
       fPtFuncMC->SetLineColor(3);
       fPtFuncMC->SetLineWidth(3);
-      h[0]->Fit(fPtFuncMC, "IWLMR", "e0sames");
+      h[0]->Fit(fPtFuncMC, "IMR", "e0sames");
     } else h[0]->Draw("e0");
     if (fPtFunc) {
       fPtFunc->SetLineColor(4);
-      h[0]->Fit(fPtFunc, "IWLMR+");
+      h[0]->Fit(fPtFunc, "IMR");
     }
   }
   if (hRef[0]) {
     hRef[0]->SetLineColor(2);
     if (fPtFuncNew) {
       fPtFuncNew->SetLineColor(2);
-      hRef[0]->Fit(fPtFuncNew, "IWLMR", "e0sames");
+      hRef[0]->Fit(fPtFuncNew, "IMR", "e0sames");
     } else hRef[0]->Draw("e0sames");
   }
   fcRes->cd(2);
@@ -434,18 +434,18 @@ void AliAnalysisTaskGenTuner::Terminate(Option_t *)
     if (fYFuncMC) {
       fYFuncMC->SetLineColor(3);
       fYFuncMC->SetLineWidth(3);
-      h[1]->Fit(fYFuncMC, "IWLMR", "e0sames");
+      h[1]->Fit(fYFuncMC, "IMR", "e0sames");
     } else h[1]->Draw("e0");
     if (fYFunc) {
       fYFunc->SetLineColor(4);
-      h[1]->Fit(fYFunc, "IWLMR+");
+      h[1]->Fit(fYFunc, "IMR");
     }
   }
   if (hRef[1]) {
     hRef[1]->SetLineColor(2);
     if (fYFuncNew) {
       fYFuncNew->SetLineColor(2);
-      hRef[1]->Fit(fYFuncNew, "IWLMR", "e0sames");
+      hRef[1]->Fit(fYFuncNew, "IMR", "e0sames");
     } else hRef[1]->Draw("e0sames");
   }
   for (Int_t i = 2; i < 6; i++) {

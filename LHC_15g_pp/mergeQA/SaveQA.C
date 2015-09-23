@@ -20,8 +20,8 @@
 #include "TH1.h"
 
 Bool_t isQATask = kTRUE;
-TString MultDirData = "HighMultiplicity";
-TString MultDirMC = "HighMultiplicity";
+TString MultDirData = "LowMultiplicity";
+TString MultDirMC = "LowMultiplicity";
 
 //----------------------------------------------------------------------------
 void SaveQA(TString inputDataFile, TString inputMCFile)

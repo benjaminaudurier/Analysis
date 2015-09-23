@@ -25,23 +25,23 @@ Int_t maxMergeStages = 4;
 // generator parameters used in the simulation
 
 // tune1 LHC13f
-Double_t oldPtParam[4] = {0.80, 0.50, 5, 0.80};
+Double_t oldPtParam[4] = {0.966783, 0.653789, 70.1811,  0.059057};
 Bool_t oldFixPtParam[4] = {kFALSE, kFALSE, kFALSE, kFALSE/*, kFALSE, kFALSE*/};
-Double_t newPtParam[4] = {0.80, 0.50, 5, 0.80};
+Double_t newPtParam[4] = {0.966783, 0.653789, 70.1811,  0.059057};
 Bool_t newFixPtParam[4] = {kFALSE, kFALSE, kFALSE, kFALSE/*, kFALSE, kFALSE*/};
 
-Double_t ptRange[2] = {0.8, 20.};
+Double_t ptRange[2] = {0.2, 15.};
 
 // tune1 LHC13f
-Double_t oldYParam[4] = {0.02, -12.5, 2.3, 0.8};
+Double_t oldYParam[4] = {0.000127694, -339.678,200.776, -54.9561};
 Bool_t oldFixYParam[4] = {kFALSE, kFALSE, kFALSE, kFALSE/*, kFALSE, kFALSE, kTRUE, kTRUE*/};
-Double_t newYParam[4] = {0.02, -12.5, 2.3, 0.8};
+Double_t newYParam[4] = {0.000127694, -339.678,200.776, -54.9561};
 Bool_t newFixYParam[4] = {kFALSE, kFALSE, kFALSE, kFALSE/*, kFALSE, kFALSE, kTRUE, kTRUE*/};
 
-Double_t yRange[2] = {-4.3, -2.3};
+Double_t yRange[2] = {-3.8, -2.5};
 
 
-Bool_t isMC = kTRUE;
+Bool_t isMC = kFALSE;
 Bool_t applyPhysicsSelection = kFALSE;
 
  // --- prepare environment ---
@@ -75,14 +75,28 @@ void runGenTuner(TString smode = "saf", TString inputFileName = "Find;BasePath=/
   // CopyFileLocally(pathList, fileList);
   
 
-  LoadAlirootLocally(extraLibs, extraIncs, extraTasks);
+  // LoadAlirootLocally(extraLibs, extraIncs, extraTasks);
+
+  gEnv->SetValue("XSec.GSI.DelegProxy","2");
+  TProof::Open("baudurie@nansafmaster2.in2p3.fr/?N","");
+  TProof::Mgr("baudurie@nansafmaster2.in2p3.fr")->SetROOTVersion("VO_ALICE@ROOT::v5-34-30");
+  TList* list = new TList;
+  list->Add(new TNamed("ALIROOT_MODE","base"));
+  list->Add(new TNamed("ALIROOT_EXTRA_LIBS","PWGmuon"));
+  list->Add(new TNamed("ALIROOT_EXTRA_INCLUDES","include"));
+  gProof->EnablePackage("VO_ALICE@AliPhysics::vAN-20150902",list,kFALSE);
+  gProof->UploadPackage("VO_ALICE@AliPhysics::vAN-20150902");
+  gROOT->LoadMacro("AliAnalysisTaskGenTuner.cxx++g");
+   gProof->Load("AliAnalysisTaskGenTuner.cxx++g",kFALSE);
+
+
   AliAnalysisGrid *alienHandler = 0x0;
-  if (mode == kProof || mode == kProofLite) LoadAlirootOnProof(smode, rootVersion, aliphysicsVersion, extraLibs, extraIncs, extraTasks, kTRUE,"");
-  else if (mode == kGrid || mode == kTerminate) {
-    TString analysisMacroName = "Eff";
-    alienHandler = static_cast<AliAnalysisGrid*>(CreateAlienHandler(smode, rootVersion, alirootVersion, aliphysicsVersion, inputFileName, dataDir, dataPattern, outDir, extraLibs, extraIncs, extraTasks, analysisMacroName, runFormat, ttl, maxFilesPerJob, maxMergeFiles, maxMergeStages));
-    if (!alienHandler) return;
-  }
+  // if (mode == kProof || mode == kProofLite) LoadAlirootOnProof(smode, rootVersion, aliphysicsVersion, extraLibs, extraIncs, extraTasks, kTRUE,"");
+  // else if (mode == kGrid || mode == kTerminate) {
+  //   TString analysisMacroName = "Eff";
+  //   alienHandler = static_cast<AliAnalysisGrid*>(CreateAlienHandler(smode, rootVersion, alirootVersion, aliphysicsVersion, inputFileName, dataDir, dataPattern, outDir, extraLibs, extraIncs, extraTasks, analysisMacroName, runFormat, ttl, maxFilesPerJob, maxMergeFiles, maxMergeStages));
+  //   if (!alienHandler) return;
+  // }
   
   // --- Create the analysis train ---
   AliAnalysisTaskGenTuner *genTuner = static_cast<AliAnalysisTaskGenTuner*>(CreateAnalysisTrain(alienHandler, iStep));
@@ -154,7 +168,7 @@ TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)
 //  if (applyPhysicsSelection) genTuner->SelectCollisionCandidates(AliVEvent::kMUSH7);
   //genTuner->SelectCentrality(0., 90.);
   genTuner->SetMuonTrackCuts(trackCuts);
-  // genTuner->SetMuonPtCut(1.);
+  genTuner->SetMuonPtCut(1.);
 //  if (isMC) genTuner->SetDataFile("/Users/pillot/Work/Alice/Work/Data/2013/LHC13d/muon_pass2/AOD/GenTuner/pT1GeV/AnalysisResults.root");
 //  if (isMC) genTuner->SetDataFile("/Users/pillot/Work/Alice/Work/Data/2013/LHC13d/muon_pass2/AOD/GenTuner/pT2GeV/AnalysisResults.root");
 //  if (isMC) genTuner->SetDataFile("/Users/pillot/Work/Alice/Work/Data/2013/LHC13e/muon_pass2/AOD/GenTuner/pT1GeV/AnalysisResults.root");

@@ -16,16 +16,6 @@ void runAccEffSubmitter(const char* mode)
 	a.MakeNofEventsPropToTriggerCount(Trigger.Data());
 	a.SetVar("VAR_GENLIB_PARNAME","\"pp 5.03\"");
 
-	a.SetVar("VAR_GENPARAMCUSTOMSINGLE_PT_P0","0.805901");
-	a.SetVar("VAR_GENPARAMCUSTOMSINGLE_PT_P1","0.508179");
-	a.SetVar("VAR_GENPARAMCUSTOMSINGLE_PT_P2","5.05173");
-	a.SetVar("VAR_GENPARAMCUSTOMSINGLE_PT_P3","0.840121");
-
-	a.SetVar("VAR_GENPARAMCUSTOMSINGLE_Y_P0","0.00497794");
-	a.SetVar("VAR_GENPARAMCUSTOMSINGLE_Y_P1","-139.038");
-	a.SetVar("VAR_GENPARAMCUSTOMSINGLE_Y_P2","-51.4033");
-	a.SetVar("VAR_GENPARAMCUSTOMSINGLE_Y_P3","-5.66992");
-
 	a.SetRunList("runlist_15-07-2015-ESD.txt");
 	a.SetPackages("VO_ALICE@AliPhysics::vAN-20150902");
 	a.SetCompactMode(0);
