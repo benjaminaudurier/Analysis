@@ -157,7 +157,7 @@ void runGenTunerLoop(TString smode = "local", TString inputFileName = "AliAOD.ro
 	     param[0], param[1], param[2], param[3]/*, param[4], param[5]*/);
       param = fYFuncMC->GetParameters();
       printf("\ny parameters for single muon generator:\n");
-      printf("Double_t p[5] = {%g, %g, %g, %g};\n\n",
+      printf("Double_t p[4] = {%g, %g, %g, %g};\n\n",
 	     param[0], param[1], param[2], param[3]/*, param[4], param[5], param[6], param[7]*/);
     }
     TCanvas *cRes = static_cast<TCanvas*>(inFile->FindObjectAny("cRes"));

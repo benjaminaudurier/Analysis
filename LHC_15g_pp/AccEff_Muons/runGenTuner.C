@@ -30,18 +30,18 @@ Bool_t oldFixPtParam[4] = {kFALSE, kFALSE, kFALSE, kFALSE/*, kFALSE, kFALSE*/};
 Double_t newPtParam[4] = {0.966783, 0.653789, 70.1811,  0.059057};
 Bool_t newFixPtParam[4] = {kFALSE, kFALSE, kFALSE, kFALSE/*, kFALSE, kFALSE*/};
 
-Double_t ptRange[2] = {0.2, 15.};
+Double_t ptRange[2] = {0.15, 999.};
 
 // tune1 LHC13f
-Double_t oldYParam[4] = {0.000127694, -339.678,200.776, -54.9561};
+Double_t oldYParam[4] = {0.7, 0.5,0.15,0.2};
 Bool_t oldFixYParam[4] = {kFALSE, kFALSE, kFALSE, kFALSE/*, kFALSE, kFALSE, kTRUE, kTRUE*/};
-Double_t newYParam[4] = {0.000127694, -339.678,200.776, -54.9561};
+Double_t newYParam[4] = {0.7, 0.5,0.15, 0.2};
 Bool_t newFixYParam[4] = {kFALSE, kFALSE, kFALSE, kFALSE/*, kFALSE, kFALSE, kTRUE, kTRUE*/};
 
-Double_t yRange[2] = {-3.8, -2.5};
+Double_t yRange[2] = {-4.3, -2.3};
 
 
-Bool_t isMC = kFALSE;
+Bool_t isMC = kTRUE;
 Bool_t applyPhysicsSelection = kFALSE;
 
  // --- prepare environment ---

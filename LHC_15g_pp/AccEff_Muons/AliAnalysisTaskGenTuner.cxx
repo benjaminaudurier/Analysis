@@ -204,9 +204,9 @@ void AliAnalysisTaskGenTuner::UserExec(Option_t *)
   AliAODEvent* aod = dynamic_cast<AliAODEvent*>(InputEvent());
   if ( !aod ) return;
   
-  // select the centrality range
-  Float_t centrality = aod->GetCentrality()->GetCentralityPercentileUnchecked("V0M");
-  if (centrality <= fCentMin || centrality > fCentMax) return;
+  // // select the centrality range
+  // Float_t centrality = aod->GetCentrality()->GetCentralityPercentileUnchecked("V0M");
+  // if (centrality <= fCentMin || centrality > fCentMax) return;
   
   // fill the MC part if running on MC
   TArrayD weight;
@@ -221,7 +221,7 @@ void AliAnalysisTaskGenTuner::UserExec(Option_t *)
       // if (mctrack->Pt() < 0.9 || mctrack->Pt() > 1.) continue;
       // if (mctrack->Y() < -4.4 || (mctrack->Y() > -4.3 && mctrack->Y() < -2.2) || mctrack->Y() > -2.1) continue;
       // if (mctrack->Y() > -4.2 && mctrack->Y() < -2.3) continue;
-      // if (mctrack->Y() < -4. || mctrack->Y() > -2.5) continue;
+      if (mctrack->Y() < -4. || mctrack->Y() > -2.5) continue;
       
       // compute the weights for all primary particles (other weights are 0)
       Double_t y = mctrack->Y();
@@ -258,7 +258,7 @@ void AliAnalysisTaskGenTuner::UserExec(Option_t *)
 //    if (mctrack->Pt() < 0.9 || mctrack->Pt() > 1.) continue;
 //    if (mctrack->Y() < -4.4 || (mctrack->Y() > -4.3 && mctrack->Y() < -2.2) || mctrack->Y() > -2.1) continue;
 //    if (mctrack->Y() > -4.2 && mctrack->Y() < -2.3) continue;
-//    if (mctrack->Y() < -4. || mctrack->Y() > -2.5) continue;
+   if (track->Y() < -4. || track->Y() > -2.5) continue;
     
     Double_t w = (weight.GetSize() > 0) ? weight[mcLabel] : 1.;
     ((TH1*)fList->UncheckedAt(kPtRec))->Fill(pT, w);
@@ -288,17 +288,17 @@ void AliAnalysisTaskGenTuner::Terminate(Option_t *)
   
   // get the fit ranges
   Double_t fitRangeMC[3][2];
-  fitRangeMC[0][0] = GetFitLowEdge(*(h[0]));
-  fitRangeMC[0][1] = 999.;
+  fitRangeMC[0][0] = 1./*GetFitLowEdge(*(h[0]))*/;
+  fitRangeMC[0][1] = 15./*999.*/;
   fitRangeMC[1][0] = GetFitLowEdge(*(h[1]));
   fitRangeMC[1][1] = GetFitUpEdge(*(h[1]));
   fitRangeMC[2][0] = h[2]->GetXaxis()->GetXmin();
   fitRangeMC[2][1] = h[2]->GetXaxis()->GetXmax();
   Double_t fitRange[3][2];
   fitRange[0][0] = (fPtCut > 0.) ? TMath::Max(fitRangeMC[0][0], fPtCut) : fitRangeMC[0][0];
-  fitRange[0][1] = 10.;
-  fitRange[1][0] = -3.98; // not -4. because to the influence of the eta cut
-  fitRange[1][1] = -2.4;
+  fitRange[0][1] = 15.;
+  fitRange[1][0] = -3.8; // not -4. because to the influence of the eta cut
+  fitRange[1][1] = -2.5;
   fitRange[2][0] = h[5]->GetXaxis()->GetXmin();
   fitRange[2][1] = h[5]->GetXaxis()->GetXmax();
   
@@ -306,9 +306,9 @@ void AliAnalysisTaskGenTuner::Terminate(Option_t *)
   TH1 *hAccEff[3] = {0x0, 0x0, 0x0};
   for (Int_t i = 0; i < 3 && h[i]->GetEntries() > 0; i++) {
     hAccEff[i] = ComputeAccEff(*(h[i]), *(h[i+3]), Form("%sOverGen",h[i+3]->GetName()), "Acc#{times}Eff");
-    //hAccEff[i] = static_cast<TH1*>(h[i+3]->Clone(Form("%sOverGen",h[i+3]->GetName())));
-    //hAccEff[i]->SetTitle("Acc#{times}Eff");
-    //hAccEff[i]->Divide(h[i]);
+    hAccEff[i] = static_cast<TH1*>(h[i+3]->Clone(Form("%sOverGen",h[i+3]->GetName())));
+    hAccEff[i]->SetTitle("Acc#{times}Eff");
+    hAccEff[i]->Divide(h[i]);
   }
   
   // get reference data if provided
@@ -413,38 +413,38 @@ void AliAnalysisTaskGenTuner::Terminate(Option_t *)
   gPad->SetLogy();
   if (hAccEff[0]) {
     if (fPtFuncMC) {
-      fPtFuncMC->SetLineColor(3);
-      fPtFuncMC->SetLineWidth(3);
+      fPtFuncMC->SetLineColor(3);// Green
+      fPtFuncMC->SetLineWidth(3);// Green
       h[0]->Fit(fPtFuncMC, "IMR", "e0sames");
     } else h[0]->Draw("e0");
     if (fPtFunc) {
       fPtFunc->SetLineColor(4);
-      h[0]->Fit(fPtFunc, "IMR");
+      h[0]->Fit(fPtFunc, "IMR+");
     }
   }
   if (hRef[0]) {
-    hRef[0]->SetLineColor(2);
+    hRef[0]->SetLineColor(2);// Red
     if (fPtFuncNew) {
-      fPtFuncNew->SetLineColor(2);
+      fPtFuncNew->SetLineColor(2);// Red
       hRef[0]->Fit(fPtFuncNew, "IMR", "e0sames");
     } else hRef[0]->Draw("e0sames");
   }
   fcRes->cd(2);
   if (hAccEff[1]) {
     if (fYFuncMC) {
-      fYFuncMC->SetLineColor(3);
-      fYFuncMC->SetLineWidth(3);
+      fYFuncMC->SetLineColor(3);// Grenn
+      fYFuncMC->SetLineWidth(3);// Green
       h[1]->Fit(fYFuncMC, "IMR", "e0sames");
     } else h[1]->Draw("e0");
     if (fYFunc) {
-      fYFunc->SetLineColor(4);
-      h[1]->Fit(fYFunc, "IMR");
+      fYFunc->SetLineColor(4);// Blue
+      h[1]->Fit(fYFunc, "IMR+");
     }
   }
   if (hRef[1]) {
-    hRef[1]->SetLineColor(2);
+    hRef[1]->SetLineColor(2);// Red
     if (fYFuncNew) {
-      fYFuncNew->SetLineColor(2);
+      fYFuncNew->SetLineColor(2);// Red
       hRef[1]->Fit(fYFuncNew, "IMR", "e0sames");
     } else hRef[1]->Draw("e0sames");
   }
@@ -453,7 +453,7 @@ void AliAnalysisTaskGenTuner::Terminate(Option_t *)
     if (i == 3) gPad->SetLogy();
     h[i]->Draw("e0");
     if (hRef[i]) {
-      hRef[i]->SetLineColor(2);
+      hRef[i]->SetLineColor(2);// Red
       hRef[i]->Draw("e0sames");
     }
   }
@@ -725,7 +725,7 @@ Double_t AliAnalysisTaskGenTuner::Pt(const Double_t *x, const Double_t *p)
 {
   /// generated pT fit function
   Double_t pT = *x;
-  return p[0] * (1. / TMath::Power(p[1] + TMath::Power(pT,p[2]), p[3])) /*+ p[4] * TMath::Exp(p[5]*pT)*/;
+  return p[0]/ TMath::Power( p[1] + TMath::Power(pT,p[2]), p[3] );
 }
 
 //________________________________________________________________________
@@ -734,7 +734,7 @@ Double_t AliAnalysisTaskGenTuner::Y(const Double_t *x, const Double_t *p)
   /// generated y fit function
   Double_t y = *x;
   // Double_t arg = y/p[7];
-  return p[0] * (/*p[1] * (*/1. + p[1]*y + p[2]*y*y + p[3]*y*y*y /*+ p[5]*y*y*y*y)*/ /*+ p[6]*TMath::Exp(-0.5*arg*arg)*/);
+  return p[0] * (1. + p[1]*y + p[2]*y*y + p[3]*y*y*y );
 }
 
 //________________________________________________________________________

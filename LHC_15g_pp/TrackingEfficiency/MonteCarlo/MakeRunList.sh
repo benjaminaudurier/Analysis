@@ -7,7 +7,7 @@ rm -dr alice
 for line in $(cat runlist_15-07-2015-ESD.txt)
 	
 do
-echo -e "alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/MonteCarlo/singleMuon/new/results/$line/AnalysisResults.root" >> grid.esd.txt
+echo -e "alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/MonteCarlo/singleMuon/results/$line/AnalysisResults.root" >> grid.esd.txt
 done < runlist_15-07-2015-ESD.txt
 	
 root -b -q CopyFromRemote.C 

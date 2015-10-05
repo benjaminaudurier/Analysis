@@ -41,5 +41,4 @@ Arguments = "Stage_$2.xml $2";
 Price = "1";
 # Validation script to be run for each subjob
 Validationcommand = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/MonteCarlo/singleMuon/new/Eff_validation_merge.sh";
-User = "baudurie";
 Workdirectorysize = {"5000MB"};

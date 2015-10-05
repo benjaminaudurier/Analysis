@@ -24,8 +24,8 @@ Bool_t FileExists(const char *lfn);
 Bool_t DirectoryExists(const char *dirname);
 
 //______________________________________________________________________________
-void Submit(const char* inDir ="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/simsinglemuon/pp/CMSL7-B-NOPF-MUON", const char* outDir="Analysis/LHC15g/TrackingEfficiency/simsinglemuon/pp/CMSL7-B-NOPF-MUON/QA", const char* resDir = "results",
-	    const char* runList = "runlist_15-07-2015-ESD_main.txt", TString runFormat = "%d", Int_t stage = 0, Bool_t submit = kTRUE)
+void Submit(const char* inDir ="/alice/cern.ch/user/p/ppillot/Data/LHC15g/muon_calo_pass1/QA/results", const char* outDir="Analysis/LHC15g/TrackingEfficiency/Data/QA", const char* resDir = "results",
+	    const char* runList = "runlist_15-07-2015-ESD_main.txt", TString runFormat = "%09d", Int_t stage = 0, Bool_t submit = kTRUE)
 {
   /// Submit multiple merging jobs with the format "submit AOD_merge(_final).jdl run# (stage#)".
   /// Also produce the xml collection before sending jobs
@@ -38,7 +38,7 @@ void Submit(const char* inDir ="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/T
   ///
   /// *** THIS MACRO MUST BE COMPILED <-- CINT PROBLEMS... ***
   
-  TString homeDir = "/alice/cern.ch/user/b/baudurie/";
+  TString homeDir = "/alice/cern.ch/user/b/baudurie";
   
   if (!TGrid::Connect("alien://")) {
     printf("cannot connect to grid\n");
@@ -48,19 +48,24 @@ void Submit(const char* inDir ="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/T
   TString outputDir = Form("%s/%s", homeDir.Data(), outDir);
   TString inputDir = inDir ? inDir : Form("%s/%s", outputDir.Data(),resDir);
   
-  if (!DirectoryExists(outputDir.Data())) {
+  if (!DirectoryExists(outputDir.Data())) 
+  {
     printf("directory %s does not exist\n", outputDir.Data());
     return;
   }
   
+  // mv to outputdir
   gGrid->Cd(outputDir.Data());
-  
+
+  // Select correct jdl file
   TString jdl = (stage > 0) ? "AOD_merge.jdl" : "AOD_merge_final.jdl";
-  if (!FileExists(jdl.Data())) {
+  if (!FileExists(jdl.Data())) 
+  {
     printf("file %s does not exist in %s\n", jdl.Data(), outputDir.Data());
     return;
   }
   
+  //open runlist
   ifstream inFile(runList);
   if (!inFile.is_open()) {
     printf("cannot open file %s\n", runList);
@@ -71,26 +76,31 @@ void Submit(const char* inDir ="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/T
   TString reply = "";
   gSystem->Exec("rm -f __failed__");
   Bool_t failedRun = kFALSE;
+
+  //Read runlist line by line
   while (!inFile.eof())
   {
-    currRun.ReadLine(inFile,kTRUE);
+    currRun.ReadLine(inFile,kTRUE);//Get line
     if(currRun.IsNull()) continue;
     
-    Int_t run = currRun.Atoi();
+    Int_t run = currRun.Atoi();//Get run number
     TString srun = Form(runFormat.Data(), run);
     printf("\n --- processing run %s ---\n", srun.Data());
     
-    TString runDir = Form("%s/%s/%s", outputDir.Data(), resDir, srun.Data());
+    TString runDir = Form("%s/%s/%s", outputDir.Data(), resDir, srun.Data());//Create folder for run
     if (!DirectoryExists(runDir.Data())) {
       printf(" - creating output directory %s\n", runDir.Data());
       gSystem->Exec(Form("alien_mkdir -p %s", runDir.Data()));
     }
     
-    if (FileExists(Form("%s/root_archive.zip", runDir.Data()))) {
+    // Skip if merging already done
+    if (FileExists(Form("%s/root_archive.zip", runDir.Data()))) 
+    {
       printf(" ! final merging already done\n");
       continue;
     }
     
+    // get merging stage
     Int_t n = 0, lastStage = 0;
     gSystem->Exec(Form("alien_ls -F %s | grep Stage_.*/ > __stage__", runDir.Data()));
     ifstream f("__stage__");
@@ -99,20 +109,20 @@ void Submit(const char* inDir ="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/T
     f.close();
     while (n > 0) if (gSystem->Exec(Form("grep Stage_%d/ __stage__ 2>&1 >/dev/null", ++lastStage)) == 0) n--;
     gSystem->Exec("rm -f __stage__");
-    if (stage > 0 && stage != lastStage+1) {
+    if (stage > 0 && stage != lastStage+1) 
+    {
       printf(" ! lastest merging stage = %d. Next must be stage %d or final stage\n", lastStage, lastStage+1);
       continue;
     }
     
     TString wn = (stage > 0) ? Form("Stage_%d.xml", stage) : "wn.xml";
-//    TString find = (lastStage == 0) ?
-//      Form("alien_find -x %s %s/%s *root_archive.zip", wn.Data(), inputDir.Data(), srun.Data()) :
-//      Form("alien_find -x %s %s/%s/ESDs/muon_calo_pass2 12%s*/root_archive.zip", wn.Data(), inputDir.Data(), srun.Data(), srun.Data()) :
-//      Form("alien_find -x %s %s/%s/vpass1 12%s*/root_archive.zip", wn.Data(), inputDir.Data(), srun.Data(), srun.Data()) :
-//      Form("alien_find -x %s %s/%s/Stage_%d *root_archive.zip", wn.Data(), inputDir.Data(), srun.Data(), lastStage);
-    TString find = (lastStage == 0) ?
-      Form("alien_find -x %s %s/%s *Merged.QA.Data.root", wn.Data(), inputDir.Data(), srun.Data()) :
-      Form("alien_find -x %s %s/%s/Stage_%d *Merged.QA.Data.root", wn.Data(), inputDir.Data(), srun.Data(), lastStage);
+   TString find = (lastStage == 0) ?
+        Form("alien_find -x %s %s/%s *Merged.QA.Data.root", wn.Data(), inputDir.Data(), srun.Data()) :
+        Form("alien_find -x %s %s/%s/Stage_%d *Merged.QA.Data.root", wn.Data(), inputDir.Data(), srun.Data(), lastStage);
+    // TString find = (lastStage == 0) ?
+    //   Form("alien_find -x %s %s/%s/muon_calo_pass1 *QAresults.root", wn.Data(), inputDir.Data(), srun.Data()) :
+    //   Form("alien_find -x %s %s/%s/muon_calo_pass1/Stage_%d *QAresults.root", wn.Data(), inputDir.Data(), srun.Data(), lastStage);
+    printf("%s\n",find.Data());
     gSystem->Exec(Form("%s 1> %s 2>/dev/null", find.Data(), wn.Data()));
     gSystem->Exec(Form("grep -c /event %s > __nfiles__", wn.Data()));
     ifstream f2("__nfiles__");
@@ -121,24 +131,30 @@ void Submit(const char* inDir ="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/T
     f2.close();
     gSystem->Exec("rm -f __nfiles__");
     printf(" - number of files to merge = %d\n", nFiles.Atoi());
-    if (nFiles.Atoi() == 0) {
-      printf(" ! collection of files to merge is empty\n");
-      gSystem->Exec(Form("rm -f %s", wn.Data()));
-      continue;
-    } else if (stage > 0 && nFiles.Atoi() <= splitLevel && !reply.BeginsWith("y")) {
-      if (!reply.BeginsWith("n")) {
-	printf(" ! number of files to merge <= split level (%d). Continue? [Y/n] ", splitLevel);
-	fflush(stdout);
-	reply.Gets(stdin,kTRUE);
-	reply.ToLower();
+    if (nFiles.Atoi() == 0) 
+      {
+        printf(" ! collection of files to merge is empty\n");
+        gSystem->Exec(Form("rm -f %s", wn.Data()));
+        continue;
+      } 
+    else if (stage > 0 && nFiles.Atoi() <= splitLevel && !reply.BeginsWith("y")) 
+    {
+      if (!reply.BeginsWith("n")) 
+      {
+      	printf(" ! number of files to merge <= split level (%d). Continue? [Y/n] ", splitLevel);
+      	fflush(stdout);
+      	reply.Gets(stdin,kTRUE);
+      	reply.ToLower();
       }
-      if (reply.BeginsWith("n")) {
-	gSystem->Exec(Form("rm -f %s", wn.Data()));
-	continue;
+      if (reply.BeginsWith("n")) 
+      {
+      	gSystem->Exec(Form("rm -f %s", wn.Data()));
+      	continue;
       } else reply = "y";
     }
     
-    if (submit) {
+    if (submit) 
+    {
       TString dirwn = Form("%s/%s", runDir.Data(), wn.Data());
       if (FileExists(dirwn.Data())) gGrid->Rm(dirwn.Data());
       gSystem->Exec(Form("alien_cp file:%s alien://%s", wn.Data(), dirwn.Data()));
@@ -151,27 +167,34 @@ void Submit(const char* inDir ="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/T
     printf(" - %s ...", query.Data());
     fflush(stdout);
     
-    if (!submit) {
+    if (!submit) 
+    {
       printf(" dry run\n");
       continue;
     }
     
     Bool_t done = kFALSE;
     TGridResult *res = gGrid->Command(query);
-    if (res) {
+    if (res) 
+    {
       TString cjobId1 = res->GetKey(0,"jobId");
-      if (!cjobId1.IsDec()) {
-	printf(" FAILED\n");
-	gGrid->Stdout();
-	gGrid->Stderr();
-      } else {
-	printf(" DONE\n   --> the job Id is: %s \n", cjobId1.Data());
-	done = kTRUE;
+      if (!cjobId1.IsDec()) 
+      {
+      	printf(" FAILED\n");
+      	gGrid->Stdout();
+      	gGrid->Stderr();
+      } 
+      else 
+      {
+      	printf(" DONE\n   --> the job Id is: %s \n", cjobId1.Data());
+      	done = kTRUE;
       }
       delete res;
-    } else printf(" FAILED\n");
+    } 
+    else printf(" FAILED\n");
     
-    if (!done) {
+    if (!done) 
+    {
       gSystem->Exec(Form("echo %s >> __failed__", srun.Data()));
       failedRun = kTRUE;
     }
@@ -181,7 +204,8 @@ void Submit(const char* inDir ="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/T
 
   inFile.close();
   
-  if (failedRun) {
+  if (failedRun) 
+  {
     printf("\n--------------------\n");
     printf("list of failed runs:\n");
     gSystem->Exec("cat __failed__");
