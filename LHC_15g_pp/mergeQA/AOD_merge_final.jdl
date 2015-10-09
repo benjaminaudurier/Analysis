@@ -10,10 +10,10 @@ Packages = {
 Jobtag = {
     "comment:AOD merging final stage"
 };
-OutputDir = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/QA/results/$1";
+OutputDir = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/QA/New/results/$1";
 InputFile = {
-    "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/QA/AODtrain.C",
-    "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/QA/results/$1/wn.xml"
+    "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/QA/New/AODtrain.C",
+    "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/QA/New/results/$1/wn.xml"
 };
 Executable = "AOD_merge.sh"; 
 Arguments = "2";
@@ -28,4 +28,4 @@ Workdirectorysize =
 {
     "5000MB"
 }; 
-Validationcommand = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/QA/validation_merge.sh"
+Validationcommand = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/QA/New/validation_merge.sh"

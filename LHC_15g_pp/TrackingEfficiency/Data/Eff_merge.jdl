@@ -19,13 +19,13 @@ Packages = {
 };
 # List of input files to be uploaded to workers
 InputFile = {
-   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/Eff_merge.C",
-   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/Eff.root",
-   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.cxx",
-   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.h"
+   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/new/Eff_merge.C",
+   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/new/Eff.root",
+   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/new/AliAnalysisTaskMuonTrackingEffLocal.cxx",
+   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/new/AliAnalysisTaskMuonTrackingEffLocal.h"
 };
 # This is the startup script
-Executable = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/Eff_merge.sh";
+Executable = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/new/Eff_merge.sh";
 # We split per SE for merging in stages
 Split = "se";
 # Time after which the job is killed (500 min.)
@@ -39,13 +39,13 @@ InputDataList = "wn.xml";
 # List of output files and archives
 Output = {
    "log_archive.zip:std*@disk=1",
-   "root_archive.zip:AnalysisResults*.root,*.stat@disk=2"
+   "root_archive.zip:EventStat_temp*.root,AnalysisResults*.root,*.stat@disk=2"
 };
 Arguments = "wn.xml $2";
 # AliEn price for this job
 Price = "1";
 # Validation script to be run for each subjob
-Validationcommand = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/Eff_validation_merge.sh";
+Validationcommand = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/new/Eff_validation_merge.sh";
 User = "baudurie";
 Workdirectorysize = {"5000MB"};
 # JDL variables

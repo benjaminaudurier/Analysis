@@ -58,6 +58,11 @@ if [ "$glibcErr" != "" ] ; then
    echo "$glibcErr"  >> stdout
    echo "Error = $error"  >> stdout
 fi
+if ! [ -f EventStat_temp.root ] ; then
+   error=1
+   echo "Output file EventStat_temp.root not found. Job FAILED !" >> stdout
+   echo "Output file EventStat_temp.root not found. Job FAILED !" >> stderr
+fi
 if ! [ -f AnalysisResults.root ] ; then
    error=1
    echo "Output file AnalysisResults.root not found. Job FAILED !" >> stdout

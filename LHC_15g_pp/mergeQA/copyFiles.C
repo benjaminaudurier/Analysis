@@ -8,7 +8,7 @@
  */
 
 //______________________________________________________________________________
-void copyFiles(TString gridLocation = "Analysis/LHC15g/TrackingEfficiency/Data/QA")
+void copyFiles(TString gridLocation = "Analysis/LHC15g/TrackingEfficiency/Data/QA/New/")
 {
   /// copy all files necessary to run the simulation into "homeDir/gridLocation/" directory
   

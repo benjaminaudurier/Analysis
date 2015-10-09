@@ -14,9 +14,9 @@ Jobtag = {
 InputDataCollection = {
     "LF:/alice/data/2015/LHC15g/$1/muon_calo_pass1/Stage_$2.xml,nodownload"
 };
-OutputDir = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/QA/results/$1/Stage_$2/#alien_counter_03i#";
+OutputDir = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/QA/New/results/$1/Stage_$2/#alien_counter_03i#";
 InputFile = {
-    "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/QA/AODtrain.C"
+    "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/QA/New/AODtrain.C"
 };
 Executable = "AOD_merge.sh"; 
 Arguments = "1";
@@ -40,4 +40,4 @@ JDLVariables =
     "Packages",
     "OutputDir"
 }; 
-Validationcommand = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/QA/validation_merge.sh"
+Validationcommand = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/QA/New/validation_merge.sh"

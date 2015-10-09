@@ -130,7 +130,7 @@ void SaveQA(TString inputDataFile, TString inputMCFile)
       // Save canvas with the two chambers hitmap
       cTmp.Clear();
       gStyle->SetOptStat(0);
-      cTmp.Divide(2,2/*,0.,0.*/);
+      cTmp.Divide(2,2,0.,0.);
 
      
 
@@ -148,8 +148,8 @@ void SaveQA(TString inputDataFile, TString inputMCFile)
       gPad->SetPad(0., 0., 1., 0.5); 
 
        // Scale histo
-      clusterMapData->Scale(1./clusterMapData->GetEntries());
-      clusterMapMC->Scale(1./clusterMapMC->GetEntries());
+      // clusterMapData->Scale(1./clusterMapData->GetEntries());
+      clusterMapMC->Scale(clusterMapData->GetEntries()/clusterMapMC->GetEntries());
       
       //Fill diff. Histo
       TH2F*h2= new TH2F("h1",Form("Differences for chamber %d",iCh),clusterMapData->GetNbinsX(),0.,clusterMapData->GetNbinsX(),clusterMapData->GetNbinsY(),0.,clusterMapData->GetNbinsY());
@@ -164,12 +164,12 @@ void SaveQA(TString inputDataFile, TString inputMCFile)
           Double_t DataBin = clusterMapData->GetBinContent(i,j);
           Double_t MCBin = clusterMapMC->GetBinContent(i,j);
 
-          if( (DataBin+MCBin)>0 ) diff = TMath::Abs( (DataBin-MCBin)/ (DataBin+MCBin) );
+          if( (DataBin+MCBin) > 0 ) diff = 15*TMath::Abs( (DataBin-MCBin)/ (DataBin+MCBin) );
           h2->SetBinContent(i,j,diff);
         }
       }
 
-      h2->DrawCopy("COLZ");
+      h2->DrawCopy("");
       cTmp.Print(Form("displays/%s/ESDclusterMapChamber%d.png",runNumber.Data(),iCh), "png");
 
       // //Saving first image

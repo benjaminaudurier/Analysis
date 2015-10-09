@@ -41,6 +41,7 @@ Output = {
 Price = "1";
 # Validation script to be run for each subjob
 Validationcommand = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/MonteCarlo/singleMuon/new/Eff_validation.sh";
+User = "baudurie";
 
 # JDL variables
 JDLVariables = 

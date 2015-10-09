@@ -95,7 +95,7 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   //  Configure task
   //===========================================================================
   AliAnalysisTaskMuMu       * task = new AliAnalysisTaskMuMu; // Call the task
-  AliAnalysisMuMuEventCutter* eventCutter = new AliAnalysisMuMuEventCutter(triggerClassesToConsiderM,triggerInputsMap); // To handle cuts on event
+  AliAnalysisMuMuEventCutter* eventCutter = new AliAnalysisMuMuEventCutter(triggerClassesToConsider,triggerInputsMap); // To handle cuts on event
   AliAnalysisMuMuCutRegistry* cr = task->CutRegistry(); // Set CutRegistry
   // task->SetCountInBins("psi","pt","BENJ");
   // task->SetCountInBins("psi","y","BENJ");
@@ -149,9 +149,9 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
     AliAnalysisMuMuCutElement* eta = cr->AddTrackCut(*singleAnalysis,"IsEtaInRange","const AliVParticle&","");
     AliAnalysisMuMuCutElement* pdca = cr->AddTrackCut(*singleAnalysis,"IsPDCAOK","const AliVParticle&","");
     // Create combination of cuts to apply
-    cr->AddCutCombination(trackTrue);
-    cr->AddCutCombination(matchlow);
-    cr->AddCutCombination(rabs,eta,matchlow,pdca,trackTrue,ps); 
+    // cr->AddCutCombination(trackTrue);
+    // cr->AddCutCombination(matchlow);
+    cr->AddCutCombination(rabs,eta,matchlow,pdca,trackTrue); 
     // Adding the sub analysis
     task->AdoptSubAnalysis(singleAnalysis); 
 
@@ -161,9 +161,9 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
       TObjArray cutElements;
 
       // Cuts on track level
-      AliAnalysisMuMuCutElement* pairTrue = cr->AddTrackPairCut(*cr,"AlwaysTrue","const AliVParticle&, const AliVParticle&","");// Apply "AlwaysTrue" cut on AliVParticle derived from AliAnalysisMuMuMinv
+      AliAnalysisMuMuCutElement* pairTrue = cr->AddTrackPairCut(*cr,"AlwaysTrue","const AliVParticle&,const AliVParticle&","");// Apply "AlwaysTrue" cut on AliVParticle derived from AliAnalysisMuMuMinv
       AliAnalysisMuMuCutElement* pairy = cr->AddTrackPairCut(*minvAnalysis,"IsRapidityInRange","const AliVParticle&,const AliVParticle&","");
-      AliAnalysisMuMuCutElement* ptRange = cr->AddTrackPairCut(*minvAnalysis,"IsPtInRange","const AliVParticle&, const AliVParticle&, Double_t&, Double_t&","0.,18.");
+      AliAnalysisMuMuCutElement* ptRange = cr->AddTrackPairCut(*minvAnalysis,"IsPtInRange","const AliVParticle&,const AliVParticle&, Double_t&, Double_t&","0.,18.");
       
       cutElements.Add(pairTrue);
       cutElements.Add(pairy);
@@ -172,7 +172,7 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
       cutElements.Add(matchlow);
       cutElements.Add(eta);
       cutElements.Add(pdca);
-      cutElements.Add(ps);
+      // cutElements.Add(ps);
       // add them
       cr->AddCutCombination(cutElements);    
       // Adding the sub analysis
@@ -203,7 +203,7 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
     binning->AddBin("psi","pt", 5.0, 6.0,"BENJ");
     binning->AddBin("psi","pt", 6.0, 8.0,"BENJ");
   
-   //  // y binning
+    // y binning
    binning->AddBin("psi","y",-4,-3.75,"BENJ");
    binning->AddBin("psi","y",-3.75,-3.5,"BENJ");
    binning->AddBin("psi","y",-3.5,-3.25,"BENJ");
@@ -231,15 +231,15 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   // binning->AddBin("centrality","v0M",10.,50.);
   binning->AddBin("centrality","v0M",0.,90.);
 
-  // binning->AddBin("centrality","v0M",0.,10.);
-  // binning->AddBin("centrality","v0M",10.,20.);
-  // binning->AddBin("centrality","v0M",20.,30.);
-  // binning->AddBin("centrality","v0M",30.,40.);
-  // binning->AddBin("centrality","v0M",40.,50.);
-  // binning->AddBin("centrality","v0M",50.,60.);
-  // binning->AddBin("centrality","v0M",60.,70.);
-  // binning->AddBin("centrality","v0M",70.,80.);
-  // binning->AddBin("centrality","v0M",80.,90.);
+  binning->AddBin("centrality","v0M",0.,10.);
+  binning->AddBin("centrality","v0M",10.,20.);
+  binning->AddBin("centrality","v0M",20.,30.);
+  binning->AddBin("centrality","v0M",30.,40.);
+  binning->AddBin("centrality","v0M",40.,50.);
+  binning->AddBin("centrality","v0M",50.,60.);
+  binning->AddBin("centrality","v0M",60.,70.);
+  binning->AddBin("centrality","v0M",70.,80.);
+  binning->AddBin("centrality","v0M",80.,90.);
   // binning->AddBin("centrality","v0M",70.,90.);
   
   // binning->AddBin("centrality","v0a",90,100);

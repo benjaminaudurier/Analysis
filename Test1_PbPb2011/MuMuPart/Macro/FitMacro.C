@@ -10,8 +10,8 @@
 
 TString striggerDimuon  ="CPBI1MUL-B-NOPF-MUON";
 TString seventType      ="PSALL";
-TString spairCut        ="pALLPAIRYPAIRPTIN0.0-18.0RABSMATCHLOWETAPDCAPSALL";
-TString sbinType        ="PT,Y";
+TString spairCut        ="pALLPAIRYPAIRPTIN0.0-18.0RABSMATCHLOWETAPDCA";
+TString sbinType        ="Y";
 TString scentrality     ="V0M_00.00_90.00";
 TString sResName        ="";
 Bool_t divideByBinWidth =kTRUE; 
@@ -24,8 +24,8 @@ char           * sfile="../datasetfull.txt.saf.root",
 char           * sasso="",
 char           * sasso2="",
 char           * beamYear="PbPb2011",
-char           * what ="pt,y,integrated",
-Bool_t FitDist = kTRUE)
+char           * what ="pt",
+Bool_t FitDist = kFALSE)
 {    
     
     //General conf.
@@ -33,9 +33,6 @@ Bool_t FitDist = kTRUE)
     TIter nextWhat(whatArray);
     TObjString* swhat;
 
-    TObjArray* WHATArray= TString(sbinType).Tokenize(",");
-    TIter nextWHAT(WHATArray);
-    TObjString* sWHAT;
 	
     // main object
     AliAnalysisMuMu analysis(sfile,sasso,sasso2,beamYear);
@@ -43,13 +40,13 @@ Bool_t FitDist = kTRUE)
     // // Clean   
     // analysis.CleanAllSpectra();    
 
-    // //_____ Fit 
-    // while ( ( swhat = static_cast<TObjString*>(nextWhat()) ) )
-    // {
-    //     if(swhat->String().Contains("integrated")) analysis.Jpsi(swhat->String().Data(),"",kFALSE,kFALSE);
+    //_____ Fit 
+    while ( ( swhat = static_cast<TObjString*>(nextWhat()) ) )
+    {
+        if(swhat->String().Contains("integrated")) analysis.Jpsi(swhat->String().Data(),"",kFALSE,kFALSE);
 
-    //     else analysis.Jpsi(swhat->String().Data(),"BENJ",kFALSE,kFALSE);
-    // }
+        else analysis.Jpsi(swhat->String().Data(),"BENJ",kFALSE,kFALSE);
+    }
 
     // analysis.PrintNofParticle("PSI","NofJPsi","INTEGRATED",kFALSE);
     // analysis.PrintNofParticle("PSI","NofJPsi","Y",kFALSE);
@@ -58,7 +55,11 @@ Bool_t FitDist = kTRUE)
     //_______Fit  J/psi vs pt or J/psi vs y 
     if(FitDist)
     {   
-       // analysis.PrintDistribution(sbinType);
+        TObjArray* WHATArray= TString(sbinType).Tokenize(",");
+        TIter nextWHAT(WHATArray);
+        TObjString* sWHAT;
+
+        // analysis.PrintDistribution(sbinType);
         while ( ( sWHAT = static_cast<TObjString*>(nextWHAT()) ) )
         {
            //________Get spectra
@@ -76,35 +77,36 @@ Bool_t FitDist = kTRUE)
             cout << h<< endl;
             TCanvas *c = new TCanvas;
             c->SetLogy();
-
-            //________
-            
-            //________Fit function
-            gROOT->LoadMacro("../../My_First_Task/FittingFunctions.C");
-
-            TF1 * f =0x0;
-            if (sWHAT->String().Contains("PT"))
-            {
-                f = new TF1("Fit",powerLaw3Par,0.,8.,3);
-                f->SetParameters(&parPOWLAW[0]);
-                f->SetParNames("C","p_0","n");
-                f->SetLineColor(36);
-                f->SetLineStyle(5);
-
-                h->Fit(f);
-            
             h->DrawCopy();
-            f->Draw("same");
-            delete h;
-            delete f;
-            }
-            else if (sWHAT->String().Contains("Y"))
-            {
-                h->Fit("pol4");
-                h->DrawCopy();
-                delete h;
-            }
+
             //________
+            
+            // //________Fit function
+            // gROOT->LoadMacro("../../My_First_Task/FittingFunctions.C");
+
+            // TF1 * f =0x0;
+            // if (sWHAT->String().Contains("PT"))
+            // {
+            //     f = new TF1("Fit",powerLaw3Par,0.,8.,3);
+            //     f->SetParameters(&parPOWLAW[0]);
+            //     f->SetParNames("C","p_0","n");
+            //     f->SetLineColor(36);
+            //     f->SetLineStyle(5);
+
+            //     h->Fit(f);
+            
+            //     h->DrawCopy();
+            //     f->Draw("same");
+            //     delete h;
+            //     delete f;
+            // }
+            // else if (sWHAT->String().Contains("Y"))
+            // {
+            //     h->Fit("pol4");
+            //     h->DrawCopy();
+            //     delete h;
+            // }
+            // //________
         }    
     }
         

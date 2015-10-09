@@ -57,7 +57,7 @@ void Eff_merge(const char *dir, Int_t stage=0)
    gSystem->SetBuildDir(gSystem->pwd(), kTRUE);
 
    TString outputDir = dir;
-   TString outputFiles = "AnalysisResults.root";
+   TString outputFiles = "EventStat_temp.root,AnalysisResults.root";
    TString mergeExcludes = "EventStat_temp.root ";
    TObjArray *list = outputFiles.Tokenize(",");
    TIter *iter = new TIter(list);

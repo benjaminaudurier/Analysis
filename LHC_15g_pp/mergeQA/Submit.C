@@ -24,7 +24,7 @@ Bool_t FileExists(const char *lfn);
 Bool_t DirectoryExists(const char *dirname);
 
 //______________________________________________________________________________
-void Submit(const char* inDir ="/alice/cern.ch/user/p/ppillot/Data/LHC15g/muon_calo_pass1/QA/results", const char* outDir="Analysis/LHC15g/TrackingEfficiency/Data/QA", const char* resDir = "results",
+void Submit(const char* inDir ="/alice/cern.ch/user/p/ppillot/Data/LHC15g/muon_calo_pass1/Eff/results", const char* outDir="Analysis/LHC15g/TrackingEfficiency/Data/QA/New", const char* resDir = "results",
 	    const char* runList = "runlist_15-07-2015-ESD_main.txt", TString runFormat = "%09d", Int_t stage = 0, Bool_t submit = kTRUE)
 {
   /// Submit multiple merging jobs with the format "submit AOD_merge(_final).jdl run# (stage#)".

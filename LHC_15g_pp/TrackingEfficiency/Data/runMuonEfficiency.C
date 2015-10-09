@@ -13,7 +13,7 @@ TString aliphysicsVersion = "vAN-20150722";
 TString dataDir = "/alice/data/2015/LHC15g";
 TString dataPattern = "muon_calo_pass1/*AliESDs.root";
 TString runFormat = "%09d";
-TString outDir = "Analysis/LHC15g/TrackingEfficiency/Data";
+TString outDir = "Analysis/LHC15g/TrackingEfficiency/Data/new";
 Int_t ttl = 30000;
 Int_t maxFilesPerJob = 150;
 Int_t maxMergeFiles = 10;
@@ -29,7 +29,7 @@ TString alignStorage = "alien://folder=/alice/data/2015/OCDB";
 
 //______________________________________________________________________________
 void runMuonEfficiency(TString smode = "full", TString inputFileName = "runlist_15-07-2015-ESD.txt",
-		       Bool_t applyPhysSel = kFALSE, Bool_t mc = kFALSE, Bool_t embedding = kFALSE)
+		       Bool_t applyPhysSel = kTRUE, Bool_t mc = kFALSE, Bool_t embedding = kFALSE)
 {
   /// Study the MUON performances
   
@@ -97,15 +97,15 @@ void CreateAnalysisTrain(Bool_t applyPhysSel, Bool_t mc, Bool_t embedding, TObje
   // event selection in case of physicselection
   UInt_t offlineTriggerMask;
   if (applyPhysSel) {
-    gROOT->LoadMacro("$ALICE_ROOT/ANALYSIS/macros/AddTaskPhysicsSelection.C");
+    gROOT->LoadMacro("/Users/audurier/alicesw/aliphysics/mumu/inst/OADB/macros/AddTaskPhysicsSelection.C");
     AliPhysicsSelectionTask* physicsSelection = AddTaskPhysicsSelection(mc && !embedding);
     if(!physicsSelection) {
       Error("CreateAnalysisTrain","AliPhysicsSelectionTask not created!");
       return;
     }
     //offlineTriggerMask = AliVEvent::kAny;
-    //offlineTriggerMask = AliVEvent::kMUU7;
-    offlineTriggerMask = AliVEvent::kMUU7 | AliVEvent::kMuonUnlikeLowPt8;
+    offlineTriggerMask = AliVEvent::kMUS7;
+    // offlineTriggerMask = AliVEvent::kMUU7 | AliVEvent::kMuonUnlikeLowPt8;
   }
   /*
   // centrality selection

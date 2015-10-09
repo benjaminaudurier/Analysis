@@ -6,9 +6,9 @@ T	kMinbiasAndMULTriggerList 	kFALSE 		CPBI2_B1-B-NOPF-ALLNOTRD&0MUL
 T	kMinbiasAndMSLTriggerList 	kFALSE 		EMPTY
 T	kMSLAndMULTriggerList   	kFALSE 		EMPTY
 T	kEventSelectionList 	 	kFALSE 		PSALL
-T	kPairSelectionList 		 	kFALSE 		pALLPAIRYPAIRPTIN0.0-18.0RABSMATCHLOWETAPDCAPSALL
+T	kPairSelectionList 		 	kFALSE 		pALLPAIRYPAIRPTIN0.0-18.0RABSMATCHLOWETAPDCA
 T	kCentralitySelectionList 	kFALSE 		V0M_00.00_90.00
-T	kFitTypeList			 	kFALSE     	func=PSIPSIPRIMECB2VWG:histoType=minv:alJPsi=1.01:nlJPsi=4.86:auJPsi=2.18:nuJPsi=2.68:range=2.06;4.8
+T	kFitTypeList			 	kFALSE     	func=PSIPSIPRIMECB2VWG:histoType=minv:alJPsi=1.01:nlJPsi=4.86:auJPsi=2.18:nuJPsi=2.68:range=2.1;5.0,func=PSIPSIPRIMECB2VWG:histoType=minv:alJPsi=1.01:nlJPsi=4.86:auJPsi=2.18:nuJPsi=2.68:range=2.3;4.7
 
 F EMPTY EMPTY (CVHN-B-NOPF-ALLNOTRD&0MUL)|(CVHN_R2-B-NOPF-ALLNOTRD&0MUL)|(CCENT-B-NOPF-ALLNOTRD&0MUL)|(CCENT_R2-B-NOPF-ALLNOTRD&0MUL) 
 
