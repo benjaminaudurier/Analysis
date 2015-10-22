@@ -7,13 +7,13 @@
  *
  */
 
-TString rootVersion = "v5-34-30-1";
-TString alirootVersion = "v5-06-33";
-TString aliphysicsVersion = "vAN-20150722";
-TString dataDir = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/simsinglemuon/pp/new/CMSL7-B-NOPF-MUON";
+TString rootVersion = "v5-34-30";
+TString alirootVersion = "v5-07-01-3";
+TString aliphysicsVersion = "vAN-20151015-1";
+TString dataDir = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON";
 TString dataPattern = "*AliESDs.root";
 TString runFormat = "%06d";
-TString outDir = "Analysis/LHC15g/TrackingEfficiency/MonteCarlo/singleMuon/new";
+TString outDir = "Analysis/LHC15g/TrackingEfficiency/MonteCarlo/singleMuon";
 Int_t ttl = 30000;
 Int_t maxFilesPerJob = 150;
 Int_t maxMergeFiles = 10;
@@ -28,7 +28,7 @@ TString alignStorage = "alien://folder=/alice/data/2015/OCDB";
 // TString alignStorage = "alien://folder=/alice/simulation/2008/v4-15-Release/Residual";
 
 //______________________________________________________________________________
-void runMuonEfficiency(TString smode = "full", TString inputFileName = "runlist_15-07-2015-ESD.txt",
+void runMuonEfficiency(TString smode = "full", TString inputFileName = "runList.txt",
 		       Bool_t applyPhysSel = kFALSE, Bool_t mc = kTRUE, Bool_t embedding = kFALSE)
 {
   /// Study the MUON performances

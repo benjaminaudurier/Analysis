@@ -59,12 +59,12 @@ AliAnalysisTask* runMuMu(const char* dataset="datasetfull.txt",
     if (!simulations)
     {
 
-       // triggers->Add(new TObjString("0VBA & 0VBC"));// MB 
-       // triggers->Add(new TObjString("CPBI2_B1-B-NOPF-ALLNOTRD"));// MB 
-       // triggers->Add(new TObjString("CPBI2_B1-B-NOPF-ALLNOTRD&0MUL"));// MB & 0MUL  
+       triggers->Add(new TObjString("0VBA & 0VBC &0MUL"));// MB 
+       triggers->Add(new TObjString("CPBI2_B1-B-NOPF-ALLNOTRD"));// MB 
+       triggers->Add(new TObjString("CPBI2_B1-B-NOPF-ALLNOTRD&0MUL"));// MB & 0MUL  
 
 
-       // triggers->Add(new TObjString("CPBI1MSL-B-NOPF-MUON")); // single muon low pt
+       triggers->Add(new TObjString("CPBI1MSL-B-NOPF-MUON")); // single muon low pt
        triggers->Add(new TObjString("CPBI1MUL-B-NOPF-MUON")); // dimuon low pt
 
        // triggers->Add(new TObjString("CVHN-B-NOPF-ALLNOTRD|CVHN_R2-B-NOPF-ALLNOTRD|CCENT-B-NOPF-ALLNOTRD|CCENT_R2-B-NOPF-ALLNOTRD ")); // central high treshold (+ TO vertex)

@@ -11,11 +11,11 @@
 
 //_____________________________________________________________________________
 void PrintFitMacro(
+char         * what ="INTEGRATED",
 char         * sfile="../datasetfull.txt.saf.root",
 char         * sasso="",
 char         * sasso2="",
 char         * beamYear="PbPb2011",
-char         * what ="INTEGRATED",
 Bool_t Raa   = kTRUE, 
 Bool_t print = kFALSE)
 {    
@@ -31,7 +31,7 @@ Bool_t print = kFALSE)
     //_____ Draw 
     while ( ( swhat = static_cast<TObjString*>(nextWhat()) ) )
     {
-        // analysis.DrawFitResults("PSI",swhat->String().Data(),"../histo",print);
+        analysis.DrawFitResults("PSI",swhat->String().Data(),"../histo",print);
         if (Raa)
         {
         	if(swhat->String().Contains("INTEGRATED")) analysis.RAAasGraphic("PSI",swhat->String().Data(),"externFile_PT.txt","externFile_CENT.txt",kFALSE);

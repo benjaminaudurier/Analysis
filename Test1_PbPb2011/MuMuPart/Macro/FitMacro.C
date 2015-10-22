@@ -20,11 +20,11 @@ Double_t parPOWLAW[3] = {80.,1.,1.};
 
 //_____________________________________________________________________________
 void FitMacro(
+char           * what ="integrated",
 char           * sfile="../datasetfull.txt.saf.root",
 char           * sasso="",
 char           * sasso2="",
 char           * beamYear="PbPb2011",
-char           * what ="pt",
 Bool_t FitDist = kFALSE)
 {    
     

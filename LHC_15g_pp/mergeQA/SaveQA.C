@@ -20,7 +20,7 @@
 #include "TH1.h"
 #include "TH2.h"
 
-Bool_t isQATask = kFALSE;
+Bool_t isQATask = kTRUE;
 TString MultDirData = "LowMultiplicity";
 TString MultDirMC = "LowMultiplicity";
 
@@ -137,12 +137,12 @@ void SaveQA(TString inputDataFile, TString inputMCFile)
       cTmp.cd(1);
       gPad->SetPad(0., 0.5, 0.5, 1); 
       clusterMapData->SetTitle(Form("Cluster position distribution for data"));
-      clusterMapData->DrawCopy("");
+      clusterMapData->DrawCopy("COLZ");
 
       cTmp.cd(2);
       gPad->SetPad(0.5, 0.5, 1, 1);
       clusterMapMC->SetTitle(Form("Cluster position distribution for MC"));
-      clusterMapMC->DrawCopy("");
+      clusterMapMC->DrawCopy("COLZ");
 
       cTmp.cd(4);
       gPad->SetPad(0., 0., 1., 0.5); 
@@ -164,12 +164,12 @@ void SaveQA(TString inputDataFile, TString inputMCFile)
           Double_t DataBin = clusterMapData->GetBinContent(i,j);
           Double_t MCBin = clusterMapMC->GetBinContent(i,j);
 
-          if( (DataBin+MCBin) > 0 ) diff = 15*TMath::Abs( (DataBin-MCBin)/ (DataBin+MCBin) );
+          if( (DataBin+MCBin) > 0 ) diff = TMath::Abs( (DataBin-MCBin)/ (DataBin+MCBin) );
           h2->SetBinContent(i,j,diff);
         }
       }
 
-      h2->DrawCopy("");
+      h2->DrawCopy("COLZ");
       cTmp.Print(Form("displays/%s/ESDclusterMapChamber%d.png",runNumber.Data(),iCh), "png");
 
       // //Saving first image

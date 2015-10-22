@@ -224,13 +224,10 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   }
 
   // v0 centrality binning
-  
-  // binning->AddBin("centrality","v0a"); 
-  
+    
   // binning->AddBin("centrality","v0M",0.,7.5);
   // binning->AddBin("centrality","v0M",10.,50.);
   binning->AddBin("centrality","v0M",0.,90.);
-
   binning->AddBin("centrality","v0M",0.,10.);
   binning->AddBin("centrality","v0M",10.,20.);
   binning->AddBin("centrality","v0M",20.,30.);

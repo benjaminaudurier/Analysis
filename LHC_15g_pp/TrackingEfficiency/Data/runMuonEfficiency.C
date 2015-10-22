@@ -8,12 +8,12 @@
  */
 
 TString rootVersion = "v5-34-30";
-TString alirootVersion = "v5-06-33";
-TString aliphysicsVersion = "vAN-20150722";
+TString alirootVersion = "v5-07-01-3";
+TString aliphysicsVersion = "vAN-20151015-1";
 TString dataDir = "/alice/data/2015/LHC15g";
 TString dataPattern = "muon_calo_pass1/*AliESDs.root";
 TString runFormat = "%09d";
-TString outDir = "Analysis/LHC15g/TrackingEfficiency/Data/new";
+TString outDir = "Analysis/LHC15g/TrackingEfficiency/Data";
 Int_t ttl = 30000;
 Int_t maxFilesPerJob = 150;
 Int_t maxMergeFiles = 10;
@@ -28,7 +28,7 @@ Int_t maxMergeStages = 4;
 TString alignStorage = "alien://folder=/alice/data/2015/OCDB";
 
 //______________________________________________________________________________
-void runMuonEfficiency(TString smode = "full", TString inputFileName = "runlist_15-07-2015-ESD.txt",
+void runMuonEfficiency(TString smode = "full", TString inputFileName = "runList.txt",
 		       Bool_t applyPhysSel = kTRUE, Bool_t mc = kFALSE, Bool_t embedding = kFALSE)
 {
   /// Study the MUON performances

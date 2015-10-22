@@ -105,6 +105,8 @@ void MuonTrackingEfficiency(TString runList = "runList.txt",
                             TString fileNameSave = "efficiency_new.root")
 {
   /// main function to compute, print and plot efficiencies
+  // GetInnerRunCounts( runList, fileNameData, fileNameSave,kTRUE);
+
   
   // PlotMuonEfficiencyVsX("centrality", fileNameData, fileNameSave, kFALSE, kFALSE, kTRUE);
   PlotMuonEfficiencyVsX("pt", fileNameData, fileNameSave, kFALSE, kFALSE, kTRUE);
@@ -130,8 +132,6 @@ void MuonTrackingEfficiency(TString runList = "runList.txt",
   PlotMuonEfficiencyPerDE(fileNameData, fileNameSave, kFALSE);
   PlotMuonEfficiencyPerDEVsRun(runList, fileNameData, fileNameSave);
   PlotIntegratedMuonEfficiencyPerDE(fileNameWeights, fileNameData, fileNameSave);
-
-  GetInnerRunCounts( runList, fileNameData, fileNameSave,kTRUE);
 
   
 }
@@ -287,8 +287,8 @@ void PlotIntegratedMuonEfficiencyVsX(TString var, TString runList, TString fileN
     printf("run %d: ", run);
     
     // compute efficiency vs var
-    TString dataFile = Form("alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/new/results/%09d/%s", run, fileNameData.Data());
-    TString outFile = Form("alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/new/results/%09d/%s", run, fileNameSave.Data());
+    TString dataFile = Form("alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/results/%09d/%s", run, fileNameData.Data());
+    TString outFile = Form("alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/results/%09d/%s", run, fileNameSave.Data());
     PlotMuonEfficiencyVsX(var, dataFile, outFile, kTRUE, print, kFALSE);
     // get input hists
     f = new TFile(dataFile.Data(), "read");
@@ -721,8 +721,8 @@ void PlotMuonEfficiencyVsRun(TString runList, TString fileNameData, TString file
     printf("run %d: ", run);
     
     // compute efficiencies for this run
-    TString dataFile = Form("alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/new/results/%09d/%s", run, fileNameData.Data());
-    TString outFile = Form("alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/new/results/%09d/%s", run, fileNameSave.Data());
+    TString dataFile = Form("alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/results/%09d/%s", run, fileNameData.Data());
+    TString outFile = Form("alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/results/%09d/%s", run, fileNameSave.Data());
     PlotMuonEfficiency(dataFile, outFile, kTRUE, print, kFALSE);
     
     TFile *file = new TFile(outFile.Data(), "read");
@@ -1082,8 +1082,8 @@ void PlotMuonEfficiencyPerDEVsRun(TString runList, TString fileNameData, TString
     printf("run %d: ", run);
     
     // compute efficiencies for this run
-    TString dataFile = Form("alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/new/results/%09d/%s", run, fileNameData.Data());
-    TString outFile = Form("alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/new/results/%09d/%s", run, fileNameSave.Data());
+    TString dataFile = Form("alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/results/%09d/%s", run, fileNameData.Data());
+    TString outFile = Form("alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/results/%09d/%s", run, fileNameSave.Data());
     PlotMuonEfficiencyPerDE(dataFile, outFile, kTRUE);
     
     TFile *file = new TFile(outFile.Data(), "read");
@@ -1477,7 +1477,7 @@ void GetInnerRunCounts(TString runList, TString fileNameData, TString fileNameSa
     
     
     // compute efficiency vs var
-    TString dataFile = Form("alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/new/results/%09d/%s", run, fileNameData.Data());
+    TString dataFile = Form("alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/results/%09d/%s", run, fileNameData.Data());
 
     // get input hists
     f1 = new TFile(dataFile.Data(), "read");
@@ -1858,7 +1858,7 @@ void IntegrateMuonEfficiency(TGraphAsymmErrors &effVsRunLow, TGraphAsymmErrors &
     
     // get run weight
     TString sRun = effVsRunLow.GetXaxis()->GetBinLabel(iRun+1);
-    TString dataFile = Form("alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/new/results/000%s/%s", sRun.Data(), fileNameData.Data());
+    TString dataFile = Form("alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/results/000%s/%s", sRun.Data(), fileNameData.Data());
 
     f = new TFile(dataFile.Data(), "read");
     if (!f || !f->IsOpen()) {

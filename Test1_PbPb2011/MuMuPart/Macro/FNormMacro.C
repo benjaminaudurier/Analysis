@@ -27,10 +27,10 @@ const char* beamYear="PbPb2011",const int DebugLevel =0)
 
 
   //_____ FNorm
-  //  analysis.ComputeIntFnormFromCounters("",kFALSE);
+   analysis.ComputeIntFnormFromCounters("",kFALSE);
   //_____ 
     
-  // analysis.ComputeJpsiYield("INTEGRATED");
+  analysis.ComputeJpsiYield("INTEGRATED");
   
 
   //_____ Plot all Fnorm

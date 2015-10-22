@@ -4,10 +4,10 @@ rm grid.QA.txt
 
 # rm -dr alice
 
-for line in $(cat runlist_15-07-2015-ESD_main.txt)
+for line in $(cat runList.txt)
 	
 do
-echo -e "alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/simsinglemuon/pp/new/CMSL7-B-NOPF-MUON/QA/results/$line/Merged.QA.Data.root" >> grid.QA.txt
+echo -e "alien:///alice/cern.ch/user/p/ppillot/Data/LHC15g/muon_calo_pass1/QA/results/000$line/Merged.QA.Data.root" >> grid.QA.txt
 done < runlist_15-07-2015-ESD_main.txt
 	
 root -b -q CopyFromRemote.C 

@@ -4,7 +4,7 @@
 
 
 TString Trigger = "CMSL7-B-NOPF-MUON";
-TString remoteDir =Form("/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/simsinglemuon/pp/new/%s",Trigger.Data());
+TString remoteDir =Form("/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/%s",Trigger.Data());
 
 void runAccEffSubmitter(const char* mode)
 {
@@ -24,10 +24,11 @@ void runAccEffSubmitter(const char* mode)
 	a.SetVar("VAR_GENPARAMCUSTOMSINGLE_Y_P0","1.17771");
 	a.SetVar("VAR_GENPARAMCUSTOMSINGLE_Y_P1","-0.591384");
 	a.SetVar("VAR_GENPARAMCUSTOMSINGLE_Y_P2","-0.418129");
-	a.SetVar("VAR_GENPARAMCUSTOMSINGLE_Y_P3"," -0.0554779");
+	a.SetVar("VAR_GENPARAMCUSTOMSINGLE_Y_P3","-0.0554779");
 
-	a.SetRunList("runlist_15-07-2015-ESD.txt");
-	a.SetPackages("VO_ALICE@AliPhysics::vAN-20150902");
+	a.SetRunList("runList.txt");
+	// a.SetAliPhysicsVersion("VO_ALICE@AliPhysics::vAN-20151015-1");
+	// a.SetAliRootVersion("VO_ALICE@AliROOT::v5-07-01-3");
 	a.SetCompactMode(0);
 	a.Print();
 	a.Run(mode);
