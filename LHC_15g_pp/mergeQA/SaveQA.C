@@ -130,19 +130,19 @@ void SaveQA(TString inputDataFile, TString inputMCFile)
       // Save canvas with the two chambers hitmap
       cTmp.Clear();
       gStyle->SetOptStat(0);
-      cTmp.Divide(2,2,0.,0.);
+      cTmp.Divide(2,2/*,0.,0.*/);
 
      
 
       cTmp.cd(1);
       gPad->SetPad(0., 0.5, 0.5, 1); 
       clusterMapData->SetTitle(Form("Cluster position distribution for data"));
-      clusterMapData->DrawCopy("COLZ");
+      clusterMapData->DrawCopy("COL");
 
       cTmp.cd(2);
       gPad->SetPad(0.5, 0.5, 1, 1);
       clusterMapMC->SetTitle(Form("Cluster position distribution for MC"));
-      clusterMapMC->DrawCopy("COLZ");
+      clusterMapMC->DrawCopy("COL");
 
       cTmp.cd(4);
       gPad->SetPad(0., 0., 1., 0.5); 
@@ -165,10 +165,18 @@ void SaveQA(TString inputDataFile, TString inputMCFile)
           Double_t MCBin = clusterMapMC->GetBinContent(i,j);
 
           if( (DataBin+MCBin) > 0 ) diff = TMath::Abs( (DataBin-MCBin)/ (DataBin+MCBin) );
-          h2->SetBinContent(i,j,diff);
+          if (diff > 0.6 ) h2->SetBinContent(i,j,TMath::Abs(1-(DataBin-MCBin))*diff/2);
         }
       }
-
+      Int_t palette[5];
+      
+      palette[0] = 20;
+      palette[1] = 23;
+      palette[2] = 31;
+      palette[3] = 34;
+      palette[4] = 13;
+      gStyle->SetPalette(5,palette);
+      // gStyle->SetPalette(91);
       h2->DrawCopy("COLZ");
       cTmp.Print(Form("displays/%s/ESDclusterMapChamber%d.png",runNumber.Data(),iCh), "png");
 
