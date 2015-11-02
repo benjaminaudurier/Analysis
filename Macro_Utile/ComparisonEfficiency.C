@@ -49,7 +49,7 @@ TGraphAsymmErrors* CreateRatioGraph(const char* name, const char* title, TGraphA
 {
   if (Graph1.GetN() != Graph2.GetN() )
   {
-    printf("Error, dividing graphs of different entries number\n");
+    printf("Error, dividing graphs of different entries number : NGraph1 = %d NGraph2 = %d \n", Graph1.GetN(),Graph2.GetN());
     return 0x0;
   }
   
@@ -278,13 +278,13 @@ void ComparisonEfficiency(TString f1 = "", TString f2 ="")
   TString hname = "Global";
    
   TObjArray *listGlobalEff1 = static_cast<TObjArray*>(file1->FindObjectAny(Form("%sEffRatios",hname.Data())));
-  if (!listChEffVSDE1) {
+  if (!listGlobalEff1) {
     printf("list of Global efficiencies from 1 not found\n");
     return;
   }
   
-  TObjArray *listGlobalEff2 = static_cast<TObjArray*>(file2->FindObjectAny(Form("%sEffRatio",hname.Data())));
-  if (!listChEffVSDE2) {
+  TObjArray *listGlobalEff2 = static_cast<TObjArray*>(file2->FindObjectAny(Form("%sEffRatios",hname.Data())));
+  if (!listGlobalEff2) {
     printf("list of Global efficiencies from 2 not found\n");
     return;
   }
@@ -347,7 +347,7 @@ void ComparisonEfficiency(TString f1 = "", TString f2 ="")
     printf("Efficiency vs phi from 2 not found\n");
     return;
   }
-  
+
   // Create an array list with the global ratios
   TObjArray globalRatios;
   
@@ -358,8 +358,8 @@ void ComparisonEfficiency(TString f1 = "", TString f2 ="")
   
   //---- Eff vs run
   TGraphAsymmErrors* effVSrun1Copy = static_cast<TGraphAsymmErrors*>(effVSrun1->Clone()); // We make clones to do not modify them
-  TGraphAsymmErrors* effVSrun2Copy = static_cast<TGraphAsymmErrors*>(effVSrun2->Clone());
-  
+  TGraphAsymmErrors* effVSrun2Copy = static_cast<TGraphAsymmErrors*>(effVSrun2->Clone()); 
+
   TGraphAsymmErrors *ratioRun = CreateRatioGraph("RatioEffVsRun","file1/file2 tracking efficiency versus run",*effVSrun1,*effVSrun2);
   globalRatios.Add(ratioRun);
   
@@ -367,7 +367,8 @@ void ComparisonEfficiency(TString f1 = "", TString f2 ="")
   
   globalRatiosAndEff.Add(DrawRatio("RatioEffVSRunAndEff","Comparison file1&file2 tracking efficiency versus run", effVSrun1Copy,effVSrun2Copy,ratioRunCopy));
   //-----
-  
+
+
   //---- Eff vs y
   TGraphAsymmErrors* effVSy1Copy = static_cast<TGraphAsymmErrors*>(effVSy1->Clone()); // We make clones to do not modify them
   TGraphAsymmErrors* effVSy2Copy = static_cast<TGraphAsymmErrors*>(effVSy2->Clone());

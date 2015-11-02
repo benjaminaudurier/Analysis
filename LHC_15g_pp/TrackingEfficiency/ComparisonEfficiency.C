@@ -30,8 +30,6 @@
 #include "AliMpDEManager.h"
 
 #include <TCanvas.h>
-//#include <TTree.h>
-//#include <TChain.h>
 
 
 #include <TFitResult.h>
@@ -49,7 +47,7 @@ TGraphAsymmErrors* CreateRatioGraph(const char* name, const char* title, TGraphA
 {
   if (Graph1.GetN() != Graph2.GetN() )
   {
-    printf("Error, dividing graphs of different entries number\n");
+    printf("Error, dividing graphs of different entries number : NGraph1 = %d NGraph2 = %d \n", Graph1.GetN(),Graph2.GetN());
     return 0x0;
   }
   
@@ -200,13 +198,11 @@ TCanvas* DrawRatio(TString name, TString title, TGraphAsymmErrors* Graph1, TGrap
   Graph2->Draw("Psame");
    //------
 //  Graph2.Draw("same");
-//  
   TLegend *legend = new TLegend (0.8, 0.8, 0.95, 0.95);
   legend->SetTextSize(0.06);
   legend->AddEntry(Graph2, Form(" %s",Name2.Data()), "ep");
   legend->AddEntry(Graph1, Form(" %s",Name1.Data()), "ep");
   legend->Draw("same");
-//
 
 //  GraphRatio->Draw("psamey+");
   
@@ -218,9 +214,6 @@ TCanvas* DrawRatio(TString name, TString title, TGraphAsymmErrors* Graph1, TGrap
   gPad->SetGridy();
   
   //------
-//  GraphRatio.SetName(Form("%s_over_%s",Name1.Data(),Name2.Data()));
-////  GraphRatio.SetStats(0);
-//  GraphRatio.SetTitle("");
 
   GraphRatio->SetLineStyle(1);
   GraphRatio->SetLineColor(1);
@@ -229,8 +222,7 @@ TCanvas* DrawRatio(TString name, TString title, TGraphAsymmErrors* Graph1, TGrap
   GraphRatio->SetMarkerColor(1);
   GraphRatio->GetXaxis()->SetLabelSize(0.11);
   GraphRatio->GetXaxis()->SetTitleSize(0.12);
-//  GraphRatio.GetXaxis()->SetTitle("GeV/c   ");
-//  GraphRatio->GetXaxis()->SetTitleOffset(-0.6);
+
   GraphRatio->GetXaxis()->CenterTitle(kTRUE);
   GraphRatio->GetXaxis()->SetLabelFont(22);
   GraphRatio->GetXaxis()->SetTitleFont(22);
@@ -239,20 +231,16 @@ TCanvas* DrawRatio(TString name, TString title, TGraphAsymmErrors* Graph1, TGrap
   GraphRatio->GetYaxis()->SetTitleSize(0.07);
   GraphRatio->GetYaxis()->CenterTitle(kTRUE);
   GraphRatio->GetYaxis()->SetTitleOffset(0.37);
-//  GraphRatio->GetYaxis()->SetLabelFont(100);
   GraphRatio->GetYaxis()->SetLabelFont(22);
 //  GraphRatio.SetMinimum(0.86);
 //  GraphRatio.SetMaximum(1.14);
   GraphRatio->Draw("ap");
   //------
 //  GraphRatio.Draw("same");
-//  
-//  
+
   TLegend *legend2 = new TLegend (0.70, 0.3, 0.95, 0.37);
   legend2->AddEntry(GraphRatio, Form(" %s / %s ",Name1.Data(), Name2.Data()), "ep");
   legend2->Draw("same");
-//
-  //gStyle->SetFillColor(0);
   c->Update();
   //------
   
@@ -358,8 +346,8 @@ void ComparisonEfficiency(TString f1 = "", TString f2 ="")
   
   //---- Eff vs run
   TGraphAsymmErrors* effVSrun1Copy = static_cast<TGraphAsymmErrors*>(effVSrun1->Clone()); // We make clones to do not modify them
-  TGraphAsymmErrors* effVSrun2Copy = static_cast<TGraphAsymmErrors*>(effVSrun2->Clone());
-  
+  TGraphAsymmErrors* effVSrun2Copy = static_cast<TGraphAsymmErrors*>(effVSrun2->Clone()); 
+
   TGraphAsymmErrors *ratioRun = CreateRatioGraph("RatioEffVsRun","file1/file2 tracking efficiency versus run",*effVSrun1,*effVSrun2);
   globalRatios.Add(ratioRun);
   
@@ -367,7 +355,8 @@ void ComparisonEfficiency(TString f1 = "", TString f2 ="")
   
   globalRatiosAndEff.Add(DrawRatio("RatioEffVSRunAndEff","Comparison file1&file2 tracking efficiency versus run", effVSrun1Copy,effVSrun2Copy,ratioRunCopy));
   //-----
-  
+
+
   //---- Eff vs y
   TGraphAsymmErrors* effVSy1Copy = static_cast<TGraphAsymmErrors*>(effVSy1->Clone()); // We make clones to do not modify them
   TGraphAsymmErrors* effVSy2Copy = static_cast<TGraphAsymmErrors*>(effVSy2->Clone());
