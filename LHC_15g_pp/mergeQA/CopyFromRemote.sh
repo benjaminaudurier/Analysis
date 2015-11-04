@@ -7,7 +7,7 @@ rm grid.QA.txt
 for line in $(cat runList.txt)
 	
 do
-echo -e "alien:///alice/cern.ch/user/p/ppillot/Data/LHC15g/muon_calo_pass1/Eff/results/000$line/AnalysisResults.root" >> grid.QA.txt
+echo -e "alien:///alice/cern.ch/user/p/ppillot/Sim/LHC15g/muTuneCMUU7/GenTuner/results/$line/AnalysisResults.root" >> grid.QA.txt
 done < runList.txt
 	
 root -b -q CopyFromRemote.C 

@@ -13,8 +13,10 @@ ALIANALYSISTASKGENTUNERJPSI_H	LHC_15g_pp/AccEff_jpsi/GenTuner/AliAnalysisTaskGen
 ALIANALYSISTASKGENTUNERJPSI_H	Tasks/AliAnalysisTaskGenTunerJpsi.h	/^#define ALIANALYSISTASKGENTUNERJPSI_H$/;"	d
 ALIANALYSISTASKGENTUNER_H	LHC_15g_pp/AccEff_Muons/AliAnalysisTaskGenTuner.h	/^#define ALIANALYSISTASKGENTUNER_H$/;"	d
 ALIANALYSISTASKGENTUNER_H	Tasks/AliAnalysisTaskGenTuner.h	/^#define ALIANALYSISTASKGENTUNER_H$/;"	d
-ALIANALYSISTASKMUONTRACKINGEFFLOCAL_H	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.h	/^#define ALIANALYSISTASKMUONTRACKINGEFFLOCAL_H$/;"	d
-ALIANALYSISTASKMUONTRACKINGEFFLOCAL_H	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.h	/^#define ALIANALYSISTASKMUONTRACKINGEFFLOCAL_H$/;"	d
+ALIANALYSISTASKMUONTRACKINGEFFLOCAL_H	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^#define ALIANALYSISTASKMUONTRACKINGEFFLOCAL_H$/;"	d
+ALIANALYSISTASKMUONTRACKINGEFFLOCAL_H	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^#define ALIANALYSISTASKMUONTRACKINGEFFLOCAL_H$/;"	d
+ALIANALYSISTASKMUONTRACKINGEFFLOCAL_H	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^#define ALIANALYSISTASKMUONTRACKINGEFFLOCAL_H$/;"	d
+ALIANALYSISTASKMUONTRACKINGEFFLOCAL_H	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^#define ALIANALYSISTASKMUONTRACKINGEFFLOCAL_H$/;"	d
 ALIANALYSISTASKMUONTRACKINGEFFLOCAL_H	Tasks/AliAnalysisTaskMuonTrackingEffLocal.h	/^#define ALIANALYSISTASKMUONTRACKINGEFFLOCAL_H$/;"	d
 AODmerge	LHC_15g_pp/TrackingEfficiency/Simulation/AODtrainsim.C	/^void AODmerge()$/;"	f
 AODmerge	LHC_15g_pp/mergeQA/AODtrain.C	/^void AODmerge()$/;"	f
@@ -32,8 +34,10 @@ AddHisto	LHC_15g_pp/TrackingEfficiency/CompareMuonDistributions.C	/^void AddHist
 AddTaskGenTuner	LHC_13_d/AccEff/GenTuner/AddTaskGenTuner.C	/^AliAnalysisTaskGenTuner* AddTaskGenTuner()$/;"	f
 AddTaskGenTuner	LHC_15g_pp/AccEff_Muons/AddTaskGenTuner.C	/^AliAnalysisTaskGenTuner* AddTaskGenTuner()$/;"	f
 AddTaskGenTuner	LHC_15g_pp/AccEff_jpsi/GenTuner/AddTaskGenTuner.C	/^AliAnalysisTaskGenTunerJpsi* AddTaskGenTuner()$/;"	f
-AddTaskMUONTrackingEfficiency	LHC_15g_pp/TrackingEfficiency/Data/AddTaskMUONTrackingEfficiency.C	/^AliAnalysisTaskMuonTrackingEffLocal *AddTaskMUONTrackingEfficiency(AliMuonTrackCuts &trackCuts, TString extension = "") $/;"	f
-AddTaskMUONTrackingEfficiency	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AddTaskMUONTrackingEfficiency.C	/^AliAnalysisTaskMuonTrackingEffLocal *AddTaskMUONTrackingEfficiency(AliMuonTrackCuts &trackCuts, TString extension = "") $/;"	f
+AddTaskMUONTrackingEfficiency	LHC_15g_pp/TrackingEfficiency/DataMSL/AddTaskMUONTrackingEfficiency.C	/^AliAnalysisTaskMuonTrackingEffLocal *AddTaskMUONTrackingEfficiency(AliMuonTrackCuts &trackCuts, TString extension = "") $/;"	f
+AddTaskMUONTrackingEfficiency	LHC_15g_pp/TrackingEfficiency/DataMUL/AddTaskMUONTrackingEfficiency.C	/^AliAnalysisTaskMuonTrackingEffLocal *AddTaskMUONTrackingEfficiency(AliMuonTrackCuts &trackCuts, TString extension = "") $/;"	f
+AddTaskMUONTrackingEfficiency	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AddTaskMUONTrackingEfficiency.C	/^AliAnalysisTaskMuonTrackingEffLocal *AddTaskMUONTrackingEfficiency(AliMuonTrackCuts &trackCuts, TString extension = "") $/;"	f
+AddTaskMUONTrackingEfficiency	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AddTaskMUONTrackingEfficiency.C	/^AliAnalysisTaskMuonTrackingEffLocal *AddTaskMUONTrackingEfficiency(AliMuonTrackCuts &trackCuts, TString extension = "") $/;"	f
 AddTaskMuMu	LHC_13_d/AccEff/DataPart/AddTaskMuMu.C	/^AliAnalysisTask* AddTaskMuMu(const char* outputname, $/;"	f
 AddTaskMuMu	LHC_13_d/AccEff/MCPart/AddTaskMuMu.C	/^AliAnalysisTask* AddTaskMuMu(const char* outputname, $/;"	f
 AddTaskMuMu	LHC_15g_pp/AccEff_jpsi/DataPart/AddTaskMuMu.C	/^AliAnalysisTask* AddTaskMuMu(const char* outputname, $/;"	f
@@ -68,12 +72,18 @@ AliAnalysisTaskGenTunerJpsi	Tasks/AliAnalysisTaskGenTunerJpsi.h	/^class AliAnaly
 AliAnalysisTaskMass	My_First_Task/AliAnalysisTaskMass.cxx	/^AliAnalysisTaskMass::AliAnalysisTaskMass(const char *name) $/;"	f	class:AliAnalysisTaskMass
 AliAnalysisTaskMass	My_First_Task/AliAnalysisTaskMass.h	/^class AliAnalysisTaskMass : public AliAnalysisTaskSE {$/;"	c
 AliAnalysisTaskMass_cxx	My_First_Task/AliAnalysisTaskMass.h	/^#define AliAnalysisTaskMass_cxx$/;"	d
-AliAnalysisTaskMuonTrackingEffLocal	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^AliAnalysisTaskMuonTrackingEffLocal::AliAnalysisTaskMuonTrackingEffLocal() :$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
-AliAnalysisTaskMuonTrackingEffLocal	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^AliAnalysisTaskMuonTrackingEffLocal::AliAnalysisTaskMuonTrackingEffLocal(TString name) :$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
-AliAnalysisTaskMuonTrackingEffLocal	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.h	/^class AliAnalysisTaskMuonTrackingEffLocal : public AliAnalysisTaskSE$/;"	c
-AliAnalysisTaskMuonTrackingEffLocal	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^AliAnalysisTaskMuonTrackingEffLocal::AliAnalysisTaskMuonTrackingEffLocal() :$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
-AliAnalysisTaskMuonTrackingEffLocal	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^AliAnalysisTaskMuonTrackingEffLocal::AliAnalysisTaskMuonTrackingEffLocal(TString name) :$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
-AliAnalysisTaskMuonTrackingEffLocal	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.h	/^class AliAnalysisTaskMuonTrackingEffLocal : public AliAnalysisTaskSE$/;"	c
+AliAnalysisTaskMuonTrackingEffLocal	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^AliAnalysisTaskMuonTrackingEffLocal::AliAnalysisTaskMuonTrackingEffLocal() :$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+AliAnalysisTaskMuonTrackingEffLocal	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^AliAnalysisTaskMuonTrackingEffLocal::AliAnalysisTaskMuonTrackingEffLocal(TString name) :$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+AliAnalysisTaskMuonTrackingEffLocal	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^class AliAnalysisTaskMuonTrackingEffLocal : public AliAnalysisTaskSE$/;"	c
+AliAnalysisTaskMuonTrackingEffLocal	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^AliAnalysisTaskMuonTrackingEffLocal::AliAnalysisTaskMuonTrackingEffLocal() :$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+AliAnalysisTaskMuonTrackingEffLocal	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^AliAnalysisTaskMuonTrackingEffLocal::AliAnalysisTaskMuonTrackingEffLocal(TString name) :$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+AliAnalysisTaskMuonTrackingEffLocal	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^class AliAnalysisTaskMuonTrackingEffLocal : public AliAnalysisTaskSE$/;"	c
+AliAnalysisTaskMuonTrackingEffLocal	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^AliAnalysisTaskMuonTrackingEffLocal::AliAnalysisTaskMuonTrackingEffLocal() :$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+AliAnalysisTaskMuonTrackingEffLocal	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^AliAnalysisTaskMuonTrackingEffLocal::AliAnalysisTaskMuonTrackingEffLocal(TString name) :$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+AliAnalysisTaskMuonTrackingEffLocal	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^class AliAnalysisTaskMuonTrackingEffLocal : public AliAnalysisTaskSE$/;"	c
+AliAnalysisTaskMuonTrackingEffLocal	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^AliAnalysisTaskMuonTrackingEffLocal::AliAnalysisTaskMuonTrackingEffLocal() :$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+AliAnalysisTaskMuonTrackingEffLocal	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^AliAnalysisTaskMuonTrackingEffLocal::AliAnalysisTaskMuonTrackingEffLocal(TString name) :$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+AliAnalysisTaskMuonTrackingEffLocal	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^class AliAnalysisTaskMuonTrackingEffLocal : public AliAnalysisTaskSE$/;"	c
 AliAnalysisTaskMuonTrackingEffLocal	Tasks/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^AliAnalysisTaskMuonTrackingEffLocal::AliAnalysisTaskMuonTrackingEffLocal() :$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
 AliAnalysisTaskMuonTrackingEffLocal	Tasks/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^AliAnalysisTaskMuonTrackingEffLocal::AliAnalysisTaskMuonTrackingEffLocal(TString name) :$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
 AliAnalysisTaskMuonTrackingEffLocal	Tasks/AliAnalysisTaskMuonTrackingEffLocal.h	/^class AliAnalysisTaskMuonTrackingEffLocal : public AliAnalysisTaskSE$/;"	c
@@ -82,12 +92,16 @@ AliOADBPhysicsSelection	LHC_15g_pp/TrackingEfficiency/Simulation/AODtrainsim.C	/
 AliOADBPhysicsSelection	LHC_15g_pp/mergeQA/AODtrain.C	/^class AliOADBPhysicsSelection;                                                                                                                  $/;"	v
 Background	Macro_Utile/FittingFunctions.C	/^Double_t Background(Double_t *arg, Double_t *par)$/;"	f
 Background	My_First_Task/FittingFunctions.C	/^Double_t Background(Double_t *arg, Double_t *par)$/;"	f
-BeautifyGraph	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^void BeautifyGraph(TGraphAsymmErrors &g, const char* xAxisName, const char* yAxisName)$/;"	f
-BeautifyGraph	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^void BeautifyGraph(TGraphAsymmErrors &g, const char* xAxisName, const char* yAxisName)$/;"	f
+BeautifyGraph	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^void BeautifyGraph(TGraphAsymmErrors &g, const char* xAxisName, const char* yAxisName)$/;"	f
+BeautifyGraph	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^void BeautifyGraph(TGraphAsymmErrors &g, const char* xAxisName, const char* yAxisName)$/;"	f
+BeautifyGraph	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^void BeautifyGraph(TGraphAsymmErrors &g, const char* xAxisName, const char* yAxisName)$/;"	f
 BeautifyGraph	Macro_Utile/MuonTrackingEfficiency.C	/^void BeautifyGraph(TGraphAsymmErrors &g, const char* xAxisName, const char* yAxisName)$/;"	f
 BeautifyGraphs	LHC_15g_pp/TrackingEfficiency/ComparisonDataMC.C	/^void BeautifyGraphs(TObjArray& array, const char* yAxisName) \/\/ Is differrent from the one in RealEfficiency.C since now the xaxis name is set in CreateRatioGraph$/;"	f
-BeautifyGraphs	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^void BeautifyGraphs(TObjArray& array, const char* xAxisName, const char* yAxisName)$/;"	f
-BeautifyGraphs	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^void BeautifyGraphs(TObjArray& array, const char* xAxisName, const char* yAxisName)$/;"	f
+BeautifyGraphs	LHC_15g_pp/TrackingEfficiency/ComparisonEfficiency.C	/^void BeautifyGraphs(TObjArray& array, const char* yAxisName) \/\/ Is differrent from the one in RealEfficiency.C since now the xaxis name is set in CreateRatioGraph$/;"	f
+BeautifyGraphs	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^void BeautifyGraphs(TObjArray& array, const char* xAxisName, const char* yAxisName)$/;"	f
+BeautifyGraphs	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^void BeautifyGraphs(TObjArray& array, const char* xAxisName, const char* yAxisName)$/;"	f
+BeautifyGraphs	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^void BeautifyGraphs(TObjArray& array, const char* xAxisName, const char* yAxisName)$/;"	f
+BeautifyGraphs	Macro_Utile/ComparisonEfficiency.C	/^void BeautifyGraphs(TObjArray& array, const char* yAxisName) \/\/ Is differrent from the one in RealEfficiency.C since now the xaxis name is set in CreateRatioGraph$/;"	f
 BeautifyGraphs	Macro_Utile/MuonTrackingEfficiency.C	/^void BeautifyGraphs(TObjArray& array, const char* xAxisName, const char* yAxisName)$/;"	f
 CheckAOD	LHC_15g_pp/TrackingEfficiency/Simulation/CheckAOD.C	/^Bool_t CheckAOD(const char* aodFileName = "AliAOD.Muons.root")$/;"	f
 CheckESD	LHC_15g_pp/TrackingEfficiency/Simulation/CheckESD.C	/^Bool_t CheckESD(const char* esdFileName = "AliESDs.root")$/;"	f
@@ -97,49 +111,60 @@ Compare	LHC_15g_pp/AccEff_Muons/Compare.C	/^void Compare(TString sfile1, TString
 Compare	LHC_15g_pp/AccEff_jpsi/GenTuner/Compare.C	/^void Compare(TString sfile1, TString sfile2)$/;"	f
 CompareMuonDistributions	LHC_15g_pp/TrackingEfficiency/CompareMuonDistributions.C	/^void CompareMuonDistributions(TString dir1, TString dir2, TString fileNameWeights = "")$/;"	f
 ComparisonDataMC	LHC_15g_pp/TrackingEfficiency/ComparisonDataMC.C	/^void ComparisonDataMC(TString fileNameData = "Data\/efficiency_new.root", TString fileNameSim ="MonteCarlo\/efficiency_new.root", Bool_t integrated = kFALSE)$/;"	f
+ComparisonEfficiency	LHC_15g_pp/TrackingEfficiency/ComparisonEfficiency.C	/^void ComparisonEfficiency(TString f1 = "", TString f2 ="")$/;"	f
+ComparisonEfficiency	Macro_Utile/ComparisonEfficiency.C	/^void ComparisonEfficiency(TString f1 = "", TString f2 ="")$/;"	f
 ComputeAccEff	LHC_13_d/AccEff/GenTuner/AliAnalysisTaskGenTunerJpsi.cxx	/^TH1* AliAnalysisTaskGenTunerJpsi::ComputeAccEff(TH1 &hGen, TH1 &hRec, const Char_t *name, const Char_t *title)$/;"	f	class:AliAnalysisTaskGenTunerJpsi
 ComputeAccEff	LHC_15g_pp/AccEff_Muons/AliAnalysisTaskGenTuner.cxx	/^TH1* AliAnalysisTaskGenTuner::ComputeAccEff(TH1 &hGen, TH1 &hRec, const Char_t *name, const Char_t *title)$/;"	f	class:AliAnalysisTaskGenTuner
 ComputeAccEff	LHC_15g_pp/AccEff_jpsi/GenTuner/AliAnalysisTaskGenTunerJpsi.cxx	/^TH1* AliAnalysisTaskGenTunerJpsi::ComputeAccEff(TH1 &hGen, TH1 &hRec, const Char_t *name, const Char_t *title)$/;"	f	class:AliAnalysisTaskGenTunerJpsi
 ComputeAccEff	Tasks/AliAnalysisTaskGenTuner.cxx	/^TH1* AliAnalysisTaskGenTuner::ComputeAccEff(TH1 &hGen, TH1 &hRec, const Char_t *name, const Char_t *title)$/;"	f	class:AliAnalysisTaskGenTuner
 ComputeAccEff	Tasks/AliAnalysisTaskGenTunerJpsi.cxx	/^TH1* AliAnalysisTaskGenTunerJpsi::ComputeAccEff(TH1 &hGen, TH1 &hRec, const Char_t *name, const Char_t *title)$/;"	f	class:AliAnalysisTaskGenTunerJpsi
-ComputeStation45Efficiency	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^void ComputeStation45Efficiency(TArrayD &chEff, TArrayD chEffErr[2], Double_t &st45Eff, Double_t st45EffErr[2])$/;"	f
-ComputeStation45Efficiency	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^void ComputeStation45Efficiency(TArrayD &chEff, TArrayD chEffErr[2], Double_t &st45Eff, Double_t st45EffErr[2])$/;"	f
+ComputeStation45Efficiency	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^void ComputeStation45Efficiency(TArrayD &chEff, TArrayD chEffErr[2], Double_t &st45Eff, Double_t st45EffErr[2])$/;"	f
+ComputeStation45Efficiency	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^void ComputeStation45Efficiency(TArrayD &chEff, TArrayD chEffErr[2], Double_t &st45Eff, Double_t st45EffErr[2])$/;"	f
+ComputeStation45Efficiency	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^void ComputeStation45Efficiency(TArrayD &chEff, TArrayD chEffErr[2], Double_t &st45Eff, Double_t st45EffErr[2])$/;"	f
 ComputeStation45Efficiency	Macro_Utile/MuonTrackingEfficiency.C	/^void ComputeStation45Efficiency(TArrayD &chEff, TArrayD chEffErr[2], Double_t &st45Eff, Double_t st45EffErr[2])$/;"	f
-ComputeStationEfficiency	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^void ComputeStationEfficiency(TArrayD &chEff, TArrayD chEffErr[2], Int_t iSt, Double_t &stEff, Double_t stEffErr[2])$/;"	f
-ComputeStationEfficiency	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^void ComputeStationEfficiency(TArrayD &chEff, TArrayD chEffErr[2], Int_t iSt, Double_t &stEff, Double_t stEffErr[2])$/;"	f
+ComputeStationEfficiency	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^void ComputeStationEfficiency(TArrayD &chEff, TArrayD chEffErr[2], Int_t iSt, Double_t &stEff, Double_t stEffErr[2])$/;"	f
+ComputeStationEfficiency	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^void ComputeStationEfficiency(TArrayD &chEff, TArrayD chEffErr[2], Int_t iSt, Double_t &stEff, Double_t stEffErr[2])$/;"	f
+ComputeStationEfficiency	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^void ComputeStationEfficiency(TArrayD &chEff, TArrayD chEffErr[2], Int_t iSt, Double_t &stEff, Double_t stEffErr[2])$/;"	f
 ComputeStationEfficiency	Macro_Utile/MuonTrackingEfficiency.C	/^void ComputeStationEfficiency(TArrayD &chEff, TArrayD chEffErr[2], Int_t iSt, Double_t &stEff, Double_t stEffErr[2])$/;"	f
-ComputeTrackingEfficiency	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^void ComputeTrackingEfficiency(Double_t stEff[6], Double_t stEffErr[6][2], Double_t &spectroEff, Double_t spectroEffErr[2])$/;"	f
-ComputeTrackingEfficiency	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^void ComputeTrackingEfficiency(Double_t stEff[6], Double_t stEffErr[6][2], Double_t &spectroEff, Double_t spectroEffErr[2])$/;"	f
+ComputeTrackingEfficiency	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^void ComputeTrackingEfficiency(Double_t stEff[6], Double_t stEffErr[6][2], Double_t &spectroEff, Double_t spectroEffErr[2])$/;"	f
+ComputeTrackingEfficiency	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^void ComputeTrackingEfficiency(Double_t stEff[6], Double_t stEffErr[6][2], Double_t &spectroEff, Double_t spectroEffErr[2])$/;"	f
+ComputeTrackingEfficiency	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^void ComputeTrackingEfficiency(Double_t stEff[6], Double_t stEffErr[6][2], Double_t &spectroEff, Double_t spectroEffErr[2])$/;"	f
 ComputeTrackingEfficiency	Macro_Utile/MuonTrackingEfficiency.C	/^void ComputeTrackingEfficiency(Double_t stEff[6], Double_t stEffErr[6][2], Double_t &spectroEff, Double_t spectroEffErr[2])$/;"	f
 Config	LHC_15g_pp/TrackingEfficiency/Simulation/Config.C	/^void Config()$/;"	f
 CopyFileLocally	Macro_Utile/runTaskFacilities.C	/^void CopyFileLocally(TList &pathList, TList &fileList, char overwrite = '\\0')$/;"	f
 CopyFromRemote	LHC_13_d/AccEff/CopyFromRemote.C	/^void CopyFromRemote(const char* txtfile="saf.aods.txt")$/;"	f
-CopyFromRemote	LHC_15g_pp/TrackingEfficiency/Data/CopyFromRemote.C	/^void CopyFromRemote(const char* txtfile="grid.esd.txt")$/;"	f
-CopyFromRemote	LHC_15g_pp/TrackingEfficiency/MonteCarlo/CopyFromRemote.C	/^void CopyFromRemote(const char* txtfile="grid.esd.txt")$/;"	f
+CopyFromRemote	LHC_15g_pp/TrackingEfficiency/DataMSL/CopyFromRemote.C	/^void CopyFromRemote(const char* txtfile="grid.esd.txt")$/;"	f
+CopyFromRemote	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/CopyFromRemote.C	/^void CopyFromRemote(const char* txtfile="grid.esd.txt")$/;"	f
+CopyFromRemote	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/CopyFromRemote.C	/^void CopyFromRemote(const char* txtfile="grid.esd.txt")$/;"	f
 CopyFromRemote	LHC_15g_pp/mergeQA/CopyFromRemote.C	/^void CopyFromRemote(const char* txtfile="grid.QA.txt")$/;"	f
 CopyFromRemote	Macro_Utile/CopyFromRemote.C	/^void CopyFromRemote(const char* txtfile="grid.esd.txt")$/;"	f
 CountTracks	LHC_15g_pp/mergeQA/SaveQA.C	/^void CountTracks(TString inputFile)$/;"	f
 CountTracks	Macro_Utile/SaveQA.C	/^void CountTracks(TString inputFile)$/;"	f
+CountTracks	SaveQA.C	/^void CountTracks(TString inputFile)$/;"	f
 CreateAlienHandler	Macro_Utile/runTaskFacilities.C	/^TObject* CreateAlienHandler(TString runMode, TString& rootVersion,TString& alirootVersion, TString& aliphysicsVersion, TString& runListName,$/;"	f
 CreateAlienHandler	My_First_Task/CreateAlienHandler.C	/^AliAnalysisGrid* CreateAlienHandler()$/;"	f
 CreateAnalysisTrain	LHC_13_d/AccEff/GenTuner/runGenTuner.C	/^TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)$/;"	f
 CreateAnalysisTrain	LHC_15g_pp/AccEff_Muons/runGenTuner.C	/^TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)$/;"	f
 CreateAnalysisTrain	LHC_15g_pp/AccEff_jpsi/GenTuner/runGenTuner.C	/^TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)$/;"	f
-CreateAnalysisTrain	LHC_15g_pp/TrackingEfficiency/Data/runMuonEfficiency.C	/^void CreateAnalysisTrain(Bool_t applyPhysSel, Bool_t mc, Bool_t embedding, TObject* alienHandler)$/;"	f
-CreateAnalysisTrain	LHC_15g_pp/TrackingEfficiency/MonteCarlo/runMuonEfficiency.C	/^void CreateAnalysisTrain(Bool_t applyPhysSel, Bool_t mc, Bool_t embedding, TObject* alienHandler)$/;"	f
+CreateAnalysisTrain	LHC_15g_pp/TrackingEfficiency/DataMSL/runMuonEfficiency.C	/^void CreateAnalysisTrain(Bool_t applyPhysSel, Bool_t mc, Bool_t embedding, TObject* alienHandler)$/;"	f
+CreateAnalysisTrain	LHC_15g_pp/TrackingEfficiency/DataMUL/runMuonEfficiency.C	/^void CreateAnalysisTrain(Bool_t applyPhysSel, Bool_t mc, Bool_t embedding, TObject* alienHandler)$/;"	f
+CreateAnalysisTrain	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/runMuonEfficiency.C	/^void CreateAnalysisTrain(Bool_t applyPhysSel, Bool_t mc, Bool_t embedding, TObject* alienHandler)$/;"	f
+CreateAnalysisTrain	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/runMuonEfficiency.C	/^void CreateAnalysisTrain(Bool_t applyPhysSel, Bool_t mc, Bool_t embedding, TObject* alienHandler)$/;"	f
+CreateAnalysisTrain	LHC_15g_pp/TrackingEfficiency/Resultat philippe/runMuonEfficiency.C	/^void CreateAnalysisTrain(Bool_t applyPhysSel, Bool_t mc, Bool_t embedding, TObject* alienHandler)$/;"	f
 CreateAnalysisTrain	My_First_Task/runLocal.C	/^void CreateAnalysisTrain()$/;"	f
 CreateAnalysisTrain	My_First_Task/runProof.C	/^void CreateAnalysisTrain()$/;"	f
 CreateChain	LHC_15g_pp/AccEff_Muons/Eff.C	/^TChain* CreateChain(const char *xmlfile, const char *type="ESD")$/;"	f
 CreateChain	LHC_15g_pp/AccEff_jpsi/DataPart/MuMu.C	/^TChain* CreateChain(const char *xmlfile, const char *type="ESD")$/;"	f
 CreateChain	LHC_15g_pp/AccEff_jpsi/MCPart/MuMu.C	/^TChain* CreateChain(const char *xmlfile, const char *type="ESD")$/;"	f
 CreateChain	LHC_15g_pp/MuMuPar/MuMu.C	/^TChain* CreateChain(const char *xmlfile, const char *type="ESD")$/;"	f
-CreateChain	LHC_15g_pp/TrackingEfficiency/Data/Eff.C	/^TChain* CreateChain(const char *xmlfile, const char *type="ESD")$/;"	f
-CreateChain	LHC_15g_pp/TrackingEfficiency/MonteCarlo/Eff.C	/^TChain* CreateChain(const char *xmlfile, const char *type="ESD")$/;"	f
+CreateChain	LHC_15g_pp/TrackingEfficiency/DataMSL/Eff.C	/^TChain* CreateChain(const char *xmlfile, const char *type="ESD")$/;"	f
+CreateChain	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/Eff.C	/^TChain* CreateChain(const char *xmlfile, const char *type="ESD")$/;"	f
 CreateChain	LHC_15g_pp/TrackingEfficiency/Simulation/AODtrainsim.C	/^TChain *CreateChain()$/;"	f
 CreateChain	LHC_15g_pp/mergeQA/AODtrain.C	/^TChain *CreateChain()$/;"	f
 CreateChainFromFile	Macro_Utile/runTaskFacilities.C	/^TChain* CreateChainFromFile(const char *rootfile)$/;"	f
-CreateGraph	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^TGraphAsymmErrors* CreateGraph(const char* name, const char* title, int value)$/;"	f
-CreateGraph	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^TGraphAsymmErrors* CreateGraph(const char* name, const char* title, int value)$/;"	f
+CreateGraph	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^TGraphAsymmErrors* CreateGraph(const char* name, const char* title, int value)$/;"	f
+CreateGraph	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^TGraphAsymmErrors* CreateGraph(const char* name, const char* title, int value)$/;"	f
+CreateGraph	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^TGraphAsymmErrors* CreateGraph(const char* name, const char* title, int value)$/;"	f
 CreateGraph	Macro_Utile/MuonTrackingEfficiency.C	/^TGraphAsymmErrors* CreateGraph(const char* name, const char* title, int value)$/;"	f
 CreateInputHandlers	EventMixing/Task_EvtMix/RunALICE.C	/^Bool_t CreateInputHandlers(TString input,TString inputMC,Bool_t useAODOut=kFALSE,Bool_t useMultiHandler=kTRUE) {$/;"	f
 CreateInputObject	Macro_Utile/runTaskFacilities.C	/^TObject* CreateInputObject(Int_t mode, TString &inputName)$/;"	f
@@ -154,6 +179,8 @@ CreateLocalChain	LHC_15g_pp/MuMuPar/runMuMuGrid.C	/^TChain* CreateLocalChain(con
 CreateLocalChain	Test1_PbPb2011/MuMuPart/runMuMu.C	/^TChain* CreateLocalChain(const char* filelist)$/;"	f
 CreateLocalChain	Test1_PbPb2011/TestMixedEvent/runMuMu.C	/^TChain* CreateLocalChain(const char* filelist)$/;"	f
 CreateRatioGraph	LHC_15g_pp/TrackingEfficiency/ComparisonDataMC.C	/^TGraphAsymmErrors* CreateRatioGraph(const char* name, const char* title, TGraphAsymmErrors& GraphData, TGraphAsymmErrors& GraphSim) \/\/ Change this function as in RealEfficiency.C (value)$/;"	f
+CreateRatioGraph	LHC_15g_pp/TrackingEfficiency/ComparisonEfficiency.C	/^TGraphAsymmErrors* CreateRatioGraph(const char* name, const char* title, TGraphAsymmErrors& Graph1, TGraphAsymmErrors& Graph2) \/\/ Change this function as in RealEfficiency.C (value)$/;"	f
+CreateRatioGraph	Macro_Utile/ComparisonEfficiency.C	/^TGraphAsymmErrors* CreateRatioGraph(const char* name, const char* title, TGraphAsymmErrors& Graph1, TGraphAsymmErrors& Graph2) \/\/ Change this function as in RealEfficiency.C (value)$/;"	f
 CrystalBall	Macro_Utile/FittingFunctions.C	/^Double_t CrystalBall(Double_t *arg, Double_t *par)$/;"	f
 CrystalBall	My_First_Task/FittingFunctions.C	/^Double_t CrystalBall(Double_t *arg, Double_t *par)$/;"	f
 DefineHistogramCollection	LHC_13_d/AccEff/MCPart/AliAnalysisMuMuMinv.cxx	/^AliAnalysisMuMuMinv::DefineHistogramCollection(const char* eventSelection,$/;"	f	class:AliAnalysisMuMuMinv
@@ -163,14 +190,18 @@ DirectoryExists	LHC_15g_pp/mergeQA/Submit.C	/^Bool_t DirectoryExists(const char 
 DirectoryExists	LHC_15g_pp/mergeQA/copyFiles.C	/^Bool_t DirectoryExists(const char *dirname)$/;"	f
 DirectoryExists	Macro_Utile/gridCommands.C	/^Bool_t DirectoryExists(const char *dirname)$/;"	f
 DrawRatio	LHC_15g_pp/TrackingEfficiency/ComparisonDataMC.C	/^TCanvas* DrawRatio(TString name, TString title, TGraphAsymmErrors* GraphData, TGraphAsymmErrors * GraphSim, TGraphAsymmErrors* GraphRatio, TString dataName = "Data", TString simName = "Simulation")$/;"	f
+DrawRatio	LHC_15g_pp/TrackingEfficiency/ComparisonEfficiency.C	/^TCanvas* DrawRatio(TString name, TString title, TGraphAsymmErrors* Graph1, TGraphAsymmErrors * Graph2, TGraphAsymmErrors* GraphRatio, TString Name1 = "result1", TString Name2 = "result2")$/;"	f
+DrawRatio	Macro_Utile/ComparisonEfficiency.C	/^TCanvas* DrawRatio(TString name, TString title, TGraphAsymmErrors* Graph1, TGraphAsymmErrors * Graph2, TGraphAsymmErrors* GraphRatio, TString Name1 = "result1", TString Name2 = "result2")$/;"	f
 Eff	LHC_15g_pp/AccEff_Muons/Eff.C	/^void Eff()$/;"	f
-Eff	LHC_15g_pp/TrackingEfficiency/Data/Eff.C	/^void Eff()$/;"	f
-Eff	LHC_15g_pp/TrackingEfficiency/MonteCarlo/Eff.C	/^void Eff()$/;"	f
+Eff	LHC_15g_pp/TrackingEfficiency/DataMSL/Eff.C	/^void Eff()$/;"	f
+Eff	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/Eff.C	/^void Eff()$/;"	f
 Eff_merge	LHC_15g_pp/AccEff_Muons/Eff_merge.C	/^void Eff_merge(const char *dir, Int_t stage=0)$/;"	f
-Eff_merge	LHC_15g_pp/TrackingEfficiency/Data/Eff_merge.C	/^void Eff_merge(const char *dir, Int_t stage=0)$/;"	f
-Eff_merge	LHC_15g_pp/TrackingEfficiency/MonteCarlo/Eff_merge.C	/^void Eff_merge(const char *dir, Int_t stage=0)$/;"	f
-EnableDisplay	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void EnableDisplay(Bool_t flag = kTRUE) { fEnableDisplay = flag; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
-EnableDisplay	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void EnableDisplay(Bool_t flag = kTRUE) { fEnableDisplay = flag; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+Eff_merge	LHC_15g_pp/TrackingEfficiency/DataMSL/Eff_merge.C	/^void Eff_merge(const char *dir, Int_t stage=0)$/;"	f
+Eff_merge	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/Eff_merge.C	/^void Eff_merge(const char *dir, Int_t stage=0)$/;"	f
+EnableDisplay	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void EnableDisplay(Bool_t flag = kTRUE) { fEnableDisplay = flag; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+EnableDisplay	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void EnableDisplay(Bool_t flag = kTRUE) { fEnableDisplay = flag; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+EnableDisplay	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void EnableDisplay(Bool_t flag = kTRUE) { fEnableDisplay = flag; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+EnableDisplay	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void EnableDisplay(Bool_t flag = kTRUE) { fEnableDisplay = flag; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
 EnableDisplay	Tasks/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void EnableDisplay(Bool_t flag = kTRUE) { fEnableDisplay = flag; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
 FileExists	LHC_15g_pp/mergeQA/Submit.C	/^Bool_t FileExists(const char *lfn)$/;"	f
 FileExists	Macro_Utile/gridCommands.C	/^Bool_t FileExists(const char *lfn)$/;"	f
@@ -179,11 +210,15 @@ FillHistosForMCEvent	LHC_15g_pp/AccEff_jpsi/MCPart/AliAnalysisMuMuMinv.cxx	/^voi
 FillHistosForPair	LHC_13_d/AccEff/MCPart/AliAnalysisMuMuMinv.cxx	/^void AliAnalysisMuMuMinv::FillHistosForPair(const char* eventSelection, const char* triggerClassName,$/;"	f	class:AliAnalysisMuMuMinv
 FillHistosForPair	LHC_15g_pp/AccEff_jpsi/MCPart/AliAnalysisMuMuMinv.cxx	/^void AliAnalysisMuMuMinv::FillHistosForPair(const char* eventSelection, const char* triggerClassName,$/;"	f	class:AliAnalysisMuMuMinv
 FillHistosMixEventForPair	MixingEventTask/AliAnalysisMuMuMixEvt.cxx	/^void AliAnalysisMuMuMixEvt::FillHistosMixEventForPair(const char* eventSelection, const char* triggerClassName,$/;"	f	class:AliAnalysisMuMuMixEvt
-FindAndRecordMissingClusters	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::FindAndRecordMissingClusters(AliMUONTrackParam &param, Int_t chamber,$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
-FindAndRecordMissingClusters	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::FindAndRecordMissingClusters(AliMUONTrackParam &param, Int_t chamber,$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+FindAndRecordMissingClusters	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::FindAndRecordMissingClusters(AliMUONTrackParam &param, Int_t chamber,$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+FindAndRecordMissingClusters	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::FindAndRecordMissingClusters(AliMUONTrackParam &param, Int_t chamber,$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+FindAndRecordMissingClusters	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::FindAndRecordMissingClusters(AliMUONTrackParam &param, Int_t chamber,$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+FindAndRecordMissingClusters	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::FindAndRecordMissingClusters(AliMUONTrackParam &param, Int_t chamber,$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
 FindAndRecordMissingClusters	Tasks/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::FindAndRecordMissingClusters(AliMUONTrackParam &param, Int_t chamber,$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
-FindPads	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^Bool_t AliAnalysisTaskMuonTrackingEffLocal::FindPads(Int_t deId, Double_t pos[3], AliMpPad pad[2])$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
-FindPads	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^Bool_t AliAnalysisTaskMuonTrackingEffLocal::FindPads(Int_t deId, Double_t pos[3], AliMpPad pad[2])$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+FindPads	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^Bool_t AliAnalysisTaskMuonTrackingEffLocal::FindPads(Int_t deId, Double_t pos[3], AliMpPad pad[2])$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+FindPads	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^Bool_t AliAnalysisTaskMuonTrackingEffLocal::FindPads(Int_t deId, Double_t pos[3], AliMpPad pad[2])$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+FindPads	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^Bool_t AliAnalysisTaskMuonTrackingEffLocal::FindPads(Int_t deId, Double_t pos[3], AliMpPad pad[2])$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+FindPads	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^Bool_t AliAnalysisTaskMuonTrackingEffLocal::FindPads(Int_t deId, Double_t pos[3], AliMpPad pad[2])$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
 FindPads	Tasks/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^Bool_t AliAnalysisTaskMuonTrackingEffLocal::FindPads(Int_t deId, Double_t pos[3], AliMpPad pad[2])$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
 FitData	LHC_13_d/AccEff/DataPart/FitData.C	/^void FitData($/;"	f
 FitData	LHC_15g_pp/AccEff_jpsi/DataPart/FitData.C	/^void FitData($/;"	f
@@ -203,11 +238,13 @@ FnormMacro	Test1_PbPb2011/MuMuPart/Macro/MeanFnorm.C	/^void FnormMacro($/;"	f
 GenParamCustomSingle	LHC_15g_pp/TrackingEfficiency/Simulation/GenParamCustomSingle.C	/^AliGenerator* GenParamCustomSingle()$/;"	f
 GetAccxEff	LHC_13_d/AccEff/MCPart/AliAnalysisMuMuMinv.cxx	/^Double_t AliAnalysisMuMuMinv::GetAccxEff(Double_t pt,Double_t rapidity)$/;"	f	class:AliAnalysisMuMuMinv
 GetAccxEff	LHC_15g_pp/AccEff_jpsi/MCPart/AliAnalysisMuMuMinv.cxx	/^Double_t AliAnalysisMuMuMinv::GetAccxEff(Double_t pt,Double_t rapidity)$/;"	f	class:AliAnalysisMuMuMinv
-GetChamberEfficiency	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^Bool_t GetChamberEfficiency(THnSparse &TT, THnSparse &TD, TArrayD &chEff, TArrayD chEffErr[2], Bool_t printError)$/;"	f
-GetChamberEfficiency	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^Bool_t GetChamberEfficiency(THnSparse &TT, THnSparse &TD, TArrayD &chEff, TArrayD chEffErr[2], Bool_t printError)$/;"	f
+GetChamberEfficiency	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^Bool_t GetChamberEfficiency(THnSparse &TT, THnSparse &TD, TArrayD &chEff, TArrayD chEffErr[2], Bool_t printError)$/;"	f
+GetChamberEfficiency	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^Bool_t GetChamberEfficiency(THnSparse &TT, THnSparse &TD, TArrayD &chEff, TArrayD chEffErr[2], Bool_t printError)$/;"	f
+GetChamberEfficiency	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^Bool_t GetChamberEfficiency(THnSparse &TT, THnSparse &TD, TArrayD &chEff, TArrayD chEffErr[2], Bool_t printError)$/;"	f
 GetChamberEfficiency	Macro_Utile/MuonTrackingEfficiency.C	/^Bool_t GetChamberEfficiency(THnSparse &TT, THnSparse &TD, TArrayD &chEff, TArrayD chEffErr[2], Bool_t printError)$/;"	f
-GetDEEfficiency	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^void GetDEEfficiency(THnSparse &TT, THnSparse &TD, TGraphAsymmErrors &effVsDE)$/;"	f
-GetDEEfficiency	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^void GetDEEfficiency(THnSparse &TT, THnSparse &TD, TGraphAsymmErrors &effVsDE)$/;"	f
+GetDEEfficiency	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^void GetDEEfficiency(THnSparse &TT, THnSparse &TD, TGraphAsymmErrors &effVsDE)$/;"	f
+GetDEEfficiency	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^void GetDEEfficiency(THnSparse &TT, THnSparse &TD, TGraphAsymmErrors &effVsDE)$/;"	f
+GetDEEfficiency	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^void GetDEEfficiency(THnSparse &TT, THnSparse &TD, TGraphAsymmErrors &effVsDE)$/;"	f
 GetDEEfficiency	Macro_Utile/MuonTrackingEfficiency.C	/^void GetDEEfficiency(THnSparse &TT, THnSparse &TD, TGraphAsymmErrors &effVsDE)$/;"	f
 GetDataType	Macro_Utile/runTaskFacilities.C	/^TString GetDataType(TString input)$/;"	f
 GetFitLowEdge	LHC_13_d/AccEff/GenTuner/AliAnalysisTaskGenTunerJpsi.cxx	/^Double_t AliAnalysisTaskGenTunerJpsi::GetFitLowEdge(TH1 &h)$/;"	f	class:AliAnalysisTaskGenTunerJpsi
@@ -220,8 +257,9 @@ GetFitUpEdge	LHC_15g_pp/AccEff_Muons/AliAnalysisTaskGenTuner.cxx	/^Double_t AliA
 GetFitUpEdge	LHC_15g_pp/AccEff_jpsi/GenTuner/AliAnalysisTaskGenTunerJpsi.cxx	/^Double_t AliAnalysisTaskGenTunerJpsi::GetFitUpEdge(TH1 &h)$/;"	f	class:AliAnalysisTaskGenTunerJpsi
 GetFitUpEdge	Tasks/AliAnalysisTaskGenTuner.cxx	/^Double_t AliAnalysisTaskGenTuner::GetFitUpEdge(TH1 &h)$/;"	f	class:AliAnalysisTaskGenTuner
 GetFitUpEdge	Tasks/AliAnalysisTaskGenTunerJpsi.cxx	/^Double_t AliAnalysisTaskGenTunerJpsi::GetFitUpEdge(TH1 &h)$/;"	f	class:AliAnalysisTaskGenTunerJpsi
-GetInnerRunCounts	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^void GetInnerRunCounts(TString runList, TString fileNameData, TString fileNameSave, Bool_t print)$/;"	f
-GetInnerRunCounts	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^void GetInnerRunCounts(TString runList, TString fileNameData, TString fileNameSave, Bool_t print)$/;"	f
+GetInnerRunCounts	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^void GetInnerRunCounts(TString runList, TString fileNameData, TString fileNameSave, Bool_t print,const char* spath)$/;"	f
+GetInnerRunCounts	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^void GetInnerRunCounts(TString runList, TString fileNameData, TString fileNameSave, Bool_t print,const char* spath)$/;"	f
+GetInnerRunCounts	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^void GetInnerRunCounts(TString runList, TString fileNameData, TString fileNameSave, Bool_t print,const char* spath)$/;"	f
 GetInputType	LHC_13_d/AccEff/DataPart/runMuMuData.C	/^TString GetInputType(const TString& sds)$/;"	f
 GetInputType	LHC_13_d/AccEff/MCPart/runMuMuMC.C	/^TString GetInputType(const TString& sds)$/;"	f
 GetInputType	LHC_15g_pp/AccEff_jpsi/DataPart/runMuMuData.C	/^TString GetInputType(const TString& sds)$/;"	f
@@ -329,25 +367,31 @@ GetResults	LHC_15g_pp/AccEff_jpsi/GenTuner/AliAnalysisTaskGenTunerJpsi.h	/^  TCa
 GetResults	Tasks/AliAnalysisTaskGenTuner.h	/^  TCanvas* GetResults() {return fcRes;}$/;"	f	class:AliAnalysisTaskGenTuner
 GetResults	Tasks/AliAnalysisTaskGenTunerJpsi.h	/^  TCanvas* GetResults() {return fcRes;}$/;"	f	class:AliAnalysisTaskGenTunerJpsi
 GetRunNumber	Macro_Utile/gridCommands.C	/^Double_t GetRunNumber(TString masterjobId, Bool_t redoPs)$/;"	f
-GetStation45Efficiency	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^void GetStation45Efficiency(TArrayD &chEff, TArrayD chEffErr[2], TGraphAsymmErrors *effVsX[3], Int_t ip, Double_t xp)$/;"	f
-GetStation45Efficiency	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^void GetStation45Efficiency(TArrayD &chEff, TArrayD chEffErr[2], TGraphAsymmErrors *effVsX[3], Int_t ip, Double_t xp)$/;"	f
+GetStation45Efficiency	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^void GetStation45Efficiency(TArrayD &chEff, TArrayD chEffErr[2], TGraphAsymmErrors *effVsX[3], Int_t ip, Double_t xp)$/;"	f
+GetStation45Efficiency	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^void GetStation45Efficiency(TArrayD &chEff, TArrayD chEffErr[2], TGraphAsymmErrors *effVsX[3], Int_t ip, Double_t xp)$/;"	f
+GetStation45Efficiency	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^void GetStation45Efficiency(TArrayD &chEff, TArrayD chEffErr[2], TGraphAsymmErrors *effVsX[3], Int_t ip, Double_t xp)$/;"	f
 GetStation45Efficiency	Macro_Utile/MuonTrackingEfficiency.C	/^void GetStation45Efficiency(TArrayD &chEff, TArrayD chEffErr[2], TGraphAsymmErrors *effVsX[3], Int_t ip, Double_t xp)$/;"	f
-GetStationEfficiency	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^void GetStationEfficiency(TArrayD &chEff, TArrayD chEffErr[2], Int_t iSt, TGraphAsymmErrors *effVsX[3], Int_t ip, Double_t xp)$/;"	f
-GetStationEfficiency	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^void GetStationEfficiency(TArrayD &chEff, TArrayD chEffErr[2], Int_t iSt, TGraphAsymmErrors *effVsX[3], Int_t ip, Double_t xp)$/;"	f
+GetStationEfficiency	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^void GetStationEfficiency(TArrayD &chEff, TArrayD chEffErr[2], Int_t iSt, TGraphAsymmErrors *effVsX[3], Int_t ip, Double_t xp)$/;"	f
+GetStationEfficiency	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^void GetStationEfficiency(TArrayD &chEff, TArrayD chEffErr[2], Int_t iSt, TGraphAsymmErrors *effVsX[3], Int_t ip, Double_t xp)$/;"	f
+GetStationEfficiency	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^void GetStationEfficiency(TArrayD &chEff, TArrayD chEffErr[2], Int_t iSt, TGraphAsymmErrors *effVsX[3], Int_t ip, Double_t xp)$/;"	f
 GetStationEfficiency	Macro_Utile/MuonTrackingEfficiency.C	/^void GetStationEfficiency(TArrayD &chEff, TArrayD chEffErr[2], Int_t iSt, TGraphAsymmErrors *effVsX[3], Int_t ip, Double_t xp)$/;"	f
 GetSubPath	Macro_Utile/gridCommands.C	/^TString GetSubPath(Int_t ientry, TString inString)$/;"	f
 GetSubjobInfo	Macro_Utile/gridCommands.C	/^TObjArray* GetSubjobInfo(TString masterJob, Bool_t redoPs)$/;"	f
 GetSubjobList	Macro_Utile/gridCommands.C	/^TObjArray* GetSubjobList(TString subjobInfo)$/;"	f
 GetToken	Macro_Utile/gridCommands.C	/^TString GetToken(Int_t ientry, TString inString, TString delimiter)$/;"	f
-GetTrackingEfficiency	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^void GetTrackingEfficiency(TArrayD &chEff, TArrayD chEffErr[2], TGraphAsymmErrors *effVsSt[3],$/;"	f
-GetTrackingEfficiency	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^void GetTrackingEfficiency(TArrayD &chEff, TArrayD chEffErr[2], TGraphAsymmErrors *effVsSt[3],$/;"	f
+GetTrackingEfficiency	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^void GetTrackingEfficiency(TArrayD &chEff, TArrayD chEffErr[2], TGraphAsymmErrors *effVsSt[3],$/;"	f
+GetTrackingEfficiency	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^void GetTrackingEfficiency(TArrayD &chEff, TArrayD chEffErr[2], TGraphAsymmErrors *effVsSt[3],$/;"	f
+GetTrackingEfficiency	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^void GetTrackingEfficiency(TArrayD &chEff, TArrayD chEffErr[2], TGraphAsymmErrors *effVsSt[3],$/;"	f
 GetTrackingEfficiency	Macro_Utile/MuonTrackingEfficiency.C	/^void GetTrackingEfficiency(TArrayD &chEff, TArrayD chEffErr[2], TGraphAsymmErrors *effVsSt[3],$/;"	f
 GuessFirstJob	Macro_Utile/gridCommands.C	/^Double_t GuessFirstJob(TObjArray* jobList)$/;"	f
-IntegrateMuonEfficiency	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^void IntegrateMuonEfficiency(TGraphAsymmErrors &effVsRunLow, TGraphAsymmErrors &effVsRunUp,$/;"	f
-IntegrateMuonEfficiency	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^void IntegrateMuonEfficiency(TGraphAsymmErrors &effVsRunLow, TGraphAsymmErrors &effVsRunUp,$/;"	f
+IntegrateMuonEfficiency	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^void IntegrateMuonEfficiency(TGraphAsymmErrors &effVsRunLow, TGraphAsymmErrors &effVsRunUp,$/;"	f
+IntegrateMuonEfficiency	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^void IntegrateMuonEfficiency(TGraphAsymmErrors &effVsRunLow, TGraphAsymmErrors &effVsRunUp,$/;"	f
+IntegrateMuonEfficiency	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^void IntegrateMuonEfficiency(TGraphAsymmErrors &effVsRunLow, TGraphAsymmErrors &effVsRunUp,$/;"	f
 IntegrateMuonEfficiency	Macro_Utile/MuonTrackingEfficiency.C	/^void IntegrateMuonEfficiency(TGraphAsymmErrors &effVsRunLow, TGraphAsymmErrors &effVsRunUp,$/;"	f
-Intersect	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::Intersect(AliMUONTrackParam &param, Int_t deId, Double_t p[3])$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
-Intersect	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::Intersect(AliMUONTrackParam &param, Int_t deId, Double_t p[3])$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+Intersect	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::Intersect(AliMUONTrackParam &param, Int_t deId, Double_t p[3])$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+Intersect	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::Intersect(AliMUONTrackParam &param, Int_t deId, Double_t p[3])$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+Intersect	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::Intersect(AliMUONTrackParam &param, Int_t deId, Double_t p[3])$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+Intersect	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::Intersect(AliMUONTrackParam &param, Int_t deId, Double_t p[3])$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
 Intersect	Tasks/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::Intersect(AliMUONTrackParam &param, Int_t deId, Double_t p[3])$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
 IpMuon	LHC_15g_pp/TrackingEfficiency/Simulation/GenParamCustomSingle.C	/^Int_t IpMuon(TRandom *ran)$/;"	f
 IsPtInRange	LHC_13_d/AccEff/MCPart/AliAnalysisMuMuMinv.cxx	/^Bool_t AliAnalysisMuMuMinv::IsPtInRange(const AliVParticle& t1, const AliVParticle& t2, Double_t& ptmin, Double_t& ptmax) const$/;"	f	class:AliAnalysisMuMuMinv
@@ -375,9 +419,12 @@ LoadLocalLibs	Macro_Utile/runTaskFacilities.C	/^void LoadLocalLibs(Bool_t localA
 LoadLocalLibs	Test1_PbPb2011/MuMuPart/runMuMu.C	/^void LoadLocalLibs(Bool_t localAnalysis=kTRUE)$/;"	f
 LoadLocalLibs	Test1_PbPb2011/TestMixedEvent/runMuMu.C	/^void LoadLocalLibs(Bool_t localAnalysis=kTRUE)$/;"	f
 LoadRunWeights	LHC_15g_pp/TrackingEfficiency/CompareMuonDistributions.C	/^void LoadRunWeights(TString fileName)$/;"	f
-LoadRunWeights	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^void LoadRunWeights(TString fileName)$/;"	f
-LoadRunWeights	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^void LoadRunWeights(TString fileName)$/;"	f
+LoadRunWeights	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^void LoadRunWeights(TString fileName)$/;"	f
+LoadRunWeights	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^void LoadRunWeights(TString fileName)$/;"	f
+LoadRunWeights	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^void LoadRunWeights(TString fileName)$/;"	f
 LoadRunWeights	Macro_Utile/MuonTrackingEfficiency.C	/^void LoadRunWeights(TString fileName)$/;"	f
+MakeDirOnGrid	LHC_15g_pp/TrackingEfficiency/DataMUL/MakeDirOnGrid.C	/^void MakeDirOnGrid(const char* txtfile="runList.txt")$/;"	f
+MakeDirOnGrid	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/MakeDirOnGrid.C	/^void MakeDirOnGrid(const char* txtfile="runList.txt")$/;"	f
 Mbin	My_First_Task/AliAnalysisTaskMass.h	/^    int Mbin; \/\/ binning for rapidity$/;"	m	class:AliAnalysisTaskMass
 MeanFnorm	LHC_15g_pp/MuMuPar/Macro/FNormMacro.C	/^  void MeanFnorm(AliAnalysisMuMu &ana)$/;"	f
 MeanFnorm	Test1_PbPb2011/MuMuPart/Macro/FNormMacro.C	/^  void MeanFnorm(AliAnalysisMuMu &ana)$/;"	f
@@ -391,11 +438,14 @@ MuMu_merge	LHC_15g_pp/AccEff_jpsi/MCPart/MuMu_merge.C	/^void MuMu_merge(const ch
 MuMu_merge	LHC_15g_pp/MuMuPar/MuMu_merge.C	/^void MuMu_merge(const char *dir, Int_t stage=0)$/;"	f
 MultDirData	LHC_15g_pp/mergeQA/SaveQA.C	/^TString MultDirData = "LowMultiplicity";$/;"	v
 MultDirData	Macro_Utile/SaveQA.C	/^TString MultDirData = "HighMultiplicity";$/;"	v
+MultDirData	SaveQA.C	/^TString MultDirData = "LowMultiplicity";$/;"	v
 MultDirMC	LHC_15g_pp/mergeQA/SaveQA.C	/^TString MultDirMC = "LowMultiplicity";$/;"	v
 MultDirMC	Macro_Utile/SaveQA.C	/^TString MultDirMC = "HighMultiplicity";$/;"	v
+MultDirMC	SaveQA.C	/^TString MultDirMC = "LowMultiplicity";$/;"	v
 MuonMass2	EventMixing/Task_EvtMix/AliAnalysisTaskEx02.cxx	/^Double_t AliAnalysisTaskEx02::MuonMass2() const$/;"	f	class:AliAnalysisTaskEx02
-MuonTrackingEfficiency	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^void MuonTrackingEfficiency(TString runList = "runList.txt",$/;"	f
-MuonTrackingEfficiency	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^void MuonTrackingEfficiency(TString runList = "runList.txt",$/;"	f
+MuonTrackingEfficiency	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^void MuonTrackingEfficiency(TString runList = "runList.txt",$/;"	f
+MuonTrackingEfficiency	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^void MuonTrackingEfficiency(TString runList = "runList.txt",$/;"	f
+MuonTrackingEfficiency	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^void MuonTrackingEfficiency(TString runList = "runList.txt",$/;"	f
 MuonTrackingEfficiency	Macro_Utile/MuonTrackingEfficiency.C	/^void MuonTrackingEfficiency(TString runList = "runlist_15-07-2015-ESD.txt",$/;"	f
 MySetupAnalysisPluginAliEn	EventMixing/Task_EvtMix/SetupAnalysisPlugin.C	/^void MySetupAnalysisPluginAliEn(AliAnalysisAlien *plugin)$/;"	f
 MySetupAnalysisPluginProof	EventMixing/Task_EvtMix/SetupAnalysisPlugin.C	/^void MySetupAnalysisPluginProof(AliAnalysisAlien *plugin,TString analysisMode)$/;"	f
@@ -414,42 +464,55 @@ NotifyRun	EventMixing/Task_EvtMix/AliAnalysisTaskEx02.cxx	/^void AliAnalysisTask
 NotifyRun	LHC_13_d/AccEff/GenTuner/AliAnalysisTaskGenTunerJpsi.cxx	/^void AliAnalysisTaskGenTunerJpsi::NotifyRun()$/;"	f	class:AliAnalysisTaskGenTunerJpsi
 NotifyRun	LHC_15g_pp/AccEff_Muons/AliAnalysisTaskGenTuner.cxx	/^void AliAnalysisTaskGenTuner::NotifyRun()$/;"	f	class:AliAnalysisTaskGenTuner
 NotifyRun	LHC_15g_pp/AccEff_jpsi/GenTuner/AliAnalysisTaskGenTunerJpsi.cxx	/^void AliAnalysisTaskGenTunerJpsi::NotifyRun()$/;"	f	class:AliAnalysisTaskGenTunerJpsi
-NotifyRun	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::NotifyRun()$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
-NotifyRun	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::NotifyRun()$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+NotifyRun	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::NotifyRun()$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+NotifyRun	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::NotifyRun()$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+NotifyRun	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::NotifyRun()$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+NotifyRun	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::NotifyRun()$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
 NotifyRun	Tasks/AliAnalysisTaskGenTuner.cxx	/^void AliAnalysisTaskGenTuner::NotifyRun()$/;"	f	class:AliAnalysisTaskGenTuner
 NotifyRun	Tasks/AliAnalysisTaskGenTunerJpsi.cxx	/^void AliAnalysisTaskGenTunerJpsi::NotifyRun()$/;"	f	class:AliAnalysisTaskGenTunerJpsi
 NotifyRun	Tasks/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::NotifyRun()$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
-OverlapDE	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^Bool_t AliAnalysisTaskMuonTrackingEffLocal::OverlapDE(AliMpArea &area, Int_t deId)$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
-OverlapDE	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^Bool_t AliAnalysisTaskMuonTrackingEffLocal::OverlapDE(AliMpArea &area, Int_t deId)$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+OverlapDE	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^Bool_t AliAnalysisTaskMuonTrackingEffLocal::OverlapDE(AliMpArea &area, Int_t deId)$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+OverlapDE	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^Bool_t AliAnalysisTaskMuonTrackingEffLocal::OverlapDE(AliMpArea &area, Int_t deId)$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+OverlapDE	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^Bool_t AliAnalysisTaskMuonTrackingEffLocal::OverlapDE(AliMpArea &area, Int_t deId)$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+OverlapDE	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^Bool_t AliAnalysisTaskMuonTrackingEffLocal::OverlapDE(AliMpArea &area, Int_t deId)$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
 OverlapDE	Tasks/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^Bool_t AliAnalysisTaskMuonTrackingEffLocal::OverlapDE(AliMpArea &area, Int_t deId)$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
 PairRapidityCut	EventMixing/Task_EvtMix/AliAnalysisTaskEx02.cxx	/^Bool_t AliAnalysisTaskEx02::PairRapidityCut(const TLorentzVector& pair) const$/;"	f	class:AliAnalysisTaskEx02
 PerformAction	Macro_Utile/gridCommands.C	/^Bool_t PerformAction(TString command, Bool_t& yesToAll)$/;"	f
-PlotIntegratedMuonEfficiency	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^void PlotIntegratedMuonEfficiency(TString fileNameWeights, TString fileNameData, TString fileNameSave, Bool_t print, Bool_t draw)$/;"	f
-PlotIntegratedMuonEfficiency	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^void PlotIntegratedMuonEfficiency(TString fileNameWeights, TString fileNameData, TString fileNameSave, Bool_t print, Bool_t draw)$/;"	f
+PlotIntegratedMuonEfficiency	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^void PlotIntegratedMuonEfficiency(TString fileNameWeights, TString fileNameData, TString fileNameSave, Bool_t print, Bool_t draw,const char * spath)$/;"	f
+PlotIntegratedMuonEfficiency	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^void PlotIntegratedMuonEfficiency(TString fileNameWeights, TString fileNameData, TString fileNameSave, Bool_t print, Bool_t draw,const char * spath)$/;"	f
+PlotIntegratedMuonEfficiency	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^void PlotIntegratedMuonEfficiency(TString fileNameWeights, TString fileNameData, TString fileNameSave, Bool_t print, Bool_t draw,const char * spath)$/;"	f
 PlotIntegratedMuonEfficiency	Macro_Utile/MuonTrackingEfficiency.C	/^void PlotIntegratedMuonEfficiency(TString fileNameWeights, TString fileNameSave, Bool_t print, Bool_t draw)$/;"	f
-PlotIntegratedMuonEfficiencyPerDE	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^void PlotIntegratedMuonEfficiencyPerDE(TString fileNameWeights, TString fileNameData, TString fileNameSave)$/;"	f
-PlotIntegratedMuonEfficiencyPerDE	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^void PlotIntegratedMuonEfficiencyPerDE(TString fileNameWeights, TString fileNameData, TString fileNameSave)$/;"	f
+PlotIntegratedMuonEfficiencyPerDE	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^void PlotIntegratedMuonEfficiencyPerDE(TString fileNameWeights, TString fileNameData, TString fileNameSave,const char* spath)$/;"	f
+PlotIntegratedMuonEfficiencyPerDE	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^void PlotIntegratedMuonEfficiencyPerDE(TString fileNameWeights, TString fileNameData, TString fileNameSave,const char* spath)$/;"	f
+PlotIntegratedMuonEfficiencyPerDE	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^void PlotIntegratedMuonEfficiencyPerDE(TString fileNameWeights, TString fileNameData, TString fileNameSave,const char* spath)$/;"	f
 PlotIntegratedMuonEfficiencyPerDE	Macro_Utile/MuonTrackingEfficiency.C	/^void PlotIntegratedMuonEfficiencyPerDE(TString fileNameWeights, TString fileNameSave)$/;"	f
-PlotIntegratedMuonEfficiencyVsX	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^void PlotIntegratedMuonEfficiencyVsX(TString var, TString runList, TString fileNameWeights,$/;"	f
-PlotIntegratedMuonEfficiencyVsX	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^void PlotIntegratedMuonEfficiencyVsX(TString var, TString runList, TString fileNameWeights,$/;"	f
+PlotIntegratedMuonEfficiencyVsX	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^void PlotIntegratedMuonEfficiencyVsX(TString var, TString runList, TString fileNameWeights,$/;"	f
+PlotIntegratedMuonEfficiencyVsX	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^void PlotIntegratedMuonEfficiencyVsX(TString var, TString runList, TString fileNameWeights,$/;"	f
+PlotIntegratedMuonEfficiencyVsX	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^void PlotIntegratedMuonEfficiencyVsX(TString var, TString runList, TString fileNameWeights,$/;"	f
 PlotIntegratedMuonEfficiencyVsX	Macro_Utile/MuonTrackingEfficiency.C	/^void PlotIntegratedMuonEfficiencyVsX(TString var, TString runList, TString fileNameWeights,$/;"	f
-PlotMuonEfficiency	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^void PlotMuonEfficiency(TString fileNameData, TString fileNameSave, Bool_t saveEdges, Bool_t print, Bool_t draw)$/;"	f
-PlotMuonEfficiency	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^void PlotMuonEfficiency(TString fileNameData, TString fileNameSave, Bool_t saveEdges, Bool_t print, Bool_t draw)$/;"	f
+PlotMuonEfficiency	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^void PlotMuonEfficiency(TString fileNameData, TString fileNameSave, Bool_t saveEdges, Bool_t print, Bool_t draw)$/;"	f
+PlotMuonEfficiency	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^void PlotMuonEfficiency(TString fileNameData, TString fileNameSave, Bool_t saveEdges, Bool_t print, Bool_t draw)$/;"	f
+PlotMuonEfficiency	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^void PlotMuonEfficiency(TString fileNameData, TString fileNameSave, Bool_t saveEdges, Bool_t print, Bool_t draw)$/;"	f
 PlotMuonEfficiency	Macro_Utile/MuonTrackingEfficiency.C	/^void PlotMuonEfficiency(TString fileNameData, TString fileNameSave, Bool_t saveEdges, Bool_t print, Bool_t draw)$/;"	f
-PlotMuonEfficiencyPerDE	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyPerDE(TString fileNameData, TString fileNameSave, Bool_t saveEdges)$/;"	f
-PlotMuonEfficiencyPerDE	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyPerDE(TString fileNameData, TString fileNameSave, Bool_t saveEdges)$/;"	f
+PlotMuonEfficiencyPerDE	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyPerDE(TString fileNameData, TString fileNameSave, Bool_t saveEdges)$/;"	f
+PlotMuonEfficiencyPerDE	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyPerDE(TString fileNameData, TString fileNameSave, Bool_t saveEdges)$/;"	f
+PlotMuonEfficiencyPerDE	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyPerDE(TString fileNameData, TString fileNameSave, Bool_t saveEdges)$/;"	f
 PlotMuonEfficiencyPerDE	Macro_Utile/MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyPerDE(TString fileNameData, TString fileNameSave, Bool_t saveEdges)$/;"	f
-PlotMuonEfficiencyPerDEVsRun	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyPerDEVsRun(TString runList, TString fileNameData, TString fileNameSave)$/;"	f
-PlotMuonEfficiencyPerDEVsRun	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyPerDEVsRun(TString runList, TString fileNameData, TString fileNameSave)$/;"	f
+PlotMuonEfficiencyPerDEVsRun	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyPerDEVsRun(TString runList, TString fileNameData, TString fileNameSave,const char* spath)$/;"	f
+PlotMuonEfficiencyPerDEVsRun	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyPerDEVsRun(TString runList, TString fileNameData, TString fileNameSave,const char* spath)$/;"	f
+PlotMuonEfficiencyPerDEVsRun	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyPerDEVsRun(TString runList, TString fileNameData, TString fileNameSave,const char* spath)$/;"	f
 PlotMuonEfficiencyPerDEVsRun	Macro_Utile/MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyPerDEVsRun(TString runList, TString fileNameData, TString fileNameSave)$/;"	f
-PlotMuonEfficiencyVsRun	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyVsRun(TString runList, TString fileNameData, TString fileNameSave, Bool_t print, Bool_t draw)$/;"	f
-PlotMuonEfficiencyVsRun	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyVsRun(TString runList, TString fileNameData, TString fileNameSave, Bool_t print, Bool_t draw)$/;"	f
+PlotMuonEfficiencyVsRun	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyVsRun(TString runList, TString fileNameData, TString fileNameSave, Bool_t print, Bool_t draw,const char* spath)$/;"	f
+PlotMuonEfficiencyVsRun	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyVsRun(TString runList, TString fileNameData, TString fileNameSave, Bool_t print, Bool_t draw,const char* spath)$/;"	f
+PlotMuonEfficiencyVsRun	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyVsRun(TString runList, TString fileNameData, TString fileNameSave, Bool_t print, Bool_t draw,const char* spath)$/;"	f
 PlotMuonEfficiencyVsRun	Macro_Utile/MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyVsRun(TString runList, TString fileNameData, TString fileNameSave, Bool_t print, Bool_t draw)$/;"	f
-PlotMuonEfficiencyVsX	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyVsX(TString var, TString fileNameData, TString fileNameSave, Bool_t saveEdges, Bool_t print, Bool_t draw)$/;"	f
-PlotMuonEfficiencyVsX	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyVsX(TString var, TString fileNameData, TString fileNameSave, Bool_t saveEdges, Bool_t print, Bool_t draw)$/;"	f
+PlotMuonEfficiencyVsX	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyVsX(TString var, TString fileNameData, TString fileNameSave, Bool_t saveEdges, Bool_t print, Bool_t draw)$/;"	f
+PlotMuonEfficiencyVsX	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyVsX(TString var, TString fileNameData, TString fileNameSave, Bool_t saveEdges, Bool_t print, Bool_t draw)$/;"	f
+PlotMuonEfficiencyVsX	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyVsX(TString var, TString fileNameData, TString fileNameSave, Bool_t saveEdges, Bool_t print, Bool_t draw)$/;"	f
 PlotMuonEfficiencyVsX	Macro_Utile/MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyVsX(TString var, TString fileNameData, TString fileNameSave, Bool_t saveEdges, Bool_t print, Bool_t draw)$/;"	f
-PlotMuonEfficiencyVsXY	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyVsXY(TString xVar, TString yVar, TString fileNameData, TString fileNameSave, Bool_t draw, Bool_t rap)$/;"	f
-PlotMuonEfficiencyVsXY	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyVsXY(TString xVar, TString yVar, TString fileNameData, TString fileNameSave, Bool_t draw, Bool_t rap)$/;"	f
+PlotMuonEfficiencyVsXY	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyVsXY(TString xVar, TString yVar, TString fileNameData, TString fileNameSave, Bool_t draw, Bool_t rap)$/;"	f
+PlotMuonEfficiencyVsXY	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyVsXY(TString xVar, TString yVar, TString fileNameData, TString fileNameSave, Bool_t draw, Bool_t rap)$/;"	f
+PlotMuonEfficiencyVsXY	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyVsXY(TString xVar, TString yVar, TString fileNameData, TString fileNameSave, Bool_t draw, Bool_t rap)$/;"	f
 PlotMuonEfficiencyVsXY	Macro_Utile/MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyVsXY(TString xVar, TString yVar, TString fileNameData, TString fileNameSave, Bool_t draw, Bool_t rap)$/;"	f
 Pol12Par	LHC_13_d/AccEff/DataPart/FitData.C	/^Double_t Pol12Par[2] = {1.,1.};$/;"	v
 Pol12Par	LHC_13_d/AccEff/MCPart/FitMCData.C	/^Double_t Pol12Par[2] = {1.,1.};$/;"	v
@@ -485,37 +548,49 @@ Ptmin	My_First_Task/AliAnalysisTaskMass.h	/^    double Ptmin; \/\/ minimum pt$/;
 RAA	LHC_15g_pp/MuMuPar/Macro/MyMacro.C	/^void RAA(AliAnalysisMuMu &ana)$/;"	f
 RAA	Test1_PbPb2011/MuMuPart/Macro/MyMacro.C	/^void RAA(AliAnalysisMuMu &ana)$/;"	f
 ReadListFromFile	EventMixing/Task_EvtMix/mergeGridFiles.C	/^void ReadListFromFile(TString filename, TString& fileList, Bool_t isLocal)$/;"	f
-RecordCluster	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::RecordCluster(Int_t chamber, Int_t deId, AliMpPad pad[2], Double_t trackInfo[6],$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
-RecordCluster	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::RecordCluster(Int_t chamber, Int_t deId, AliMpPad pad[2], Double_t trackInfo[6],$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+RecordCluster	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::RecordCluster(Int_t chamber, Int_t deId, AliMpPad pad[2], Double_t trackInfo[6],$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+RecordCluster	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::RecordCluster(Int_t chamber, Int_t deId, AliMpPad pad[2], Double_t trackInfo[6],$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+RecordCluster	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::RecordCluster(Int_t chamber, Int_t deId, AliMpPad pad[2], Double_t trackInfo[6],$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+RecordCluster	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::RecordCluster(Int_t chamber, Int_t deId, AliMpPad pad[2], Double_t trackInfo[6],$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
 RecordCluster	Tasks/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::RecordCluster(Int_t chamber, Int_t deId, AliMpPad pad[2], Double_t trackInfo[6],$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
 RunALICE	EventMixing/Task_EvtMix/RunALICE.C	/^Bool_t RunALICE(TString anSrc = "grid",$/;"	f
 RunAnalysisManager	EventMixing/Task_EvtMix/RunALICE.C	/^Bool_t RunAnalysisManager(TString anSrc = "proof", TString anMode = "test", Long64_t nEvents = 1e10, Long64_t nSkip = 0) {$/;"	f
 SaveQA	LHC_15g_pp/mergeQA/SaveQA.C	/^void SaveQA(TString inputDataFile, TString inputMCFile)$/;"	f
 SaveQA	Macro_Utile/SaveQA.C	/^void SaveQA(TString inputDataFile, TString inputMCFile)$/;"	f
+SaveQA	SaveQA.C	/^void SaveQA(TString inputDataFile, TString inputMCFile)$/;"	f
 SelectCentrality	LHC_13_d/AccEff/GenTuner/AliAnalysisTaskGenTunerJpsi.h	/^  void SelectCentrality(Double_t min, Double_t max) {fCentMin = min; fCentMax = max;}$/;"	f	class:AliAnalysisTaskGenTunerJpsi
 SelectCentrality	LHC_15g_pp/AccEff_Muons/AliAnalysisTaskGenTuner.h	/^  void SelectCentrality(Double_t min, Double_t max) {fCentMin = min; fCentMax = max;}$/;"	f	class:AliAnalysisTaskGenTuner
 SelectCentrality	LHC_15g_pp/AccEff_jpsi/GenTuner/AliAnalysisTaskGenTunerJpsi.h	/^  void SelectCentrality(Double_t min, Double_t max) {fCentMin = min; fCentMax = max;}$/;"	f	class:AliAnalysisTaskGenTunerJpsi
-SelectCentrality	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SelectCentrality(Double_t min, Double_t max) {fCentMin = min; fCentMax = max;}$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
-SelectCentrality	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SelectCentrality(Double_t min, Double_t max) {fCentMin = min; fCentMax = max;}$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+SelectCentrality	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SelectCentrality(Double_t min, Double_t max) {fCentMin = min; fCentMax = max;}$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+SelectCentrality	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SelectCentrality(Double_t min, Double_t max) {fCentMin = min; fCentMax = max;}$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+SelectCentrality	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SelectCentrality(Double_t min, Double_t max) {fCentMin = min; fCentMax = max;}$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+SelectCentrality	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SelectCentrality(Double_t min, Double_t max) {fCentMin = min; fCentMax = max;}$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
 SelectCentrality	Tasks/AliAnalysisTaskGenTuner.h	/^  void SelectCentrality(Double_t min, Double_t max) {fCentMin = min; fCentMax = max;}$/;"	f	class:AliAnalysisTaskGenTuner
 SelectCentrality	Tasks/AliAnalysisTaskGenTunerJpsi.h	/^  void SelectCentrality(Double_t min, Double_t max) {fCentMin = min; fCentMax = max;}$/;"	f	class:AliAnalysisTaskGenTunerJpsi
 SelectCentrality	Tasks/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SelectCentrality(Double_t min, Double_t max) {fCentMin = min; fCentMax = max;}$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
-SetAlignStorage	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SetAlignStorage(const char* ocdbPath) { fAlignOCDBpath = ocdbPath; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
-SetAlignStorage	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SetAlignStorage(const char* ocdbPath) { fAlignOCDBpath = ocdbPath; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+SetAlignStorage	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SetAlignStorage(const char* ocdbPath) { fAlignOCDBpath = ocdbPath; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+SetAlignStorage	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SetAlignStorage(const char* ocdbPath) { fAlignOCDBpath = ocdbPath; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+SetAlignStorage	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SetAlignStorage(const char* ocdbPath) { fAlignOCDBpath = ocdbPath; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+SetAlignStorage	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SetAlignStorage(const char* ocdbPath) { fAlignOCDBpath = ocdbPath; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
 SetAlignStorage	Tasks/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SetAlignStorage(const char* ocdbPath) { fAlignOCDBpath = ocdbPath; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
-SetCentPtCh	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^void SetCentPtCh(THnSparse& SparseData)$/;"	f
-SetCentPtCh	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^void SetCentPtCh(THnSparse& SparseData)$/;"	f
+SetCentPtCh	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^void SetCentPtCh(THnSparse& SparseData)$/;"	f
+SetCentPtCh	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^void SetCentPtCh(THnSparse& SparseData)$/;"	f
+SetCentPtCh	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^void SetCentPtCh(THnSparse& SparseData)$/;"	f
 SetCentPtCh	Macro_Utile/MuonTrackingEfficiency.C	/^void SetCentPtCh(THnSparse& SparseData)$/;"	f
 SetDataFile	LHC_15g_pp/AccEff_Muons/AliAnalysisTaskGenTuner.h	/^  void SetDataFile(const Char_t* name) {fDataFile = name;}$/;"	f	class:AliAnalysisTaskGenTuner
 SetDataFile	Tasks/AliAnalysisTaskGenTuner.h	/^  void SetDataFile(const Char_t* name) {fDataFile = name;}$/;"	f	class:AliAnalysisTaskGenTuner
-SetDefaultStorage	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SetDefaultStorage(const char* ocdbPath) { fOCDBpath = ocdbPath; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
-SetDefaultStorage	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SetDefaultStorage(const char* ocdbPath) { fOCDBpath = ocdbPath; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+SetDefaultStorage	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SetDefaultStorage(const char* ocdbPath) { fOCDBpath = ocdbPath; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+SetDefaultStorage	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SetDefaultStorage(const char* ocdbPath) { fOCDBpath = ocdbPath; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+SetDefaultStorage	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SetDefaultStorage(const char* ocdbPath) { fOCDBpath = ocdbPath; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+SetDefaultStorage	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SetDefaultStorage(const char* ocdbPath) { fOCDBpath = ocdbPath; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
 SetDefaultStorage	Tasks/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SetDefaultStorage(const char* ocdbPath) { fOCDBpath = ocdbPath; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
 SetMuonPtCut	LHC_13_d/AccEff/GenTuner/AliAnalysisTaskGenTunerJpsi.h	/^  void SetMuonPtCut(Double_t cut) {fPtCut = cut;}$/;"	f	class:AliAnalysisTaskGenTunerJpsi
 SetMuonPtCut	LHC_15g_pp/AccEff_Muons/AliAnalysisTaskGenTuner.h	/^  void SetMuonPtCut(Double_t cut) {fPtCut = cut;}$/;"	f	class:AliAnalysisTaskGenTuner
 SetMuonPtCut	LHC_15g_pp/AccEff_jpsi/GenTuner/AliAnalysisTaskGenTunerJpsi.h	/^  void SetMuonPtCut(Double_t cut) {fPtCut = cut;}$/;"	f	class:AliAnalysisTaskGenTunerJpsi
-SetMuonPtCut	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SetMuonPtCut(Double_t cut) {fPtCut = cut;}$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
-SetMuonPtCut	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SetMuonPtCut(Double_t cut) {fPtCut = cut;}$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+SetMuonPtCut	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SetMuonPtCut(Double_t cut) {fPtCut = cut;}$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+SetMuonPtCut	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SetMuonPtCut(Double_t cut) {fPtCut = cut;}$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+SetMuonPtCut	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SetMuonPtCut(Double_t cut) {fPtCut = cut;}$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+SetMuonPtCut	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SetMuonPtCut(Double_t cut) {fPtCut = cut;}$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
 SetMuonPtCut	Tasks/AliAnalysisTaskGenTuner.h	/^  void SetMuonPtCut(Double_t cut) {fPtCut = cut;}$/;"	f	class:AliAnalysisTaskGenTuner
 SetMuonPtCut	Tasks/AliAnalysisTaskGenTunerJpsi.h	/^  void SetMuonPtCut(Double_t cut) {fPtCut = cut;}$/;"	f	class:AliAnalysisTaskGenTunerJpsi
 SetMuonPtCut	Tasks/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SetMuonPtCut(Double_t cut) {fPtCut = cut;}$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
@@ -523,8 +598,10 @@ SetMuonTrackCuts	EventMixing/Task_EvtMix/AliAnalysisTaskEx02.h	/^  void SetMuonT
 SetMuonTrackCuts	LHC_13_d/AccEff/GenTuner/AliAnalysisTaskGenTunerJpsi.h	/^inline void AliAnalysisTaskGenTunerJpsi::SetMuonTrackCuts(AliMuonTrackCuts &trackCuts)$/;"	f	class:AliAnalysisTaskGenTunerJpsi
 SetMuonTrackCuts	LHC_15g_pp/AccEff_Muons/AliAnalysisTaskGenTuner.h	/^inline void AliAnalysisTaskGenTuner::SetMuonTrackCuts(AliMuonTrackCuts &trackCuts)$/;"	f	class:AliAnalysisTaskGenTuner
 SetMuonTrackCuts	LHC_15g_pp/AccEff_jpsi/GenTuner/AliAnalysisTaskGenTunerJpsi.h	/^inline void AliAnalysisTaskGenTunerJpsi::SetMuonTrackCuts(AliMuonTrackCuts &trackCuts)$/;"	f	class:AliAnalysisTaskGenTunerJpsi
-SetMuonTrackCuts	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.h	/^inline void AliAnalysisTaskMuonTrackingEffLocal::SetMuonTrackCuts(AliMuonTrackCuts &trackCuts)$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
-SetMuonTrackCuts	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.h	/^inline void AliAnalysisTaskMuonTrackingEffLocal::SetMuonTrackCuts(AliMuonTrackCuts &trackCuts)$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+SetMuonTrackCuts	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^inline void AliAnalysisTaskMuonTrackingEffLocal::SetMuonTrackCuts(AliMuonTrackCuts &trackCuts)$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+SetMuonTrackCuts	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^inline void AliAnalysisTaskMuonTrackingEffLocal::SetMuonTrackCuts(AliMuonTrackCuts &trackCuts)$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+SetMuonTrackCuts	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^inline void AliAnalysisTaskMuonTrackingEffLocal::SetMuonTrackCuts(AliMuonTrackCuts &trackCuts)$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+SetMuonTrackCuts	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^inline void AliAnalysisTaskMuonTrackingEffLocal::SetMuonTrackCuts(AliMuonTrackCuts &trackCuts)$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
 SetMuonTrackCuts	Tasks/AliAnalysisTaskGenTuner.h	/^inline void AliAnalysisTaskGenTuner::SetMuonTrackCuts(AliMuonTrackCuts &trackCuts)$/;"	f	class:AliAnalysisTaskGenTuner
 SetMuonTrackCuts	Tasks/AliAnalysisTaskGenTunerJpsi.h	/^inline void AliAnalysisTaskGenTunerJpsi::SetMuonTrackCuts(AliMuonTrackCuts &trackCuts)$/;"	f	class:AliAnalysisTaskGenTunerJpsi
 SetMuonTrackCuts	Tasks/AliAnalysisTaskMuonTrackingEffLocal.h	/^inline void AliAnalysisTaskMuonTrackingEffLocal::SetMuonTrackCuts(AliMuonTrackCuts &trackCuts)$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
@@ -541,13 +618,17 @@ SetPtRefHisto	LHC_13_d/AccEff/GenTuner/AliAnalysisTaskGenTunerJpsi.h	/^  void Se
 SetPtRefHisto	LHC_15g_pp/AccEff_jpsi/GenTuner/AliAnalysisTaskGenTunerJpsi.h	/^  void SetPtRefHisto(TH1* hptRef) {if(hptRef) fHptRef = static_cast<TH1*>(hptRef->Clone());}$/;"	f	class:AliAnalysisTaskGenTunerJpsi
 SetPtRefHisto	Tasks/AliAnalysisTaskGenTunerJpsi.h	/^  void SetPtRefHisto(TH1* hptRef) {if(hptRef) fHptRef = static_cast<TH1*>(hptRef->Clone());}$/;"	f	class:AliAnalysisTaskGenTunerJpsi
 SetPtUpEdge	EventMixing/Task_EvtMix/AliAnalysisTaskEx02.h	/^  void SetPtUpEdge(Int_t nPtBins, Float_t *ptUpEdge) { fPtBin[1].Set(nPtBins, ptUpEdge); }$/;"	f	class:AliAnalysisTaskEx02
-SetRecoParamStorage	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SetRecoParamStorage(const char* ocdbPath) { fRecoParamOCDBpath = ocdbPath; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
-SetRecoParamStorage	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SetRecoParamStorage(const char* ocdbPath) { fRecoParamOCDBpath = ocdbPath; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+SetRecoParamStorage	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SetRecoParamStorage(const char* ocdbPath) { fRecoParamOCDBpath = ocdbPath; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+SetRecoParamStorage	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SetRecoParamStorage(const char* ocdbPath) { fRecoParamOCDBpath = ocdbPath; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+SetRecoParamStorage	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SetRecoParamStorage(const char* ocdbPath) { fRecoParamOCDBpath = ocdbPath; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+SetRecoParamStorage	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SetRecoParamStorage(const char* ocdbPath) { fRecoParamOCDBpath = ocdbPath; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
 SetRecoParamStorage	Tasks/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void SetRecoParamStorage(const char* ocdbPath) { fRecoParamOCDBpath = ocdbPath; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
-SetRunLabel	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^void SetRunLabel(TGraphAsymmErrors &g, Int_t irun, const TList& runs)$/;"	f
-SetRunLabel	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^void SetRunLabel(TObjArray& array, Int_t irun, const TList& runs)$/;"	f
-SetRunLabel	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^void SetRunLabel(TGraphAsymmErrors &g, Int_t irun, const TList& runs)$/;"	f
-SetRunLabel	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^void SetRunLabel(TObjArray& array, Int_t irun, const TList& runs)$/;"	f
+SetRunLabel	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^void SetRunLabel(TGraphAsymmErrors &g, Int_t irun, const TList& runs)$/;"	f
+SetRunLabel	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^void SetRunLabel(TObjArray& array, Int_t irun, const TList& runs)$/;"	f
+SetRunLabel	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^void SetRunLabel(TGraphAsymmErrors &g, Int_t irun, const TList& runs)$/;"	f
+SetRunLabel	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^void SetRunLabel(TObjArray& array, Int_t irun, const TList& runs)$/;"	f
+SetRunLabel	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^void SetRunLabel(TGraphAsymmErrors &g, Int_t irun, const TList& runs)$/;"	f
+SetRunLabel	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^void SetRunLabel(TObjArray& array, Int_t irun, const TList& runs)$/;"	f
 SetRunLabel	Macro_Utile/MuonTrackingEfficiency.C	/^void SetRunLabel(TGraphAsymmErrors &g, Int_t irun, const TList& runs)$/;"	f
 SetRunLabel	Macro_Utile/MuonTrackingEfficiency.C	/^void SetRunLabel(TObjArray& array, Int_t irun, const TList& runs)$/;"	f
 SetYBin	LHC_13_d/AccEff/GenTuner/AliAnalysisTaskGenTunerJpsi.cxx	/^void AliAnalysisTaskGenTunerJpsi::SetYBin(Int_t nofbin,Double_t* bin)$/;"	f	class:AliAnalysisTaskGenTunerJpsi
@@ -572,14 +653,18 @@ Sum1	Macro_Utile/FittingFunctions.C	/^Double_t Sum1(Double_t *arg, Double_t *par
 Sum1	My_First_Task/FittingFunctions.C	/^Double_t Sum1(Double_t *arg, Double_t *par)$/;"	f
 Sum2	Macro_Utile/FittingFunctions.C	/^Double_t Sum2(Double_t *arg, Double_t *par)$/;"	f
 Sum2	My_First_Task/FittingFunctions.C	/^Double_t Sum2(Double_t *arg, Double_t *par)$/;"	f
-TagRemovableClusters	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^Bool_t AliAnalysisTaskMuonTrackingEffLocal::TagRemovableClusters(AliMUONTrack &track, Bool_t removableChambers[10])$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
-TagRemovableClusters	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^Bool_t AliAnalysisTaskMuonTrackingEffLocal::TagRemovableClusters(AliMUONTrack &track, Bool_t removableChambers[10])$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+TagRemovableClusters	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^Bool_t AliAnalysisTaskMuonTrackingEffLocal::TagRemovableClusters(AliMUONTrack &track, Bool_t removableChambers[10])$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+TagRemovableClusters	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^Bool_t AliAnalysisTaskMuonTrackingEffLocal::TagRemovableClusters(AliMUONTrack &track, Bool_t removableChambers[10])$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+TagRemovableClusters	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^Bool_t AliAnalysisTaskMuonTrackingEffLocal::TagRemovableClusters(AliMUONTrack &track, Bool_t removableChambers[10])$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+TagRemovableClusters	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^Bool_t AliAnalysisTaskMuonTrackingEffLocal::TagRemovableClusters(AliMUONTrack &track, Bool_t removableChambers[10])$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
 TagRemovableClusters	Tasks/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^Bool_t AliAnalysisTaskMuonTrackingEffLocal::TagRemovableClusters(AliMUONTrack &track, Bool_t removableChambers[10])$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
 Terminate	LHC_13_d/AccEff/GenTuner/AliAnalysisTaskGenTunerJpsi.cxx	/^void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)$/;"	f	class:AliAnalysisTaskGenTunerJpsi
 Terminate	LHC_15g_pp/AccEff_Muons/AliAnalysisTaskGenTuner.cxx	/^void AliAnalysisTaskGenTuner::Terminate(Option_t *)$/;"	f	class:AliAnalysisTaskGenTuner
 Terminate	LHC_15g_pp/AccEff_jpsi/GenTuner/AliAnalysisTaskGenTunerJpsi.cxx	/^void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)$/;"	f	class:AliAnalysisTaskGenTunerJpsi
-Terminate	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::Terminate(Option_t *)$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
-Terminate	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::Terminate(Option_t *)$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+Terminate	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::Terminate(Option_t *)$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+Terminate	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::Terminate(Option_t *)$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+Terminate	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::Terminate(Option_t *)$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+Terminate	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::Terminate(Option_t *)$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
 Terminate	My_First_Task/AliAnalysisTaskMass.cxx	/^void AliAnalysisTaskMass::Terminate(Option_t *) $/;"	f	class:AliAnalysisTaskMass
 Terminate	Tasks/AliAnalysisTaskGenTuner.cxx	/^void AliAnalysisTaskGenTuner::Terminate(Option_t *)$/;"	f	class:AliAnalysisTaskGenTuner
 Terminate	Tasks/AliAnalysisTaskGenTunerJpsi.cxx	/^void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)$/;"	f	class:AliAnalysisTaskGenTunerJpsi
@@ -587,15 +672,19 @@ Terminate	Tasks/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMu
 Trigger	LHC_15g_pp/TrackingEfficiency/Simulation/runAccEffSubmitter.c	/^TString Trigger = "CMSL7-B-NOPF-MUON";$/;"	v
 TriggerInputsForMuonEventCuts	LHC_15g_pp/MuMuPar/Macro/TriggerInputsForMuonEventCuts.C	/^void TriggerInputsForMuonEventCuts ( TString runListFilename, TString selectedInputs="", TString defaultStorage = "raw:\/\/" )$/;"	f
 TriggerInputsForMuonEventCuts	Test1_PbPb2011/MuMuPart/Macro/TriggerInputsForMuonEventCuts.C	/^void TriggerInputsForMuonEventCuts ( TString runListFilename, TString selectedInputs="", TString defaultStorage = "raw:\/\/" )$/;"	f
-UseMCLabel	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void UseMCLabel(Bool_t flag = kTRUE) { fUseMCLabel = flag; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
-UseMCLabel	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void UseMCLabel(Bool_t flag = kTRUE) { fUseMCLabel = flag; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+UseMCLabel	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void UseMCLabel(Bool_t flag = kTRUE) { fUseMCLabel = flag; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+UseMCLabel	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void UseMCLabel(Bool_t flag = kTRUE) { fUseMCLabel = flag; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+UseMCLabel	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void UseMCLabel(Bool_t flag = kTRUE) { fUseMCLabel = flag; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+UseMCLabel	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void UseMCLabel(Bool_t flag = kTRUE) { fUseMCLabel = flag; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
 UseMCLabel	Tasks/AliAnalysisTaskMuonTrackingEffLocal.h	/^  void UseMCLabel(Bool_t flag = kTRUE) { fUseMCLabel = flag; }$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
 UserCreateOutputObjects	EventMixing/Task_EvtMix/AliAnalysisTaskEx02.cxx	/^void AliAnalysisTaskEx02::UserCreateOutputObjects()$/;"	f	class:AliAnalysisTaskEx02
 UserCreateOutputObjects	LHC_13_d/AccEff/GenTuner/AliAnalysisTaskGenTunerJpsi.cxx	/^void AliAnalysisTaskGenTunerJpsi::UserCreateOutputObjects()$/;"	f	class:AliAnalysisTaskGenTunerJpsi
 UserCreateOutputObjects	LHC_15g_pp/AccEff_Muons/AliAnalysisTaskGenTuner.cxx	/^void AliAnalysisTaskGenTuner::UserCreateOutputObjects()$/;"	f	class:AliAnalysisTaskGenTuner
 UserCreateOutputObjects	LHC_15g_pp/AccEff_jpsi/GenTuner/AliAnalysisTaskGenTunerJpsi.cxx	/^void AliAnalysisTaskGenTunerJpsi::UserCreateOutputObjects()$/;"	f	class:AliAnalysisTaskGenTunerJpsi
-UserCreateOutputObjects	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::UserCreateOutputObjects()$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
-UserCreateOutputObjects	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::UserCreateOutputObjects()$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+UserCreateOutputObjects	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::UserCreateOutputObjects()$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+UserCreateOutputObjects	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::UserCreateOutputObjects()$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+UserCreateOutputObjects	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::UserCreateOutputObjects()$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+UserCreateOutputObjects	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::UserCreateOutputObjects()$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
 UserCreateOutputObjects	My_First_Task/AliAnalysisTaskMass.cxx	/^void AliAnalysisTaskMass::UserCreateOutputObjects()$/;"	f	class:AliAnalysisTaskMass
 UserCreateOutputObjects	Tasks/AliAnalysisTaskGenTuner.cxx	/^void AliAnalysisTaskGenTuner::UserCreateOutputObjects()$/;"	f	class:AliAnalysisTaskGenTuner
 UserCreateOutputObjects	Tasks/AliAnalysisTaskGenTunerJpsi.cxx	/^void AliAnalysisTaskGenTunerJpsi::UserCreateOutputObjects()$/;"	f	class:AliAnalysisTaskGenTunerJpsi
@@ -604,8 +693,10 @@ UserExec	EventMixing/Task_EvtMix/AliAnalysisTaskEx02.cxx	/^void AliAnalysisTaskE
 UserExec	LHC_13_d/AccEff/GenTuner/AliAnalysisTaskGenTunerJpsi.cxx	/^void AliAnalysisTaskGenTunerJpsi::UserExec(Option_t *)$/;"	f	class:AliAnalysisTaskGenTunerJpsi
 UserExec	LHC_15g_pp/AccEff_Muons/AliAnalysisTaskGenTuner.cxx	/^void AliAnalysisTaskGenTuner::UserExec(Option_t *)$/;"	f	class:AliAnalysisTaskGenTuner
 UserExec	LHC_15g_pp/AccEff_jpsi/GenTuner/AliAnalysisTaskGenTunerJpsi.cxx	/^void AliAnalysisTaskGenTunerJpsi::UserExec(Option_t *)$/;"	f	class:AliAnalysisTaskGenTunerJpsi
-UserExec	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::UserExec(Option_t *)$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
-UserExec	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::UserExec(Option_t *)$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+UserExec	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::UserExec(Option_t *)$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+UserExec	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::UserExec(Option_t *)$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+UserExec	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::UserExec(Option_t *)$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+UserExec	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^void AliAnalysisTaskMuonTrackingEffLocal::UserExec(Option_t *)$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
 UserExec	My_First_Task/AliAnalysisTaskMass.cxx	/^void AliAnalysisTaskMass::UserExec(Option_t *) $/;"	f	class:AliAnalysisTaskMass
 UserExec	Tasks/AliAnalysisTaskGenTuner.cxx	/^void AliAnalysisTaskGenTuner::UserExec(Option_t *)$/;"	f	class:AliAnalysisTaskGenTuner
 UserExec	Tasks/AliAnalysisTaskGenTunerJpsi.cxx	/^void AliAnalysisTaskGenTunerJpsi::UserExec(Option_t *)$/;"	f	class:AliAnalysisTaskGenTunerJpsi
@@ -636,28 +727,37 @@ YRat	LHC_15g_pp/AccEff_jpsi/GenTuner/AliAnalysisTaskGenTunerJpsi.cxx	/^Double_t 
 YRat	LHC_15g_pp/AccEff_jpsi/GenTuner/Compare.C	/^Double_t YRat(const Double_t *x, const Double_t *p)$/;"	f
 YRat	Tasks/AliAnalysisTaskGenTuner.cxx	/^Double_t AliAnalysisTaskGenTuner::YRat(const Double_t *x, const Double_t *p)$/;"	f	class:AliAnalysisTaskGenTuner
 YRat	Tasks/AliAnalysisTaskGenTunerJpsi.cxx	/^Double_t AliAnalysisTaskGenTunerJpsi::YRat(const Double_t *x, const Double_t *p)$/;"	f	class:AliAnalysisTaskGenTunerJpsi
-alignStorage	LHC_15g_pp/TrackingEfficiency/Data/runMuonEfficiency.C	/^TString alignStorage = "alien:\/\/folder=\/alice\/data\/2015\/OCDB";$/;"	v
-alignStorage	LHC_15g_pp/TrackingEfficiency/MonteCarlo/runMuonEfficiency.C	/^TString alignStorage = "alien:\/\/folder=\/alice\/data\/2015\/OCDB";$/;"	v
+alignStorage	LHC_15g_pp/TrackingEfficiency/DataMSL/runMuonEfficiency.C	/^TString alignStorage = "alien:\/\/folder=\/alice\/data\/2015\/OCDB";$/;"	v
+alignStorage	LHC_15g_pp/TrackingEfficiency/DataMUL/runMuonEfficiency.C	/^TString alignStorage = "alien:\/\/folder=\/alice\/data\/2015\/OCDB";$/;"	v
+alignStorage	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/runMuonEfficiency.C	/^TString alignStorage = "alien:\/\/folder=\/alice\/data\/2015\/OCDB";$/;"	v
+alignStorage	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/runMuonEfficiency.C	/^TString alignStorage = "alien:\/\/folder=\/alice\/data\/2015\/OCDB";$/;"	v
+alignStorage	LHC_15g_pp/TrackingEfficiency/Resultat philippe/runMuonEfficiency.C	/^TString alignStorage = "alien:\/\/folder=\/alice\/data\/2015\/OCDB";$/;"	v
 aliphysicsVersion	LHC_13_d/AccEff/GenTuner/runGenTuner.C	/^TString aliphysicsVersion = "vAN-20150422";$/;"	v
 aliphysicsVersion	LHC_15g_pp/AccEff_Muons/runGenTuner.C	/^TString aliphysicsVersion = "vAN-20150902";$/;"	v
 aliphysicsVersion	LHC_15g_pp/AccEff_jpsi/DataPart/runMuMuGrid.C	/^TString aliphysicsVersion = "vAN-20150722";$/;"	v
 aliphysicsVersion	LHC_15g_pp/AccEff_jpsi/GenTuner/runGenTuner.C	/^TString aliphysicsVersion = "vAN-20150422";$/;"	v
 aliphysicsVersion	LHC_15g_pp/AccEff_jpsi/MCPart/runMuMuGrid.C	/^TString aliphysicsVersion = "vAN-20150722";$/;"	v
 aliphysicsVersion	LHC_15g_pp/MuMuPar/runMuMuGrid.C	/^TString aliphysicsVersion = "vAN-20150722";$/;"	v
-aliphysicsVersion	LHC_15g_pp/TrackingEfficiency/Data/runMuonEfficiency.C	/^TString aliphysicsVersion = "vAN-20151015-1";$/;"	v
-aliphysicsVersion	LHC_15g_pp/TrackingEfficiency/MonteCarlo/runMuonEfficiency.C	/^TString aliphysicsVersion = "vAN-20151015-1";$/;"	v
+aliphysicsVersion	LHC_15g_pp/TrackingEfficiency/DataMSL/runMuonEfficiency.C	/^TString aliphysicsVersion = "vAN-20151015-1";$/;"	v
+aliphysicsVersion	LHC_15g_pp/TrackingEfficiency/DataMUL/runMuonEfficiency.C	/^TString aliphysicsVersion = "vAN-20151015-1";$/;"	v
+aliphysicsVersion	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/runMuonEfficiency.C	/^TString aliphysicsVersion = "vAN-20151015-1";$/;"	v
+aliphysicsVersion	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/runMuonEfficiency.C	/^TString aliphysicsVersion = "vAN-20151015-1";$/;"	v
+aliphysicsVersion	LHC_15g_pp/TrackingEfficiency/Resultat philippe/runMuonEfficiency.C	/^TString aliphysicsVersion = "vAN-20151015-1";$/;"	v
 alirootVersion	LHC_15g_pp/AccEff_Muons/runGenTuner.C	/^TString alirootVersion = "v5-06-33";$/;"	v
 alirootVersion	LHC_15g_pp/AccEff_jpsi/DataPart/runMuMuGrid.C	/^TString alirootVersion = "v5-06-33";$/;"	v
 alirootVersion	LHC_15g_pp/AccEff_jpsi/MCPart/runMuMuGrid.C	/^TString alirootVersion = "v5-06-33";$/;"	v
 alirootVersion	LHC_15g_pp/MuMuPar/runMuMuGrid.C	/^TString alirootVersion = "v5-06-33";$/;"	v
-alirootVersion	LHC_15g_pp/TrackingEfficiency/Data/runMuonEfficiency.C	/^TString alirootVersion = "v5-07-01-3";$/;"	v
-alirootVersion	LHC_15g_pp/TrackingEfficiency/MonteCarlo/runMuonEfficiency.C	/^TString alirootVersion = "v5-07-01-3";$/;"	v
+alirootVersion	LHC_15g_pp/TrackingEfficiency/DataMSL/runMuonEfficiency.C	/^TString alirootVersion = "v5-07-01-3";$/;"	v
+alirootVersion	LHC_15g_pp/TrackingEfficiency/DataMUL/runMuonEfficiency.C	/^TString alirootVersion = "v5-07-01-3";$/;"	v
+alirootVersion	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/runMuonEfficiency.C	/^TString alirootVersion = "v5-07-01-3";$/;"	v
+alirootVersion	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/runMuonEfficiency.C	/^TString alirootVersion = "v5-07-01-3";$/;"	v
+alirootVersion	LHC_15g_pp/TrackingEfficiency/Resultat philippe/runMuonEfficiency.C	/^TString alirootVersion = "v5-07-01-3";$/;"	v
 anatype	LHC_15g_pp/AccEff_Muons/Eff.C	/^const char *anatype = "AOD";$/;"	v
 anatype	LHC_15g_pp/AccEff_jpsi/DataPart/MuMu.C	/^const char *anatype = "AOD";$/;"	v
 anatype	LHC_15g_pp/AccEff_jpsi/MCPart/MuMu.C	/^const char *anatype = "AOD";$/;"	v
 anatype	LHC_15g_pp/MuMuPar/MuMu.C	/^const char *anatype = "AOD";$/;"	v
-anatype	LHC_15g_pp/TrackingEfficiency/Data/Eff.C	/^const char *anatype = "ESD";$/;"	v
-anatype	LHC_15g_pp/TrackingEfficiency/MonteCarlo/Eff.C	/^const char *anatype = "ESD";$/;"	v
+anatype	LHC_15g_pp/TrackingEfficiency/DataMSL/Eff.C	/^const char *anatype = "ESD";$/;"	v
+anatype	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/Eff.C	/^const char *anatype = "ESD";$/;"	v
 applyPhysicsSelection	LHC_13_d/AccEff/GenTuner/runGenTuner.C	/^Bool_t applyPhysicsSelection = kFALSE;$/;"	v
 applyPhysicsSelection	LHC_15g_pp/AccEff_Muons/runGenTuner.C	/^Bool_t applyPhysicsSelection = kFALSE;$/;"	v
 applyPhysicsSelection	LHC_15g_pp/AccEff_jpsi/DataPart/runMuMuGrid.C	/^Bool_t applyPhysicsSelection = kFALSE;$/;"	v
@@ -665,14 +765,17 @@ applyPhysicsSelection	LHC_15g_pp/AccEff_jpsi/GenTuner/runGenTuner.C	/^Bool_t app
 applyPhysicsSelection	LHC_15g_pp/AccEff_jpsi/MCPart/runMuMuGrid.C	/^Bool_t applyPhysicsSelection = kFALSE;$/;"	v
 applyPhysicsSelection	LHC_15g_pp/MuMuPar/runMuMuGrid.C	/^Bool_t applyPhysicsSelection = kFALSE;$/;"	v
 bufferSize	Test1_PbPb2011/TestMixedEvent/runMuMu.C	/^const Int_t bufferSize = 1;$/;"	v
-centMax	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^Double_t centMax = 999.;$/;"	v
-centMax	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^Double_t centMax = 999.;$/;"	v
+centMax	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^Double_t centMax = 999.;$/;"	v
+centMax	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^Double_t centMax = 999.;$/;"	v
+centMax	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^Double_t centMax = 999.;$/;"	v
 centMax	Macro_Utile/MuonTrackingEfficiency.C	/^Double_t centMax = 999.;$/;"	v
-centMin	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^Double_t centMin = -999.;$/;"	v
-centMin	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^Double_t centMin = -999.;$/;"	v
+centMin	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^Double_t centMin = -999.;$/;"	v
+centMin	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^Double_t centMin = -999.;$/;"	v
+centMin	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^Double_t centMin = -999.;$/;"	v
 centMin	Macro_Utile/MuonTrackingEfficiency.C	/^Double_t centMin = -999.;$/;"	v
-charge	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^Int_t charge = 0; \/\/ 0 selects + and -, -1 and +1 selects - or + muons respectively$/;"	v
-charge	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^Int_t charge = 0; \/\/ 0 selects + and -, -1 and +1 selects - or + muons respectively$/;"	v
+charge	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^Int_t charge = 0; \/\/ 0 selects + and -, -1 and +1 selects - or + muons respectively$/;"	v
+charge	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^Int_t charge = 0; \/\/ 0 selects + and -, -1 and +1 selects - or + muons respectively$/;"	v
+charge	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^Int_t charge = 0; \/\/ 0 selects + and -, -1 and +1 selects - or + muons respectively$/;"	v
 charge	Macro_Utile/MuonTrackingEfficiency.C	/^Int_t charge = 0; \/\/ 0 selects + and -, -1 and +1 selects - or + muons respectively$/;"	v
 completeProd	EventMixing/Task_EvtMix/mergeGridFiles.C	/^void completeProd(TString runListName="runList.txt", TString outTaskFilename="QAresults.root", TString baseDir="\/alice\/data\/2010\/LHC10h", TString prodDir = "")$/;"	f
 copyFiles	LHC_15g_pp/mergeQA/copyFiles.C	/^void copyFiles(TString gridLocation = "Analysis\/LHC15g\/TrackingEfficiency\/Data\/QA\/New\/")$/;"	f
@@ -682,16 +785,22 @@ dataDir	LHC_15g_pp/AccEff_jpsi/DataPart/runMuMuGrid.C	/^TString dataDir = "\/ali
 dataDir	LHC_15g_pp/AccEff_jpsi/GenTuner/runGenTuner.C	/^TString dataDir = "\/alice\/data\/2010\/LHC10h";$/;"	v
 dataDir	LHC_15g_pp/AccEff_jpsi/MCPart/runMuMuGrid.C	/^TString dataDir = "\/alice\/data\/2015\/LHC15g";$/;"	v
 dataDir	LHC_15g_pp/MuMuPar/runMuMuGrid.C	/^TString dataDir = "\/alice\/cern.ch\/user\/b\/baudurie\/Analysis\/LHC15g\/TrackingEfficiency\/simjpsi\/pp\/CMUL7-B-NOPF-MUON";$/;"	v
-dataDir	LHC_15g_pp/TrackingEfficiency/Data/runMuonEfficiency.C	/^TString dataDir = "\/alice\/data\/2015\/LHC15g";$/;"	v
-dataDir	LHC_15g_pp/TrackingEfficiency/MonteCarlo/runMuonEfficiency.C	/^TString dataDir = "\/alice\/cern.ch\/user\/b\/baudurie\/Analysis\/LHC15g\/sim\/singleMuon\/CMSL7-B-NOPF-MUON";$/;"	v
+dataDir	LHC_15g_pp/TrackingEfficiency/DataMSL/runMuonEfficiency.C	/^TString dataDir = "\/alice\/data\/2015\/LHC15g";$/;"	v
+dataDir	LHC_15g_pp/TrackingEfficiency/DataMUL/runMuonEfficiency.C	/^TString dataDir = "\/alice\/data\/2015\/LHC15g";$/;"	v
+dataDir	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/runMuonEfficiency.C	/^TString dataDir = "\/alice\/cern.ch\/user\/b\/baudurie\/Analysis\/LHC15g\/sim\/singleMuon\/CMSL7-B-NOPF-MUON";$/;"	v
+dataDir	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/runMuonEfficiency.C	/^TString dataDir = "\/alice\/data\/2015\/LHC15g";$/;"	v
+dataDir	LHC_15g_pp/TrackingEfficiency/Resultat philippe/runMuonEfficiency.C	/^TString dataDir = "\/alice\/data\/2015\/LHC15g";$/;"	v
 dataPattern	LHC_13_d/AccEff/GenTuner/runGenTuner.C	/^TString dataPattern = "pass2\/*AliESDs.root";$/;"	v
 dataPattern	LHC_15g_pp/AccEff_Muons/runGenTuner.C	/^TString dataPattern = "*AliAOD.Muons.root";$/;"	v
 dataPattern	LHC_15g_pp/AccEff_jpsi/DataPart/runMuMuGrid.C	/^TString dataPattern = "muon_calo_pass1\/*AliAOD.Muons.root";$/;"	v
 dataPattern	LHC_15g_pp/AccEff_jpsi/GenTuner/runGenTuner.C	/^TString dataPattern = "pass2\/*AliESDs.root";$/;"	v
 dataPattern	LHC_15g_pp/AccEff_jpsi/MCPart/runMuMuGrid.C	/^TString dataPattern = "muon_calo_pass1\/*AliAOD.Muons.root";$/;"	v
 dataPattern	LHC_15g_pp/MuMuPar/runMuMuGrid.C	/^TString dataPattern = "AliAOD.Muons.root";$/;"	v
-dataPattern	LHC_15g_pp/TrackingEfficiency/Data/runMuonEfficiency.C	/^TString dataPattern = "muon_calo_pass1\/*AliESDs.root";$/;"	v
-dataPattern	LHC_15g_pp/TrackingEfficiency/MonteCarlo/runMuonEfficiency.C	/^TString dataPattern = "*AliESDs.root";$/;"	v
+dataPattern	LHC_15g_pp/TrackingEfficiency/DataMSL/runMuonEfficiency.C	/^TString dataPattern = "muon_calo_pass1\/*AliESDs.root";$/;"	v
+dataPattern	LHC_15g_pp/TrackingEfficiency/DataMUL/runMuonEfficiency.C	/^TString dataPattern = "muon_calo_pass1\/*AliESDs.root";$/;"	v
+dataPattern	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/runMuonEfficiency.C	/^TString dataPattern = "*AliESDs.root";$/;"	v
+dataPattern	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/runMuonEfficiency.C	/^TString dataPattern = "muon_calo_pass1\/*AliESDs.root";$/;"	v
+dataPattern	LHC_15g_pp/TrackingEfficiency/Resultat philippe/runMuonEfficiency.C	/^TString dataPattern = "muon_calo_pass1\/*AliESDs.root";$/;"	v
 divideByBinWidth	LHC_13_d/AccEff/DataPart/FitData.C	/^Bool_t divideByBinWidth =kTRUE; $/;"	v
 divideByBinWidth	LHC_13_d/AccEff/MCPart/FitMCData.C	/^Bool_t divideByBinWidth =kTRUE; $/;"	v
 divideByBinWidth	LHC_15g_pp/AccEff_jpsi/DataPart/FitData.C	/^Bool_t divideByBinWidth =kTRUE; $/;"	v
@@ -703,8 +812,9 @@ eList	LHC_15g_pp/AccEff_Muons/AliAnalysisTaskGenTuner.h	/^  enum eList {$/;"	g	c
 eList	LHC_15g_pp/AccEff_jpsi/GenTuner/AliAnalysisTaskGenTunerJpsi.h	/^  enum eList {$/;"	g	class:AliAnalysisTaskGenTunerJpsi
 eList	Tasks/AliAnalysisTaskGenTuner.h	/^  enum eList {$/;"	g	class:AliAnalysisTaskGenTuner
 eList	Tasks/AliAnalysisTaskGenTunerJpsi.h	/^  enum eList {$/;"	g	class:AliAnalysisTaskGenTunerJpsi
-effErrMode	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^const Char_t *effErrMode = "b(1,1)mode"; \/\/ Bayesian with uniform prior$/;"	v
-effErrMode	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^const Char_t *effErrMode = "b(1,1)mode"; \/\/ Bayesian with uniform prior$/;"	v
+effErrMode	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^const Char_t *effErrMode = "b(1,1)mode"; \/\/ Bayesian with uniform prior$/;"	v
+effErrMode	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^const Char_t *effErrMode = "b(1,1)mode"; \/\/ Bayesian with uniform prior$/;"	v
+effErrMode	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^const Char_t *effErrMode = "b(1,1)mode"; \/\/ Bayesian with uniform prior$/;"	v
 effErrMode	Macro_Utile/MuonTrackingEfficiency.C	/^const Char_t *effErrMode = "b(1,1)mode"; \/\/ Bayesian with uniform prior$/;"	v
 extraIncs	LHC_13_d/AccEff/GenTuner/runGenTuner.C	/^TString extraIncs="include";$/;"	v
 extraIncs	LHC_15g_pp/AccEff_Muons/runGenTuner.C	/^TString extraIncs="include";$/;"	v
@@ -712,72 +822,103 @@ extraIncs	LHC_15g_pp/AccEff_jpsi/DataPart/runMuMuGrid.C	/^TString extraIncs="";$
 extraIncs	LHC_15g_pp/AccEff_jpsi/GenTuner/runGenTuner.C	/^TString extraIncs="include";$/;"	v
 extraIncs	LHC_15g_pp/AccEff_jpsi/MCPart/runMuMuGrid.C	/^TString extraIncs="";$/;"	v
 extraIncs	LHC_15g_pp/MuMuPar/runMuMuGrid.C	/^TString extraIncs="";$/;"	v
-extraIncs	LHC_15g_pp/TrackingEfficiency/Data/runMuonEfficiency.C	/^ TString extraIncs="include";$/;"	v
-extraIncs	LHC_15g_pp/TrackingEfficiency/MonteCarlo/runMuonEfficiency.C	/^ TString extraIncs="include";$/;"	v
+extraIncs	LHC_15g_pp/TrackingEfficiency/DataMSL/runMuonEfficiency.C	/^ TString extraIncs="include";$/;"	v
+extraIncs	LHC_15g_pp/TrackingEfficiency/DataMUL/runMuonEfficiency.C	/^ TString extraIncs="include";$/;"	v
+extraIncs	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/runMuonEfficiency.C	/^ TString extraIncs="include";$/;"	v
+extraIncs	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/runMuonEfficiency.C	/^ TString extraIncs="include";$/;"	v
+extraIncs	LHC_15g_pp/TrackingEfficiency/Resultat philippe/runMuonEfficiency.C	/^ TString extraIncs="include";$/;"	v
 extraLibs	LHC_13_d/AccEff/GenTuner/runGenTuner.C	/^TString extraLibs="CORRFW:PWGmuon";$/;"	v
 extraLibs	LHC_15g_pp/AccEff_Muons/runGenTuner.C	/^ TString extraLibs="PWGmuon";$/;"	v
 extraLibs	LHC_15g_pp/AccEff_jpsi/DataPart/runMuMuGrid.C	/^TString extraLibs="";$/;"	v
 extraLibs	LHC_15g_pp/AccEff_jpsi/GenTuner/runGenTuner.C	/^TString extraLibs="CORRFW:PWGmuon";$/;"	v
 extraLibs	LHC_15g_pp/AccEff_jpsi/MCPart/runMuMuGrid.C	/^TString extraLibs="";$/;"	v
 extraLibs	LHC_15g_pp/MuMuPar/runMuMuGrid.C	/^TString extraLibs="";$/;"	v
-extraLibs	LHC_15g_pp/TrackingEfficiency/Data/runMuonEfficiency.C	/^ TString extraLibs="";$/;"	v
-extraLibs	LHC_15g_pp/TrackingEfficiency/MonteCarlo/runMuonEfficiency.C	/^  TString extraLibs="";$/;"	v
+extraLibs	LHC_15g_pp/TrackingEfficiency/DataMSL/runMuonEfficiency.C	/^ TString extraLibs="";$/;"	v
+extraLibs	LHC_15g_pp/TrackingEfficiency/DataMUL/runMuonEfficiency.C	/^ TString extraLibs="";$/;"	v
+extraLibs	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/runMuonEfficiency.C	/^  TString extraLibs="";$/;"	v
+extraLibs	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/runMuonEfficiency.C	/^ TString extraLibs="";$/;"	v
+extraLibs	LHC_15g_pp/TrackingEfficiency/Resultat philippe/runMuonEfficiency.C	/^ TString extraLibs="";$/;"	v
 extraTasks	LHC_13_d/AccEff/GenTuner/runGenTuner.C	/^TString extraTasks="";$/;"	v
 extraTasks	LHC_15g_pp/AccEff_Muons/runGenTuner.C	/^TString extraTasks="AliAnalysisTaskGenTuner";$/;"	v
 extraTasks	LHC_15g_pp/AccEff_jpsi/DataPart/runMuMuGrid.C	/^TString extraTasks="";$/;"	v
 extraTasks	LHC_15g_pp/AccEff_jpsi/GenTuner/runGenTuner.C	/^TString extraTasks="AliAnalysisTaskGenTunerJpsi";$/;"	v
 extraTasks	LHC_15g_pp/AccEff_jpsi/MCPart/runMuMuGrid.C	/^TString extraTasks="";$/;"	v
 extraTasks	LHC_15g_pp/MuMuPar/runMuMuGrid.C	/^TString extraTasks="";$/;"	v
-extraTasks	LHC_15g_pp/TrackingEfficiency/Data/runMuonEfficiency.C	/^ TString extraTasks="AliAnalysisTaskMuonTrackingEffLocal";$/;"	v
-extraTasks	LHC_15g_pp/TrackingEfficiency/MonteCarlo/runMuonEfficiency.C	/^ TString extraTasks="AliAnalysisTaskMuonTrackingEffLocal";$/;"	v
+extraTasks	LHC_15g_pp/TrackingEfficiency/DataMSL/runMuonEfficiency.C	/^ TString extraTasks="AliAnalysisTaskMuonTrackingEffLocal";$/;"	v
+extraTasks	LHC_15g_pp/TrackingEfficiency/DataMUL/runMuonEfficiency.C	/^ TString extraTasks="AliAnalysisTaskMuonTrackingEffLocal";$/;"	v
+extraTasks	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/runMuonEfficiency.C	/^ TString extraTasks="AliAnalysisTaskMuonTrackingEffLocal";$/;"	v
+extraTasks	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/runMuonEfficiency.C	/^ TString extraTasks="AliAnalysisTaskMuonTrackingEffLocal";$/;"	v
+extraTasks	LHC_15g_pp/TrackingEfficiency/Resultat philippe/runMuonEfficiency.C	/^ TString extraTasks="AliAnalysisTaskMuonTrackingEffLocal";$/;"	v
 fAOD	My_First_Task/AliAnalysisTaskMass.h	/^    AliAODEvent *fAOD;    \/\/! AOS object$/;"	m	class:AliAnalysisTaskMass
 fAccEffHisto	LHC_13_d/AccEff/MCPart/AliAnalysisMuMuMinv.h	/^  TH2F* fAccEffHisto;$/;"	m	class:AliAnalysisMuMuMinv
 fAccEffHisto	LHC_15g_pp/AccEff_jpsi/MCPart/AliAnalysisMuMuMinv.h	/^  TH2F* fAccEffHisto;$/;"	m	class:AliAnalysisMuMuMinv
-fAlignOCDBpath	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TString  fAlignOCDBpath;          \/\/\/< OCDB path to the alignment file$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
-fAlignOCDBpath	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TString  fAlignOCDBpath;          \/\/\/< OCDB path to the alignment file$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fAlignOCDBpath	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TString  fAlignOCDBpath;          \/\/\/< OCDB path to the alignment file$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fAlignOCDBpath	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TString  fAlignOCDBpath;          \/\/\/< OCDB path to the alignment file$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fAlignOCDBpath	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TString  fAlignOCDBpath;          \/\/\/< OCDB path to the alignment file$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fAlignOCDBpath	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TString  fAlignOCDBpath;          \/\/\/< OCDB path to the alignment file$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
 fAlignOCDBpath	Tasks/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TString  fAlignOCDBpath;          \/\/\/< OCDB path to the alignment file$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
 fCentMax	LHC_13_d/AccEff/GenTuner/AliAnalysisTaskGenTunerJpsi.h	/^  Double_t  fCentMax;               \/\/\/< select centrality <= fCentMax$/;"	m	class:AliAnalysisTaskGenTunerJpsi
 fCentMax	LHC_15g_pp/AccEff_Muons/AliAnalysisTaskGenTuner.h	/^  Double_t fCentMax;                \/\/\/< select centrality <= fCentMax$/;"	m	class:AliAnalysisTaskGenTuner
 fCentMax	LHC_15g_pp/AccEff_jpsi/GenTuner/AliAnalysisTaskGenTunerJpsi.h	/^  Double_t  fCentMax;               \/\/\/< select centrality <= fCentMax$/;"	m	class:AliAnalysisTaskGenTunerJpsi
-fCentMax	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Double_t fCentMax;                \/\/\/< select centrality <= fCentMax$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
-fCentMax	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Double_t fCentMax;                \/\/\/< select centrality <= fCentMax$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fCentMax	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Double_t fCentMax;                \/\/\/< select centrality <= fCentMax$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fCentMax	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Double_t fCentMax;                \/\/\/< select centrality <= fCentMax$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fCentMax	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Double_t fCentMax;                \/\/\/< select centrality <= fCentMax$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fCentMax	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Double_t fCentMax;                \/\/\/< select centrality <= fCentMax$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
 fCentMax	Tasks/AliAnalysisTaskGenTuner.h	/^  Double_t fCentMax;                \/\/\/< select centrality <= fCentMax$/;"	m	class:AliAnalysisTaskGenTuner
 fCentMax	Tasks/AliAnalysisTaskGenTunerJpsi.h	/^  Double_t  fCentMax;               \/\/\/< select centrality <= fCentMax$/;"	m	class:AliAnalysisTaskGenTunerJpsi
 fCentMax	Tasks/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Double_t fCentMax;                \/\/\/< select centrality <= fCentMax$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
 fCentMin	LHC_13_d/AccEff/GenTuner/AliAnalysisTaskGenTunerJpsi.h	/^  Double_t  fCentMin;               \/\/\/< select centrality > fCentMin$/;"	m	class:AliAnalysisTaskGenTunerJpsi
 fCentMin	LHC_15g_pp/AccEff_Muons/AliAnalysisTaskGenTuner.h	/^  Double_t fCentMin;                \/\/\/< select centrality > fCentMin$/;"	m	class:AliAnalysisTaskGenTuner
 fCentMin	LHC_15g_pp/AccEff_jpsi/GenTuner/AliAnalysisTaskGenTunerJpsi.h	/^  Double_t  fCentMin;               \/\/\/< select centrality > fCentMin$/;"	m	class:AliAnalysisTaskGenTunerJpsi
-fCentMin	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Double_t fCentMin;                \/\/\/< select centrality > fCentMin$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
-fCentMin	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Double_t fCentMin;                \/\/\/< select centrality > fCentMin$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fCentMin	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Double_t fCentMin;                \/\/\/< select centrality > fCentMin$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fCentMin	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Double_t fCentMin;                \/\/\/< select centrality > fCentMin$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fCentMin	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Double_t fCentMin;                \/\/\/< select centrality > fCentMin$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fCentMin	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Double_t fCentMin;                \/\/\/< select centrality > fCentMin$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
 fCentMin	Tasks/AliAnalysisTaskGenTuner.h	/^  Double_t fCentMin;                \/\/\/< select centrality > fCentMin$/;"	m	class:AliAnalysisTaskGenTuner
 fCentMin	Tasks/AliAnalysisTaskGenTunerJpsi.h	/^  Double_t  fCentMin;               \/\/\/< select centrality > fCentMin$/;"	m	class:AliAnalysisTaskGenTunerJpsi
 fCentMin	Tasks/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Double_t fCentMin;                \/\/\/< select centrality > fCentMin$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
-fChamberSDHistList	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TList* fChamberSDHistList; \/\/!< List of histograms of the tracks only detected by one chamber of the station.$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
-fChamberSDHistList	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TList* fChamberSDHistList; \/\/!< List of histograms of the tracks only detected by one chamber of the station.$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fChamberSDHistList	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TList* fChamberSDHistList; \/\/!< List of histograms of the tracks only detected by one chamber of the station.$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fChamberSDHistList	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TList* fChamberSDHistList; \/\/!< List of histograms of the tracks only detected by one chamber of the station.$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fChamberSDHistList	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TList* fChamberSDHistList; \/\/!< List of histograms of the tracks only detected by one chamber of the station.$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fChamberSDHistList	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TList* fChamberSDHistList; \/\/!< List of histograms of the tracks only detected by one chamber of the station.$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
 fChamberSDHistList	Tasks/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TList* fChamberSDHistList; \/\/!< List of histograms of the tracks only detected by one chamber of the station.$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
-fChamberTDHistList	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TList* fChamberTDHistList; \/\/!< List of histograms of the tracks detected in the chambers.$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
-fChamberTDHistList	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TList* fChamberTDHistList; \/\/!< List of histograms of the tracks detected in the chambers.$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fChamberTDHistList	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TList* fChamberTDHistList; \/\/!< List of histograms of the tracks detected in the chambers.$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fChamberTDHistList	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TList* fChamberTDHistList; \/\/!< List of histograms of the tracks detected in the chambers.$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fChamberTDHistList	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TList* fChamberTDHistList; \/\/!< List of histograms of the tracks detected in the chambers.$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fChamberTDHistList	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TList* fChamberTDHistList; \/\/!< List of histograms of the tracks detected in the chambers.$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
 fChamberTDHistList	Tasks/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TList* fChamberTDHistList; \/\/!< List of histograms of the tracks detected in the chambers.$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
-fChamberTTHistList	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TList* fChamberTTHistList; \/\/!< List of histograms of the tracks which have passed through the chambers.$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
-fChamberTTHistList	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TList* fChamberTTHistList; \/\/!< List of histograms of the tracks which have passed through the chambers.$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fChamberTTHistList	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TList* fChamberTTHistList; \/\/!< List of histograms of the tracks which have passed through the chambers.$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fChamberTTHistList	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TList* fChamberTTHistList; \/\/!< List of histograms of the tracks which have passed through the chambers.$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fChamberTTHistList	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TList* fChamberTTHistList; \/\/!< List of histograms of the tracks which have passed through the chambers.$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fChamberTTHistList	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TList* fChamberTTHistList; \/\/!< List of histograms of the tracks which have passed through the chambers.$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
 fChamberTTHistList	Tasks/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TList* fChamberTTHistList; \/\/!< List of histograms of the tracks which have passed through the chambers.$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
-fClusters	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.h	/^  AliCounterCollection* fClusters; \/\/!< detected (all), accepted (for efficiency calculation) and expected clusters$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
-fClusters	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.h	/^  AliCounterCollection* fClusters; \/\/!< detected (all), accepted (for efficiency calculation) and expected clusters$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fClusters	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  AliCounterCollection* fClusters; \/\/!< detected (all), accepted (for efficiency calculation) and expected clusters$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fClusters	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  AliCounterCollection* fClusters; \/\/!< detected (all), accepted (for efficiency calculation) and expected clusters$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fClusters	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  AliCounterCollection* fClusters; \/\/!< detected (all), accepted (for efficiency calculation) and expected clusters$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fClusters	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  AliCounterCollection* fClusters; \/\/!< detected (all), accepted (for efficiency calculation) and expected clusters$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
 fClusters	Tasks/AliAnalysisTaskMuonTrackingEffLocal.h	/^  AliCounterCollection* fClusters; \/\/!< detected (all), accepted (for efficiency calculation) and expected clusters$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
-fCounts	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.h	/^  AliCounterCollection* fCounts; \/\/!< Number of event couted$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
-fCounts	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.h	/^  AliCounterCollection* fCounts; \/\/!< Number of event couted$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fCounts	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  AliCounterCollection* fCounts; \/\/!< Number of event couted$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fCounts	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  AliCounterCollection* fCounts; \/\/!< Number of event couted$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fCounts	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  AliCounterCollection* fCounts; \/\/!< Number of event couted$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fCounts	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  AliCounterCollection* fCounts; \/\/!< Number of event couted$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
 fCounts	Tasks/AliAnalysisTaskMuonTrackingEffLocal.h	/^  AliCounterCollection* fCounts; \/\/!< Number of event couted$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
-fDEPlanes	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TObjArray *fDEPlanes; \/\/!< vectors (x0, y0, z0, a, b, c) defining the plane of each DE in the global frame$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
-fDEPlanes	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TObjArray *fDEPlanes; \/\/!< vectors (x0, y0, z0, a, b, c) defining the plane of each DE in the global frame$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fDEPlanes	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TObjArray *fDEPlanes; \/\/!< vectors (x0, y0, z0, a, b, c) defining the plane of each DE in the global frame$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fDEPlanes	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TObjArray *fDEPlanes; \/\/!< vectors (x0, y0, z0, a, b, c) defining the plane of each DE in the global frame$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fDEPlanes	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TObjArray *fDEPlanes; \/\/!< vectors (x0, y0, z0, a, b, c) defining the plane of each DE in the global frame$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fDEPlanes	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TObjArray *fDEPlanes; \/\/!< vectors (x0, y0, z0, a, b, c) defining the plane of each DE in the global frame$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
 fDEPlanes	Tasks/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TObjArray *fDEPlanes; \/\/!< vectors (x0, y0, z0, a, b, c) defining the plane of each DE in the global frame$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
 fDataFile	LHC_15g_pp/AccEff_Muons/AliAnalysisTaskGenTuner.h	/^  TString  fDataFile;               \/\/\/< data file used in terminate to tune the generated distributions$/;"	m	class:AliAnalysisTaskGenTuner
 fDataFile	Tasks/AliAnalysisTaskGenTuner.h	/^  TString  fDataFile;               \/\/\/< data file used in terminate to tune the generated distributions$/;"	m	class:AliAnalysisTaskGenTuner
-fEnableDisplay	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Bool_t   fEnableDisplay;          \/\/\/< enable the display in the terminate$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
-fEnableDisplay	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Bool_t   fEnableDisplay;          \/\/\/< enable the display in the terminate$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fEnableDisplay	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Bool_t   fEnableDisplay;          \/\/\/< enable the display in the terminate$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fEnableDisplay	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Bool_t   fEnableDisplay;          \/\/\/< enable the display in the terminate$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fEnableDisplay	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Bool_t   fEnableDisplay;          \/\/\/< enable the display in the terminate$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fEnableDisplay	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Bool_t   fEnableDisplay;          \/\/\/< enable the display in the terminate$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
 fEnableDisplay	Tasks/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Bool_t   fEnableDisplay;          \/\/\/< enable the display in the terminate$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
 fEventCounters	EventMixing/Task_EvtMix/AliAnalysisTaskEx02.h	/^  AliCounterCollection   *fEventCounters;     \/\/! event counters$/;"	m	class:AliAnalysisTaskEx02
-fExtraHistList	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TList* fExtraHistList;     \/\/!< List of extra histograms.$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
-fExtraHistList	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TList* fExtraHistList;     \/\/!< List of extra histograms.$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fExtraHistList	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TList* fExtraHistList;     \/\/!< List of extra histograms.$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fExtraHistList	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TList* fExtraHistList;     \/\/!< List of extra histograms.$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fExtraHistList	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TList* fExtraHistList;     \/\/!< List of extra histograms.$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fExtraHistList	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TList* fExtraHistList;     \/\/!< List of extra histograms.$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
 fExtraHistList	Tasks/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TList* fExtraHistList;     \/\/!< List of extra histograms.$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
 fHist	My_First_Task/AliAnalysisTaskMass.h	/^    THnSparseF        *fHist; \/\/! Mass spectrum$/;"	m	class:AliAnalysisTaskMass
 fHistCent	EventMixing/Task_EvtMix/AliAnalysisTaskEx02.h	/^  TH1F                   *fHistCent;		  \/\/ Check centrality$/;"	m	class:AliAnalysisTaskEx02
@@ -797,16 +938,22 @@ fMuonTrackCuts	EventMixing/Task_EvtMix/AliAnalysisTaskEx02.h	/^  AliMuonTrackCut
 fMuonTrackCuts	LHC_13_d/AccEff/GenTuner/AliAnalysisTaskGenTunerJpsi.h	/^  AliMuonTrackCuts* fMuonTrackCuts; \/\/\/< cuts to select tracks to be considered$/;"	m	class:AliAnalysisTaskGenTunerJpsi
 fMuonTrackCuts	LHC_15g_pp/AccEff_Muons/AliAnalysisTaskGenTuner.h	/^  AliMuonTrackCuts* fMuonTrackCuts; \/\/\/< cuts to select tracks to be considered$/;"	m	class:AliAnalysisTaskGenTuner
 fMuonTrackCuts	LHC_15g_pp/AccEff_jpsi/GenTuner/AliAnalysisTaskGenTunerJpsi.h	/^  AliMuonTrackCuts* fMuonTrackCuts; \/\/\/< cuts to select tracks to be considered$/;"	m	class:AliAnalysisTaskGenTunerJpsi
-fMuonTrackCuts	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.h	/^  AliMuonTrackCuts* fMuonTrackCuts; \/\/\/< cuts to select tracks to be considered$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
-fMuonTrackCuts	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.h	/^  AliMuonTrackCuts* fMuonTrackCuts; \/\/\/< cuts to select tracks to be considered$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fMuonTrackCuts	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  AliMuonTrackCuts* fMuonTrackCuts; \/\/\/< cuts to select tracks to be considered$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fMuonTrackCuts	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  AliMuonTrackCuts* fMuonTrackCuts; \/\/\/< cuts to select tracks to be considered$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fMuonTrackCuts	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  AliMuonTrackCuts* fMuonTrackCuts; \/\/\/< cuts to select tracks to be considered$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fMuonTrackCuts	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  AliMuonTrackCuts* fMuonTrackCuts; \/\/\/< cuts to select tracks to be considered$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
 fMuonTrackCuts	Tasks/AliAnalysisTaskGenTuner.h	/^  AliMuonTrackCuts* fMuonTrackCuts; \/\/\/< cuts to select tracks to be considered$/;"	m	class:AliAnalysisTaskGenTuner
 fMuonTrackCuts	Tasks/AliAnalysisTaskGenTunerJpsi.h	/^  AliMuonTrackCuts* fMuonTrackCuts; \/\/\/< cuts to select tracks to be considered$/;"	m	class:AliAnalysisTaskGenTunerJpsi
 fMuonTrackCuts	Tasks/AliAnalysisTaskMuonTrackingEffLocal.h	/^  AliMuonTrackCuts* fMuonTrackCuts; \/\/\/< cuts to select tracks to be considered$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
-fOCDBLoaded	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Bool_t   fOCDBLoaded;             \/\/!< Determine if the OCDB and =geometry have been loaded$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
-fOCDBLoaded	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Bool_t   fOCDBLoaded;             \/\/!< Determine if the OCDB and =geometry have been loaded$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fOCDBLoaded	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Bool_t   fOCDBLoaded;             \/\/!< Determine if the OCDB and =geometry have been loaded$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fOCDBLoaded	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Bool_t   fOCDBLoaded;             \/\/!< Determine if the OCDB and =geometry have been loaded$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fOCDBLoaded	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Bool_t   fOCDBLoaded;             \/\/!< Determine if the OCDB and =geometry have been loaded$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fOCDBLoaded	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Bool_t   fOCDBLoaded;             \/\/!< Determine if the OCDB and =geometry have been loaded$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
 fOCDBLoaded	Tasks/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Bool_t   fOCDBLoaded;             \/\/!< Determine if the OCDB and =geometry have been loaded$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
-fOCDBpath	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TString  fOCDBpath;               \/\/\/< OCDB path$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
-fOCDBpath	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TString  fOCDBpath;               \/\/\/< OCDB path$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fOCDBpath	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TString  fOCDBpath;               \/\/\/< OCDB path$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fOCDBpath	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TString  fOCDBpath;               \/\/\/< OCDB path$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fOCDBpath	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TString  fOCDBpath;               \/\/\/< OCDB path$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fOCDBpath	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TString  fOCDBpath;               \/\/\/< OCDB path$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
 fOCDBpath	Tasks/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TString  fOCDBpath;               \/\/\/< OCDB path$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
 fOutput	EventMixing/Task_EvtMix/AliAnalysisTaskEx02.h	/^  TList                  *fOutput;            \/\/ Output list$/;"	m	class:AliAnalysisTaskEx02
 fOutputList	My_First_Task/AliAnalysisTaskMass.h	/^    TList       *fOutputList; \/\/! Output list$/;"	m	class:AliAnalysisTaskMass
@@ -827,8 +974,10 @@ fPtCopyFuncNew	Tasks/AliAnalysisTaskGenTunerJpsi.h	/^  TF1 *fPtCopyFuncNew; \/\/
 fPtCut	LHC_13_d/AccEff/GenTuner/AliAnalysisTaskGenTunerJpsi.h	/^  Double_t fPtCut;                  \/\/\/< muon low pT cut$/;"	m	class:AliAnalysisTaskGenTunerJpsi
 fPtCut	LHC_15g_pp/AccEff_Muons/AliAnalysisTaskGenTuner.h	/^  Double_t fPtCut;                  \/\/\/< muon low pT cut$/;"	m	class:AliAnalysisTaskGenTuner
 fPtCut	LHC_15g_pp/AccEff_jpsi/GenTuner/AliAnalysisTaskGenTunerJpsi.h	/^  Double_t fPtCut;                  \/\/\/< muon low pT cut$/;"	m	class:AliAnalysisTaskGenTunerJpsi
-fPtCut	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Double_t fPtCut;                  \/\/\/< cut on minimum pt$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
-fPtCut	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Double_t fPtCut;                  \/\/\/< cut on minimum pt$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fPtCut	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Double_t fPtCut;                  \/\/\/< cut on minimum pt$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fPtCut	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Double_t fPtCut;                  \/\/\/< cut on minimum pt$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fPtCut	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Double_t fPtCut;                  \/\/\/< cut on minimum pt$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fPtCut	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Double_t fPtCut;                  \/\/\/< cut on minimum pt$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
 fPtCut	Tasks/AliAnalysisTaskGenTuner.h	/^  Double_t fPtCut;                  \/\/\/< muon low pT cut$/;"	m	class:AliAnalysisTaskGenTuner
 fPtCut	Tasks/AliAnalysisTaskGenTunerJpsi.h	/^  Double_t fPtCut;                  \/\/\/< muon low pT cut$/;"	m	class:AliAnalysisTaskGenTunerJpsi
 fPtCut	Tasks/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Double_t fPtCut;                  \/\/\/< cut on minimum pt$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
@@ -860,14 +1009,20 @@ fPtFuncNew	Tasks/AliAnalysisTaskGenTunerJpsi.h	/^  TF1     *fPtFuncNew;         
 fPtNofBin	LHC_13_d/AccEff/GenTuner/AliAnalysisTaskGenTunerJpsi.h	/^  Int_t     fPtNofBin;              \/\/ Number of Pt bin$/;"	m	class:AliAnalysisTaskGenTunerJpsi
 fPtNofBin	LHC_15g_pp/AccEff_jpsi/GenTuner/AliAnalysisTaskGenTunerJpsi.h	/^  Int_t     fPtNofBin;              \/\/ Number of Pt bin$/;"	m	class:AliAnalysisTaskGenTunerJpsi
 fPtNofBin	Tasks/AliAnalysisTaskGenTunerJpsi.h	/^  Int_t     fPtNofBin;              \/\/ Number of Pt bin$/;"	m	class:AliAnalysisTaskGenTunerJpsi
-fRecoParamOCDBpath	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TString  fRecoParamOCDBpath;      \/\/\/< OCDB path to the recoParam file$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
-fRecoParamOCDBpath	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TString  fRecoParamOCDBpath;      \/\/\/< OCDB path to the recoParam file$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fRecoParamOCDBpath	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TString  fRecoParamOCDBpath;      \/\/\/< OCDB path to the recoParam file$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fRecoParamOCDBpath	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TString  fRecoParamOCDBpath;      \/\/\/< OCDB path to the recoParam file$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fRecoParamOCDBpath	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TString  fRecoParamOCDBpath;      \/\/\/< OCDB path to the recoParam file$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fRecoParamOCDBpath	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TString  fRecoParamOCDBpath;      \/\/\/< OCDB path to the recoParam file$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
 fRecoParamOCDBpath	Tasks/AliAnalysisTaskMuonTrackingEffLocal.h	/^  TString  fRecoParamOCDBpath;      \/\/\/< OCDB path to the recoParam file$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
-fTransformer	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.h	/^  AliMUONGeometryTransformer *fTransformer; \/\/!< Transformer object$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
-fTransformer	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.h	/^  AliMUONGeometryTransformer *fTransformer; \/\/!< Transformer object$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fTransformer	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  AliMUONGeometryTransformer *fTransformer; \/\/!< Transformer object$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fTransformer	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  AliMUONGeometryTransformer *fTransformer; \/\/!< Transformer object$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fTransformer	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  AliMUONGeometryTransformer *fTransformer; \/\/!< Transformer object$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fTransformer	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  AliMUONGeometryTransformer *fTransformer; \/\/!< Transformer object$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
 fTransformer	Tasks/AliAnalysisTaskMuonTrackingEffLocal.h	/^  AliMUONGeometryTransformer *fTransformer; \/\/!< Transformer object$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
-fUseMCLabel	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Bool_t   fUseMCLabel;             \/\/\/< select tracks using MC label$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
-fUseMCLabel	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Bool_t   fUseMCLabel;             \/\/\/< select tracks using MC label$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fUseMCLabel	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Bool_t   fUseMCLabel;             \/\/\/< select tracks using MC label$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fUseMCLabel	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Bool_t   fUseMCLabel;             \/\/\/< select tracks using MC label$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fUseMCLabel	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Bool_t   fUseMCLabel;             \/\/\/< select tracks using MC label$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fUseMCLabel	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Bool_t   fUseMCLabel;             \/\/\/< select tracks using MC label$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
 fUseMCLabel	Tasks/AliAnalysisTaskMuonTrackingEffLocal.h	/^  Bool_t   fUseMCLabel;             \/\/\/< select tracks using MC label$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
 fWeight	LHC_13_d/AccEff/GenTuner/AliAnalysisTaskGenTunerJpsi.h	/^  Bool_t   fWeight;                 \/\/\/< weight simulated\/reconstructed particles using using given functions$/;"	m	class:AliAnalysisTaskGenTunerJpsi
 fWeight	LHC_15g_pp/AccEff_Muons/AliAnalysisTaskGenTuner.h	/^  Bool_t   fWeight;                 \/\/\/< weight simulated\/reconstructed particles using using given functions$/;"	m	class:AliAnalysisTaskGenTuner
@@ -938,22 +1093,34 @@ fgkNYParam	LHC_15g_pp/AccEff_Muons/AliAnalysisTaskGenTuner.h	/^  static const In
 fgkNYParam	LHC_15g_pp/AccEff_jpsi/GenTuner/AliAnalysisTaskGenTunerJpsi.h	/^  static const Int_t fgkNYParam  = 2;$/;"	m	class:AliAnalysisTaskGenTunerJpsi
 fgkNYParam	Tasks/AliAnalysisTaskGenTuner.h	/^  static const Int_t fgkNYParam  = 8;$/;"	m	class:AliAnalysisTaskGenTuner
 fgkNYParam	Tasks/AliAnalysisTaskGenTunerJpsi.h	/^  static const Int_t fgkNYParam  = 2;$/;"	m	class:AliAnalysisTaskGenTunerJpsi
-fgkNofBusPath	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^const Int_t AliAnalysisTaskMuonTrackingEffLocal::fgkNofBusPath = 888;$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal	file:
-fgkNofBusPath	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.h	/^  static const Int_t fgkNofBusPath; \/\/\/< Total number of bus patches$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
-fgkNofBusPath	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^const Int_t AliAnalysisTaskMuonTrackingEffLocal::fgkNofBusPath = 888;$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal	file:
-fgkNofBusPath	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.h	/^  static const Int_t fgkNofBusPath; \/\/\/< Total number of bus patches$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fgkNofBusPath	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^const Int_t AliAnalysisTaskMuonTrackingEffLocal::fgkNofBusPath = 888;$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal	file:
+fgkNofBusPath	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  static const Int_t fgkNofBusPath; \/\/\/< Total number of bus patches$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fgkNofBusPath	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^const Int_t AliAnalysisTaskMuonTrackingEffLocal::fgkNofBusPath = 888;$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal	file:
+fgkNofBusPath	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  static const Int_t fgkNofBusPath; \/\/\/< Total number of bus patches$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fgkNofBusPath	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^const Int_t AliAnalysisTaskMuonTrackingEffLocal::fgkNofBusPath = 888;$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal	file:
+fgkNofBusPath	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  static const Int_t fgkNofBusPath; \/\/\/< Total number of bus patches$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fgkNofBusPath	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^const Int_t AliAnalysisTaskMuonTrackingEffLocal::fgkNofBusPath = 888;$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal	file:
+fgkNofBusPath	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  static const Int_t fgkNofBusPath; \/\/\/< Total number of bus patches$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
 fgkNofBusPath	Tasks/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^const Int_t AliAnalysisTaskMuonTrackingEffLocal::fgkNofBusPath = 888;$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal	file:
 fgkNofBusPath	Tasks/AliAnalysisTaskMuonTrackingEffLocal.h	/^  static const Int_t fgkNofBusPath; \/\/\/< Total number of bus patches$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
-fgkNofDE	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^const Int_t AliAnalysisTaskMuonTrackingEffLocal::fgkNofDE[11] = {4, 4, 4, 4, 18, 18, 26, 26, 26, 26, 156};$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal	file:
-fgkNofDE	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.h	/^  static const Int_t fgkNofDE[11];  \/\/\/< Total number of detection elements in each chamber$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
-fgkNofDE	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^const Int_t AliAnalysisTaskMuonTrackingEffLocal::fgkNofDE[11] = {4, 4, 4, 4, 18, 18, 26, 26, 26, 26, 156};$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal	file:
-fgkNofDE	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.h	/^  static const Int_t fgkNofDE[11];  \/\/\/< Total number of detection elements in each chamber$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fgkNofDE	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^const Int_t AliAnalysisTaskMuonTrackingEffLocal::fgkNofDE[11] = {4, 4, 4, 4, 18, 18, 26, 26, 26, 26, 156};$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal	file:
+fgkNofDE	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  static const Int_t fgkNofDE[11];  \/\/\/< Total number of detection elements in each chamber$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fgkNofDE	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^const Int_t AliAnalysisTaskMuonTrackingEffLocal::fgkNofDE[11] = {4, 4, 4, 4, 18, 18, 26, 26, 26, 26, 156};$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal	file:
+fgkNofDE	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  static const Int_t fgkNofDE[11];  \/\/\/< Total number of detection elements in each chamber$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fgkNofDE	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^const Int_t AliAnalysisTaskMuonTrackingEffLocal::fgkNofDE[11] = {4, 4, 4, 4, 18, 18, 26, 26, 26, 26, 156};$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal	file:
+fgkNofDE	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  static const Int_t fgkNofDE[11];  \/\/\/< Total number of detection elements in each chamber$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fgkNofDE	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^const Int_t AliAnalysisTaskMuonTrackingEffLocal::fgkNofDE[11] = {4, 4, 4, 4, 18, 18, 26, 26, 26, 26, 156};$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal	file:
+fgkNofDE	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  static const Int_t fgkNofDE[11];  \/\/\/< Total number of detection elements in each chamber$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
 fgkNofDE	Tasks/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^const Int_t AliAnalysisTaskMuonTrackingEffLocal::fgkNofDE[11] = {4, 4, 4, 4, 18, 18, 26, 26, 26, 26, 156};$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal	file:
 fgkNofDE	Tasks/AliAnalysisTaskMuonTrackingEffLocal.h	/^  static const Int_t fgkNofDE[11];  \/\/\/< Total number of detection elements in each chamber$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
-fgkNofManu	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^const Int_t AliAnalysisTaskMuonTrackingEffLocal::fgkNofManu = 16828;$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal	file:
-fgkNofManu	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.h	/^  static const Int_t fgkNofManu;    \/\/\/< Total number of manus$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
-fgkNofManu	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^const Int_t AliAnalysisTaskMuonTrackingEffLocal::fgkNofManu = 16828;$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal	file:
-fgkNofManu	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.h	/^  static const Int_t fgkNofManu;    \/\/\/< Total number of manus$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fgkNofManu	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^const Int_t AliAnalysisTaskMuonTrackingEffLocal::fgkNofManu = 16828;$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal	file:
+fgkNofManu	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  static const Int_t fgkNofManu;    \/\/\/< Total number of manus$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fgkNofManu	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^const Int_t AliAnalysisTaskMuonTrackingEffLocal::fgkNofManu = 16828;$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal	file:
+fgkNofManu	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  static const Int_t fgkNofManu;    \/\/\/< Total number of manus$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fgkNofManu	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^const Int_t AliAnalysisTaskMuonTrackingEffLocal::fgkNofManu = 16828;$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal	file:
+fgkNofManu	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  static const Int_t fgkNofManu;    \/\/\/< Total number of manus$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
+fgkNofManu	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^const Int_t AliAnalysisTaskMuonTrackingEffLocal::fgkNofManu = 16828;$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal	file:
+fgkNofManu	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.h	/^  static const Int_t fgkNofManu;    \/\/\/< Total number of manus$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
 fgkNofManu	Tasks/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^const Int_t AliAnalysisTaskMuonTrackingEffLocal::fgkNofManu = 16828;$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal	file:
 fgkNofManu	Tasks/AliAnalysisTaskMuonTrackingEffLocal.h	/^  static const Int_t fgkNofManu;    \/\/\/< Total number of manus$/;"	m	class:AliAnalysisTaskMuonTrackingEffLocal
 fsystLevel	LHC_13_d/AccEff/MCPart/AliAnalysisMuMuMinv.h	/^  Int_t fsystLevel;$/;"	m	class:AliAnalysisMuMuMinv
@@ -987,8 +1154,9 @@ iMUONRefit	LHC_15g_pp/mergeQA/AODtrain.C	/^Int_t       iMUONRefit         = 0;  
 iMUONcopyAOD	LHC_15g_pp/TrackingEfficiency/Simulation/AODtrainsim.C	/^Int_t       iMUONcopyAOD       = 1;      \/\/ Task that copies only muon events in a separate AOD$/;"	v
 iMUONcopyAOD	LHC_15g_pp/mergeQA/AODtrain.C	/^Int_t       iMUONcopyAOD       = 1;      \/\/ Task that copies only muon events in a separate AOD (PWG3)$/;"	v
 isMC	LHC_15g_pp/AccEff_Muons/runGenTuner.C	/^Bool_t isMC = kTRUE;$/;"	v
-isQATask	LHC_15g_pp/mergeQA/SaveQA.C	/^Bool_t isQATask = kFALSE;$/;"	v
+isQATask	LHC_15g_pp/mergeQA/SaveQA.C	/^Bool_t isQATask = kTRUE;$/;"	v
 isQATask	Macro_Utile/SaveQA.C	/^Bool_t isQATask = kTRUE;$/;"	v
+isQATask	SaveQA.C	/^Bool_t isQATask = kTRUE;$/;"	v
 kGrid	Macro_Utile/runTaskFacilities.C	/^enum {kLocal, kProof, kProofLite, kGrid, kTerminate};$/;"	e	enum:__anon2	file:
 kLocal	Macro_Utile/runTaskFacilities.C	/^enum {kLocal, kProof, kProofLite, kGrid, kTerminate};$/;"	e	enum:__anon2	file:
 kNtmpFiles	Macro_Utile/gridCommands.C	/^enum {kTmpPsMaster, kTmpMasterjob, kTmpPsTrace, kTmpPsJdl, kNtmpFiles};$/;"	e	enum:__anon1	file:
@@ -1029,28 +1197,38 @@ maxFilesPerJob	LHC_15g_pp/AccEff_jpsi/DataPart/runMuMuGrid.C	/^Int_t maxFilesPer
 maxFilesPerJob	LHC_15g_pp/AccEff_jpsi/GenTuner/runGenTuner.C	/^Int_t maxFilesPerJob = 100;$/;"	v
 maxFilesPerJob	LHC_15g_pp/AccEff_jpsi/MCPart/runMuMuGrid.C	/^Int_t maxFilesPerJob = 100;$/;"	v
 maxFilesPerJob	LHC_15g_pp/MuMuPar/runMuMuGrid.C	/^Int_t maxFilesPerJob = 100;$/;"	v
-maxFilesPerJob	LHC_15g_pp/TrackingEfficiency/Data/runMuonEfficiency.C	/^Int_t maxFilesPerJob = 150;$/;"	v
-maxFilesPerJob	LHC_15g_pp/TrackingEfficiency/MonteCarlo/runMuonEfficiency.C	/^Int_t maxFilesPerJob = 150;$/;"	v
+maxFilesPerJob	LHC_15g_pp/TrackingEfficiency/DataMSL/runMuonEfficiency.C	/^Int_t maxFilesPerJob = 150;$/;"	v
+maxFilesPerJob	LHC_15g_pp/TrackingEfficiency/DataMUL/runMuonEfficiency.C	/^Int_t maxFilesPerJob = 150;$/;"	v
+maxFilesPerJob	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/runMuonEfficiency.C	/^Int_t maxFilesPerJob = 150;$/;"	v
+maxFilesPerJob	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/runMuonEfficiency.C	/^Int_t maxFilesPerJob = 150;$/;"	v
+maxFilesPerJob	LHC_15g_pp/TrackingEfficiency/Resultat philippe/runMuonEfficiency.C	/^Int_t maxFilesPerJob = 150;$/;"	v
 maxMergeFiles	LHC_13_d/AccEff/GenTuner/runGenTuner.C	/^Int_t maxMergeFiles = 10;$/;"	v
 maxMergeFiles	LHC_15g_pp/AccEff_Muons/runGenTuner.C	/^Int_t maxMergeFiles = 10;$/;"	v
 maxMergeFiles	LHC_15g_pp/AccEff_jpsi/DataPart/runMuMuGrid.C	/^Int_t maxMergeFiles = 10;$/;"	v
 maxMergeFiles	LHC_15g_pp/AccEff_jpsi/GenTuner/runGenTuner.C	/^Int_t maxMergeFiles = 10;$/;"	v
 maxMergeFiles	LHC_15g_pp/AccEff_jpsi/MCPart/runMuMuGrid.C	/^Int_t maxMergeFiles = 10;$/;"	v
 maxMergeFiles	LHC_15g_pp/MuMuPar/runMuMuGrid.C	/^Int_t maxMergeFiles = 10;$/;"	v
-maxMergeFiles	LHC_15g_pp/TrackingEfficiency/Data/runMuonEfficiency.C	/^Int_t maxMergeFiles = 10;$/;"	v
-maxMergeFiles	LHC_15g_pp/TrackingEfficiency/MonteCarlo/runMuonEfficiency.C	/^Int_t maxMergeFiles = 10;$/;"	v
+maxMergeFiles	LHC_15g_pp/TrackingEfficiency/DataMSL/runMuonEfficiency.C	/^Int_t maxMergeFiles = 10;$/;"	v
+maxMergeFiles	LHC_15g_pp/TrackingEfficiency/DataMUL/runMuonEfficiency.C	/^Int_t maxMergeFiles = 10;$/;"	v
+maxMergeFiles	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/runMuonEfficiency.C	/^Int_t maxMergeFiles = 10;$/;"	v
+maxMergeFiles	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/runMuonEfficiency.C	/^Int_t maxMergeFiles = 10;$/;"	v
+maxMergeFiles	LHC_15g_pp/TrackingEfficiency/Resultat philippe/runMuonEfficiency.C	/^Int_t maxMergeFiles = 10;$/;"	v
 maxMergeStages	LHC_13_d/AccEff/GenTuner/runGenTuner.C	/^Int_t maxMergeStages = 2;$/;"	v
 maxMergeStages	LHC_15g_pp/AccEff_Muons/runGenTuner.C	/^Int_t maxMergeStages = 4;$/;"	v
 maxMergeStages	LHC_15g_pp/AccEff_jpsi/DataPart/runMuMuGrid.C	/^Int_t maxMergeStages = 2;$/;"	v
 maxMergeStages	LHC_15g_pp/AccEff_jpsi/GenTuner/runGenTuner.C	/^Int_t maxMergeStages = 2;$/;"	v
 maxMergeStages	LHC_15g_pp/AccEff_jpsi/MCPart/runMuMuGrid.C	/^Int_t maxMergeStages = 2;$/;"	v
 maxMergeStages	LHC_15g_pp/MuMuPar/runMuMuGrid.C	/^Int_t maxMergeStages = 2;$/;"	v
-maxMergeStages	LHC_15g_pp/TrackingEfficiency/Data/runMuonEfficiency.C	/^Int_t maxMergeStages = 4;$/;"	v
-maxMergeStages	LHC_15g_pp/TrackingEfficiency/MonteCarlo/runMuonEfficiency.C	/^Int_t maxMergeStages = 4;$/;"	v
+maxMergeStages	LHC_15g_pp/TrackingEfficiency/DataMSL/runMuonEfficiency.C	/^Int_t maxMergeStages = 4;$/;"	v
+maxMergeStages	LHC_15g_pp/TrackingEfficiency/DataMUL/runMuonEfficiency.C	/^Int_t maxMergeStages = 4;$/;"	v
+maxMergeStages	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/runMuonEfficiency.C	/^Int_t maxMergeStages = 4;$/;"	v
+maxMergeStages	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/runMuonEfficiency.C	/^Int_t maxMergeStages = 4;$/;"	v
+maxMergeStages	LHC_15g_pp/TrackingEfficiency/Resultat philippe/runMuonEfficiency.C	/^Int_t maxMergeStages = 4;$/;"	v
 mergeGridFiles	EventMixing/Task_EvtMix/mergeGridFiles.C	/^void mergeGridFiles(TString outFilename, TString inFileList, Bool_t isLocal = kFALSE, Int_t nFilesPerStep = 100, Bool_t copyLocal = kTRUE)$/;"	f
 mixNum	Test1_PbPb2011/TestMixedEvent/runMuMu.C	/^const Int_t mixNum = 20;  \/\/ 6$/;"	v
-moreTrackCandidates	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^Bool_t moreTrackCandidates = kFALSE;$/;"	v
-moreTrackCandidates	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^Bool_t moreTrackCandidates = kFALSE;$/;"	v
+moreTrackCandidates	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^Bool_t moreTrackCandidates = kFALSE;$/;"	v
+moreTrackCandidates	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^Bool_t moreTrackCandidates = kFALSE;$/;"	v
+moreTrackCandidates	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^Bool_t moreTrackCandidates = kFALSE;$/;"	v
 moreTrackCandidates	Macro_Utile/MuonTrackingEfficiency.C	/^Bool_t moreTrackCandidates = kFALSE;$/;"	v
 nHist	LHC_15g_pp/TrackingEfficiency/CompareMuonDistributions.C	/^const Int_t nHist = 3;$/;"	v
 ndim	My_First_Task/AliAnalysisTaskMass.h	/^    Int_t ndim; \/\/ number of dimension for fHistMass (3 here for M, pt and y)$/;"	m	class:AliAnalysisTaskMass
@@ -1088,8 +1266,11 @@ outDir	LHC_15g_pp/AccEff_jpsi/DataPart/runMuMuGrid.C	/^TString outDir = "Analysi
 outDir	LHC_15g_pp/AccEff_jpsi/GenTuner/runGenTuner.C	/^TString outDir = "Data\/LHC10h\/pass2\/Eff\/pDCAChi2";$/;"	v
 outDir	LHC_15g_pp/AccEff_jpsi/MCPart/runMuMuGrid.C	/^TString outDir = "Analysis\/LHC15g\/AccEff\/Data";$/;"	v
 outDir	LHC_15g_pp/MuMuPar/runMuMuGrid.C	/^TString outDir = "Analysis\/LHC15g\/Minv\/MC\/";$/;"	v
-outDir	LHC_15g_pp/TrackingEfficiency/Data/runMuonEfficiency.C	/^TString outDir = "Analysis\/LHC15g\/TrackingEfficiency\/Data";$/;"	v
-outDir	LHC_15g_pp/TrackingEfficiency/MonteCarlo/runMuonEfficiency.C	/^TString outDir = "Analysis\/LHC15g\/TrackingEfficiency\/MonteCarlo\/singleMuon";$/;"	v
+outDir	LHC_15g_pp/TrackingEfficiency/DataMSL/runMuonEfficiency.C	/^TString outDir = "Analysis\/LHC15g\/TrackingEfficiency\/Data";$/;"	v
+outDir	LHC_15g_pp/TrackingEfficiency/DataMUL/runMuonEfficiency.C	/^TString outDir = "Analysis\/LHC15g\/TrackingEfficiency\/ResultatPhilippe\/Data";$/;"	v
+outDir	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/runMuonEfficiency.C	/^TString outDir = "Analysis\/LHC15g\/TrackingEfficiency\/MonteCarlo\/singleMuon";$/;"	v
+outDir	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/runMuonEfficiency.C	/^TString outDir = "Analysis\/LHC15g\/TrackingEfficiency\/ResultatPhilippe\/MonteCarlo";$/;"	v
+outDir	LHC_15g_pp/TrackingEfficiency/Resultat philippe/runMuonEfficiency.C	/^TString outDir = "Analysis\/LHC15g\/TrackingEfficiency\/Data";$/;"	v
 parPOWLAW	LHC_13_d/AccEff/DataPart/FitData.C	/^Double_t parPOWLAW[3] = {80.,1.,1.};$/;"	v
 parPOWLAW	LHC_13_d/AccEff/MCPart/FitMCData.C	/^Double_t parPOWLAW[3] = {80.,1.,1.};$/;"	v
 parPOWLAW	LHC_15g_pp/AccEff_jpsi/DataPart/FitData.C	/^Double_t parPOWLAW[3] = {80.,1.,1.};$/;"	v
@@ -1100,11 +1281,13 @@ powerLaw3Par	LHC_13_d/AccEff/MCPart/AliAnalysisMuMuMinv.cxx	/^Double_t AliAnalys
 powerLaw3Par	LHC_15g_pp/AccEff_jpsi/MCPart/AliAnalysisMuMuMinv.cxx	/^Double_t AliAnalysisMuMuMinv::powerLaw3Par(Double_t *x, Double_t *par)$/;"	f	class:AliAnalysisMuMuMinv
 powerLaw3Par	Macro_Utile/FittingFunctions.C	/^Double_t powerLaw3Par(Double_t *x, Double_t *par)$/;"	f
 powerLaw3Par	My_First_Task/FittingFunctions.C	/^Double_t powerLaw3Par(Double_t *x, Double_t *par)$/;"	f
-ptMax	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^Double_t ptMax = -1.;$/;"	v
-ptMax	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^Double_t ptMax = -1.;$/;"	v
+ptMax	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^Double_t ptMax = -1.;$/;"	v
+ptMax	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^Double_t ptMax = -1.;$/;"	v
+ptMax	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^Double_t ptMax = -1.;$/;"	v
 ptMax	Macro_Utile/MuonTrackingEfficiency.C	/^Double_t ptMax = -1.;$/;"	v
-ptMin	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^Double_t ptMin = 0.;$/;"	v
-ptMin	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^Double_t ptMin = 0.;$/;"	v
+ptMin	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^Double_t ptMin = 0.;$/;"	v
+ptMin	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^Double_t ptMin = 0.;$/;"	v
+ptMin	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^Double_t ptMin = 0.;$/;"	v
 ptMin	Macro_Utile/MuonTrackingEfficiency.C	/^Double_t ptMin = 0.;$/;"	v
 ptRange	LHC_13_d/AccEff/GenTuner/runGenTuner.C	/^Double_t ptRange[2] = {0.1, 6.5};$/;"	v
 ptRange	LHC_15g_pp/AccEff_Muons/runGenTuner.C	/^Double_t ptRange[2] = {0.15, 999.};$/;"	v
@@ -1117,8 +1300,11 @@ rootVersion	LHC_15g_pp/AccEff_jpsi/DataPart/runMuMuGrid.C	/^TString rootVersion 
 rootVersion	LHC_15g_pp/AccEff_jpsi/GenTuner/runGenTuner.C	/^TString rootVersion = "v5-34-08";$/;"	v
 rootVersion	LHC_15g_pp/AccEff_jpsi/MCPart/runMuMuGrid.C	/^TString rootVersion = "v5-34-30-1";$/;"	v
 rootVersion	LHC_15g_pp/MuMuPar/runMuMuGrid.C	/^TString rootVersion = "v5-34-30";$/;"	v
-rootVersion	LHC_15g_pp/TrackingEfficiency/Data/runMuonEfficiency.C	/^TString rootVersion = "v5-34-30";$/;"	v
-rootVersion	LHC_15g_pp/TrackingEfficiency/MonteCarlo/runMuonEfficiency.C	/^TString rootVersion = "v5-34-30";$/;"	v
+rootVersion	LHC_15g_pp/TrackingEfficiency/DataMSL/runMuonEfficiency.C	/^TString rootVersion = "v5-34-30";$/;"	v
+rootVersion	LHC_15g_pp/TrackingEfficiency/DataMUL/runMuonEfficiency.C	/^TString rootVersion = "v5-34-30";$/;"	v
+rootVersion	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/runMuonEfficiency.C	/^TString rootVersion = "v5-34-30";$/;"	v
+rootVersion	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/runMuonEfficiency.C	/^TString rootVersion = "v5-34-30";$/;"	v
+rootVersion	LHC_15g_pp/TrackingEfficiency/Resultat philippe/runMuonEfficiency.C	/^TString rootVersion = "v5-34-30";$/;"	v
 runAccEffSubmitter	LHC_15g_pp/TrackingEfficiency/Simulation/runAccEffSubmitter.c	/^void runAccEffSubmitter(const char* mode)$/;"	f
 runFormat	LHC_13_d/AccEff/GenTuner/runGenTuner.C	/^TString runFormat = "%09d";$/;"	v
 runFormat	LHC_15g_pp/AccEff_Muons/runGenTuner.C	/^TString runFormat = "%09d";$/;"	v
@@ -1126,8 +1312,11 @@ runFormat	LHC_15g_pp/AccEff_jpsi/DataPart/runMuMuGrid.C	/^TString runFormat = "%
 runFormat	LHC_15g_pp/AccEff_jpsi/GenTuner/runGenTuner.C	/^TString runFormat = "%09d";$/;"	v
 runFormat	LHC_15g_pp/AccEff_jpsi/MCPart/runMuMuGrid.C	/^TString runFormat = "%09d";$/;"	v
 runFormat	LHC_15g_pp/MuMuPar/runMuMuGrid.C	/^TString runFormat = "%06d";$/;"	v
-runFormat	LHC_15g_pp/TrackingEfficiency/Data/runMuonEfficiency.C	/^TString runFormat = "%09d";$/;"	v
-runFormat	LHC_15g_pp/TrackingEfficiency/MonteCarlo/runMuonEfficiency.C	/^TString runFormat = "%06d";$/;"	v
+runFormat	LHC_15g_pp/TrackingEfficiency/DataMSL/runMuonEfficiency.C	/^TString runFormat = "%09d";$/;"	v
+runFormat	LHC_15g_pp/TrackingEfficiency/DataMUL/runMuonEfficiency.C	/^TString runFormat = "%09d";$/;"	v
+runFormat	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/runMuonEfficiency.C	/^TString runFormat = "%06d";$/;"	v
+runFormat	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/runMuonEfficiency.C	/^TString runFormat = "%09d";$/;"	v
+runFormat	LHC_15g_pp/TrackingEfficiency/Resultat philippe/runMuonEfficiency.C	/^TString runFormat = "%09d";$/;"	v
 runGenTuner	LHC_13_d/AccEff/GenTuner/runGenTuner.C	/^void runGenTuner(TString smode = "saf", TString inputFileName = "Find;BasePath=\/alice\/cern.ch\/user\/l\/laphecet\/Analysis\/LHC13d\/simjpsi\/CynthiaTuneWithRejectList\/195760\/;FileName=AliAOD.Muons.root",$/;"	f
 runGenTuner	LHC_15g_pp/AccEff_Muons/runGenTuner.C	/^void runGenTuner(TString smode = "saf", TString inputFileName = "Find;BasePath=\/alice\/data\/2015\/LHC15g\/000228979\/muon_calo_pass1\/AOD\/*;FileName=AliAOD.Muons.root",$/;"	f
 runGenTuner	LHC_15g_pp/AccEff_jpsi/GenTuner/runGenTuner.C	/^void runGenTuner(TString smode = "saf", TString inputFileName = "Find;BasePath=\/alice\/cern.ch\/user\/l\/laphecet\/Analysis\/LHC13d\/simjpsi\/CynthiaTuneWithRejectList\/195760\/;FileName=AliAOD.Muons.root",$/;"	f
@@ -1144,13 +1333,17 @@ runMuMuGrid	LHC_15g_pp/AccEff_jpsi/MCPart/runMuMuGrid.C	/^AliAnalysisTask* runMu
 runMuMuGrid	LHC_15g_pp/MuMuPar/runMuMuGrid.C	/^AliAnalysisTask* runMuMuGrid(const char* dataset="datasetfull.AOD.txt",$/;"	f
 runMuMuMC	LHC_13_d/AccEff/MCPart/runMuMuMC.C	/^AliAnalysisTask* runMuMuMC(const char* dataset="Find;BasePath=\/alice\/cern.ch\/user\/l\/laphecet\/Analysis\/LHC13d\/simjpsi\/CynthiaTuneWithRejectList\/195760\/;FileName=AliAOD.Muons.root",$/;"	f
 runMuMuMC	LHC_15g_pp/AccEff_jpsi/MCPart/runMuMuMC.C	/^AliAnalysisTask* runMuMuMC(const char* dataset="Find;BasePath=\/alice\/cern.ch\/user\/l\/laphecet\/Analysis\/LHC13d\/simjpsi\/CynthiaTuneWithRejectList\/195760\/;FileName=AliAOD.Muons.root",$/;"	f
-runMuonEfficiency	LHC_15g_pp/TrackingEfficiency/Data/runMuonEfficiency.C	/^void runMuonEfficiency(TString smode = "full", TString inputFileName = "runList.txt",$/;"	f
-runMuonEfficiency	LHC_15g_pp/TrackingEfficiency/MonteCarlo/runMuonEfficiency.C	/^void runMuonEfficiency(TString smode = "full", TString inputFileName = "runList.txt",$/;"	f
+runMuonEfficiency	LHC_15g_pp/TrackingEfficiency/DataMSL/runMuonEfficiency.C	/^void runMuonEfficiency(TString smode = "full", TString inputFileName = "runList.txt",$/;"	f
+runMuonEfficiency	LHC_15g_pp/TrackingEfficiency/DataMUL/runMuonEfficiency.C	/^void runMuonEfficiency(TString smode = "full", TString inputFileName = "runList.txt",$/;"	f
+runMuonEfficiency	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/runMuonEfficiency.C	/^void runMuonEfficiency(TString smode = "full", TString inputFileName = "runList.txt",$/;"	f
+runMuonEfficiency	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/runMuonEfficiency.C	/^void runMuonEfficiency(TString smode = "full", TString inputFileName = "runList.txt",$/;"	f
+runMuonEfficiency	LHC_15g_pp/TrackingEfficiency/Resultat philippe/runMuonEfficiency.C	/^void runMuonEfficiency(TString smode = "full", TString inputFileName = "runList.txt",$/;"	f
 runOnData	LHC_15g_pp/mergeQA/AODtrain.C	/^Int_t       runOnData          = 0;       \/\/ Set to 1 if processing real data$/;"	v
 runProof	My_First_Task/runProof.C	/^void runProof()$/;"	f
 runWeights	LHC_15g_pp/TrackingEfficiency/CompareMuonDistributions.C	/^THashList *runWeights = 0x0;$/;"	v
-runWeights	LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C	/^THashList *runWeights = 0x0;$/;"	v
-runWeights	LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C	/^THashList *runWeights = 0x0;$/;"	v
+runWeights	LHC_15g_pp/TrackingEfficiency/DataMSL/MuonTrackingEfficiency.C	/^THashList *runWeights = 0x0;$/;"	v
+runWeights	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/MuonTrackingEfficiency.C	/^THashList *runWeights = 0x0;$/;"	v
+runWeights	LHC_15g_pp/TrackingEfficiency/MuonTrackingEfficiency.C	/^THashList *runWeights = 0x0;$/;"	v
 runWeights	Macro_Utile/MuonTrackingEfficiency.C	/^THashList *runWeights = 0x0;$/;"	v
 runcommand	LHC_15g_pp/TrackingEfficiency/Simulation/simrun.sh	/^function runcommand(){$/;"	f
 sRes	LHC_15g_pp/TrackingEfficiency/CompareMuonDistributions.C	/^TString sRes[nHist] = {"fHistPt", "fHistY", "fHistPhi"};$/;"	v
@@ -1209,8 +1402,11 @@ ttl	LHC_15g_pp/AccEff_jpsi/DataPart/runMuMuGrid.C	/^Int_t ttl = 30000;$/;"	v
 ttl	LHC_15g_pp/AccEff_jpsi/GenTuner/runGenTuner.C	/^Int_t ttl = 30000;$/;"	v
 ttl	LHC_15g_pp/AccEff_jpsi/MCPart/runMuMuGrid.C	/^Int_t ttl = 30000;$/;"	v
 ttl	LHC_15g_pp/MuMuPar/runMuMuGrid.C	/^Int_t ttl = 30000;$/;"	v
-ttl	LHC_15g_pp/TrackingEfficiency/Data/runMuonEfficiency.C	/^Int_t ttl = 30000;$/;"	v
-ttl	LHC_15g_pp/TrackingEfficiency/MonteCarlo/runMuonEfficiency.C	/^Int_t ttl = 30000;$/;"	v
+ttl	LHC_15g_pp/TrackingEfficiency/DataMSL/runMuonEfficiency.C	/^Int_t ttl = 30000;$/;"	v
+ttl	LHC_15g_pp/TrackingEfficiency/DataMUL/runMuonEfficiency.C	/^Int_t ttl = 30000;$/;"	v
+ttl	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/runMuonEfficiency.C	/^Int_t ttl = 30000;$/;"	v
+ttl	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/runMuonEfficiency.C	/^Int_t ttl = 30000;$/;"	v
+ttl	LHC_15g_pp/TrackingEfficiency/Resultat philippe/runMuonEfficiency.C	/^Int_t ttl = 30000;$/;"	v
 useAODTAGS	LHC_15g_pp/mergeQA/AODtrain.C	/^Bool_t      useAODTAGS          = kFALSE; \/\/ use AOD tags$/;"	v
 useCORRFW	LHC_15g_pp/mergeQA/AODtrain.C	/^Bool_t      useCORRFW           = kFALSE; \/\/ do not change$/;"	v
 useCentrality	LHC_15g_pp/TrackingEfficiency/Simulation/AODtrainsim.C	/^Bool_t      useCentrality       = kFALSE; \/\/ centrality$/;"	v
@@ -1245,6 +1441,8 @@ ymin	My_First_Task/AliAnalysisTaskMass.h	/^    double ymin; \/\/ minimum rapidit
 ~AliAnalysisTaskGenTunerJpsi	LHC_15g_pp/AccEff_jpsi/GenTuner/AliAnalysisTaskGenTunerJpsi.cxx	/^AliAnalysisTaskGenTunerJpsi::~AliAnalysisTaskGenTunerJpsi()$/;"	f	class:AliAnalysisTaskGenTunerJpsi
 ~AliAnalysisTaskGenTunerJpsi	Tasks/AliAnalysisTaskGenTunerJpsi.cxx	/^AliAnalysisTaskGenTunerJpsi::~AliAnalysisTaskGenTunerJpsi()$/;"	f	class:AliAnalysisTaskGenTunerJpsi
 ~AliAnalysisTaskMass	My_First_Task/AliAnalysisTaskMass.cxx	/^AliAnalysisTaskMass::~AliAnalysisTaskMass()$/;"	f	class:AliAnalysisTaskMass
-~AliAnalysisTaskMuonTrackingEffLocal	LHC_15g_pp/TrackingEfficiency/Data/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^AliAnalysisTaskMuonTrackingEffLocal::~AliAnalysisTaskMuonTrackingEffLocal()$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
-~AliAnalysisTaskMuonTrackingEffLocal	LHC_15g_pp/TrackingEfficiency/MonteCarlo/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^AliAnalysisTaskMuonTrackingEffLocal::~AliAnalysisTaskMuonTrackingEffLocal()$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+~AliAnalysisTaskMuonTrackingEffLocal	LHC_15g_pp/TrackingEfficiency/DataMSL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^AliAnalysisTaskMuonTrackingEffLocal::~AliAnalysisTaskMuonTrackingEffLocal()$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+~AliAnalysisTaskMuonTrackingEffLocal	LHC_15g_pp/TrackingEfficiency/DataMUL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^AliAnalysisTaskMuonTrackingEffLocal::~AliAnalysisTaskMuonTrackingEffLocal()$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+~AliAnalysisTaskMuonTrackingEffLocal	LHC_15g_pp/TrackingEfficiency/MonteCarloMSL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^AliAnalysisTaskMuonTrackingEffLocal::~AliAnalysisTaskMuonTrackingEffLocal()$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
+~AliAnalysisTaskMuonTrackingEffLocal	LHC_15g_pp/TrackingEfficiency/MonteCarloMUL/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^AliAnalysisTaskMuonTrackingEffLocal::~AliAnalysisTaskMuonTrackingEffLocal()$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
 ~AliAnalysisTaskMuonTrackingEffLocal	Tasks/AliAnalysisTaskMuonTrackingEffLocal.cxx	/^AliAnalysisTaskMuonTrackingEffLocal::~AliAnalysisTaskMuonTrackingEffLocal()$/;"	f	class:AliAnalysisTaskMuonTrackingEffLocal
