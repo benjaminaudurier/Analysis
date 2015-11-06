@@ -48,54 +48,66 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   
   //  Configure inputmaps (Default on is in AliMuonEventCuts)
   //===========================================================================
-  // triggerInputsMap = new TList();
-  // triggerInputsMap->SetOwner(kTRUE);
+  triggerInputsMap = new TList();
+  triggerInputsMap->SetOwner(kTRUE);
+  
+  triggerInputsMap->Add(new TObjString("0VBA:1,")); 
+  triggerInputsMap->Add(new TObjString("0VBC:2,")); 
+  triggerInputsMap->Add(new TObjString("0UBA:3,")); 
+  triggerInputsMap->Add(new TObjString("0UBC:4,")); 
+  triggerInputsMap->Add(new TObjString("0T0A:5,")); 
+  triggerInputsMap->Add(new TObjString("0T0C:6,")); 
+  triggerInputsMap->Add(new TObjString("0TVX:7,")); 
+  triggerInputsMap->Add(new TObjString("0TSC:8,")); 
+  triggerInputsMap->Add(new TObjString("0TCE:9,")); 
+  triggerInputsMap->Add(new TObjString("0EMC:10,")); 
+  triggerInputsMap->Add(new TObjString("0VHM:11,")); 
+  triggerInputsMap->Add(new TObjString("0VGC:12,")); 
+  triggerInputsMap->Add(new TObjString("0UGA:13,")); 
+  triggerInputsMap->Add(new TObjString("0UGC:14,")); 
+  triggerInputsMap->Add(new TObjString("0BPA:15,")); 
+  triggerInputsMap->Add(new TObjString("0BPC:16,")); 
+  triggerInputsMap->Add(new TObjString("0V0M:17,")); 
+  triggerInputsMap->Add(new TObjString("0MSL:18,")); 
+  triggerInputsMap->Add(new TObjString("0MSH:19,")); 
+  triggerInputsMap->Add(new TObjString("0MLL:20,")); 
+  triggerInputsMap->Add(new TObjString("0MUL:21,")); 
+  triggerInputsMap->Add(new TObjString("0SMB:22,")); 
+  triggerInputsMap->Add(new TObjString("0DMC:23,")); 
+  triggerInputsMap->Add(new TObjString("0LSR:24,")); 
 
-  // triggerInputsMap->Add(new TObjString("0VBA:0,"));
-  // triggerInputsMap->Add(new TObjString("0VBC:1,"));    
-  // triggerInputsMap->Add(new TObjString("0VLN:2,"));
-  // triggerInputsMap->Add(new TObjString("0ZAC:3,"));
-  // triggerInputsMap->Add(new TObjString("0BPC:4,"));
-  // triggerInputsMap->Add(new TObjString("0MUL:5,"));
-  // triggerInputsMap->Add(new TObjString("0MSL:6,"));
-  // triggerInputsMap->Add(new TObjString("0MLL:7,"));
-  // triggerInputsMap->Add(new TObjString("0MSH:8,"));
-  // triggerInputsMap->Add(new TObjString("0OMU:9,"));
-  // triggerInputsMap->Add(new TObjString("0MUH:10,"));
-  // triggerInputsMap->Add(new TObjString("0SMB:11,"));
-  // triggerInputsMap->Add(new TObjString("0SM2:12,"));
-  // triggerInputsMap->Add(new TObjString("0TVX:13,"));
-  // triggerInputsMap->Add(new TObjString("0LSR:14,"));
-  // triggerInputsMap->Add(new TObjString("0HWU:15,"));
-  // triggerInputsMap->Add(new TObjString("0PH0:16,"));
-  // triggerInputsMap->Add(new TObjString("0VHO:17,"));
-  // triggerInputsMap->Add(new TObjString("0VHN:18,"));
-  // triggerInputsMap->Add(new TObjString("0TCE:19,"));
-  // triggerInputsMap->Add(new TObjString("0TSC:20,"));
-  // triggerInputsMap->Add(new TObjString("0OM2:21,"));
-  // triggerInputsMap->Add(new TObjString("0BPA:22,"));
-  // triggerInputsMap->Add(new TObjString("0EMC:23,"));
 
-  // triggerInputsMap->Add(new TObjString("1EJE:0,"));
-  // triggerInputsMap->Add(new TObjString("1EGA:1,"));    
-  // triggerInputsMap->Add(new TObjString("1PHL:4,"));
-  // triggerInputsMap->Add(new TObjString("1PHM:5,"));
-  // triggerInputsMap->Add(new TObjString("1PHH:6,"));
-  // triggerInputsMap->Add(new TObjString("1HCO:8,"));
-  // triggerInputsMap->Add(new TObjString("1HJT:9,"));
-  // triggerInputsMap->Add(new TObjString("1HSE:10,"));
-  // triggerInputsMap->Add(new TObjString("1DUM:11,"));
-  // triggerInputsMap->Add(new TObjString("1ZMD:14,"));
-  // triggerInputsMap->Add(new TObjString("1ZMB:16,"));
-  // triggerInputsMap->Add(new TObjString("1ZED:17,"));
-  // triggerInputsMap->Add(new TObjString("1ZAC:18,"));
+
+triggerInputsMap->Add(new TObjString("1EJ1:1,"));
+triggerInputsMap->Add(new TObjString("1EG1:2,"));
+triggerInputsMap->Add(new TObjString("1EJ2:3,"));
+triggerInputsMap->Add(new TObjString("1EG2:4,"));
+triggerInputsMap->Add(new TObjString("1PHL:5,"));
+triggerInputsMap->Add(new TObjString("1PHM:6,"));
+triggerInputsMap->Add(new TObjString("1PHH:7,"));
+triggerInputsMap->Add(new TObjString("1HCO:9,"));
+triggerInputsMap->Add(new TObjString("1HJT:10,"));
+triggerInputsMap->Add(new TObjString("1HSE:11,"));
+triggerInputsMap->Add(new TObjString("1H12:12,"));
+triggerInputsMap->Add(new TObjString("1HQU:13,"));
+triggerInputsMap->Add(new TObjString("1H14:14,"));
+triggerInputsMap->Add(new TObjString("1ZED:15,"));
+triggerInputsMap->Add(new TObjString("1ZMS:16,"));
+triggerInputsMap->Add(new TObjString("1ZMB:17,"));
+triggerInputsMap->Add(new TObjString("1ZMD:18,"));
+triggerInputsMap->Add(new TObjString("1ZAC:19,"));
+triggerInputsMap->Add(new TObjString("1EDA:20,"));
+triggerInputsMap->Add(new TObjString("1EDB:21,"));
+triggerInputsMap->Add(new TObjString("1EDC:22,"));
+triggerInputsMap->Add(new TObjString("1EDD:23,"));
+triggerInputsMap->Add(new TObjString("2DUM:12,"));
 
   //===========================================================================
 
   //  Configure task
   //===========================================================================
   AliAnalysisTaskMuMu       * task = new AliAnalysisTaskMuMu; // Call the task
-  AliAnalysisMuMuEventCutter* eventCutter = new AliAnalysisMuMuEventCutter(triggerClassesToConsider/*triggerInputsMap*/); // To handle cuts on event
+  AliAnalysisMuMuEventCutter* eventCutter = new AliAnalysisMuMuEventCutter(triggerClassesToConsider,triggerInputsMap); // To handle cuts on event
   AliAnalysisMuMuCutRegistry* cr = task->CutRegistry(); // Set CutRegistry
   // task->SetCountInBins("psi","pt","BENJ");
   // task->SetCountInBins("psi","y","BENJ");
@@ -145,13 +157,13 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
     // Cuts on tracks
     AliAnalysisMuMuCutElement* trackTrue = cr->AddTrackCut(*cr,"AlwaysTrue","const AliVParticle&",""); // Apply "AlwaysTrue" cut on AliVParticle derived from AliAnalysisMuMuSingle
     AliAnalysisMuMuCutElement* rabs = cr->AddTrackCut(*singleAnalysis,"IsRabsOK","const AliVParticle&","");
-    // AliAnalysisMuMuCutElement* matchlow = cr->AddTrackCut(*singleAnalysis,"IsMatchingTriggerLowPt","const AliVParticle&","");
+    AliAnalysisMuMuCutElement* matchlow = cr->AddTrackCut(*singleAnalysis,"IsMatchingTriggerLowPt","const AliVParticle&","");
     AliAnalysisMuMuCutElement* eta = cr->AddTrackCut(*singleAnalysis,"IsEtaInRange","const AliVParticle&","");
     // AliAnalysisMuMuCutElement* pdca = cr->AddTrackCut(*singleAnalysis,"IsPDCAOK","const AliVParticle&","");
     
     // Create combination of cuts to apply
     cr->AddCutCombination(trackTrue);
-    // cr->AddCutCombination(matchlow);
+    cr->AddCutCombination(matchlow);
     cr->AddCutCombination(rabs,eta); 
     // Adding the sub analysis
     task->AdoptSubAnalysis(singleAnalysis); 
@@ -164,13 +176,13 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
       // Cuts on track level
       AliAnalysisMuMuCutElement* pairTrue = cr->AddTrackPairCut(*cr,"AlwaysTrue","const AliVParticle&,const AliVParticle&","");// Apply "AlwaysTrue" cut on AliVParticle derived from AliAnalysisMuMuMinv
       AliAnalysisMuMuCutElement* pairy = cr->AddTrackPairCut(*minvAnalysis,"IsRapidityInRange","const AliVParticle&,const AliVParticle&","");
-      AliAnalysisMuMuCutElement* ptRange = cr->AddTrackPairCut(*minvAnalysis,"IsPtInRange","const AliVParticle&,const AliVParticle&,Double_t&,Double_t&","0.,18.");
+      AliAnalysisMuMuCutElement* ptRange = cr->AddTrackPairCut(*minvAnalysis,"IsPtInRange","const AliVParticle&,const AliVParticle&,Double_t&,Double_t&","0.,20.");
 
       cutElements.Add(pairTrue);
       cutElements.Add(pairy);
-      // cutElements.Add(ptRange);
+      cutElements.Add(ptRange);
       cutElements.Add(rabs);
-      // cutElements.Add(matchlow);
+      cutElements.Add(matchlow);
       cutElements.Add(eta);
       // cutElements.Add(pdca);
       // cutElements.Add(ps);
@@ -202,7 +214,20 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
     binning->AddBin("psi","pt", 3.0, 4.0,"BENJ");
     binning->AddBin("psi","pt", 4.0, 5.0,"BENJ");
     binning->AddBin("psi","pt", 5.0, 6.0,"BENJ");
-    binning->AddBin("psi","pt", 6.0, 8.0,"BENJ");
+    binning->AddBin("psi","pt", 6.0, 7.0,"BENJ");
+    binning->AddBin("psi","pt", 7.0, 8.0,"BENJ");
+    binning->AddBin("psi","pt", 8.0, 9.0,"BENJ");
+    binning->AddBin("psi","pt", 9.0, 10.0,"BENJ");
+    binning->AddBin("psi","pt", 10.0, 11.0,"BENJ");
+    binning->AddBin("psi","pt", 11.0, 12.0,"BENJ");
+    binning->AddBin("psi","pt", 12.0, 13.0,"BENJ");
+    binning->AddBin("psi","pt", 13.0, 14.0,"BENJ");
+    binning->AddBin("psi","pt", 14.0, 15.0,"BENJ");
+    binning->AddBin("psi","pt", 15.0, 16.0,"BENJ");
+    binning->AddBin("psi","pt", 16.0, 17.0,"BENJ");
+    binning->AddBin("psi","pt", 17.0, 18.0,"BENJ");
+    binning->AddBin("psi","pt", 18.0, 19.0,"BENJ");
+    binning->AddBin("psi","pt", 19.0, 20.0,"BENJ");
   
    //  // y binning
    binning->AddBin("psi","y",-4,-3.75,"BENJ");

@@ -137,12 +137,12 @@ void SaveQA(TString inputDataFile, TString inputMCFile)
       cTmp.cd(1);
       gPad->SetPad(0., 0.5, 0.5, 1); 
       clusterMapData->SetTitle(Form("Cluster position distribution for data"));
-      clusterMapData->DrawCopy("COL");
+      clusterMapData->DrawCopy("");
 
       cTmp.cd(2);
       gPad->SetPad(0.5, 0.5, 1, 1);
       clusterMapMC->SetTitle(Form("Cluster position distribution for MC"));
-      clusterMapMC->DrawCopy("COL");
+      clusterMapMC->DrawCopy("");
 
       cTmp.cd(4);
       gPad->SetPad(0., 0., 1., 0.5); 
@@ -168,14 +168,14 @@ void SaveQA(TString inputDataFile, TString inputMCFile)
           if (diff > 0.6 ) h2->SetBinContent(i,j,TMath::Abs(1-(DataBin-MCBin))*diff/2);
         }
       }
-      Int_t palette[5];
+      // Int_t palette[5];
       
-      palette[0] = 20;
-      palette[1] = 23;
-      palette[2] = 31;
-      palette[3] = 34;
-      palette[4] = 13;
-      gStyle->SetPalette(5,palette);
+      // palette[0] = 20;
+      // palette[1] = 23;
+      // palette[2] = 31;
+      // palette[3] = 34;
+      // palette[4] = 13;
+      // gStyle->SetPalette(5,palette);
       // gStyle->SetPalette(91);
       h2->DrawCopy("COLZ");
       cTmp.Print(Form("displays/%s/ESDclusterMapChamber%d.png",runNumber.Data(),iCh), "png");

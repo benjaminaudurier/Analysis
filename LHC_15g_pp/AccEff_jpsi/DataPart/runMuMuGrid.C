@@ -30,10 +30,10 @@ Int_t maxMergeStages = 2;
 //__________
 
 //______________________________________________________________________________
-AliAnalysisTask* runMuMuGrid(const char* dataset="",
+AliAnalysisTask* runMuMuGrid(const char* dataset="runList.txt",
                          Bool_t simulations=kFALSE,
                          Bool_t baseline=kFALSE,
-                         TString where="full",const char* alirootMode="")
+                         TString where="terminate",const char* alirootMode="")
 {
   gROOT->LoadMacro("/Users/audurier/Documents/Analysis/Macro_Utile/runTaskFacilities.C");// where are macros to load on grid, caf etc.
 

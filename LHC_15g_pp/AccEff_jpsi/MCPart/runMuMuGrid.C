@@ -10,7 +10,7 @@ TString alirootVersion = "v5-06-33";
 TString aliphysicsVersion = "vAN-20150722";
 TString dataDir = "/alice/data/2015/LHC15g";
 TString dataPattern = "muon_calo_pass1/*AliAOD.Muons.root";
-TString runFormat = "%09d";
+TString runFormat = "%06d";
 TString outDir = "Analysis/LHC15g/AccEff/Data";
 
 // extra to be load on CF

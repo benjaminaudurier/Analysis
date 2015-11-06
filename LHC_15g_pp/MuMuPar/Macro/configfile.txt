@@ -6,7 +6,7 @@ T	kMinbiasAndMULTriggerList 	kFALSE 		EMPTY
 T	kMinbiasAndMSLTriggerList 	kFALSE 		EMPTY
 T	kMSLAndMULTriggerList   	kFALSE 		EMPTY
 T	kEventSelectionList 	 	kFALSE 		ALL
-T	kPairSelectionList 		 	kFALSE 		pALLPAIRYRABSETA
+T	kPairSelectionList 		 	kFALSE 		pALLPAIRYPAIRPTIN0.0-8.0RABSMATCHLOWETA
 T	kCentralitySelectionList 	kFALSE 		V0A
 T	kFitTypeList			 	kFALSE     	func=PSIPSIPRIMECB2VWG:rebin=2:histoType=minv:alJPsi=1.05349:nlJPsi=3.28651:auJPsi=2.14782:nuJPsi=2.71848
 

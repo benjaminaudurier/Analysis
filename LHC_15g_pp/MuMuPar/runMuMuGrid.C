@@ -5,13 +5,27 @@
 ///
 
 //__________Global Settings
+// -----grid------
 TString rootVersion = "v5-34-30";
-TString alirootVersion = "v5-06-33";
-TString aliphysicsVersion = "vAN-20150722";
-TString dataDir = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/simjpsi/pp/CMUL7-B-NOPF-MUON";
-TString dataPattern = "AliAOD.Muons.root";
-TString runFormat = "%06d";
-TString outDir = "Analysis/LHC15g/Minv/MC/";
+TString alirootVersion = "v5-07-01-3";
+TString aliphysicsVersion = "vAN-20151015-1";
+
+// // -----saf------
+// TString rootVersion = "v5-34-30";
+// TString aliphysicsVersion = "vAN-20150902";
+// TString alirootVersion = "v5-06-33";
+
+// -----For data-----
+TString dataDir = "/alice/data/2015/LHC15g";
+TString dataPattern = "muon_calo_pass1/AOD/*AliAOD.Muons.root";
+TString runFormat = "%09d";
+TString outDir = "Analysis/LHC15g/Minv";
+
+// -----For Mc-----
+// TString dataDir = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/Jpsi/CMUL7-B-NOPF-MUON";
+// TString dataPattern = "*AliESDs.root";
+// TString runFormat = "%06d";
+// TString outDir = "Analysis/LHC15g/Minv/MC";
 
 // extra to be load on CF
 TString extraLibs="";
@@ -32,7 +46,7 @@ Int_t maxMergeStages = 2;
 //______________________________________________________________________________
 AliAnalysisTask* runMuMuGrid(const char* dataset="datasetfull.AOD.txt",
                          TString where="saf",
-                         Bool_t simulations=kTRUE,
+                         Bool_t simulations=kFALSE,
                          Bool_t baseline=kFALSE,
                          const char* alirootMode="")
 {
@@ -109,10 +123,11 @@ AliAnalysisTask* runMuMuGrid(const char* dataset="datasetfull.AOD.txt",
   {
 
     triggers->Add(new TObjString("CINT7-B-NOPF-MUON|CINT7-B-NOPF-CENTNOTRD"));// MB
+    triggers->Add(new TObjString("CINT7-B-NOPF-MUON|CINT7-B-NOPF-CENTNOTRD&0MUL"));// MB &MUL
     triggers->Add(new TObjString("CMUL7-B-NOPF-MUON"));// Dimuon
   }
 
-  TString outputname("test.MuMu.AOD.1.root"); // Create output name in case of no dataset selected 
+  TString outputname("LHC15g.MuMu.1.root"); // Create output name in case of no dataset selected 
 
   // Loop to configure the .root output file's name
   //==============================================================================
