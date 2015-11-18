@@ -14,7 +14,7 @@ void PrintFitMacro(
 char         * sfile="../LHC15g.MuMu.1.root",
 char         * sasso="",
 char         * sasso2="",
-char         * beamYear="PbPb2011",
+char         * beamYear="mumu.ppb2013.config",
 char         * what ="INTEGRATED,PT,Y",
 Bool_t Raa   = kFALSE, 
 Bool_t print = kFALSE)

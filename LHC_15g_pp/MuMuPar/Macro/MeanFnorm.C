@@ -3,7 +3,7 @@ void FnormMacro(
               const char* filename="../LHC15g.MuMu.1.root",
               const char* associatedSimFileName="",
               const char* associatedSimFileName2="",
-              const char* beamYear="PbPb2011",const int DebugLevel =0)
+              const char* beamYear="mumu.ppb2013.config",const int DebugLevel =0)
 {
 
 

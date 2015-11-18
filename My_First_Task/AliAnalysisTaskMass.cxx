@@ -46,7 +46,7 @@
 
 
 
-ClassImp(AliAnalysisTaskMass)
+ClassImp(AliAnalysisTaskMass)// for ROOT
 
 //________________________________________________________________________
 AliAnalysisTaskMass::AliAnalysisTaskMass(const char *name) 

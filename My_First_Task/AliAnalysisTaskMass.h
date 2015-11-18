@@ -1,7 +1,7 @@
 #ifndef AliAnalysisTaskMass_cxx
 #define AliAnalysisTaskMass_cxx
 
-
+// Class used
 class THnSparse;
 class AliAODEvent;
 class AliMuonPairCuts;

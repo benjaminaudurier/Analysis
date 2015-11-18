@@ -88,7 +88,7 @@ echo ${file2}
 #ComputeComparison
 echo 
 echo "Compute Comparison"
-
+cd /Users/audurier/Documents/Analysis/LHC_15g_pp/TrackingEfficiency #move to directory
 root -b -l -q 'ComparisonEfficiency.C++("'$file1'","'$file2'")'
 cp ComparisonEfficiency.root Resultats/ComparisonEfficiency${trigg1}-${ptMin1}-Over${trigg2}-${ptMin2}.root
 

@@ -5,6 +5,7 @@
 ///
 
 //__________Global Settings
+//
 // -----grid------
 TString rootVersion = "v5-34-30";
 TString alirootVersion = "v5-07-01-3";
@@ -44,7 +45,7 @@ Int_t maxMergeStages = 2;
 //__________
 
 //______________________________________________________________________________
-AliAnalysisTask* runMuMuGrid(const char* dataset="datasetfull.AOD.txt",
+AliAnalysisTask* runMuMuGrid(const char* dataset="runList-AOD.txt",
                          TString where="saf",
                          Bool_t simulations=kFALSE,
                          Bool_t baseline=kFALSE,
@@ -123,7 +124,8 @@ AliAnalysisTask* runMuMuGrid(const char* dataset="datasetfull.AOD.txt",
   {
 
     triggers->Add(new TObjString("CINT7-B-NOPF-MUON|CINT7-B-NOPF-CENTNOTRD"));// MB
-    triggers->Add(new TObjString("CINT7-B-NOPF-MUON|CINT7-B-NOPF-CENTNOTRD&0MUL"));// MB &MUL
+// -   triggers->Add(new TObjString("CINT7-B-NOPF-MUON|CINT7-B-NOPF-CENTNOTRD&0MUL"));// MB &MUL
+    // triggers->Add(new TObjString("CINT7-B-NOPF-MUON&0MUL"));// MB &MUL
     triggers->Add(new TObjString("CMUL7-B-NOPF-MUON"));// Dimuon
   }
 
@@ -156,7 +158,7 @@ AliAnalysisTask* runMuMuGrid(const char* dataset="datasetfull.AOD.txt",
   if (!baseline)
   {
     gROOT->LoadMacro("AddTaskMuMu.C");
-    task = AddTaskMuMu(outputname.Data(),triggers,"PbPb2011",simulations);
+    task = AddTaskMuMu(outputname.Data(),triggers,"pp2011",simulations);
   }
   else
   {

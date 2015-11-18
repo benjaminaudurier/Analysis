@@ -48,8 +48,8 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   
   //  Configure inputmaps (Default on is in AliMuonEventCuts)
   //===========================================================================
-  // triggerInputsMap = new TList();
-  // triggerInputsMap->SetOwner(kTRUE);
+  TList() * triggerInputsMap = new TList();
+  triggerInputsMap->SetOwner(kTRUE);
 
   // triggerInputsMap->Add(new TObjString("0VBA:0,"));
   // triggerInputsMap->Add(new TObjString("0VBC:1,"));    
@@ -95,7 +95,7 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   //  Configure task
   //===========================================================================
   AliAnalysisTaskMuMu       * task = new AliAnalysisTaskMuMu; // Call the task
-  AliAnalysisMuMuEventCutter* eventCutter = new AliAnalysisMuMuEventCutter(triggerClassesToConsider/*triggerInputsMap*/); // To handle cuts on event
+  AliAnalysisMuMuEventCutter* eventCutter = new AliAnalysisMuMuEventCutter(triggerClassesToConsider,triggerInputsMap); // To handle cuts on event
   AliAnalysisMuMuCutRegistry* cr = task->CutRegistry(); // Set CutRegistry
   // task->SetCountInBins("psi","pt","BENJ");
   // task->SetCountInBins("psi","y","BENJ");

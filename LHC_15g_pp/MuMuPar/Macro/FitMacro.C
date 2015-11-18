@@ -23,7 +23,7 @@ void FitMacro(
 char           * sfile="../LHC15g.MuMu.1.root",
 char           * sasso="",
 char           * sasso2="",
-char           * beamYear="PbPb2011",
+char           * beamYear="mumu.ppb2013.config",
 char           * what ="integrated,pt,y",
 Bool_t FitDist = kTRUE)
 {    

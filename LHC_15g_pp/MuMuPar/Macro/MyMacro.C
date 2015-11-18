@@ -12,7 +12,7 @@
 void FitMacro(const char* filename="LHC15g.MuMu.1.root",
                   const char* associatedSimFileName="",
                   const char* associatedSimFileName2="",
-                  const char* beamYear="PbPb2011",const char* what ="", const int DebugLevel =0)
+                  const char* beamYear="mumu.ppb2013.config",const char* what ="", const int DebugLevel =0)
 {    
 	// the analysis
     AliAnalysisMuMu analysis(filename,associatedSimFileName,associatedSimFileName2,beamYear);

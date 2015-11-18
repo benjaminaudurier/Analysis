@@ -48,7 +48,7 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   
   //  Configure inputmaps (Default on is in AliMuonEventCuts)
   //===========================================================================
-  triggerInputsMap = new TList();
+  TList* triggerInputsMap = new TList();
   triggerInputsMap->SetOwner(kTRUE);
   
   triggerInputsMap->Add(new TObjString("0VBA:1,")); 
@@ -76,31 +76,29 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   triggerInputsMap->Add(new TObjString("0DMC:23,")); 
   triggerInputsMap->Add(new TObjString("0LSR:24,")); 
 
-
-
-triggerInputsMap->Add(new TObjString("1EJ1:1,"));
-triggerInputsMap->Add(new TObjString("1EG1:2,"));
-triggerInputsMap->Add(new TObjString("1EJ2:3,"));
-triggerInputsMap->Add(new TObjString("1EG2:4,"));
-triggerInputsMap->Add(new TObjString("1PHL:5,"));
-triggerInputsMap->Add(new TObjString("1PHM:6,"));
-triggerInputsMap->Add(new TObjString("1PHH:7,"));
-triggerInputsMap->Add(new TObjString("1HCO:9,"));
-triggerInputsMap->Add(new TObjString("1HJT:10,"));
-triggerInputsMap->Add(new TObjString("1HSE:11,"));
-triggerInputsMap->Add(new TObjString("1H12:12,"));
-triggerInputsMap->Add(new TObjString("1HQU:13,"));
-triggerInputsMap->Add(new TObjString("1H14:14,"));
-triggerInputsMap->Add(new TObjString("1ZED:15,"));
-triggerInputsMap->Add(new TObjString("1ZMS:16,"));
-triggerInputsMap->Add(new TObjString("1ZMB:17,"));
-triggerInputsMap->Add(new TObjString("1ZMD:18,"));
-triggerInputsMap->Add(new TObjString("1ZAC:19,"));
-triggerInputsMap->Add(new TObjString("1EDA:20,"));
-triggerInputsMap->Add(new TObjString("1EDB:21,"));
-triggerInputsMap->Add(new TObjString("1EDC:22,"));
-triggerInputsMap->Add(new TObjString("1EDD:23,"));
-triggerInputsMap->Add(new TObjString("2DUM:12,"));
+  triggerInputsMap->Add(new TObjString("1EJ1:1,"));
+  triggerInputsMap->Add(new TObjString("1EG1:2,"));
+  triggerInputsMap->Add(new TObjString("1EJ2:3,"));
+  triggerInputsMap->Add(new TObjString("1EG2:4,"));
+  triggerInputsMap->Add(new TObjString("1PHL:5,")); 
+  triggerInputsMap->Add(new TObjString("1PHM:6,"));
+  triggerInputsMap->Add(new TObjString("1PHH:7,"));
+  triggerInputsMap->Add(new TObjString("1HCO:9,"));
+  triggerInputsMap->Add(new TObjString("1HJT:10,"));
+  triggerInputsMap->Add(new TObjString("1HSE:11,"));
+  triggerInputsMap->Add(new TObjString("1H12:12,"));
+  triggerInputsMap->Add(new TObjString("1HQU:13,"));
+  triggerInputsMap->Add(new TObjString("1H14:14,"));
+  triggerInputsMap->Add(new TObjString("1ZED:15,"));
+  triggerInputsMap->Add(new TObjString("1ZMS:16,"));
+  triggerInputsMap->Add(new TObjString("1ZMB:17,"));
+  triggerInputsMap->Add(new TObjString("1ZMD:18,"));
+  triggerInputsMap->Add(new TObjString("1ZAC:19,"));
+  triggerInputsMap->Add(new TObjString("1EDA:20,"));
+  triggerInputsMap->Add(new TObjString("1EDB:21,"));
+  triggerInputsMap->Add(new TObjString("1EDC:22,"));
+  triggerInputsMap->Add(new TObjString("1EDD:23,"));
+  triggerInputsMap->Add(new TObjString("2DUM:12,"));
 
   //===========================================================================
 
@@ -109,8 +107,6 @@ triggerInputsMap->Add(new TObjString("2DUM:12,"));
   AliAnalysisTaskMuMu       * task = new AliAnalysisTaskMuMu; // Call the task
   AliAnalysisMuMuEventCutter* eventCutter = new AliAnalysisMuMuEventCutter(triggerClassesToConsider,triggerInputsMap); // To handle cuts on event
   AliAnalysisMuMuCutRegistry* cr = task->CutRegistry(); // Set CutRegistry
-  // task->SetCountInBins("psi","pt","BENJ");
-  // task->SetCountInBins("psi","y","BENJ");
 
   // Default cuts on trigger and event level
   AliAnalysisMuMuCutElement * eventTrue = cr->AddEventCut(*eventCutter,"IsTrue","const AliVEvent&",""); 
@@ -155,10 +151,10 @@ triggerInputsMap->Add(new TObjString("2DUM:12,"));
   if ( singleAnalysis )
   {
     // Cuts on tracks
-    AliAnalysisMuMuCutElement* trackTrue = cr->AddTrackCut(*cr,"AlwaysTrue","const AliVParticle&",""); // Apply "AlwaysTrue" cut on AliVParticle derived from AliAnalysisMuMuSingle
-    AliAnalysisMuMuCutElement* rabs = cr->AddTrackCut(*singleAnalysis,"IsRabsOK","const AliVParticle&","");
-    AliAnalysisMuMuCutElement* matchlow = cr->AddTrackCut(*singleAnalysis,"IsMatchingTriggerLowPt","const AliVParticle&","");
-    AliAnalysisMuMuCutElement* eta = cr->AddTrackCut(*singleAnalysis,"IsEtaInRange","const AliVParticle&","");
+    AliAnalysisMuMuCutElement   * trackTrue = cr->AddTrackCut(*cr,"AlwaysTrue","const AliVParticle&",""); // Apply "AlwaysTrue" cut on AliVParticle derived from AliAnalysisMuMuSingle
+    AliAnalysisMuMuCutElement   * rabs = cr->AddTrackCut(*singleAnalysis,"IsRabsOK","const AliVParticle&","");
+    AliAnalysisMuMuCutElement   * matchlow = cr->AddTrackCut(*singleAnalysis,"IsMatchingTriggerLowPt","const AliVParticle&","");
+    AliAnalysisMuMuCutElement   * eta = cr->AddTrackCut(*singleAnalysis,"IsEtaInRange","const AliVParticle&","");
     // AliAnalysisMuMuCutElement* pdca = cr->AddTrackCut(*singleAnalysis,"IsPDCAOK","const AliVParticle&","");
     
     // Create combination of cuts to apply
@@ -184,8 +180,7 @@ triggerInputsMap->Add(new TObjString("2DUM:12,"));
       cutElements.Add(rabs);
       cutElements.Add(matchlow);
       cutElements.Add(eta);
-      // cutElements.Add(pdca);
-      // cutElements.Add(ps);
+
       // add them
       cr->AddCutCombination(cutElements);    
       // Adding the sub analysis

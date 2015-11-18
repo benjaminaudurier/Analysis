@@ -35,12 +35,12 @@ read computedata
 if [ "$computedata" = "y" ]  ; then
 	echo "Computing efficieny for data ..."
 	echo
-	cd Data${trigg}
+	cd /Users/audurier/Documents/Analysis/LHC_15g_pp/TrackingEfficiency/Data${trigg}
 	pwd
 	# grep 'Double_t ptMin = 0.' MuonTrackingEfficiency.C | sed -n "s/Double_t ptMin = 0./Double_t ptMin = ${ptMin1}/p"
 	root -b -q 'MuonTrackingEfficiency.C++("runList.txt","weightfileCMUL.txt","AnalysisResults.root","efficiency_new.root","'${datapath}'")'
 	# grep 'Double_t ptMin = ${ptMin1}' MuonTrackingEfficiency.C | sed -n "s/ptMin = ${ptMin1}/ptMin = 0./"
-	cd ..
+	cd —
 fi
 
 #Efficiency for MC
@@ -50,12 +50,11 @@ read computeMc
 if [ "$computeMc" = "y" ] ; then
 	echo "Computing efficieny for MonteCarlo ..."
 	echo
-	cd MonteCarlo${trigg}
+	cd /Users/audurier/Documents/Analysis/LHC_15g_pp/TrackingEfficiency/MonteCarlo${trigg}
 	# grep 'Double_t ptMin = 0.' MuonTrackingEfficiency.C | sed -n "s/Double_t ptMin = 0./Double_t ptMin = ${ptMin1}/p"
 	root -b -q  'MuonTrackingEfficiency.C++("runList.txt","weightfileCMUL.txt","AnalysisResults.root","efficiency_new.root","'${mcpath}'")'
-	cd ..
+	cd —
 fi
-
 
 
 #Eff comparison
@@ -65,9 +64,11 @@ read DataOverMc
 if [ "$DataOverMc" = "y" ] ; then
 	echo "Computing the ratio ..."
 	echo
+	cd /Users/audurier/Documents/Analysis/LHC_15g_pp/TrackingEfficiency
 	root -b -q 'ComparisonDataMC.C++("Data'${trigg}'/efficiency_new.root","MonteCarlo'${trigg}'/efficiency_new.root")'
 	cp EffComparison.root Resultats/EffComparison${trigg}Pt=4.root
 	echo
+	cd -
 fi
 
 
