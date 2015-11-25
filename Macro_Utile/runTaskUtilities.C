@@ -83,7 +83,7 @@ TString GetProofInfo ( TString info, TString analysisMode )
   else if ( analysisMode == "saf" ) {
     proofCluster = "pod://";
     proofServer = "nansafmaster3.in2p3.fr";
-    copyCommand = "rsync -avu -e 'gsissh -p 1975'";
+    copyCommand = "rsync -avuL -e 'gsissh -p 1975'";
     openCommand = Form("gsissh -p 1975 -t %s",proofServer.Data());
     aafEnter = "/opt/SAF3/bin/saf3-enter";
     datasetMode = "cache";
@@ -91,7 +91,7 @@ TString GetProofInfo ( TString info, TString analysisMode )
   else if ( analysisMode == "vaf" ) {
     proofCluster = "pod://";
     proofServer = "alivaf-002.cern.ch";
-    copyCommand = Form("rsync -avu -e 'ssh %s@localhost -p 5501'",userName.Data());
+    copyCommand = Form("rsync -avuL -e 'ssh %s@localhost -p 5501'",userName.Data());
     openCommand = Form("ssh %s@localhost -p 5501",userName.Data());
     aafEnter = "/usr/bin/vaf-enter";
     datasetMode = "remote";
@@ -839,7 +839,7 @@ void ConnectToPod ( TString aaf, TString softVersions )
   Bool_t yesToAll = kTRUE;
   TString remoteDir = GetProofInfo("proofserver",aaf);
   remoteDir += Form(":%s",GetPodOutDir().Data());
-  TString baseExclude = "--exclude=\"*/\" --exclude=\"*.log\" --exclude=\"outputs_valid\" --exclude=\"*.xml\" --exclude=\"*.jdl\" --exclude=\"plugin_test_copy\"";
+  TString baseExclude = "--exclude=\"*/\" --exclude=\"*.log\" --exclude=\"outputs_valid\" --exclude=\"*.xml\" --exclude=\"*.jdl\" --exclude=\"plugin_test_copy\" --exclude=\"*.so\" --exclude=\"*.d\"";
   TString command = Form("%s --delete %s --exclude=\"*.root\" ./ %s/",copyCommand.Data(),baseExclude.Data(),remoteDir.Data());
   PerformAction(command,yesToAll);
 //  command = Form("%s %s %s %s",baseSync.Data(),baseExclude.Data(),localDir.Data(),remoteDir.Data());
@@ -862,7 +862,7 @@ void GetPodOutput ( TString aaf )
   TString copyCommand = GetProofInfo("copycommand",aaf);
   TString remoteDir = GetProofInfo("proofserver",aaf);
   remoteDir += Form(":%s",GetPodOutDir().Data());
-  PerformAction(Form("%s --exclude=\"*/\" %s/ ./",copyCommand.Data(),remoteDir.Data()),yesToAll);
+  PerformAction(Form("%s --exclude=\"*/\" --exclude=\"*.so\" --exclude=\"*.d\" %s/ ./",copyCommand.Data(),remoteDir.Data()),yesToAll);
 }
 
 //______________________________________________________________________________

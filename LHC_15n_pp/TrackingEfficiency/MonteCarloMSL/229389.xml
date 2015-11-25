@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<alien>
+  <collection name="collection">
+    <event name="1">
+      <file name="AliESDs.root" aclId="" broken="0" ctime="2015-09-01 10:11:31" dir="16811949" entryId="16811983" expiretime="" gowner="baudurie" guid="016CC3B6-5081-11E5-97F0-DB1824CA9226" guidtime="11E55081" jobid="544999866" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/simsinglemuon/pp/CMUL7-B-NOPF-MUON/229389/001/AliESDs.root" md5="63680f59ebdf574ea10b9106184441a6" owner="baudurie" perm="755" replicated="0" size="30668388" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/simsinglemuon/pp/CMUL7-B-NOPF-MUON/229389/001/AliESDs.root" type="f" />
+    </event>
+    <info command="[/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/MonteCarlo/singleMuon/]: find -z -x collection -l 15000 -o 0 /alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/simsinglemuon/pp/CMUL7-B-NOPF-MUON/229389 *AliESDs.root" creator="admin" date="Tue Sep  1 10:51:15 CEST 2015" timestamp="1441097475" />
+  </collection>
+</alien>
+

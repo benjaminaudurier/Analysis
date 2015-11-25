@@ -7,28 +7,9 @@
  *
  */
 
-//__________Global Settings
-TString rootVersion = "v5-34-08";
-TString aliphysicsVersion = "vAN-20150422";
-TString dataDir = "/alice/data/2010/LHC10h";
-TString dataPattern = "pass2/*AliESDs.root";
-TString runFormat = "%09d";
-TString outDir = "Data/LHC10h/pass2/Eff/pDCAChi2";
-
-// extra to be load on CF
-TString extraLibs="CORRFW:PWGmuon";
-TString extraIncs="include";
-TString extraTasks="AliAnalysisTaskGenTunerJpsi";
-
+// --- prepare environment ---
+TString extraTasks="AliAnalysisTaskGenTunerLocal";
 Bool_t applyPhysicsSelection = kFALSE;
-//__________
-
-//__________Config. Param. for grid macro.
-Int_t ttl = 30000;
-Int_t maxFilesPerJob = 100;
-Int_t maxMergeFiles = 10;
-Int_t maxMergeStages = 2;
-//__________
 
 //__________generator parameters used in the simulation
 // tune1 LHC13d pt param. (see AliAnalysisTaskGenTunerJpsi::Pt)
@@ -50,10 +31,10 @@ Double_t yRange[2] = {-3.8, -2.3};
 
 //__________Setting for spectra path
 TString striggerDimuon  ="CMUL7-B-NOPF-MUON";
-TString seventType      ="PSALL";
-TString spairCut        ="pALLPAIRYPAIRPTIN0.0-18.0RABSMATCHLOWETAPDCA";
+TString seventType      ="ALL";
+TString spairCut        ="pALLPAIRYPAIRPTIN0.0-8.0RABSMATCHLOWETA";
 TString scentrality     ="V0A";
-TString subResultName   ="YVSPT_BENJ_02.00_04.00_m03.50_m03.00";
+TString subResultName   = ""/*"YVSPT_BENJ_02.00_04.00_m03.50_m03.00";*/
 //__________
 
 // Sim :
@@ -62,93 +43,66 @@ TString subResultName   ="YVSPT_BENJ_02.00_04.00_m03.50_m03.00";
 // Data:
 // Find;BasePath=/alice/data/2013/LHC13d/000195760/ESDs/muon_pass2/AOD134;FileName=AliAOD.root
 
+ 
+
 //______________________________________________________________________________
-void runGenTuner(TString smode = "saf", TString inputFileName = "Find;BasePath=/alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/;FileName=AliAOD.Muons.root",
-		 Int_t iStep = -1, char overwrite = '\0')
+void runGenTuner(TString runMode, TString analysisMode,
+TString inputName       = "Find;BasePath=/alice/data/2013/LHC13d/000195682/ESDs/muon_pass2/AOD134;FileName=AliAOD.root;Mode=cache",
+TString inputOptions    = "",
+Int_t iStep             = -1,
+TString analysisOptions = "",
+TString softVersions    = "aliphysics=vAN-20151115-1",
+TString taskOptions     = "")
 {
   /// Study the MUON performances
   
-  gROOT->LoadMacro("/Users/audurier/Documents/Analysis/Macro_Utile/runTaskFacilities.C");
-  
-  // --- Check runing mode ---
-  Int_t mode = GetMode(smode, inputFileName);
-  if(mode < 0) 
-  {
-    Error("runGenTuner","Please provide either an AOD root file a collection of AODs or a dataset.");
-    return;
-  }
-  
-  // --- copy files needed for this analysis ---
-  TList pathList; pathList.SetOwner();
-  pathList.Add(new TObjString("/Users/audurier/Documents/Analysis/Tasks"));
+  // Load macro used to connect to saf3
+  gROOT->LoadMacro(gSystem->ExpandPathName("$TASKDIR/runTaskUtilities.C"));
 
-  TList fileList; fileList.SetOwner();
-  fileList.Add(new TObjString("AliAnalysisTaskGenTunerJpsi.cxx"));
-  fileList.Add(new TObjString("AliAnalysisTaskGenTunerJpsi.h"));
+  // Set Mc Flag
+  Bool_t isMC = IsMC(inputOptions);
 
-  CopyFileLocally(pathList, fileList);
-  
-  // --- prepare environment ---
-  LoadAlirootLocally(extraLibs, extraIncs, extraTasks);
-  
-  // Choose the CF
-  AliAnalysisGrid *alienHandler = 0x0;
-  if (mode == kProof || mode == kProofLite) LoadAlirootOnProof(smode, rootVersion, aliphysicsVersion, extraLibs, extraIncs, extraTasks, kTRUE);
-  else if (mode == kGrid || mode == kTerminate) 
-  {
-    TString analysisMacroName = "GenTuner";
-    alienHandler = static_cast<AliAnalysisGrid*>(CreateAlienHandler(smode, rootVersion, aliphysicsVersion, inputFileName, dataDir, dataPattern, outDir, extraLibs, extraIncs, extraTasks, analysisMacroName, runFormat, ttl, maxFilesPerJob, maxMergeFiles, maxMergeStages));
-    if (!alienHandler) return;
-  }
-  
+  // Macro to connect to proof. First argument useless for saf3
+  SetupAnalysis(runMode,analysisMode,inputName,inputOptions,softVersions,analysisOptions,Form("libPWGmuon.so %s.cxx",extraTasks.Data()),". $ALICE_ROOT/include $ALICE_PHYSICS/include");
+    
   // --- Create the analysis train ---
-  AliAnalysisTaskGenTunerJpsi *genTuner = static_cast<AliAnalysisTaskGenTunerJpsi*>(CreateAnalysisTrain(alienHandler, iStep));
+  AliAnalysisTaskGenTunerJpsi *genTuner = static_cast<AliAnalysisTaskGenTunerJpsi*>(CreateAnalysisTrain(iStep,isMC));
   if (!genTuner) return;
-  
-  // --- Create input object ---
-  TObject* inputObj = CreateInputObject(mode, inputFileName);
-  
+    
   // --- start analysis ---
-  StartAnalysis(mode, inputObj);
+  StartAnalysis(runMode,analysisMode,inputName,inputOptions);     
   
   // --- save fitting functions ---
-  TString outFileName = AliAnalysisManager::GetCommonFileName();
-  TFile *outFile = (TFile*)gROOT->GetListOfFiles()->FindObject(outFileName.Data());
-  if (outFile) outFile->ReOpen("UPDATE");
-  else outFile = TFile::Open(outFileName.Data(),"UPDATE");
-  if (outFile && outFile->IsOpen()) 
+  if(!IsPod(analysisMode) || IsPodMachine(analysisMode))
   {
-    outFile->Cd(Form("%s:/MUON_GenTuner",outFileName.Data()));
-    if (genTuner->GetOldPtFunc())   genTuner->GetOldPtFunc()->Write(0x0, TObject  ::kOverwrite);
-    if (genTuner->GetOldPtFuncMC()) genTuner->GetOldPtFuncMC()->Write(0x0, TObject::kOverwrite);
-    if (genTuner->GetNewPtFunc())   genTuner->GetNewPtFunc()->Write(0x0, TObject  ::kOverwrite);
-    if (genTuner->GetOldYFunc())    genTuner->GetOldYFunc()->Write(0x0, TObject   ::kOverwrite);
-    if (genTuner->GetOldYFuncMC())  genTuner->GetOldYFuncMC()->Write(0x0, TObject ::kOverwrite);
-    if (genTuner->GetNewYFunc())    genTuner->GetNewYFunc()->Write(0x0, TObject   ::kOverwrite);
-    if (genTuner->GetResults())     genTuner->GetResults()->Write(0x0, TObject    ::kOverwrite);
-    if (genTuner->GetRatios())      genTuner->GetRatios()->Write(0x0, TObject     ::kOverwrite);
-    outFile->Close();
+    TString outFileName = AliAnalysisManager::GetCommonFileName();
+    TFile *outFile = (TFile*)gROOT->GetListOfFiles()->FindObject(outFileName.Data());
+    if (outFile) outFile->ReOpen("UPDATE");
+    else outFile = TFile::Open(outFileName.Data(),"UPDATE");
+    if (outFile && outFile->IsOpen()) 
+    {
+      outFile->Cd(Form("%s:/MUON_GenTuner",outFileName.Data()));
+      if (genTuner->GetOldPtFunc())   genTuner->GetOldPtFunc()->Write(0x0, TObject  ::kOverwrite);
+      if (genTuner->GetOldPtFuncMC()) genTuner->GetOldPtFuncMC()->Write(0x0, TObject::kOverwrite);
+      if (genTuner->GetNewPtFunc())   genTuner->GetNewPtFunc()->Write(0x0, TObject  ::kOverwrite);
+      if (genTuner->GetOldYFunc())    genTuner->GetOldYFunc()->Write(0x0, TObject   ::kOverwrite);
+      if (genTuner->GetOldYFuncMC())  genTuner->GetOldYFuncMC()->Write(0x0, TObject ::kOverwrite);
+      if (genTuner->GetNewYFunc())    genTuner->GetNewYFunc()->Write(0x0, TObject   ::kOverwrite);
+      if (genTuner->GetResults())     genTuner->GetResults()->Write(0x0, TObject    ::kOverwrite);
+      if (genTuner->GetRatios())      genTuner->GetRatios()->Write(0x0, TObject     ::kOverwrite);
+      outFile->Close();
+    }
+    // save results of current step if running in a loop
+    if (iStep > -1) gSystem->Exec(Form("cp -f AnalysisResults.root Results_step%d.root", iStep)); 
   }
-  
-  // save results of current step if running in a loop
-  if (iStep > -1) gSystem->Exec(Form("cp -f AnalysisResults.root Results_step%d.root", iStep));
-  
 }
 
 //______________________________________________________________________________
-TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)
+TObject* CreateAnalysisTrain(Int_t iStep , Bool_t mc )
 {
   /// create the analysis train and configure it
   
-  // analysis manager
-  AliAnalysisManager *mgr = new AliAnalysisManager("GenTunerAnalysis");
-  
-  // Connect plugin to the analysis manager if any
-  if (alienHandler) mgr->SetGridHandler(static_cast<AliAnalysisGrid*>(alienHandler));
-  
-  // AOD handler
-  AliInputEventHandler* aodH = new AliAODInputHandler;
-  mgr->SetInputEventHandler(aodH);
+  AliAnalysisManager *mgr = AliAnalysisManager::GetAnalysisManager(); 
   
   // track selection
   AliMuonTrackCuts trackCuts("stdCuts", "stdCuts");
@@ -156,7 +110,8 @@ TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)
   trackCuts.SetFilterMask(AliMuonTrackCuts::kMuMatchLpt | AliMuonTrackCuts::kMuEta |
 			  AliMuonTrackCuts::kMuThetaAbs | AliMuonTrackCuts::kMuPdca);
 
-  trackCuts.SetIsMC(kTRUE);
+  //Flag for MC
+  trackCuts.SetIsMC(mc);
   
   // generator tuner
   gROOT->LoadMacro("AddTaskGenTuner.C");
@@ -209,6 +164,12 @@ TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)
   TH1* hy= spectraY->Plot("NofJPsi",subResultName,kTRUE);// new
 
   dataFile->Close();
+
+  new TCanvas;
+  hpt->Draw("");
+  new TCanvas;
+  hy->Draw("");
+  return;
 
   // cout << "ptnofbin =" << ptnofbin << endl;
 
@@ -282,11 +243,8 @@ TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)
     }
     // enable the weighing
     genTuner->Weight(kTRUE);
-    //__________
-    
+    //__________ 
   }
-  
   return genTuner;
-  
 }
 

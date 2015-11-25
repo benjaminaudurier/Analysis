@@ -67,11 +67,9 @@ AliAnalysisTaskMass::AliAnalysisTaskMass(const char *name)
 AliAnalysisTaskMass::~AliAnalysisTaskMass()
 {
     // Destructor
-
-    if (!AliAnalysisManager::GetAnalysisManager()->IsProofMode()) {
-        delete fOutputList;
-        delete fHist;
-    }
+    delete fOutputList;
+    delete fHist;
+    
 }
 
 
@@ -81,7 +79,20 @@ void AliAnalysisTaskMass::UserCreateOutputObjects()
   // Create histograms
   // Called once
     
+    Int_t ndim; // number of dimension for fHistMass (3 here for M, pt and y)
     
+    double ymin; // minimum rapidity
+    double ymax; // max rapidity
+    
+    double Mmin; // minimum mass
+    double Mmax; // max mass
+    
+    double Ptmin; // minimum pt
+    double Ptmax; // max pt
+    
+    int ybin; // binning for rapidity
+    int Mbin; // binning for rapidity
+    int Ptbin; // binning for rapidity
     
     // ____ Constants_____
 
@@ -112,6 +123,7 @@ void AliAnalysisTaskMass::UserCreateOutputObjects()
 
     
     fOutputList = new TList();
+    fOutputList->SetOwner(kTRUE);
     fHist = new THnSparseF("fHist", "fHist",ndim,bins,min,max);
     fOutputList->Add(fHist);
     PostData(1, fOutputList);
@@ -147,16 +159,13 @@ void AliAnalysisTaskMass::UserExec(Option_t *)
   printf("ERROR: fAOD not available\n");
   return;
   }
-    
-
-  cout << "Event type : " /*<<   fAOD->GetEventType()*/ << endl;
-  
+      
   // printf("There are %d tracks in this event\n", fAOD->GetNumberOfTracks());
   
     // Loop on each tracks
     for (Int_t iTracks = 0; iTracks < fAOD->GetNumberOfTracks(); iTracks++)
         {
-        AliAODTrack *particle = fAOD->GetTrack(iTracks);// Get the particle from iTracks
+        AliAODTrack *particle = static_cast<AliAODTrack *>(fAOD->GetTrack(iTracks));// Get the particle from iTracks
 
         if (! particle->IsMuonTrack()) continue; // Make sure it is a muon
 
@@ -166,7 +175,7 @@ void AliAnalysisTaskMass::UserExec(Option_t *)
         for (int i = iTracks+1; i < fAOD->GetNumberOfTracks(); ++i)
             {
             // Get and create the second particle 4-Vector
-            AliAODTrack *particle2 = fAOD->GetTrack(i);
+            AliAODTrack *particle2 = static_cast<AliAODTrack *>(fAOD->GetTrack(i));
 
             // Make sure it is a muon
             if (!particle2->IsMuonTrack() ) continue;
@@ -190,7 +199,7 @@ void AliAnalysisTaskMass::UserExec(Option_t *)
 
 
   PostData(1, fOutputList);
-    delete fMuonPairCuts;
+  delete fMuonPairCuts;
 
 }      
 

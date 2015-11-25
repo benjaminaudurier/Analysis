@@ -1,7 +1,4 @@
 #ifndef __CINT__
-#include <ANALYSIS/AliAnalysisManager.h>
-#include <ANALYSIS/EventMixing/AliAnalysisTaskMixInfo.h>
-#include <ANALYSIS/AliAnalysisDataContainer.h>
 #endif
 void AddAnalysisTaskMixInfo(TString opts = "")
 {
@@ -14,8 +11,9 @@ void AddAnalysisTaskMixInfo(TString opts = "")
    Int_t debugLevel = 1;
    TString myclasses = "";
 //    myclasses += ":AliAnalysisTaskMixInfo";
-//
-   if (!myclasses.IsNull()) task->SetLogType(AliLog::kDebug + debugLevel, myclasses.Data());
+//    myclasses += ":AliAnalysisTaskEx02";
+
+   if (!myclasses.IsNull()) task->SetLogType(AliLog::kDebug + debugLevel, myclasses);
 
    // create mix output container
    AliAnalysisDataContainer *outputMix = mgr->CreateContainer("cMixInfoList", TList::Class(), AliAnalysisManager::kOutputContainer, Form("MixInfo%s.root", opts.Data()));

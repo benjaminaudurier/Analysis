@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<alien>
+  <collection name="Stage_1">
+    <event name="1">
+      <file name="root_archive.zip" aclId="" broken="0" ctime="2015-10-25 13:30:46" dir="17488986" entryId="17489243" expiretime="" gowner="baudurie" guid="215F0B3A-7B14-11E5-AEB7-933E0C77BC33" guidtime="11E57B14" jobid="567870149" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/MonteCarlo/singleMuon/results/231321/001/root_archive.zip" md5="708646c6fdcc3b3453f24d33c9c1e5bf" owner="baudurie" perm="755" replicated="0" size="233011" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/MonteCarlo/singleMuon/results/231321/001/root_archive.zip" type="f" />
+    </event>
+    <event name="2">
+      <file name="root_archive.zip" aclId="" broken="0" ctime="2015-10-25 13:33:27" dir="17489607" entryId="17489612" expiretime="" gowner="baudurie" guid="9057F100-7B14-11E5-B2CB-B7D0E54D7E8D" guidtime="11E57B14" jobid="567870150" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/MonteCarlo/singleMuon/results/231321/002/root_archive.zip" md5="6d0279bf257928795515ef05cad362dd" owner="baudurie" perm="755" replicated="0" size="94656" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/MonteCarlo/singleMuon/results/231321/002/root_archive.zip" type="f" />
+    </event>
+    <event name="3">
+      <file name="root_archive.zip" aclId="" broken="0" ctime="2015-10-25 13:30:37" dir="17488888" entryId="17489111" expiretime="" gowner="baudurie" guid="1C63FFA0-7B14-11E5-93E9-2F7B2EBB65D4" guidtime="11E57B14" jobid="567870151" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/MonteCarlo/singleMuon/results/231321/003/root_archive.zip" md5="a94536324f26ad18481979c3875c69c5" owner="baudurie" perm="755" replicated="0" size="86818" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/MonteCarlo/singleMuon/results/231321/003/root_archive.zip" type="f" />
+    </event>
+    <event name="4">
+      <file name="root_archive.zip" aclId="" broken="0" ctime="2015-10-25 13:31:17" dir="17489361" entryId="17489435" expiretime="" gowner="baudurie" guid="40488256-7B14-11E5-8C29-E396B78E7AC1" guidtime="11E57B14" jobid="567870152" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/MonteCarlo/singleMuon/results/231321/004/root_archive.zip" md5="cef7746499c0a0b957e17aeb8142d860" owner="baudurie" perm="755" replicated="0" size="188774" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/MonteCarlo/singleMuon/results/231321/004/root_archive.zip" type="f" />
+    </event>
+    <event name="5">
+      <file name="root_archive.zip" aclId="" broken="0" ctime="2015-10-25 13:36:33" dir="17489790" entryId="17489819" expiretime="" gowner="baudurie" guid="FFD5DD80-7B14-11E5-A780-DF40944990BE" guidtime="11E57B14" jobid="567870153" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/MonteCarlo/singleMuon/results/231321/005/root_archive.zip" md5="ca39586264cbebd14b80958c8cf8bdf1" owner="baudurie" perm="755" replicated="0" size="92019" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/MonteCarlo/singleMuon/results/231321/005/root_archive.zip" type="f" />
+    </event>
+    <info command="[/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/MonteCarlo/singleMuon/results/]: find -z -x Stage_1 /alice/cern.ch/user/b/baudurie//Analysis/LHC15g/TrackingEfficiency/MonteCarlo/singleMuon/results/231321 *root_archive.zip" creator="admin" date="Sun Oct 25 15:15:53 CET 2015" timestamp="1445782553" />
+  </collection>
+</alien>
+
+
+
+
+

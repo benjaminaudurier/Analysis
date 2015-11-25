@@ -1,30 +1,32 @@
 //
-//  MyMacro.c
+//  Fit.c
 //  
 //
 //  Created by Benjamin Audurier on 03/12/14.
 //
 //
 
-// Macro loadded by runMuMuResult.sh
+
+// Macro to fit Minv Spectra and draw J/psi distribution vs pt and y
 
 TString striggerDimuon  ="CMUL7-B-NOPF-MUON";
 TString seventType      ="ALL";
-TString spairCut        ="pALLPAIRYRABSETA";
-TString sbinType        ="YVSPT";
+TString spairCut        ="pALLPAIRYPAIRPTIN0.0-8.0RABSMATCHLOWETA";
+TString sbinType        ="PT,Y";
 TString scentrality     ="V0A";
 TString sResName        ="";
 Bool_t divideByBinWidth =kTRUE; 
 Double_t parPOWLAW[3] = {80.,1.,1.};
-Double_t Pol12Par[2] = {1.,1.};
 
 
 //_____________________________________________________________________________
 void FitData(
 char           * sfile="AnalysisResultsReference.root",
-char           * beamYear="PbPb2011",
-char           * what ="yvspt",
-Bool_t FitDist = kTRUE)
+char           * sasso="",
+char           * sasso2="",
+char           * beamYear="mumu.pp2015.config",
+char           * what ="integrated",
+Bool_t FitDist = kFALSE)
 {    
     
     //General conf.
@@ -35,30 +37,24 @@ Bool_t FitDist = kTRUE)
     TObjArray* WHATArray= TString(sbinType).Tokenize(",");
     TIter nextWHAT(WHATArray);
     TObjString* sWHAT;
-	
+    
     // main object
-    AliAnalysisMuMu analysis(sfile,"","",beamYear);
+    AliAnalysisMuMu analysis(sfile,sasso,sasso2,beamYear);
 
-
-
-    // //______Clean   
+    // // Clean   
     // analysis.CleanAllSpectra();    
 
+    //_____ Fit 
+    while ( ( swhat = static_cast<TObjString*>(nextWhat()) ) )
+    {
+        if(swhat->String().Contains("integrated")) analysis.Jpsi(swhat->String().Data(),"",kFALSE,kFALSE);
 
+        else analysis.Jpsi(swhat->String().Data(),"BENJ",kFALSE,kFALSE);
+    }
 
-    //______Fit 
-    // while ( ( swhat = static_cast<TObjString*>(nextWhat()) ) )
-    // {
-    //     if(swhat->String().Contains("integrated")) analysis.Jpsi(swhat->String().Data(),"",kFALSE,kFALSE);
-
-    //     else analysis.Jpsi(swhat->String().Data(),"BENJ",kFALSE,kFALSE);
-    // }
-    
-    
+    analysis.PrintNofParticle("PSI","NofJPsi","INTEGRATED",kFALSE);
     // analysis.PrintNofParticle("PSI","NofJPsi","Y",kFALSE);
     // analysis.PrintNofParticle("PSI","NofJPsi","PT",kFALSE);
-    // analysis.DrawFitResults("PSI","PT");
-    // analysis.DrawFitResults("PSI","Y");
  
     //_______Fit  J/psi vs pt or J/psi vs y 
     if(FitDist)
@@ -75,53 +71,40 @@ Bool_t FitDist = kTRUE)
                 cout << Form("Cannot find spectra with name %s",spectraPath.Data()) <<endl;
                 return;
             }
-            spectra->Print("-");
+            TObject* o= static_cast<TObject*>(spectra->Plot("NofJPsi",sResName,divideByBinWidth));
+            cout << o << endl;
+            TH1* h= static_cast<TH1*>(o->Clone());
+            cout << h<< endl;
+            TCanvas *c = new TCanvas;
+            c->SetLogy();
 
-            // TH1* h= static_cast<TH1*>(spectra->Plot("NofJPsi",sResName,divideByBinWidth)->Clone());
-            // TCanvas *c = new TCanvas;
-            // c->SetLogy();
-            gStyle->SetPalette(1);
-            TH2* h= static_cast<TH2*>(spectra->Plot("NofJPsi",sResName,divideByBinWidth));
-            TH1*h2 =h->ProjectionX();
-            cout << "projection histo adress : " << Form("%p",h2)<< endl;
-            h2->DrawClone();
-            
             //________
             
             //________Fit function
-            // gROOT->LoadMacro("../../My_First_Task/FittingFunctions.C");
+            gROOT->LoadMacro("/Users/audurier/Documents/Analysis/Macro_Utile/FittingFunctions.C");
 
-            // TF1 * f =0x0;
-            // if (sWHAT->String().Contains("PT"))
-            // {
-            //     f = new TF1("Fit",powerLaw3Par,0.,8.,3);
-            //     f->SetParameters(&parPOWLAW[0]);
-            //     f->SetParNames("C","p_0","n");
-            //     f->SetLineColor(36);
-            //     f->SetLineStyle(5);
+            TF1 * f =0x0;
+            if (sWHAT->String().Contains("PT"))
+            {
+                f = new TF1("Fit",powerLaw3Par,0.,8.,3);
+                f->SetParameters(&parPOWLAW[0]);
+                f->SetParNames("C","p_0","n");
+                f->SetLineColor(36);
+                f->SetLineStyle(5);
 
-            //     h->Fit(f);
+                h->Fit(f);
             
-            //     h->DrawCopy();
-            //     f->Draw("same");
-            //     delete h;
-            //     delete f;
-            // }
-            // else if (sWHAT->String().Contains("Y"))
-            // {
-            //     f = new TF1("Fit",normPol12Par,0.,8.,2);
-            //     f->SetParameters(&Pol12Par[0]);
-            //     f->SetParNames("p_0","p_1");
-            //     f->SetLineColor(36);
-            //     f->SetLineStyle(5);
-
-            //     h->Fit(f);
-            
-            // h->DrawCopy();
-            // f->Draw("same");
-            // delete h;
-            // delete f;
-            // }
+            h->DrawCopy();
+            f->Draw("same");
+            delete h;
+            delete f;
+            }
+            else if (sWHAT->String().Contains("Y"))
+            {
+                h->Fit("pol4");
+                h->DrawCopy();
+                delete h;
+            }
             //________
         }    
     }

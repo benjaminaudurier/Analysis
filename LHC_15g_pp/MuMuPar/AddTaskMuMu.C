@@ -119,9 +119,9 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   // }
 
   // Apply default cut
-  cr->AddCutCombination(triggerSelection);
-  cr->AddCutCombination(eventTrue);
-  // cr->AddCutCombination(ps,triggerSelection);
+  // cr->AddCutCombination(triggerSelection);
+  // cr->AddCutCombination(eventTrue);
+  cr->AddCutCombination(ps,triggerSelection);
 
   task->SetBeamYear(beamYear);
 
@@ -129,14 +129,6 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   AliAnalysisMuMuSingle* singleAnalysis = new AliAnalysisMuMuSingle;// Analysis dealing with single muon
   AliAnalysisMuMuMinv  * minvAnalysis = new AliAnalysisMuMuMinv;// Analysis creating invariant mass spectrum
 
-//  TFile f("$HOME/Downloads/ResponseMatrix_QASPDZPSALL_ANY.root");
-//  TH2* h = static_cast<TH2*>(f.Get("ResponseMatrix"));
-  
-//  AliAnalysisMuMuNch* nchAnalysis = new AliAnalysisMuMuNch; // (0x0,-2,2,-40,40);
-  
-//  AliAnalysisMuMuNch(TH2* spdCorrection=0x0,
-//                     Int_t nbinsEta=10, Double_t etaMin=-0.5, Double_t etaMax=0.5,
-//                     Int_t nbinsZ=320, Double_t zmin=-40, Double_t zmax=40);
     
   // Configure sub analysis
   //===========================================================================
@@ -151,10 +143,10 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   if ( singleAnalysis )
   {
     // Cuts on tracks
-    AliAnalysisMuMuCutElement   * trackTrue = cr->AddTrackCut(*cr,"AlwaysTrue","const AliVParticle&",""); // Apply "AlwaysTrue" cut on AliVParticle derived from AliAnalysisMuMuSingle
-    AliAnalysisMuMuCutElement   * rabs = cr->AddTrackCut(*singleAnalysis,"IsRabsOK","const AliVParticle&","");
-    AliAnalysisMuMuCutElement   * matchlow = cr->AddTrackCut(*singleAnalysis,"IsMatchingTriggerLowPt","const AliVParticle&","");
-    AliAnalysisMuMuCutElement   * eta = cr->AddTrackCut(*singleAnalysis,"IsEtaInRange","const AliVParticle&","");
+    AliAnalysisMuMuCutElement* trackTrue = cr->AddTrackCut(*cr,"AlwaysTrue","const AliVParticle&",""); // Apply "AlwaysTrue" cut on AliVParticle derived from AliAnalysisMuMuSingle
+    AliAnalysisMuMuCutElement* rabs = cr->AddTrackCut(*singleAnalysis,"IsRabsOK","const AliVParticle&","");
+    AliAnalysisMuMuCutElement* matchlow = cr->AddTrackCut(*singleAnalysis,"IsMatchingTriggerLowPt","const AliVParticle&","");
+    AliAnalysisMuMuCutElement* eta = cr->AddTrackCut(*singleAnalysis,"IsEtaInRange","const AliVParticle&","");
     // AliAnalysisMuMuCutElement* pdca = cr->AddTrackCut(*singleAnalysis,"IsPDCAOK","const AliVParticle&","");
     
     // Create combination of cuts to apply
@@ -251,27 +243,17 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   // binning->AddBin("centrality","v0M",0.,7.5);
   // binning->AddBin("centrality","v0M",10.,50.);
   binning->AddBin("centrality","v0a");
-
-  // binning->AddBin("centrality","v0M",0.,10.);
-  // binning->AddBin("centrality","v0M",10.,20.);
-  // binning->AddBin("centrality","v0M",20.,30.);
-  // binning->AddBin("centrality","v0M",30.,40.);
-  // binning->AddBin("centrality","v0M",40.,50.);
-  // binning->AddBin("centrality","v0M",50.,60.);
-  // binning->AddBin("centrality","v0M",60.,70.);
-  // binning->AddBin("centrality","v0M",70.,80.);
-  // binning->AddBin("centrality","v0M",80.,90.);
-  // binning->AddBin("centrality","v0M",70.,90.);
-  
+  // binning->AddBin("centrality","v0a",0.,10.);
+  // binning->AddBin("centrality","v0a",10.,20.);
+  // binning->AddBin("centrality","v0a",20.,30.);
+  // binning->AddBin("centrality","v0a",30.,40.);
+  // binning->AddBin("centrality","v0a",40.,50.);
+  // binning->AddBin("centrality","v0a",50.,60.);
+  // binning->AddBin("centrality","v0a",60.,70.);
+  // binning->AddBin("centrality","v0a",70.,80.);
+  // binning->AddBin("centrality","v0a",80.,90.);
   // binning->AddBin("centrality","v0a",90,100);
 
-
-
-  // disable some histograms if we don't want them
-//  task->DisableHistograms("^V02D");
-//  task->DisableHistograms("^dca");
-//  task->DisableHistograms("^Chi12");
-//  task->DisableHistograms("^Rabs12");
 
   // add the configured task to the analysis manager
   mgr->AddTask(task);  

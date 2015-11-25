@@ -13,16 +13,30 @@
  * provided "as is" without express or implied warranty.                  *
  **************************************************************************/
 
+/* $Id: AliAnalysisTaskEx02.cxx 46301 2011-01-06 14:25:27Z agheata $ */
+
+/* AliAnalysisTaskEx02.cxx
+ *
+ * Template task producing a P_t spectrum and pseudorapidity distribution.
+ * Includes explanations of physics and primary track selections
+ *
+ * Instructions for adding histograms can be found below, starting with NEW HISTO
+ *
+ * Based on tutorial example from offline pages using AliMultiInputHandler
+ * Edited by Martin Vala
+ */
+#include <TCanvas.h>
 #include <TList.h>
 #include <TH1.h>
-#include <TArrayF.h>
 
 #include "AliLog.h"
 #include "AliAnalysisManager.h"
+#include "AliESDEvent.h"
+#include "AliESDtrack.h"
+#include "AliESDv0.h"
 #include "AliAODTrack.h"
+#include "AliAODv0.h"
 #include "AliAODEvent.h"
-#include "AliCounterCollection.h"
-#include "AliMuonTrackCuts.h"
 
 #include "AliAnalysisTaskEx02.h"
 #include <AliMultiInputEventHandler.h>
@@ -30,592 +44,416 @@
 
 ClassImp(AliAnalysisTaskEx02)
 
-
 //________________________________________________________________________
-AliAnalysisTaskEx02::AliAnalysisTaskEx02() 
+AliAnalysisTaskEx02::AliAnalysisTaskEx02() // All data members should be initialised here
    : AliAnalysisTaskSE(),
      fOutput(0),
-     fHistCent(0),
-     fEventCounters(0),
-     fMuonTrackCuts(0)
+     fHistPt(0),
+     fHistEta(0),
+     fHistMultiDiff(0),
+     fHistZVertexDiff(0),
+     fUseLoopInUserExecMix(kFALSE),
+     fUseLoopMixedEvent(kFALSE),
+     fUseLoopV0(kFALSE),
+     fMainInputHandler(0),
+     fMixingInputHandler(0) // The last in the above list should not have a comma after it
 {
    // Dummy constructor ALWAYS needed for I/O.
 }
 
 //________________________________________________________________________
-AliAnalysisTaskEx02::AliAnalysisTaskEx02(const char *name) 
+AliAnalysisTaskEx02::AliAnalysisTaskEx02(const char *name) // All data members should be initialised here
    : AliAnalysisTaskSE(name),
      fOutput(0),
-     fHistCent(0),
-     fEventCounters(0),
-     fMuonTrackCuts(0)
+     fHistPt(0),
+     fHistEta(0),
+     fHistMultiDiff(0),
+     fHistZVertexDiff(0),
+     fUseLoopInUserExecMix(kFALSE),
+     fUseLoopMixedEvent(kFALSE),
+     fUseLoopV0(kFALSE),
+     fMainInputHandler(0),
+     fMixingInputHandler(0) // The last in the above list should not have a comma after it
 {
-  Float_t ptLowEdge[8] = {0., 1., 2., 3., 4., 5., 6., 7.};
-  Float_t ptUpEdge[8] = {1., 2., 3., 4., 5., 6., 7., 8.};
-  fPtBin[0].Set(8,ptLowEdge);
-  fPtBin[1].Set(8,ptUpEdge);
-  
-  Float_t yLowEdge[3] = {-2.5, -3., -3.5};
-  Float_t yUpEdge[3] = {-3., -3.5, -4.};
-  fYBin[0].Set(3,yLowEdge);
-  fYBin[1].Set(3,yUpEdge);
-  
-  DefineOutput(1, TList::Class());     
+   // Constructor
+   // Define input and output slots here (never in the dummy constructor)
+   // Input slot #0 works with a TChain - it is connected to the default input container
+   // Output slot #1 writes into a TH1 container
+   DefineOutput(1, TList::Class());                                            // for output list
 }
 
 //________________________________________________________________________
 AliAnalysisTaskEx02::~AliAnalysisTaskEx02()
 {
-  if (fOutput && !AliAnalysisManager::GetAnalysisManager()->IsProofMode()) {
-	delete fOutput;
-  }
-  delete fMuonTrackCuts;
-}
-
-//________________________________________________________________________
-void AliAnalysisTaskEx02::NotifyRun()
-{
-  // Set run number for cuts
-  if (fMuonTrackCuts==0x0) AliFatal("No AliMuonTrackCuts");
-  fMuonTrackCuts->SetRun(fInputHandler);
+   // Destructor. Clean-up the output list, but not the histograms that are put inside
+   // (the list is owner and will clean-up these histograms). Protect in PROOF case.
+   if (fOutput && !AliAnalysisManager::GetAnalysisManager()->IsProofMode()) {
+      delete fOutput;
+   }
 }
 
 //________________________________________________________________________
 void AliAnalysisTaskEx02::UserCreateOutputObjects()
 {
-  // Create histograms  
-  fOutput = new TList();
-  fOutput->SetOwner(); 
-  
-  Int_t nbins = 560;  // -> 25 Mev/c2
-  TString hName;
-  const Int_t nCent=9;
-  TString centBinName[nCent] = {"010", "1020", "2030", "3040", "4050", "5060", "6070", "7080", "8090"};
-  const Int_t npt = fPtBin[0].GetSize();   
-  const Int_t ny = fYBin[0].GetSize(); 
-  
-  
-  
-  //########################################
-  //########################################
-  // histo w/o sharp pt muon cut from tracker
-  //########################################
-  //########################################
-  
-  
-  //########################################
-  // histo vs Centrality  & pt bins,  2.5<y<4
-  //########################################
-  
-  // classic dimuon histo
-  TH1F *hDimuPM_pt_cent[npt][nCent];
-  TH1F *hDimuPP_pt_cent[npt][nCent];
-  TH1F *hDimuMM_pt_cent[npt][nCent];
-  // Mix dimuon histo
-  TH1F *hDimuPM_Mix_pt_cent[npt][nCent];
-  TH1F *hDimuPP_Mix_pt_cent[npt][nCent];
-  TH1F *hDimuMM_Mix_pt_cent[npt][nCent];
- 
-  //########################################
-  // histo vs Centrality & y bins,  0<pt<8  
-  //########################################
-  
-  // classic dimuon histo
-  TH1F *hDimuPM_y_cent[ny][nCent];
-  TH1F *hDimuPP_y_cent[ny][nCent];
-  TH1F *hDimuMM_y_cent[ny][nCent];
-  // Mix dimuon histo
-  TH1F *hDimuPM_Mix_y_cent[ny][nCent];
-  TH1F *hDimuPP_Mix_y_cent[ny][nCent];
-  TH1F *hDimuMM_Mix_y_cent[ny][nCent];
-  
-  //########################################
-  // histo vs Centrality & y bins,  0.3<pt<8  
-  //########################################
-  
-  // classic dimuon histo
-  TH1F *hDimuPM_y_ptphoto_cent[ny][nCent];
-  TH1F *hDimuPP_y_ptphoto_cent[ny][nCent];
-  TH1F *hDimuMM_y_ptphoto_cent[ny][nCent];
-  // Mix dimuon histo
-  TH1F *hDimuPM_Mix_y_ptphoto_cent[ny][nCent];
-  TH1F *hDimuPP_Mix_y_ptphoto_cent[ny][nCent];
-  TH1F *hDimuMM_Mix_y_ptphoto_cent[ny][nCent];
-  
- 
-  for (Int_t i = 0; i < nCent; i++) 
-  {
-	//########################################
-	// histo vs Centrality  & pt bins,  2.5<y<4
-	//########################################
-	
-	for (Int_t j = 0; j < npt; j++) 
-	{
-	  // Classic dimuon analysis (ref)
-	  hName = Form("hDimuPM_pt_%i_%s", j, centBinName[i].Data());
-	  hDimuPM_pt_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-	  fOutput->Add(hDimuPM_pt_cent[j][i]);
-	  hName = Form("hDimuPP_pt_%i_%s", j, centBinName[i].Data());
-	  hDimuPP_pt_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-	  fOutput->Add(hDimuPP_pt_cent[j][i]);
-	  hName = Form("hDimuMM_pt_%i_%s", j, centBinName[i].Data());
-	  hDimuMM_pt_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-	  fOutput->Add(hDimuMM_pt_cent[j][i]);
-	  // Mix dimuon analysis
-	  hName = Form("hDimuPM_pt_%i_%s_Mix", j,centBinName[i].Data());
-	  hDimuPM_Mix_pt_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-	  fOutput->Add(hDimuPM_Mix_pt_cent[j][i]);
-	  hName = Form("hDimuPP_pt_%i_%s_Mix", j,centBinName[i].Data());
-	  hDimuPP_Mix_pt_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-	  fOutput->Add(hDimuPP_Mix_pt_cent[j][i]);
-	  hName = Form("hDimuMM_pt_%i_%s_Mix", j,centBinName[i].Data());
-	  hDimuMM_Mix_pt_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-	  fOutput->Add(hDimuMM_Mix_pt_cent[j][i]);
-	
-	  if (j < ny) {
-		//########################################
-		// histo vs Centrality & y bins,  0<pt<8  
-		//########################################
-		
-		// Classic dimuon analysis (ref)
-		hName = Form("hDimuPM_y_%i_%s", j, centBinName[i].Data());
-		hDimuPM_y_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-		fOutput->Add(hDimuPM_y_cent[j][i]);
-		hName = Form("hDimuPP_y_%i_%s", j, centBinName[i].Data());
-		hDimuPP_y_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-		fOutput->Add(hDimuPP_y_cent[j][i]);
-		hName = Form("hDimuMM_y_%i_%s", j, centBinName[i].Data());
-		hDimuMM_y_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-		fOutput->Add(hDimuMM_y_cent[j][i]);
-		// Mix dimuon analysis
-		hName = Form("hDimuPM_y_%i_%s_Mix", j,centBinName[i].Data());
-		hDimuPM_Mix_y_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-		fOutput->Add(hDimuPM_Mix_y_cent[j][i]);
-		hName = Form("hDimuPP_y_%i_%s_Mix", j,centBinName[i].Data());
-		hDimuPP_Mix_y_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-		fOutput->Add(hDimuPP_Mix_y_cent[j][i]);
-		hName = Form("hDimuMM_y_%i_%s_Mix", j,centBinName[i].Data());
-		hDimuMM_Mix_y_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-		fOutput->Add(hDimuMM_Mix_y_cent[j][i]);
-		
-		//########################################
-		// histo vs Centrality & y bins,  0.3<pt<8  
-		//########################################
-		
-		// Classic dimuon analysis (ref)
-		hName = Form("hDimuPM_ypt_%i_%s", j, centBinName[i].Data());
-		hDimuPM_y_ptphoto_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-		fOutput->Add(hDimuPM_y_ptphoto_cent[j][i]);
-		hName = Form("hDimuPP_ypt_%i_%s", j, centBinName[i].Data());
-		hDimuPP_y_ptphoto_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-		fOutput->Add(hDimuPP_y_ptphoto_cent[j][i]);
-		hName = Form("hDimuMM_ypt_%i_%s", j, centBinName[i].Data());
-		hDimuMM_y_ptphoto_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-		fOutput->Add(hDimuMM_y_ptphoto_cent[j][i]);
-		// Mix dimuon analysis
-		hName = Form("hDimuPM_ypt_%i_%s_Mix", j,centBinName[i].Data());
-		hDimuPM_Mix_y_ptphoto_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-		fOutput->Add(hDimuPM_Mix_y_ptphoto_cent[j][i]);
-		hName = Form("hDimuPP_ypt_%i_%s_Mix", j,centBinName[i].Data());
-		hDimuPP_Mix_y_ptphoto_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-		fOutput->Add(hDimuPP_Mix_y_ptphoto_cent[j][i]);
-		hName = Form("hDimuMM_ypt_%i_%s_Mix", j,centBinName[i].Data());
-		hDimuMM_Mix_y_ptphoto_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-		fOutput->Add(hDimuMM_Mix_y_ptphoto_cent[j][i]);
-	  }
-	}
-  }
-  
-  
-  
-  
-  
-  //########################################
-  //########################################
-  // histo w/ sharp pt muon cut from tracker
-  //########################################
-  //########################################
-  
-  
-  //########################################
-  // histo vs Centrality  & pt bins,  2.5<y<4
-  //########################################
-  
-  // classic dimuon histo
-  TH1F *hDimuPM_ptMuonCut_cent[npt][nCent];
-  TH1F *hDimuPP_ptMuonCut_cent[npt][nCent];
-  TH1F *hDimuMM_ptMuonCut_cent[npt][nCent];
-  // Mix dimuon histo
-  TH1F *hDimuPM_Mix_ptMuonCut_cent[npt][nCent];
-  TH1F *hDimuPP_Mix_ptMuonCut_cent[npt][nCent];
-  TH1F *hDimuMM_Mix_ptMuonCut_cent[npt][nCent];
-  
-  //########################################
-  // histo vs Centrality & y bins,  0<pt<8  
-  //########################################
-  
-  // classic dimuon histo
-  TH1F *hDimuPM_yMuonCut_cent[ny][nCent];
-  TH1F *hDimuPP_yMuonCut_cent[ny][nCent];
-  TH1F *hDimuMM_yMuonCut_cent[ny][nCent];
-  // Mix dimuon histo
-  TH1F *hDimuPM_Mix_yMuonCut_cent[ny][nCent];
-  TH1F *hDimuPP_Mix_yMuonCut_cent[ny][nCent];
-  TH1F *hDimuMM_Mix_yMuonCut_cent[ny][nCent];
-  
-  //########################################
-  // histo vs Centrality & y bins,  0.3<pt<8  
-  //########################################
-  
-  // classic dimuon histo
-  TH1F *hDimuPM_yMuonCut_ptphoto_cent[ny][nCent];
-  TH1F *hDimuPP_yMuonCut_ptphoto_cent[ny][nCent];
-  TH1F *hDimuMM_yMuonCut_ptphoto_cent[ny][nCent];
-  // Mix dimuon histo
-  TH1F *hDimuPM_Mix_yMuonCut_ptphoto_cent[ny][nCent];
-  TH1F *hDimuPP_Mix_yMuonCut_ptphoto_cent[ny][nCent];
-  TH1F *hDimuMM_Mix_yMuonCut_ptphoto_cent[ny][nCent];
-  
-  
-  for (Int_t i = 0; i < nCent; i++) 
-  {
-	//########################################
-	// histo vs Centrality  & pt bins,  2.5<y<4
-	//########################################
-	
-	for (Int_t j = 0; j < npt; j++) 
-	{
-	  // Classic dimuon analysis (ref)
-	  hName = Form("hDimuPM_ptMuonCut_%i_%s", j, centBinName[i].Data());
-	  hDimuPM_ptMuonCut_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-	  fOutput->Add(hDimuPM_ptMuonCut_cent[j][i]);
-	  hName = Form("hDimuPP_ptMuonCut_%i_%s", j, centBinName[i].Data());
-	  hDimuPP_ptMuonCut_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-	  fOutput->Add(hDimuPP_ptMuonCut_cent[j][i]);
-	  hName = Form("hDimuMM_ptMuonCut_%i_%s", j, centBinName[i].Data());
-	  hDimuMM_ptMuonCut_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-	  fOutput->Add(hDimuMM_ptMuonCut_cent[j][i]);
-	  // Mix dimuon analysis
-	  hName = Form("hDimuPM_ptMuonCut_%i_%s_Mix", j,centBinName[i].Data());
-	  hDimuPM_Mix_ptMuonCut_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-	  fOutput->Add(hDimuPM_Mix_ptMuonCut_cent[j][i]);
-	  hName = Form("hDimuPP_ptMuonCut_%i_%s_Mix", j,centBinName[i].Data());
-	  hDimuPP_Mix_ptMuonCut_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-	  fOutput->Add(hDimuPP_Mix_ptMuonCut_cent[j][i]);
-	  hName = Form("hDimuMM_ptMuonCut_%i_%s_Mix", j,centBinName[i].Data());
-	  hDimuMM_Mix_ptMuonCut_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-	  fOutput->Add(hDimuMM_Mix_ptMuonCut_cent[j][i]);
-	  
-	  if (j < ny) {
-		//########################################
-		// histo vs Centrality & y bins,  0<pt<8  
-		//########################################
-		
-		// Classic dimuon analysis (ref)
-		hName = Form("hDimuPM_yMuonCut_%i_%s", j, centBinName[i].Data());
-		hDimuPM_yMuonCut_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-		fOutput->Add(hDimuPM_yMuonCut_cent[j][i]);
-		hName = Form("hDimuPP_yMuonCut_%i_%s", j, centBinName[i].Data());
-		hDimuPP_yMuonCut_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-		fOutput->Add(hDimuPP_yMuonCut_cent[j][i]);
-		hName = Form("hDimuMM_yMuonCut_%i_%s", j, centBinName[i].Data());
-		hDimuMM_yMuonCut_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-		fOutput->Add(hDimuMM_yMuonCut_cent[j][i]);
-		// Mix dimuon analysis
-		hName = Form("hDimuPM_yMuonCut_%i_%s_Mix", j,centBinName[i].Data());
-		hDimuPM_Mix_yMuonCut_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-		fOutput->Add(hDimuPM_Mix_yMuonCut_cent[j][i]);
-		hName = Form("hDimuPP_yMuonCut_%i_%s_Mix", j,centBinName[i].Data());
-		hDimuPP_Mix_yMuonCut_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-		fOutput->Add(hDimuPP_Mix_yMuonCut_cent[j][i]);
-		hName = Form("hDimuMM_yMuonCut_%i_%s_Mix", j,centBinName[i].Data());
-		hDimuMM_Mix_yMuonCut_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-		fOutput->Add(hDimuMM_Mix_yMuonCut_cent[j][i]);
-		
-		//########################################
-		// histo vs Centrality & y bins,  0.3<pt<8  
-		//########################################
-		
-		// Classic dimuon analysis (ref)
-		hName = Form("hDimuPM_yptMuonCut_%i_%s", j, centBinName[i].Data());
-		hDimuPM_yMuonCut_ptphoto_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-		fOutput->Add(hDimuPM_yMuonCut_ptphoto_cent[j][i]);
-		hName = Form("hDimuPP_yptMuonCut_%i_%s", j, centBinName[i].Data());
-		hDimuPP_yMuonCut_ptphoto_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-		fOutput->Add(hDimuPP_yMuonCut_ptphoto_cent[j][i]);
-		hName = Form("hDimuMM_yptMuonCut_%i_%s", j, centBinName[i].Data());
-		hDimuMM_yMuonCut_ptphoto_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-		fOutput->Add(hDimuMM_yMuonCut_ptphoto_cent[j][i]);
-		// Mix dimuon analysis
-		hName = Form("hDimuPM_yptMuonCut_%i_%s_Mix", j,centBinName[i].Data());
-		hDimuPM_Mix_yMuonCut_ptphoto_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-		fOutput->Add(hDimuPM_Mix_yMuonCut_ptphoto_cent[j][i]);
-		hName = Form("hDimuPP_yptMuonCut_%i_%s_Mix", j,centBinName[i].Data());
-		hDimuPP_Mix_yMuonCut_ptphoto_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-		fOutput->Add(hDimuPP_Mix_yMuonCut_ptphoto_cent[j][i]);
-		hName = Form("hDimuMM_yptMuonCut_%i_%s_Mix", j,centBinName[i].Data());
-		hDimuMM_Mix_yMuonCut_ptphoto_cent[j][i] = new TH1F(hName.Data(),hName.Data(),nbins,0.,14.);
-		fOutput->Add(hDimuMM_Mix_yMuonCut_ptphoto_cent[j][i]);
-	  }
-	}
-  }
-  
-  
-  // event counters
-  fEventCounters = new AliCounterCollection("eventCounters");
-  fEventCounters->AddRubric("centrality", "010/1020/2030/3040/4050/5060/6070/7080/8090");
-  fEventCounters->Init();
-  fOutput->Add(fEventCounters);
-  
-  // Create histograms for check
-  fHistCent = new TH1F("fHistCent", "Cent of events mixed", 100, 0, 100);
-  fOutput->Add(fHistCent);  
-  
-  PostData(1, fOutput); // Post data for ALL output slots >0 here, to get at least an empty histogram
+   // Create histograms
+   // Called once (on the worker node)
+
+   fOutput = new TList();
+   fOutput->SetOwner();  // IMPORTANT!
+
+   // Create histograms
+   Int_t ptbins = 15;
+   Float_t ptlow = 0.1, ptup = 3.1;
+   fHistPt = new TH1F("fHistPt", "P_{T} distribution for reconstructed", ptbins, ptlow, ptup);
+   fHistPt->GetXaxis()->SetTitle("P_{T} (GeV/c)");
+   fHistPt->GetYaxis()->SetTitle("dN/dP_{T} (c/GeV)");
+   fHistPt->SetMarkerStyle(kFullCircle);
+
+   Int_t etabins = 40;
+   Float_t etalow = -2.0, etaup = 2.0;
+   fHistEta = new TH1F("fHistEta", "#eta distribution for reconstructed", etabins, etalow, etaup);
+   fHistEta->GetXaxis()->SetTitle("#eta");
+   fHistEta->GetYaxis()->SetTitle("counts");
+
+   fHistMultiDiff = new TH1F("fHistMultiDiff", "Multiplicity Difference", 100, 0, 100);
+   fHistMultiDiff->GetXaxis()->SetTitle("MultiDiff");
+   fHistMultiDiff->GetYaxis()->SetTitle("counts");
+
+   fHistZVertexDiff = new TH1F("fHistZVertexDiff", "Multiplicity Difference", 100, 0, 10);
+   fHistZVertexDiff->GetXaxis()->SetTitle("ZVertexDiff");
+   fHistZVertexDiff->GetYaxis()->SetTitle("counts");
+
+   // NEW HISTO should be defined here, with a sensible name,
+
+   fOutput->Add(fHistPt);
+   fOutput->Add(fHistEta);
+   fOutput->Add(fHistMultiDiff);
+   fOutput->Add(fHistZVertexDiff);
+   // NEW HISTO added to fOutput here
+
+
+   // sets helper pointers for Mixing
+   AliAnalysisManager *mgr = AliAnalysisManager::GetAnalysisManager();
+   SetMainInputHandler(mgr);
+   if (fMainInputHandler) SetMixingInputHandler(fMainInputHandler);
+
+   PostData(1, fOutput); // Post data for ALL output slots >0 here, to get at least an empty histogram
 }
 
 //________________________________________________________________________
 void AliAnalysisTaskEx02::UserExec(Option_t *)
 {
+   // Main loop
+   // Called for each eventn (Simply standard UserExec() like you would do without mixing)
+   // If you want to process events which are used for mixing,
+   // then you have to check for (multiplicity, Vz, ... ) ranges set in event pool.
+   // This action is up to user
+   //
 
-   AliAnalysisManager *mgr = AliAnalysisManager::GetAnalysisManager();
-   AliMultiInputEventHandler *inEvHMainMulti = dynamic_cast<AliMultiInputEventHandler *>(mgr->GetInputEventHandler());
-   if (inEvHMainMulti) {
-	 AliInputEventHandler *inEvMain = dynamic_cast<AliInputEventHandler *>(inEvHMainMulti->GetFirstInputEventHandler());
 
-     // Get AOD Event
-	 AliAODEvent* aodEvent = dynamic_cast<AliAODEvent*>(inEvMain->GetEvent());
-	 if (aodEvent) {
-	   
-	   // Init
-	   const Int_t nCent=9;
-	   Double_t centBinRange[nCent][2] = {{0., 10.}, {10., 20.}, {20., 30.}, {30., 40.}, {40., 50.}, {50., 60.}, {60., 70.}, {70., 80.}, {80.,90.}};
-	   TString centBinName[nCent] = {"010", "1020", "2030", "3040", "4050", "5060", "6070", "7080", "8090"};
-	  
-	   Bool_t ptMuonCutBoth = kFALSE;
-	   const Int_t npt = fPtBin[0].GetSize();   
-	   const Int_t ny = fYBin[0].GetSize();
-	   
-	   // Get Centrality
-	   AliCentrality* acent = aodEvent->GetCentrality();
-	   Float_t cent=0.;
-	   if (acent) {
-		 cent = acent->GetCentralityPercentile("V0M");
-		 fHistCent->Fill(cent);	   
-	   }
-	   
-	   // Count
-	   TString trigger = aodEvent->GetFiredTriggerClasses();
-	   Bool_t isTrigger = trigger.Contains("CPBI1MUL-B-NOPF-MUON");
-	   if(isTrigger) {
-		 for (Int_t iCent = 0; iCent < nCent; iCent++) {		   
-		   if (cent > centBinRange[iCent][0] && cent <= centBinRange[iCent][1]) {
-			 fEventCounters->Count(Form("centrality:%s",centBinName[iCent].Data()));
-		   }
-		 }
-	   }
-	   
-		  
-	   // Track i loop
-	   Int_t ntracks = aodEvent->GetNumberOfTracks();
-	   for (Int_t i = 0; i < ntracks; ++i)
-	   {
-		 AliAODTrack* tracki = aodEvent->GetTrack(i);
-		 if (!fMuonTrackCuts->IsSelected(tracki)) continue;
-		 TLorentzVector p(tracki->Px(),tracki->Py(),tracki->Pz(),TMath::Sqrt(MuonMass2()+tracki->P()*tracki->P()));
-		 
-		 // Track j loop
-		 for (Int_t j = i+1; j < ntracks; ++j)
-		 {
-		   AliAODTrack* trackj = aodEvent->GetTrack(j);
-		   if (!fMuonTrackCuts->IsSelected(trackj)) continue;
-		   TLorentzVector pj(trackj->Px(),trackj->Py(),trackj->Pz(),TMath::Sqrt(MuonMass2()+trackj->P()*trackj->P()));
-		   
-		   // Tracker sharp pt muon cut both
-		   if (p.Pt() > 1. && pj.Pt() > 1.) ptMuonCutBoth = kTRUE;
-		   else ptMuonCutBoth = kFALSE;
-		   		   
-		   // Create dimuon kinematics 
-		   pj += p;
-		   if (!PairRapidityCut(pj)) continue;
-		   
-		   // pt max due to pp reference
-		   if (pj.Pt()>8.) continue;
-		   
-		   Float_t massDimuon = pj.M();
-		   Float_t ptDimuon = pj.Pt();
-		   Float_t yDimuon = pj.Rapidity();
-		   
-		   // Charge
-		   TString sign;
-		   if ( tracki->Charge() > 0. && trackj->Charge() > 0. ) sign = "PP";
-		   else if ( tracki->Charge() < 0. && trackj->Charge() < 0. ) sign = "MM";
-		   else sign = "PM";
-		   
-		   // Loop on centrality bins
-		   for (Int_t iCent = 0; iCent < nCent; iCent++) {		   
-			 if (cent > centBinRange[iCent][0] && cent <= centBinRange[iCent][1]) {
-			   
-			   // Loop on pt bins
-			   for (Int_t ipt = 0; ipt < npt; ipt++) {		   
-				 if (ptDimuon > fPtBin[0].At(ipt) && ptDimuon <= fPtBin[1].At(ipt)) {
-				   ( (TH1F*) fOutput->FindObject( Form("hDimu%s_pt_%i_%s", sign.Data(), ipt, centBinName[iCent].Data()) ) )->Fill(massDimuon);
-				   if (ptMuonCutBoth) ( (TH1F*) fOutput->FindObject( Form("hDimu%s_ptMuonCut_%i_%s", sign.Data(), ipt, centBinName[iCent].Data()) ) )->Fill(massDimuon);
-				 }
-			   }
-			   
-			   // Loop on y bins
-			   for (Int_t iy = 0; iy < ny; iy++) {		   
-				 if (yDimuon < fYBin[0].At(iy) && yDimuon >= fYBin[1].At(iy)) {
-				   ( (TH1F*) fOutput->FindObject( Form("hDimu%s_y_%i_%s", sign.Data(), iy, centBinName[iCent].Data()) ) )->Fill(massDimuon);
-				   if (ptMuonCutBoth) ( (TH1F*) fOutput->FindObject( Form("hDimu%s_yMuonCut_%i_%s", sign.Data(), iy, centBinName[iCent].Data()) ) )->Fill(massDimuon);
-				   if (ptDimuon > 0.3 && ptDimuon <= 8.) {
-					 ( (TH1F*) fOutput->FindObject( Form("hDimu%s_ypt_%i_%s", sign.Data(), iy, centBinName[iCent].Data()) ) )->Fill(massDimuon);
-				     if (ptMuonCutBoth) ( (TH1F*) fOutput->FindObject( Form("hDimu%s_yptMuonCut_%i_%s", sign.Data(), iy, centBinName[iCent].Data()) ) )->Fill(massDimuon);
-
-				   } 
-				 }
-			   }
-			   
-			   break;
-			 
-			 }
-		   } // end loop centrality bins
-		   			   
-		 } // end loop track j
-	   } // end loop track i
-	 }
+   AliESDEvent *esd = dynamic_cast<AliESDEvent *>(GetMainEvent());
+   if (esd) {
+      if (!fUseLoopInUserExecMix) {
+         if (fUseLoopV0)
+            LoopV0(esd);
+         else
+            Loop(esd);
+      }
+   } else {
+      AliAODEvent *aod = dynamic_cast<AliAODEvent *>(GetMainEvent());
+      if (aod) {
+         if (!fUseLoopInUserExecMix) {
+            if (fUseLoopV0)
+               LoopV0(aod);
+            else
+               Loop(aod);
+         }
+      }
    }
-  
-  PostData(1, fOutput);
+
+   PostData(1, fOutput);
 }
 
 //________________________________________________________________________
 void AliAnalysisTaskEx02::UserExecMix(Option_t *)
 {
-  
-  AliAnalysisManager *mgr = AliAnalysisManager::GetAnalysisManager();
-  AliMultiInputEventHandler *inEvHMain = dynamic_cast<AliMultiInputEventHandler *>(mgr->GetInputEventHandler());
-  if (inEvHMain) {
-	AliMixInputEventHandler *mixEH = dynamic_cast<AliMixInputEventHandler *>(inEvHMain->GetFirstMultiInputHandler());
-	if (!mixEH) return;
-	if (mixEH->CurrentBinIndex() < 0) {
-	  AliDebug(AliLog::kDebug + 1, "Current event mixEH->CurrentEntry() == -1");
-	  return ;
-	}
-	AliDebug(AliLog::kDebug, Form("Mixing %lld %d [%lld,%lld] %d", mixEH->CurrentEntry(), mixEH->CurrentBinIndex(), mixEH->CurrentEntryMain(), mixEH->CurrentEntryMix(), mixEH->NumberMixed()));
-	AliInputEventHandler *ihMainCurrent = inEvHMain->GetFirstInputEventHandler();
-	
-	AliMultiInputEventHandler *inEvHMixedCurrent = mixEH->GetFirstMultiInputHandler();
-	AliInputEventHandler *ihMixedCurrent = inEvHMixedCurrent->GetFirstInputEventHandler();
-	
-	// Get AOD Events
-	AliAODEvent *aodEvent = dynamic_cast<AliAODEvent *>(ihMainCurrent->GetEvent());
-	if (aodEvent) {
-	  AliAODEvent *aodEventMix = dynamic_cast<AliAODEvent *>(ihMixedCurrent->GetEvent());
-	  AliDebug(AliLog::kDebug, Form("Multi=%d MultiMix=%d", aodEvent->GetNumberOfTracks(), aodEventMix->GetNumberOfTracks()));
-	  
-	  // Init
-	  const Int_t nCent=9;
-	  Double_t centBinRange[nCent][2] = {{0., 10.}, {10., 20.}, {20., 30.}, {30., 40.}, {40., 50.}, {50., 60.}, {60., 70.}, {70., 80.}, {80.,90.}};
-	  TString centBinName[nCent] = {"010", "1020", "2030", "3040", "4050", "5060", "6070", "7080", "8090"};
-	  
-	  Bool_t ptMuonCutBoth = kFALSE;
-	  const Int_t npt = fPtBin[0].GetSize();   
-	  const Int_t ny = fYBin[0].GetSize();
-	  
-	  // Get Centrality
-	  AliCentrality* acent = aodEvent->GetCentrality();
-	  Float_t cent=0.;
-	  if (acent) cent = acent->GetCentralityPercentile("V0M");
-	  
-	  
-	  // Track i loop of current event
-	  Int_t ntracks = aodEvent->GetNumberOfTracks();
-	  Int_t ntracksMix = aodEventMix->GetNumberOfTracks();
-	  for (Int_t i = 0; i < ntracks; ++i) {
-		AliAODTrack* tracki = aodEvent->GetTrack(i);
-		if (!fMuonTrackCuts->IsSelected(tracki)) continue;
-		TLorentzVector p(tracki->Px(),tracki->Py(),tracki->Pz(),TMath::Sqrt(MuonMass2()+tracki->P()*tracki->P()));
-		
-		// Track j loop of Mix event
-		for (Int_t jMix = 0; jMix < ntracksMix; jMix++)
-		{
-		  AliAODTrack* trackjMix = aodEventMix->GetTrack(jMix);
-		  if (!fMuonTrackCuts->IsSelected(trackjMix)) continue;
-		  TLorentzVector pjMix(trackjMix->Px(),trackjMix->Py(),trackjMix->Pz(),TMath::Sqrt(MuonMass2()+trackjMix->P()*trackjMix->P()));
-		  
-		  // Tracker sharp pt muon cut both
-		  if (p.Pt() > 1. && pjMix.Pt() > 1.) ptMuonCutBoth=kTRUE;
-		  else ptMuonCutBoth=kFALSE;
-		  
-		  // Create dimuon kinematics 
-		  pjMix += p;
-		  if (!PairRapidityCut(pjMix)) continue;
-		  
-		  // pt max due to pp reference
-		  if (pjMix.Pt()>8.) continue;
-		  
-		  Float_t massDimuon = pjMix.M();
-		  Float_t ptDimuon = pjMix.Pt();
-		  Float_t yDimuon = pjMix.Rapidity();
-	
-		  // Charge
-		  TString sign;
-		  if ( tracki->Charge() > 0. && trackjMix->Charge() > 0. ) sign = "PP";
-		  else if ( tracki->Charge() < 0. && trackjMix->Charge() < 0. ) sign = "MM";
-		  else sign = "PM";
-		  
-		  // Loop on centrality bins
-		  for (Int_t iCent = 0; iCent < nCent; iCent++) {		   
-			if (cent > centBinRange[iCent][0] && cent <= centBinRange[iCent][1]) {
-			  
-			  // Loop on pt bins
-			  for (Int_t ipt = 0; ipt < npt; ipt++) {		   
-				if (ptDimuon > fPtBin[0].At(ipt) && ptDimuon <= fPtBin[1].At(ipt)) {
-				  ( (TH1F*) fOutput->FindObject( Form("hDimu%s_pt_%i_%s_Mix", sign.Data(), ipt, centBinName[iCent].Data()) ) )->Fill(massDimuon);
-				  if (ptMuonCutBoth) ( (TH1F*) fOutput->FindObject( Form("hDimu%s_ptMuonCut_%i_%s_Mix", sign.Data(), ipt, centBinName[iCent].Data()) ) )->Fill(massDimuon);
-				}
-			  }
-			  
-			  // Loop on y bins
-			  for (Int_t iy = 0; iy < ny; iy++) {		   
-				if (yDimuon < fYBin[0].At(iy) && yDimuon >= fYBin[1].At(iy)) {
-				  ( (TH1F*) fOutput->FindObject( Form("hDimu%s_y_%i_%s_Mix", sign.Data(), iy, centBinName[iCent].Data()) ) )->Fill(massDimuon);
-				  if (ptMuonCutBoth) ( (TH1F*) fOutput->FindObject( Form("hDimu%s_yMuonCut_%i_%s_Mix", sign.Data(), iy, centBinName[iCent].Data()) ) )->Fill(massDimuon);
-				  if (ptDimuon > 0.3 && ptDimuon <= 8.) {
-					( (TH1F*) fOutput->FindObject( Form("hDimu%s_ypt_%i_%s_Mix", sign.Data(), iy, centBinName[iCent].Data()) ) )->Fill(massDimuon);
-					if (ptMuonCutBoth) ( (TH1F*) fOutput->FindObject( Form("hDimu%s_yptMuonCut_%i_%s_Mix", sign.Data(), iy, centBinName[iCent].Data()) ) )->Fill(massDimuon);
-				  } 
-				}
-			  }
-			  
-			  break;
-			  
-			} 
-		  } // end loop centrality bins
+   //
+   // Running mixing function
+   //
 
-		} // end loop track j of Mix event
-	  } // end loop track i of Current event 
-	}
-  }
+   if (!fMixingInputHandler) return;
 
-PostData(1, fOutput);
+   Int_t bufferSize = fMixingInputHandler->BufferSize();
+   Int_t numberMixed = fMixingInputHandler->NumberMixed();
+   if (numberMixed == 1) {
+      // you may process Main Event here instead of UserExec()
+      // Here you will have events which are in range of bins in event pool
+      // but only in case when other N (bufferSize) events are found for mix
+   }
+
+   AliESDEvent *esdEvent = dynamic_cast<AliESDEvent *>(GetMainEvent());
+   if (esdEvent) {
+
+      for(Int_t iBuffer=0; iBuffer<bufferSize; iBuffer++) {
+         AliESDEvent *esdEventMix = dynamic_cast<AliESDEvent *>(GetMixedEvent(iBuffer));
+         AliDebug(AliLog::kDebug, Form("Multi=%d MultiMix=%d", esdEvent->GetNumberOfTracks(), esdEventMix->GetNumberOfTracks()));
+//          AliDebug(AliLog::kDebug, Form("Mask=%lld MaskMix=%lld", esdEvent->GetTriggerMask(), esdEvent->GetTriggerMask()));
+         fHistMultiDiff->Fill(TMath::Abs(esdEvent->GetNumberOfTracks() - esdEventMix->GetNumberOfTracks()));
+
+         // For tesing purpose only (no physics)
+         if (fUseLoopInUserExecMix) {
+            if (fUseLoopV0) {
+               if (fUseLoopMixedEvent) LoopV0(esdEventMix);
+               else LoopV0(esdEvent);
+            }
+            else {
+               if (fUseLoopMixedEvent) Loop(esdEventMix);
+               else Loop(esdEvent);
+            }
+         }
+
+      }
+   } else {
+      AliAODEvent *aodEvent = dynamic_cast<AliAODEvent *>(GetMainEvent());
+      if (aodEvent) {
+         for(Int_t iBuffer=0; iBuffer<bufferSize; iBuffer++) {
+            AliAODEvent *aodEventMix = dynamic_cast<AliAODEvent *>(GetMixedEvent(iBuffer));
+            AliDebug(AliLog::kDebug, Form("Multi=%d MultiMix=%d", aodEvent->GetNumberOfTracks(), aodEventMix->GetNumberOfTracks()));
+//             AliDebug(AliLog::kDebug, Form("Mask=%lld MaskMix=%lld", aodEvent->GetTriggerMask(), aodEventMix->GetTriggerMask()));
+            fHistMultiDiff->Fill(TMath::Abs(aodEvent->GetNumberOfTracks() - aodEventMix->GetNumberOfTracks()));
+
+            // For tesing purpose only (no physics)
+            if (fUseLoopInUserExecMix) {
+               if (fUseLoopV0) {
+                  if (fUseLoopMixedEvent) LoopV0(aodEventMix);
+                  else LoopV0(aodEvent);
+               }
+               else {
+                  if (fUseLoopMixedEvent) Loop(aodEventMix);
+                  else Loop(aodEvent);
+               }
+            }
+            AliAODVertex *aodVertex = aodEvent->GetPrimaryVertex();
+            AliAODVertex *aodVertexMix = aodEventMix->GetPrimaryVertex();
+            if ( aodVertex && aodVertexMix) {
+               AliDebug(AliLog::kDebug, Form("Vz=%f VzMix=%f", aodVertex->GetZ(), aodVertexMix->GetZ()));
+               fHistZVertexDiff->Fill(TMath::Abs( aodVertex->GetZ()-aodVertexMix->GetZ()));
+            }
+
+         }
+
+      }
+   }
+
+   PostData(1, fOutput);
 }
 
-//_____________________________________________________________________________
-Double_t AliAnalysisTaskEx02::MuonMass2() const
+//________________________________________________________________________
+void AliAnalysisTaskEx02::Terminate(Option_t *)
 {
-  static Double_t m2 = 1.11636129640000012e-02;
-  return m2;
+   // Draw result to screen, or perform fitting, normalizations
+   // Called once at the end of the query
+
+   fOutput = dynamic_cast<TList *>(GetOutputData(1));
+   if (!fOutput) { AliError("Could not retrieve TList fOutput"); return; }
+
+   fHistPt = dynamic_cast<TH1F *>(fOutput->FindObject("fHistPt"));
+   if (!fHistPt) { AliError("Could not retrieve fHistPt"); return;}
+
+   fHistEta = dynamic_cast<TH1F *>(fOutput->FindObject("fHistEta"));
+   if (!fHistEta) { AliError("Could not retrieve fHistEta"); return;}
+
+   fHistMultiDiff = dynamic_cast<TH1F *>(fOutput->FindObject("fHistMultiDiff"));
+   if (!fHistMultiDiff) { AliError("Could not retrieve fHistMultiDiff"); return;}
+
+   fHistZVertexDiff = dynamic_cast<TH1F *>(fOutput->FindObject("fHistZVertexDiff"));
+   if (!fHistZVertexDiff) { AliError("Could not retrieve fHistZVertexDiff"); return;}
+
+
+   // NEW HISTO should be retrieved from the TList container in the above way,
+   // so it is available to draw on a canvas such as below
+
+   TCanvas *c = new TCanvas("AliAnalysisTaskEx02", "P_{T} & #eta", 10, 10, 820, 410);
+   c->Divide(2, 2);
+   c->cd(1)->SetLogy();
+   fHistPt->DrawCopy("E");
+   c->cd(2);
+   fHistEta->DrawCopy("E");
+   c->cd(3)->SetLogy();
+   fHistMultiDiff->DrawCopy();
+   c->cd(4)->SetLogy();
+   fHistZVertexDiff->DrawCopy();
+
+
 }
 
-//_____________________________________________________________________________
-Bool_t AliAnalysisTaskEx02::PairRapidityCut(const TLorentzVector& pair) const
+//________________________________________________________________________
+void AliAnalysisTaskEx02::Loop(AliESDEvent *esd)
 {
-  Double_t y = pair.Rapidity();
-  Bool_t ok = ( y < -2.5 && y > -4.0 );
-  
-  return ok;
+   // Track loop for reconstructed event
+   Int_t ntracks = esd->GetNumberOfTracks();
+   for (Int_t i = 0; i < ntracks; i++) {
+      AliESDtrack *esdtrack = esd->GetTrack(i); // pointer to reconstructed to track
+      if (!esdtrack) {
+         AliError(Form("ERROR: Could not retrieve esdtrack %d", i));
+         continue;
+      }
+      fHistPt->Fill(esdtrack->Pt());
+      fHistEta->Fill(esdtrack->Eta());
+   }
 }
+
+//________________________________________________________________________
+void AliAnalysisTaskEx02::LoopV0(AliESDEvent *esd)
+{
+   //
+   // V0 loop for reconstructed event (ESD)
+   //
+
+   Int_t nv0 = esd->GetNumberOfV0s();
+   Int_t lIndexTrackPos;
+   AliESDtrack *myTrackPosTest;
+   for (Int_t i = 0; i < nv0; i++)
+   {
+      AliESDv0 *esdv0 = esd->GetV0(i);
+      if (!esdv0) {
+         AliError(Form("ERROR: Could not retrieve esdv0 %d", i));
+         continue;
+      }
+      lIndexTrackPos = TMath::Abs(esdv0->GetPindex());
+      myTrackPosTest = esd->GetTrack(lIndexTrackPos);
+      fHistPt->Fill(myTrackPosTest->Pt());
+      fHistEta->Fill(myTrackPosTest->Eta());
+   }
+
+}
+
+//________________________________________________________________________
+void AliAnalysisTaskEx02::LoopESDMC()
+{
+   //
+   // TODO
+   //
+}
+
+//________________________________________________________________________
+void AliAnalysisTaskEx02::Loop(AliAODEvent *aod)
+{
+   //
+   // Loops over AOD event
+   //
+
+   // Track loop for reconstructed event
+   Int_t ntracks = aod->GetNumberOfTracks();
+   for (Int_t i = 0; i < ntracks; i++) {
+      AliAODTrack *aodTrack = static_cast<AliAODTrack *>(aod->GetTrack(i)); // pointer to reconstructed to track
+      if (!aodTrack) {
+         AliError(Form("ERROR: Could not retrieve esdtrack %d", i));
+         continue;
+      }
+
+      fHistPt->Fill(aodTrack->Pt());
+      fHistEta->Fill(aodTrack->Eta());
+   }
+}
+
+
+
+//________________________________________________________________________
+void AliAnalysisTaskEx02::LoopV0(AliAODEvent *aod)
+{
+   //
+   // V0 loop for reconstructed event (AOD)
+   //
+
+   Int_t nv0 = aod->GetNumberOfV0s();
+   AliAODTrack *postrackmix;
+   for (Int_t i = 0; i < nv0; i++)
+   {
+      AliAODv0 *aodv0 = dynamic_cast<AliAODv0 *>(aod->GetV0(i));
+      if (!aodv0) {
+         AliError(Form("ERROR: Could not retrieve aodv0 %d", i));
+         continue;
+      }
+      postrackmix = (AliAODTrack *)aodv0->GetDaughter(0);
+      fHistPt->Fill(postrackmix->Pt());
+      fHistEta->Fill(postrackmix->Eta());
+   }
+
+}
+
+//________________________________________________________________________
+void AliAnalysisTaskEx02::LoopAODMC()
+{
+   //
+   // TODO
+   //
+}
+
+//________________________________________________________________________
+AliVEvent *AliAnalysisTaskEx02::GetMainEvent()
+{
+   //
+   // Access to MainEvent
+   //
+
+   AliMultiInputEventHandler *inEvHMainMulti = fMainInputHandler;
+   if (inEvHMainMulti) {
+      AliInputEventHandler *inEvMain = dynamic_cast<AliInputEventHandler *>(inEvHMainMulti->GetFirstInputEventHandler());
+      if (inEvMain) return inEvMain->GetEvent();
+   }
+
+   return 0;
+}
+
+//________________________________________________________________________
+AliVEvent *AliAnalysisTaskEx02::GetMixedEvent(Int_t buffId)
+{
+   //
+   // Access to Mixed event with buffer id
+   //
+
+   AliMultiInputEventHandler *inEvHMain = fMainInputHandler;
+   if (inEvHMain) {
+
+      AliMixInputEventHandler *mixIH = fMixingInputHandler;
+      if (!mixIH) return 0;
+      if (mixIH->CurrentBinIndex() < 0) {
+         AliDebug(AliLog::kDebug + 1, "Current event mixEH->CurrentEntry() == -1");
+         return 0;
+      }
+//       AliMultiInputEventHandler *inEvHMixedCurrent = mixEH->GetFirstMultiInputHandler();
+      AliMultiInputEventHandler *inEvHMixedCurrent = dynamic_cast<AliMultiInputEventHandler *>(mixIH->InputEventHandler(buffId));
+      if (!inEvHMixedCurrent) return 0;
+      AliInputEventHandler *ihMixedCurrent = inEvHMixedCurrent->GetFirstInputEventHandler();
+      if (ihMixedCurrent) return ihMixedCurrent->GetEvent();
+   }
+
+   return 0;
+}
+
+//________________________________________________________________________
+AliMultiInputEventHandler *AliAnalysisTaskEx02::SetMainInputHandler(AliAnalysisManager *mgr)
+{
+   //
+   // Sets main input handler
+   //
+
+   if (!fMainInputHandler) fMainInputHandler = dynamic_cast<AliMultiInputEventHandler *>(mgr->GetInputEventHandler());
+
+   return fMainInputHandler;
+}
+
+//________________________________________________________________________
+AliMixInputEventHandler *AliAnalysisTaskEx02::SetMixingInputHandler(AliMultiInputEventHandler *mainIH)
+{
+   //
+   // Sets mixing input handler
+   //
+
+   if (!fMixingInputHandler) fMixingInputHandler = dynamic_cast<AliMixInputEventHandler *>(mainIH->GetFirstMultiInputHandler());
+
+   return fMixingInputHandler;
+}
+
 

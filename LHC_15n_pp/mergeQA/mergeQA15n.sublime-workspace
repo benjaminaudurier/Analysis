@@ -1,0 +1,2896 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"Loa",
+				"LoadMacro"
+			],
+			[
+				"Doul",
+				"Double_t"
+			],
+			[
+				"Ana",
+				"AnalysisResultsReference	(runGenTuner.C)"
+			],
+			[
+				"pp",
+				"pp2015	(runMuMu.C)"
+			],
+			[
+				"P",
+				"Plot"
+			],
+			[
+				"GetData",
+				"GetDataFile	(AliAnalysisTaskGenTunerLocal.h)"
+			],
+			[
+				"output",
+				"outputfile"
+			],
+			[
+				"reu",
+				"return"
+			],
+			[
+				"IsPo",
+				"IsPodMachine	(runTaskUtilities.C)"
+			],
+			[
+				"Set",
+				"SetOwner	(AliAnalysisTaskEx02.cxx)"
+			],
+			[
+				"UNLIKE",
+				"UNLIKE"
+			],
+			[
+				"ana",
+				"analyse"
+			],
+			[
+				"AliAnalysisMuMuMix",
+				"AliAnalysisMuMuMixEvt"
+			],
+			[
+				"FillMix",
+				"FillMixEvent	(AliAnalysisTaskMuMu.cxx)"
+			],
+			[
+				"AliANa",
+				"AliAnalysisMuMuBase"
+			],
+			[
+				"Is",
+				"IsSimulation"
+			],
+			[
+				"PbP",
+				"PbPb2011	(runMuMu.C)"
+			],
+			[
+				"data",
+				"datasetfull"
+			],
+			[
+				"pol",
+				"pol2"
+			],
+			[
+				"TM",
+				"TMath::Power((1"
+			],
+			[
+				"stat",
+				"static_cast"
+			],
+			[
+				"h",
+				"hDist"
+			],
+			[
+				"TG",
+				"TGraph"
+			],
+			[
+				"GetY",
+				"GetYaxis"
+			],
+			[
+				"str",
+				"strigger"
+			],
+			[
+				"cont",
+				"contain"
+			],
+			[
+				"sye",
+				"syear"
+			],
+			[
+				"nCIN",
+				"nCINTandOMUL"
+			],
+			[
+				"nextTrigg",
+				"nextTriggerMB"
+			],
+			[
+				"AliWar",
+				"AliWarning(\"Reimplement"
+			],
+			[
+				"nextTriggerM",
+				"nextTriggerMuon"
+			],
+			[
+				"re",
+				"return"
+			],
+			[
+				"Beam",
+				"BeamYear"
+			],
+			[
+				"kM",
+				"kMuonTriggerList"
+			],
+			[
+				"Trig",
+				"TriggerError"
+			],
+			[
+				"Trigg",
+				"TriggPT"
+			],
+			[
+				"Traj",
+				"TrajPT"
+			],
+			[
+				"Pari",
+				"PairError"
+			],
+			[
+				"Pai",
+				"PairError"
+			],
+			[
+				"binA",
+				"binAsString"
+			],
+			[
+				"DOuble",
+				"Double_t"
+			],
+			[
+				"Doubl",
+				"Double_t"
+			],
+			[
+				"SetMa",
+				"SetMarkerSize"
+			],
+			[
+				"gra",
+				"graph"
+			],
+			[
+				"F",
+				"Fnorm"
+			],
+			[
+				"doub",
+				"Double_t"
+			],
+			[
+				"Dra",
+				"Draw"
+			],
+			[
+				"Tm",
+				"TMath::Sqrt"
+			],
+			[
+				"Er",
+				"ErrorSystCorr"
+			],
+			[
+				"dou",
+				"Double_t"
+			],
+			[
+				"Tg",
+				"TGraph2D"
+			],
+			[
+				"binArra",
+				"binArrayX"
+			],
+			[
+				"fbi",
+				"fBinType"
+			],
+			[
+				"SetBin",
+				"SetBinError"
+			],
+			[
+				"Norm",
+				"NormTot"
+			],
+			[
+				"Data",
+				"Data());//\"MPT2CB2VWGPOL2INDEPTAILS"
+			],
+			[
+				"For",
+				"Form(\"%s"
+			],
+			[
+				"nofM",
+				"nofMUL"
+			],
+			[
+				"subresutl",
+				"subresult"
+			],
+			[
+				"Print",
+				"PrintNofJpsi"
+			],
+			[
+				"res",
+				"resultName"
+			],
+			[
+				"No",
+				"NofJpsi"
+			],
+			[
+				"Get",
+				"GetXaxis"
+			],
+			[
+				"IsP",
+				"IsPtInRange"
+			],
+			[
+				"event",
+				"eventTrue"
+			],
+			[
+				"INtegrat",
+				"INTEGRATED"
+			],
+			[
+				"x",
+				"xmin"
+			],
+			[
+				"his",
+				"histo"
+			],
+			[
+				"GEtBin",
+				"GetBinContent"
+			],
+			[
+				"hist",
+				"histo"
+			],
+			[
+				"Comp",
+				"CompareTo"
+			],
+			[
+				"sigma",
+				"sigmaPPIntegrated"
+			],
+			[
+				"AccEf",
+				"AccEffIntegrated"
+			],
+			[
+				"sig",
+				"sigma_pp_integrated"
+			],
+			[
+				"result",
+				"resultName"
+			],
+			[
+				"bin",
+				"binning"
+			],
+			[
+				"GetX",
+				"GetNbinsX"
+			],
+			[
+				"AliA",
+				"AliAnalysisMuMuBinning"
+			],
+			[
+				"AliAnaMuMu",
+				"AliAnalysisMuMuBinning"
+			],
+			[
+				"Bin",
+				"Binning"
+			],
+			[
+				"GEtX",
+				"GetXaxis"
+			],
+			[
+				"xM",
+				"xmax"
+			],
+			[
+				"fSep",
+				"fSpectraName"
+			],
+			[
+				"inter",
+				"intervals"
+			],
+			[
+				"ALi",
+				"AliError"
+			],
+			[
+				"extern",
+				"externfile"
+			],
+			[
+				"histo",
+				"histos"
+			],
+			[
+				"TOb",
+				"TObjArray"
+			],
+			[
+				"Spe",
+				"Spectra"
+			],
+			[
+				"Spec",
+				"SpectraName"
+			],
+			[
+				"fS",
+				"fSpectraName"
+			],
+			[
+				"jpsi",
+				"jpsiSpectra"
+			],
+			[
+				"fSp",
+				"fSpectra"
+			],
+			[
+				"Spectra",
+				"SpectraName"
+			],
+			[
+				"jspi",
+				"jpsiSpectra"
+			],
+			[
+				"FOrm",
+				"Form(\"%s"
+			],
+			[
+				"AliAnalysisMuMuJ",
+				"AliAnalysisMuMuJpsiSpectra"
+			],
+			[
+				"fParticle",
+				"fParticle"
+			],
+			[
+				"de",
+				"delete"
+			],
+			[
+				"Ali",
+				"AliCounterCollection"
+			],
+			[
+				"spectraName",
+				"spectraName"
+			],
+			[
+				"fSt",
+				"fSpectra"
+			],
+			[
+				"bins",
+				"bins"
+			],
+			[
+				"con",
+				"continue"
+			],
+			[
+				"fBin",
+				"fBinType"
+			],
+			[
+				"fSpect",
+				"fSpectraName"
+			],
+			[
+				"TS",
+				"TString"
+			],
+			[
+				"SetS",
+				"SetSpectraName"
+			],
+			[
+				"AliAna",
+				"AliAnalysisMuMuSpectra"
+			],
+			[
+				"s",
+				"simulation"
+			],
+			[
+				"interva",
+				"intervalLow"
+			],
+			[
+				"Nor",
+				"NormTot"
+			],
+			[
+				"el",
+				"else"
+			],
+			[
+				"da",
+				"datasets"
+			],
+			[
+				"nsubre",
+				"nsubresult"
+			],
+			[
+				"sie",
+				"size"
+			],
+			[
+				"noR",
+				"nofResult"
+			],
+			[
+				"nof",
+				"nofResult"
+			],
+			[
+				"TH1",
+				"TH1F"
+			],
+			[
+				"raa",
+				"raaArray"
+			],
+			[
+				"TArr",
+				"TArrayD"
+			],
+			[
+				"trac",
+				"trackTrue"
+			],
+			[
+				"TA",
+				"TAA"
+			],
+			[
+				"AliDe",
+				"AliDebug(1"
+			],
+			[
+				"col",
+				"colomn"
+			],
+			[
+				"sub",
+				"subresult"
+			],
+			[
+				"GetN",
+				"GetName"
+			],
+			[
+				"Fno",
+				"Fnorm"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "AOD_merge.jdl",
+			"settings":
+			{
+				"buffer_size": 1248,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "AOD_merge.sh",
+			"settings":
+			{
+				"buffer_size": 818,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "AOD_merge_final.jdl",
+			"settings":
+			{
+				"buffer_size": 1010,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "AODtrain.C",
+			"settings":
+			{
+				"buffer_size": 11958,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "copyFiles.C",
+			"settings":
+			{
+				"buffer_size": 2293,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "CopyFromRemote.C",
+			"settings":
+			{
+				"buffer_size": 1447,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "CopyFromRemote.sh",
+			"settings":
+			{
+				"buffer_size": 388,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "grid.QA.txt",
+			"settings":
+			{
+				"buffer_size": 4028,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "SaveQA.C",
+			"settings":
+			{
+				"buffer_size": 9487,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Submit.C",
+			"settings":
+			{
+				"buffer_size": 8187,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "validation_merge.sh",
+			"settings":
+			{
+				"buffer_size": 2892,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 207.0,
+		"last_filter": "git diff current",
+		"selected_items":
+		[
+			[
+				"git diff current",
+				"Git: Diff Current File"
+			],
+			[
+				"git diff",
+				"git: diff"
+			],
+			[
+				"git diff curent",
+				"git: diff current file"
+			],
+			[
+				"diff",
+				"git: diff current file (cached)"
+			],
+			[
+				"blame",
+				"Git: Blame"
+			],
+			[
+				"quick",
+				"Git: Quick Commit"
+			],
+			[
+				"checkout",
+				"Git: Checkout"
+			],
+			[
+				"status",
+				"Git: Status"
+			],
+			[
+				"branc ",
+				"Legit: Branches"
+			],
+			[
+				"git branch",
+				"Legit: Branches"
+			],
+			[
+				"git d",
+				"Git: Diff Current File"
+			],
+			[
+				"git stat",
+				"Git: Status"
+			],
+			[
+				"statu",
+				"Git: Status"
+			],
+			[
+				"sta",
+				"Git: Status"
+			],
+			[
+				"stat",
+				"Git: Status"
+			],
+			[
+				"git di",
+				"Git: Diff"
+			],
+			[
+				"colo",
+				"Colorsublime: Install Theme"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"color",
+				"Colorsublime: Browse Themes"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"git ",
+				"Git: Blame"
+			],
+			[
+				"comm",
+				"Git: Commit"
+			],
+			[
+				"git check",
+				"Git: Checkout"
+			],
+			[
+				"bran",
+				"Legit: Branches"
+			],
+			[
+				"git new",
+				"Git: Checkout New Branch"
+			],
+			[
+				"com",
+				"Git: Commit"
+			],
+			[
+				"merge",
+				"Git: Merge"
+			],
+			[
+				"git mer",
+				"Git: Merge"
+			],
+			[
+				"Git new branc",
+				"Git: Checkout New Branch"
+			],
+			[
+				"git dif",
+				"Git: Diff Current File"
+			],
+			[
+				"gitg",
+				"GitGutter: Compare Against Origin"
+			],
+			[
+				"git com",
+				"GitGutter: Compare Against Branch"
+			],
+			[
+				"git comp",
+				"GitGutter: Compare Against Commit"
+			],
+			[
+				"branch",
+				"Legit: Branches"
+			],
+			[
+				"git stau",
+				"Git: Status"
+			],
+			[
+				"gitgut",
+				"GitGutter: Compare Against Commit"
+			],
+			[
+				"git tra",
+				"GitGutter: Compare Against Commit"
+			],
+			[
+				"git st",
+				"Git: Status"
+			],
+			[
+				"git co",
+				"Git: Commit"
+			],
+			[
+				"git checkout",
+				"Git: Checkout"
+			],
+			[
+				"git statu",
+				"Git: Status"
+			],
+			[
+				"git sta",
+				"Git: Status"
+			],
+			[
+				"git sat",
+				"Git: Status"
+			],
+			[
+				"git branc",
+				"Legit: Branches"
+			],
+			[
+				"git ad",
+				"Git: Quick Add"
+			],
+			[
+				"gitsta",
+				"Git: Status"
+			],
+			[
+				"Gitstat",
+				"Git: Status"
+			],
+			[
+				"git br",
+				"GitGutter: Compare Against Branch"
+			],
+			[
+				"Git stat",
+				"Git: Status"
+			],
+			[
+				"blam",
+				"Git: Blame"
+			],
+			[
+				"Blame",
+				"Git: Blame"
+			],
+			[
+				"git Diff",
+				"Git: Diff Cached"
+			],
+			[
+				"Git Status",
+				"Git: Status"
+			],
+			[
+				"Git Add",
+				"Git: Quick Add"
+			],
+			[
+				"Termian",
+				"Preferences: Terminal Settings – User"
+			],
+			[
+				"terminal",
+				"Terminality: Browse Commands..."
+			],
+			[
+				"",
+				"Package Control: Install Package"
+			],
+			[
+				"git log",
+				"Git: Log"
+			],
+			[
+				"git",
+				"Git: Quick Log"
+			],
+			[
+				"term",
+				"Preferences: Terminal Settings – Default"
+			],
+			[
+				"clip",
+				"Clipboard History"
+			],
+			[
+				"in",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			],
+			[
+				"Statu",
+				"Git: Status"
+			],
+			[
+				"Ctag",
+				"CTags: Rebuild Tags"
+			],
+			[
+				"Ctat",
+				"CTags: Rebuild Tags"
+			],
+			[
+				"Ct",
+				"CTags: Rebuild Tags"
+			],
+			[
+				"CTag",
+				"CTags: Rebuild Tags"
+			],
+			[
+				"gitDiff",
+				"Git: Diff Current File"
+			],
+			[
+				"CTags",
+				"CTags: Show Symbols (all)"
+			],
+			[
+				"C",
+				"CTags: Rebuild Tags"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			],
+			[
+				"gitgutter",
+				"GitGutter: Compare Against Commit"
+			],
+			[
+				"Gitgut",
+				"GitGutter: Compare Against Commit"
+			],
+			[
+				"gitgutt",
+				"GitGutter: Compare Against Commit"
+			],
+			[
+				"gitgu",
+				"GitGutter: Compare Against Branch"
+			],
+			[
+				"Gitgu",
+				"GitGutter: Compare Against Branch"
+			],
+			[
+				"inst	",
+				"Package Control: Install Package"
+			],
+			[
+				"In",
+				"Package Control: Install Package"
+			],
+			[
+				"pack",
+				"Package Control: Install Package"
+			],
+			[
+				"gitD",
+				"Git: Diff"
+			],
+			[
+				"Pack",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 383.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			" import urllib.request,os,hashlib; h = 'eb2297e1a458f27d836c04bb0cbaf282' + 'd0e7a3098092775ccb37ca9d6b2e4b7d'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by) "
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/audurier/Documents/Analysis",
+		"/Users/audurier/Documents/Analysis/LHC_15n_pp",
+		"/Users/audurier/Documents/Analysis/LHC_15n_pp/mergeQA"
+	],
+	"file_history":
+	[
+		"/Users/audurier/Documents/Analysis/LHC_15n_pp/runList.txt",
+		"/Users/audurier/Documents/Analysis/LHC_15n_pp/mergeQA/validation_merge.sh",
+		"/Users/audurier/Documents/Analysis/LHC_15n_pp/mergeQA/Submit.C",
+		"/Users/audurier/Documents/Analysis/LHC_15n_pp/mergeQA/SaveQA.C",
+		"/Users/audurier/Documents/Analysis/LHC_15n_pp/mergeQA/CopyFromRemote.sh",
+		"/Users/audurier/Documents/Analysis/LHC_15n_pp/mergeQA/CopyFromRemote.C",
+		"/Users/audurier/Documents/Analysis/LHC_15n_pp/mergeQA/AOD_merge.jdl",
+		"/Users/audurier/Documents/Analysis/LHC_15n_pp/mergeQA/AOD_merge.sh",
+		"/Users/audurier/Documents/Analysis/LHC_15n_pp/mergeQA/AOD_merge_final.jdl",
+		"/Users/audurier/Documents/Analysis/LHC_15n_pp/mergeQA/copyFiles.C",
+		"/Users/audurier/Documents/Analysis/LHC_15n_pp/mergeQA/AODtrain.C",
+		"/Users/audurier/Documents/Analysis/EventMixing/Task_EvtMix/RunALICE.C",
+		"/Users/audurier/alicesw/aliphysics/mumu/inst/include/AliMixInputEventHandler.h",
+		"/Users/audurier/Documents/Analysis/EventMixing/Task_EvtMix/AddMixingHandler.C",
+		"/Users/audurier/Documents/Analysis/EventMixing/Task_EvtMix/AddAnalysisTaskMixInfo.C",
+		"/Users/audurier/Documents/Analysis/EventMixing/Task_EvtMix/AddEventMixingTestTask.C",
+		"/Users/audurier/Documents/Analysis/EventMixing/Task_EvtMix/SetupAnalysisPlugin.C",
+		"/Users/audurier/alicesw/aliroot/v5-06-42-1/src/ANALYSIS/ANALYSIS/AliAnalysisManager.cxx",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/MuMuPar/runMuMu.C",
+		"/Users/audurier/alicesw/aliroot/v5-06-42-1/src/ANALYSIS/examples/EventMixing/RunALICE.C",
+		"/Users/audurier/alicesw/aliroot/v5-06-42-1/src/ANALYSIS/examples/EventMixing/AliAnalysisTaskEx02.h",
+		"/Users/audurier/alicesw/aliroot/v5-06-42-1/src/ANALYSIS/examples/EventMixing/AliAnalysisTaskEx02.cxx",
+		"/Users/audurier/alicesw/aliroot/v5-06-42-1/src/ANALYSIS/examples/EventMixing/AddMixingHandler.C",
+		"/Users/audurier/alicesw/aliroot/v5-06-42-1/src/ANALYSIS/examples/EventMixing/AddEventMixingTestTask.C",
+		"/Users/audurier/alicesw/aliroot/v5-06-42-1/src/ANALYSIS/examples/EventMixing/AddAnalysisTaskMixInfo.C",
+		"/Users/audurier/alicesw/aliroot/v5-06-42-1/src/ANALYSIS/examples/EventMixing/AddAMEventMixingTest.C",
+		"/Users/audurier/Documents/Analysis/EventMixing/Task_EvtMix/SetupMuonBasedTasks.C",
+		"/Users/audurier/Documents/Analysis/EventMixing/Task_EvtMix/runTaskUtilities.C",
+		"/Users/audurier/Documents/Analysis/EventMixing/Task_EvtMix/AddAMEventMixingTest.C",
+		"/Users/audurier/Documents/Analysis/EventMixing/Task_EvtMix/AliAnalysisTaskEx02.cxx",
+		"/Users/audurier/Documents/Analysis/EventMixing/Task_EvtMix/AliAnalysisTaskEx02.h",
+		"/Users/audurier/Documents/Analysis/EventMixing/Task_EvtMix/BuildMuonEventCuts.C",
+		"/Users/audurier/alicesw/aliphysics/mumu/src/PWG/muondep/AccEffTemplates/GenParamCustomSingle.C",
+		"/Users/audurier/alicesw/aliphysics/mumu/src/PWG/muon/AliAnalysisTaskMuMu.h",
+		"/Users/audurier/Documents/Analysis/LHC_15n_pp/MuMuPar/runMuMu.C",
+		"/Users/audurier/Documents/Analysis/LHC_15n_pp/MuMuPar/AddTaskMuMu.C",
+		"/Users/audurier/alicesw/aliphysics/mumu/inst/include/AliAnalysisTaskDimuonBackground.h",
+		"/Users/audurier/alicesw/aliphysics/mumu/inst/include/AliMixEventCutObj.h",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/AccEff_Muons/AddTaskGenTuner.C",
+		"/Users/audurier/Documents/Analysis/Dataset/datasetlight_saf_LHC15g_AOD_data.txt",
+		"/Users/audurier/Documents/Analysis/Dataset/datasetlight_saf_LHC15g_AOD_sim_singlemuon.txt",
+		"/Users/audurier/Documents/Analysis/Macro_Utile/alice-analysis-utils/runTaskUtilities.C",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/AccEff_Muons/runGenTuner.C",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/AccEff_Muons/dataset.txt",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/AccEff_Muons/dataoverMC.pdf",
+		"/Users/audurier/Documents/Analysis/My_First_Task/dataset.txt",
+		"/Users/audurier/alicesw/aliphysics/mumu/src/PWG/muon/AliAnalysisTaskMuMu.cxx",
+		"/Users/audurier/Documents/Analysis/EventMixing/MuMuEventMixing/AddTaskMuMu.C",
+		"/Users/audurier/Documents/Analysis/EventMixing/MuMuEventMixing/runMuMu.C",
+		"/Users/audurier/alicesw/aliroot/v5-06-42-1/src/ANALYSIS/ANALYSISaliceBase/AliMultiInputEventHandler.h",
+		"/Users/audurier/Documents/Analysis/EventMixing/Task_EvtMix/README",
+		"/Users/audurier/alicesw/aliroot/v5-06-42-1/src/ANALYSIS/examples/EventMixing/files.txt",
+		"/Users/audurier/alicesw/aliroot/v5-06-42-1/src/ANALYSIS/examples/EventMixing/SetupAnalysisPlugin.C",
+		"/Users/audurier/alicesw/aliroot/v5-06-42-1/src/ANALYSIS/examples/EventMixing/README",
+		"/Users/audurier/Documents/Analysis/EventMixing/Task_EvtMix/run.sh",
+		"/Users/audurier/Documents/Analysis/My_First_Task/runLocal.C",
+		"/Users/audurier/Documents/Analysis/My_First_Task/AliAnalysisTaskMass.h",
+		"/Users/audurier/Documents/Analysis/My_First_Task/AliAnalysisTaskMass.cxx",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/AccEff_jpsi/GenTuner/AliAnalysisTaskGenTunerJpsi.h",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/AccEff_jpsi/GenTuner/AliAnalysisTaskGenTunerJpsi.cxx",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/MuMuPar/Macro/mumu.ppb2013.config",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/AccEff_jpsi/DataPart/mumu.pp2015.config",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/MuMuPar/Macro/FitMacro.C",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/AccEff_jpsi/DataPart/FitData.C",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/AccEff_jpsi/DataPart/runMuMu.C",
+		"/Users/audurier/alicesw/aliphysics/mumu/src/PWG/muon/AliAnalysisMuMuBinning.cxx",
+		"/Users/audurier/alicesw/aliphysics/mumu/src/PWG/muon/AliAnalysisMuMuMinv.cxx",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/AccEff_jpsi/DataPart/AddTaskMuMu.C",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/AccEff_jpsi/DataPart/runTaskUtilities.C",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/AccEff_jpsi/GenTuner/AddTaskGenTuner.C",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/AccEff_jpsi/GenTuner/runGenTuner.C",
+		"/Users/audurier/Documents/Analysis/My_First_Task/FittingFunctions.C",
+		"/Users/audurier/alicesw/aliphysics/mumu/src/PWGPP/MUON/dep/MuonTrackingEfficiency.C",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/MuMuPar/Macro/PrintFitMacro.C",
+		"/Users/audurier/alicesw/aliphysics/mumu/src/PWG/muondep/AliAnalysisMuMu.cxx",
+		"/Users/audurier/alicesw/aliphysics/mumu/src/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx",
+		"/Users/audurier/alicesw/aliphysics/mumu/src/PWG/muondep/AliAnalysisMuMuConfig.h",
+		"/Users/audurier/alicesw/aliphysics/mumu/src/PWG/muondep/AliAnalysisMuMuConfig.cxx",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/MuMuPar/AddTaskMuMu.C",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/AccEff_Muons/AliAnalysisTaskGenTunerLocal.h",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/AccEff_Muons/AliAnalysisTaskGenTunerLocal.cxx",
+		"/Users/audurier/Documents/Analysis/EventMixing/MuMuEventMixing/runTaskUtilities.C",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/AccEff_Muons/runGenTunerLoop.C",
+		"/Users/audurier/Documents/Analysis/runTaskUtilities.C",
+		"/Users/audurier/Documents/Analysis/Macro_Utile/runMuMu.C",
+		"/Users/audurier/Documents/Analysis/LHC_13_d/AccEff/GenTuner/runGenTuner.C",
+		"/Users/audurier/Documents/Analysis/Macro_Utile/runTaskFacilities.C",
+		"/Users/audurier/Documents/Analysis/Macro_Utile/runTaskUtilities.C",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/MuMuPar/Macro/FitMacro",
+		"/Users/audurier/.bash_profile",
+		"/Users/audurier/.bash_pr",
+		"/Users/audurier/Documents/Analysis/Macro_Utile/AddTaskMuMu.C",
+		"/Users/audurier/alicesw/aliphysics/mumu/src/PWG/muon/AliAnalysisMuMuBase.cxx",
+		"/Users/audurier/Documents/Analysis/EventMixing/Task_EvtMix/runbyrun.sh",
+		"/Users/audurier/alicesw/aliphysics/mumu/inst/include/AliMixEventPool.h",
+		"/Users/audurier/Documents/Analysis/Test1_PbPb2011/TestMixedEvent/AddTaskMuMu.C",
+		"/Users/audurier/Documents/Analysis/Test1_PbPb2011/TestMixedEvent/runMuMu.C",
+		"/Users/audurier/Library/Application Support/Sublime Text 3/Packages/User/Side Bar.sublime-settings",
+		"/Users/audurier/Library/Application Support/Sublime Text 3/Packages/User/Default (OSX).sublime-keymap",
+		"/Users/audurier/Library/Application Support/Sublime Text 3/Packages/Highlight/README.md",
+		"/Users/audurier/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/Users/audurier/Library/Application Support/Sublime Text 3/Packages/SideBarEnhancements/Side Bar.sublime-settings",
+		"/Users/audurier/Library/Application Support/Sublime Text 3/Packages/User/Git.sublime-settings",
+		"/Users/audurier/Library/Application Support/Sublime Text 3/Packages/Git/Git.sublime-settings",
+		"/Users/audurier/Library/Application Support/Sublime Text 3/Packages/GitGutter/GitGutter.sublime-settings",
+		"/Users/audurier/Library/Application Support/Sublime Text 3/Packages/User/CTags.sublime-settings",
+		"/Users/audurier/Library/Application Support/Sublime Text 3/Packages/CTags/CTags.sublime-settings",
+		"/Users/audurier/Library/Application Support/Sublime Text 3/Packages/User/bh_core.sublime-settings",
+		"/Users/audurier/Library/Application Support/Sublime Text 3/Packages/BracketHighlighter/bh_core.sublime-settings",
+		"/Users/audurier/alicesw/aliroot/mumu/src/ANALYSIS/ANALYSISalice/AliMultiInputEventHandler.h",
+		"/Users/audurier/alicesw/aliroot/mumu/src/MUON/Doxymodules_STEER.h",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/TrackingEfficiency/MonteCarlo/CopyFromRemote.C",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/TrackingEfficiency/MonteCarlo/AddTaskMUONTrackingEfficiency.C",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/TrackingEfficiency/MonteCarlo/runMuonEfficiency.C",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/TrackingEfficiency/MonteCarlo/grid.esd.txt",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/TrackingEfficiency/MonteCarlo/MuonTrackingEfficiency.C",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/TrackingEfficiency/MonteCarlo/MakeRunList.sh",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/TrackingEfficiency/Data/CopyFromRemote.C",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/TrackingEfficiency/Data/MakeRunList.sh",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/TrackingEfficiency/Data/grid.esd.txt",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/TrackingEfficiency/Data/MuonTrackingEfficiency.C",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/TrackingEfficiency/Data/runMuonEfficiency.C",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/TrackingEfficiency/Data/runlist_15-07-2015-ESD.txt",
+		"/Users/audurier/Documents/Analysis/LHC_15g_pp/TrackingEfficiency/MonteCarlo/Eff_validation_merge.sh",
+		"/Users/audurier/alicesw/aliroot/mumu/src/ANALYSIS/ANALYSIS/AliAnalysisManager.h",
+		"/Users/audurier/alicesw/aliroot/mumu/src/ANALYSIS/ANALYSISalice/AliAnalysisTaskME.cxx",
+		"/Users/audurier/alicesw/aliroot/mumu/src/ANALYSIS/ANALYSIS/AliAnalysisManager.cxx",
+		"/Users/audurier/alicesw/aliroot/mumu/src/ANALYSIS/examples/EventMixing/RunALICE.C"
+	],
+	"find":
+	{
+		"height": 22.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"LHC15g/TrackingEfficiency",
+			"LHC_15g_pp",
+			"LHC15g/TrackingEfficiency/Data/QA/New/",
+			"/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/QA/New/",
+			"nSkip",
+			"nEvents",
+			"inputOptions",
+			"inputName",
+			"analysisMode",
+			"runMode",
+			"anSrc",
+			"AliMultiInputEventHandler",
+			"double",
+			"int",
+			"2D",
+			"yvspt",
+			"\"yvspt\"",
+			"yvspt",
+			"#Centrality",
+			"Centrality",
+			"IsMC",
+			"overwrite",
+			"CMSL7",
+			"rsync",
+			"exclude",
+			"isMC",
+			"exclude",
+			"-exclude",
+			"--exclude",
+			"pod",
+			"IsPod",
+			"Is",
+			"IsPod",
+			"v0M",
+			"\");",
+			"AddMixingHandler",
+			"AddMix",
+			"AliMultiInputEventHandler",
+			"multiInputHandler",
+			"   ",
+			"AliVEventPool",
+			"fEventPool",
+			"DefineHistogramCollection",
+			"Create",
+			"->Data()",
+			"\"UNLIKE_Eta\"",
+			"\"UNLIKE_Y\"",
+			"UNLIKE_Pt",
+			"minvName1",
+			"minvName",
+			"sPaireCharge",
+			"char*",
+			"Char",
+			"char",
+			"sPaireCharge",
+			"PairCharge",
+			"sPaireCharge",
+			"LIKEMINUS",
+			"LIKEPLUS",
+			"UNLIKE",
+			"PlotIntegratedMuonEfficiencyVsX",
+			"runs/%d/",
+			"runs/%d",
+			"GetChamberEfficiency",
+			"effErrMode",
+			"TArrayD",
+			"GetChamberEfficiency",
+			"AliAnalysisMuMuMixEvt",
+			"TGraphAsymmErrors",
+			"Form(\"runs/%d/%s\"",
+			"runs",
+			"PlotIntegratedMuonEfficiencyVsX",
+			"AliAnalysisMuMuMixEvt",
+			"ALIANALYSISMUMUMIXEVT_H",
+			"AliAnalysisMuMuMixEvt",
+			"PlotMuonEfficiencyVsRun",
+			"Form(\"runs/%d/%s",
+			"(\"%",
+			"Form(\"runs/%d/%s\", run,",
+			"runs",
+			"analysis",
+			"fsystLevel",
+			"AliMixInputEventHandler",
+			"pairCutName",
+			"WeightDistribution",
+			"+",
+			"fCountInBins",
+			"kTRUE",
+			"\n",
+			"228855",
+			"2",
+			"228855",
+			"GetDataType",
+			"UserExecMix",
+			"FIll",
+			"pair4MomentumMC",
+			"distribution",
+			"fAccEffHisto",
+			"AliAnalysisMuMuMinv",
+			"ALIANALYSISMUMUMINV_H",
+			"AliAnalysisMuMuMinv",
+			"*\n",
+			"//",
+			"*",
+			"/**",
+			"NofJpsi",
+			"First",
+			"GetSpectra",
+			"CorrectSpectra",
+			"HasMC",
+			"fAccEffHisto",
+			"WeightDistribution",
+			"result",
+			"asbin",
+			"AsBin",
+			"sWHAT",
+			"sbinType",
+			"whatArray",
+			"fsystLevel",
+			"1.0",
+			"\");\n",
+			"1.0",
+			"bkgrd",
+			"cb",
+			"CLone",
+			"->",
+			"TString",
+			"SData"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": true,
+		"replace_history":
+		[
+			"numArray",
+			"num[3]",
+			"num[0]",
+			"num[6]",
+			"num[7]",
+			"num[è]",
+			"num[5]",
+			"num[2]",
+			"num[1]",
+			"num[0]",
+			"num[4]"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 10,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "AOD_merge.jdl",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1248,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content"
+							],
+							"git_savvy.file_path": "/Users/audurier/Documents/Analysis/LHC_15n_pp/mergeQA/AOD_merge.jdl",
+							"git_savvy.repo_path": "/Users/audurier/Documents/Analysis",
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 10,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "AOD_merge.sh",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 818,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content"
+							],
+							"git_savvy.file_path": "/Users/audurier/Documents/Analysis/LHC_15n_pp/mergeQA/AOD_merge.sh",
+							"git_savvy.repo_path": "/Users/audurier/Documents/Analysis",
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "AOD_merge_final.jdl",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1010,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content"
+							],
+							"git_savvy.file_path": "/Users/audurier/Documents/Analysis/LHC_15n_pp/mergeQA/AOD_merge_final.jdl",
+							"git_savvy.repo_path": "/Users/audurier/Documents/Analysis",
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "AODtrain.C",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 11958,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content"
+							],
+							"git_savvy.file_path": "/Users/audurier/Documents/Analysis/LHC_15n_pp/mergeQA/AODtrain.C",
+							"git_savvy.repo_path": "/Users/audurier/Documents/Analysis",
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "copyFiles.C",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2293,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content"
+							],
+							"git_savvy.file_path": "/Users/audurier/Documents/Analysis/LHC_15n_pp/mergeQA/copyFiles.C",
+							"git_savvy.repo_path": "/Users/audurier/Documents/Analysis",
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "CopyFromRemote.C",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1447,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content"
+							],
+							"git_savvy.file_path": "/Users/audurier/Documents/Analysis/LHC_15n_pp/mergeQA/CopyFromRemote.C",
+							"git_savvy.repo_path": "/Users/audurier/Documents/Analysis",
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "CopyFromRemote.sh",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 388,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content"
+							],
+							"git_savvy.file_path": "/Users/audurier/Documents/Analysis/LHC_15n_pp/mergeQA/CopyFromRemote.sh",
+							"git_savvy.repo_path": "/Users/audurier/Documents/Analysis",
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "grid.QA.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4028,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content"
+							],
+							"git_savvy.file_path": "/Users/audurier/Documents/Analysis/LHC_15n_pp/mergeQA/grid.QA.txt",
+							"git_savvy.repo_path": "/Users/audurier/Documents/Analysis",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "SaveQA.C",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9487,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content"
+							],
+							"git_savvy.file_path": "/Users/audurier/Documents/Analysis/LHC_15n_pp/mergeQA/SaveQA.C",
+							"git_savvy.repo_path": "/Users/audurier/Documents/Analysis",
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "Submit.C",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8187,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content"
+							],
+							"git_savvy.file_path": "/Users/audurier/Documents/Analysis/LHC_15n_pp/mergeQA/Submit.C",
+							"git_savvy.repo_path": "/Users/audurier/Documents/Analysis",
+							"syntax": "Packages/C++/C++.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "validation_merge.sh",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2892,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content"
+							],
+							"git_savvy.file_path": "/Users/audurier/Documents/Analysis/LHC_15n_pp/mergeQA/validation_merge.sh",
+							"git_savvy.repo_path": "/Users/audurier/Documents/Analysis",
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.tmLanguage",
+							"tab_size": 3,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 22.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 300.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.git":
+	{
+		"height": 329.0
+	},
+	"output.git-checkout":
+	{
+		"height": 94.0
+	},
+	"output.git-commit":
+	{
+		"height": 100.0
+	},
+	"output.git-merge":
+	{
+		"height": 94.0
+	},
+	"pinned_build_system": "Packages/User/alice-xcode-build-aliphysics.sublime-build",
+	"project": "/Users/audurier/Documents/Sublime_Project/mumu.sublime-project",
+	"replace":
+	{
+		"height": 40.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"utiliti",
+				"Analysis/Macro_Utile/alice-analysis-utils/runTaskUtilities.C"
+			],
+			[
+				"alimixinputevent",
+				"include/AliMixInputEventHandler.h"
+			],
+			[
+				"alianalysismanager",
+				"ANALYSIS/ANALYSIS/AliAnalysisManager.cxx"
+			],
+			[
+				"utilit",
+				"Analysis/Macro_Utile/alice-analysis-utils/runTaskUtilities.C"
+			],
+			[
+				"runmumu",
+				"Analysis/LHC_15g_pp/MuMuPar/runMuMu.C"
+			],
+			[
+				"alimultiinputeventhandler",
+				"ANALYSIS/ANALYSISaliceBase/AliMultiInputEventHandler.h"
+			],
+			[
+				"genparamcustomsingle",
+				"muondep/AccEffTemplates/GenParamCustomSingle.C"
+			],
+			[
+				"taskui",
+				"Analysis/Macro_Utile/alice-analysis-utils/runTaskUtilities.C"
+			],
+			[
+				"data",
+				"Analysis/My_First_Task/dataset.txt"
+			],
+			[
+				"addameventmixingtest",
+				"Analysis/EventMixing/Task_EvtMix/AddAMEventMixingTest.C"
+			],
+			[
+				"taskmumu",
+				"muon/AliAnalysisTaskMuMu.h"
+			],
+			[
+				"rungen",
+				"Analysis/LHC_15g_pp/AccEff_Muons/runGenTuner.C"
+			],
+			[
+				"muon",
+				"dep/MuonTrackingEfficiency.C"
+			],
+			[
+				"fitmac",
+				"Analysis/LHC_15g_pp/MuMuPar/Macro/FitMacro.C"
+			],
+			[
+				"mumu.",
+				"Analysis/LHC_15g_pp/MuMuPar/Macro/mumu.ppb2013.config"
+			],
+			[
+				"mumu.pp",
+				"Analysis/LHC_15g_pp/AccEff_jpsi/DataPart/mumu.pp2015.config"
+			],
+			[
+				"fitdata",
+				"Analysis/LHC_15g_pp/AccEff_jpsi/DataPart/FitData.C"
+			],
+			[
+				"printfitmac",
+				"Analysis/LHC_15g_pp/MuMuPar/Macro/PrintFitMacro.C"
+			],
+			[
+				"fitmacro",
+				"Analysis/LHC_15g_pp/MuMuPar/Macro/FitMacro.C"
+			],
+			[
+				"config",
+				"Analysis/LHC_15g_pp/MuMuPar/Macro/mumu.ppb2013.config"
+			],
+			[
+				"fitma",
+				"Analysis/LHC_15g_pp/MuMuPar/Macro/FitMacro.C"
+			],
+			[
+				"mumuminv",
+				"muon/AliAnalysisMuMuMinv.cxx"
+			],
+			[
+				"analysismumu",
+				"muondep/AliAnalysisMuMu.cxx"
+			],
+			[
+				"minv",
+				"muon/AliAnalysisMuMuMinv.cxx"
+			],
+			[
+				"alianalysismumu",
+				"muondep/AliAnalysisMuMu.cxx"
+			],
+			[
+				"printfit",
+				"Analysis/LHC_15g_pp/MuMuPar/Macro/PrintFitMacro.C"
+			],
+			[
+				"mumucofig",
+				"muondep/AliAnalysisMuMuConfig.h"
+			],
+			[
+				"addtaskmumu",
+				"Analysis/LHC_15g_pp/MuMuPar/AddTaskMuMu.C"
+			],
+			[
+				"rungentu",
+				"Analysis/LHC_15g_pp/AccEff_Muons/runGenTuner.C"
+			],
+			[
+				"utilities",
+				"Analysis/Macro_Utile/alice-analysis-utils/runTaskUtilities.C"
+			],
+			[
+				"rungentuner",
+				"Analysis/LHC_13_d/AccEff/GenTuner/runGenTuner.C"
+			],
+			[
+				"rungent",
+				"Analysis/LHC_15g_pp/AccEff_Muons/runGenTunerLoop.C"
+			],
+			[
+				"rungentun",
+				"Analysis/LHC_15g_pp/AccEff_Muons/runGenTuner.C"
+			],
+			[
+				"mumumin",
+				"muon/AliAnalysisMuMuMinv.cxx"
+			],
+			[
+				"mixevent",
+				"STEER/STEERBase/AliMixedEvent.cxx"
+			],
+			[
+				"alieventpoo",
+				"muon/AliEventPoolMuon.cxx"
+			],
+			[
+				"eventpool",
+				"muon/AliEventPoolMuon.h"
+			],
+			[
+				"alianalysistaskme",
+				"ANALYSIS/ANALYSISalice/AliAnalysisTaskME.cxx"
+			],
+			[
+				"manager",
+				"ANALYSIS/ANALYSIS/AliAnalysisManager.cxx"
+			],
+			[
+				"mixe",
+				"Analysis/MixingEventTask/AliAnalysisMuMuMixEvt.cxx"
+			],
+			[
+				"taskmix",
+				"muon/AliAnalysisTaskMixEvt.cxx"
+			],
+			[
+				"muontracking",
+				"dep/MuonTrackingEfficiency.C"
+			],
+			[
+				"muonlink",
+				"muon/PWGmuonLinkDef.h"
+			],
+			[
+				"cmake",
+				"muon/CMakeLists.txt"
+			],
+			[
+				"mumubase",
+				"muon/AliAnalysisMuMuBase.cxx"
+			],
+			[
+				"pwg",
+				"muon/PWGmuonLinkDef.h"
+			],
+			[
+				"efficiency",
+				"dep/MuonTrackingEfficiency.C"
+			],
+			[
+				"alianalysismuonutility",
+				"muon/AliAnalysisMuonUtility.cxx"
+			],
+			[
+				"mumuinv",
+				"muon/AliAnalysisMuMuMinv.cxx"
+			],
+			[
+				"alianalysistaskmumu",
+				"muon/AliAnalysisTaskMuMu.cxx"
+			],
+			[
+				"mumuspectra",
+				"muondep/AliAnalysisMuMuSpectra.h"
+			],
+			[
+				"spectra",
+				"muondep/AliAnalysisMuMuSpectra.h"
+			],
+			[
+				"mumuconfig",
+				"muondep/AliAnalysisMuMuConfig.cxx"
+			],
+			[
+				"caps",
+				"muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx"
+			],
+			[
+				"jpsires",
+				"muondep/AliAnalysisMuMuJpsiResult.cxx"
+			],
+			[
+				"mumucon",
+				"muondep/AliAnalysisMuMuConfig.cxx"
+			],
+			[
+				"alianalysismumuspectra",
+				"muondep/AliAnalysisMuMuSpectra.h"
+			],
+			[
+				"capsul",
+				"muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx"
+			],
+			[
+				"addtask",
+				"muon/AddTaskMuMu.C"
+			],
+			[
+				"configfil",
+				"Test1_PbPb2011/Macro/configfile.txt"
+			],
+			[
+				"jpsi",
+				"muondep/AliAnalysisMuMuJpsiResult.cxx"
+			],
+			[
+				"add",
+				"Test1_PbPb2011/AddTaskMuMu.C"
+			],
+			[
+				"run",
+				"Test1_PbPb2011/runMuMu.C"
+			],
+			[
+				"mymacro",
+				"Test1_PbPb2011/MyMacro.C"
+			],
+			[
+				"alivparticle",
+				"STEER/STEERBase/AliVParticle.cxx"
+			],
+			[
+				"alivpa",
+				"STEER/STEERBase/AliVParticle.h"
+			],
+			[
+				"jspiresult",
+				"muondep/AliAnalysisMuMuJpsiResult.h"
+			],
+			[
+				"capsule",
+				"muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx"
+			],
+			[
+				"mumusep",
+				"muondep/AliAnalysisMuMuSpectra.h"
+			],
+			[
+				"addtasmumu",
+				"Test1_PbPb2011/AddTaskMuMu.C"
+			],
+			[
+				"exterf",
+				"Test1_PbPb2011/externFile_CENT.txt"
+			],
+			[
+				"con",
+				"Test1_PbPb2011/configfile.txt"
+			],
+			[
+				"myma",
+				"Test1_PbPb2011/MyMacro.C"
+			],
+			[
+				"mym",
+				"Test1_PbPb2011/MyMacro.C"
+			],
+			[
+				"alimergeabl",
+				"STEER/STEERBase/AliMergeableCollection.cxx"
+			],
+			[
+				"alimergea",
+				"STEER/STEERBase/AliMergeableCollection.h"
+			],
+			[
+				"confi",
+				"Test1_PbPb2011/configfile.txt"
+			],
+			[
+				"mergeable",
+				"STEER/STEERBase/AliMergeableCollection.h"
+			],
+			[
+				"histocll",
+				"muon/AliHistogramCollection.h"
+			],
+			[
+				"mumucongi",
+				"muondep/AliAnalysisMuMuConfig.cxx"
+			],
+			[
+				"analysismu",
+				"muondep/AliAnalysisMuMu.h"
+			],
+			[
+				"alianalysmu",
+				"ANALYSIS/ANALYSISalice/AliMultiInputEventHandler.h"
+			],
+			[
+				"mumu",
+				"PWG/muondep/AliAnalysisMuMu.cxx"
+			],
+			[
+				"extern",
+				"Analysis/Test1_PbPb2011/externFile_Y.txt"
+			],
+			[
+				"exter",
+				"Analysis/Test1_PbPb2011/externFile_PT.txt"
+			],
+			[
+				"sigma",
+				"Analysis/Test1_PbPb2011/sigma_pp_Y.txt"
+			],
+			[
+				"mumuresult",
+				"PWG/muondep/AliAnalysisMuMuResult.h"
+			],
+			[
+				"mumuresu",
+				"Analysis/Test1_PbPb2011/runMuMuResult.sh"
+			],
+			[
+				"binning",
+				"PWG/muon/AliAnalysisMuMuBinning.h"
+			],
+			[
+				"sigm",
+				"Analysis/Test1_PbPb2011/sigma_pp_PT.txt"
+			],
+			[
+				"jpsispec",
+				"PWG/muondep/AliAnalysisMuMuJpsiSpectra.cxx"
+			],
+			[
+				"mymacr",
+				"Analysis/Test1_PbPb2011/MyMacro.C"
+			],
+			[
+				"runmu",
+				"Analysis/Test1_PbPb2011/runMuMu.C"
+			],
+			[
+				"addtaskmu",
+				"PWG/muon/AddTaskMuMu.C"
+			],
+			[
+				"addmumu",
+				"Analysis/Test1_PbPb2011/AddTaskMuMu.C"
+			],
+			[
+				"jpsire",
+				"PWG/muondep/AliAnalysisMuMuJpsiResult.cxx"
+			],
+			[
+				"mumuspec",
+				"PWG/muondep/AliAnalysisMuMuSpectra.cxx"
+			],
+			[
+				"mumuspect",
+				"PWG/muondep/AliAnalysisMuMuSpectra.h"
+			],
+			[
+				"congi",
+				"Analysis/Test1_PbPb2011/configfile.txt"
+			],
+			[
+				"mymac",
+				"Analysis/Test1_PbPb2011/MyMacro.C"
+			],
+			[
+				"outp",
+				"Analysis/Test1_PbPb2011/runMuMuResultsOutputs.txt"
+			],
+			[
+				"jpsispr",
+				"PWG/muondep/AliAnalysisMuMuJpsiSpectra.cxx"
+			],
+			[
+				"spectr",
+				"PWG/muondep/AliAnalysisMuMuSpectra.cxx"
+			],
+			[
+				"mumusp",
+				"PWG/muondep/AliAnalysisMuMuSpectra.h"
+			],
+			[
+				"mumures",
+				"PWG/muondep/AliAnalysisMuMuResult.h"
+			],
+			[
+				"jpsir",
+				"PWG/muondep/AliAnalysisMuMuJpsiResult.h"
+			],
+			[
+				"run.sh",
+				"Analysis/Test1_PbPb2011/runMuMuResult.sh"
+			],
+			[
+				"evencute",
+				"PWG/muon/AliAnalysisMuMuEventCutter.h"
+			],
+			[
+				"alicen",
+				"STEER/STEERBase/AliCentrality.h"
+			],
+			[
+				"aliaodevent",
+				"STEER/AOD/AliAODEvent.h"
+			],
+			[
+				"jpsiresu",
+				"PWG/muondep/AliAnalysisMuMuJpsiResult.h"
+			],
+			[
+				"sig",
+				"Analysis/Test1_PbPb2011/sigma_pp_Y.txt"
+			],
+			[
+				"taa",
+				"Analysis/Test1_PbPb2011/TAA_for_Centrality.txt"
+			],
+			[
+				"sip",
+				"Analysis/Test1_PbPb2011/sigma_pp_PT.txt"
+			],
+			[
+				"",
+				"PWG/muondep/AliAnalysisMuMuResult.h"
+			],
+			[
+				"mumujpsi",
+				"PWG/muondep/AliAnalysisMuMuJpsiResult.cxx"
+			],
+			[
+				"mumure",
+				"PWG/muondep/AliAnalysisMuMuResult.h"
+			],
+			[
+				"mumubinn",
+				"PWG/muon/AliAnalysisMuMuBinning.h"
+			],
+			[
+				"mumur",
+				"Analysis/Test1_PbPb2011/runMuMuResult.sh"
+			],
+			[
+				"mumuj",
+				"PWG/muondep/AliAnalysisMuMuJpsiResult.cxx"
+			],
+			[
+				"counter",
+				"STEER/STEERBase/AliCounterCollection.h"
+			],
+			[
+				"fnom",
+				"PWG/muondep/AliAnalysisMuMuFnorm.h"
+			],
+			[
+				"alianalysismumuresult",
+				"PWG/muondep/AliAnalysisMuMuResult.h"
+			],
+			[
+				"mumuconfi",
+				"PWG/muondep/AliAnalysisMuMuConfig.cxx"
+			],
+			[
+				"sigma_pp",
+				"Analysis/Test1_PbPb2011/sigma_pp_PT.txt"
+			],
+			[
+				"addtas",
+				"Analysis/Test1_PbPb2011/AddTaskMuMu.C"
+			],
+			[
+				"counterco",
+				"STEER/STEERBase/AliCounterCollection.h"
+			],
+			[
+				"mumucong",
+				"PWG/muondep/AliAnalysisMuMuConfig.cxx"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": false,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 313.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+		"max_columns": 2
+	}
+}

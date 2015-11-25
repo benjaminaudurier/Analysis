@@ -1,97 +1,110 @@
-#ifndef __CINT__
-#include <TSystem.h>
-#include <TROOT.h>
-#include <Rtypes.h>
-#include <TString.h>
-#include <TNamed.h>
-#include <TObjArray.h>
-#include <TObjString.h>
-#include <TList.h>
-#include <ANALYSIS/AliAnalysisManager.h>
-#include <ANALYSIS/AliMultiInputEventHandler.h>
-#include <STEER/AOD/AliAODHandler.h>
-#include <TStopwatch.h>
-#endif
-
-Bool_t RunALICE(TString anSrc = "grid",
-                TString anMode = "terminate",
-                TString input="aod" /*or "esd"*/,
-                TString inputMC="" /*or "mc"*/,
+Bool_t RunALICE(TString runMode, 
+                TString analysisMode,
+                TString inputName       = "Find;BasePath=/alice/data/2015/LHC15g/000228936/muon_calo_pass1/AOD/*;FileName=AliAOD.Muons.root;Mode=cache;",
+                TString inputOptions    = "",
+                TString analysisOptions = "MIXED",
+                TString softVersions    = "aliphysics=vAN-20151115-1",
+                TString taskOptions     = "",
                 Long64_t nEvents = 1e10,
                 Long64_t nSkip = 0,
-                TString alirsnliteManagers ="",
-                TString alirsnlitesrc ="$ALICE_ROOT",
-                TString alirsnlitetasks ="",
+                TString dsName="",
+                TString alirsnliteManagers ="AddAMEventMixingTest",
                 Bool_t useMultiHandler=kTRUE,
-                TString dsName="") {
+                TString alirsnlitesrc ="$ALICE_ROOT",
+                TString alirsnlitetasks =""
+                ) 
+{
 
-   Printf("Working directory is %s ...", gSystem->WorkingDirectory());
-
-   // some init work
-   anSrc.ToLower(); anMode.ToLower(); input.ToLower(); inputMC.ToLower();
-
-   // loads libs and setup include paths
-   if (LoadLibsBase(alirsnlitesrc)) return kFALSE;
-
-   // reset manager if already exists
-   AliAnalysisManager *mgr = AliAnalysisManager::GetAnalysisManager();
-   if (mgr) delete mgr;
-   mgr = new AliAnalysisManager("AliRsnLiteAM","AliRsnLite Analysis Manager");
+   // path for macro usefull for saf3
+   gROOT->LoadMacro(gSystem->ExpandPathName("$TASKDIR/runTaskUtilities.C"));
 
    Bool_t useAODOut = kFALSE;
-   CreateInputHandlers(input,inputMC,useAODOut,useMultiHandler);
+   // CreateInputHandlers(input,inputMC,useAODOut,useMultiHandler);
 
-   // add default grid handler
-   gROOT->LoadMacro("SetupAnalysisPlugin.C");
-   AliAnalysisGrid *analysisPlugin = SetupAnalysisPlugin(anMode.Data());
-   if (!analysisPlugin) { Printf("Error : analysisPlugin is null !!!"); return kFALSE; }
-   mgr->SetGridHandler(analysisPlugin);
-   if (!dsName.IsNull()) {
-      if (!anSrc.CompareTo("proof") && !anMode.CompareTo("full")) {
-         analysisPlugin->SetProofDataSet(dsName.Data());
-         Printf(Form("Using DataSet %s ...",dsName.Data()));
-      } else {
-         analysisPlugin->SetFileForTestMode(dsName.Data());
-         Printf(Form("Using Test file %s ...",dsName.Data()));
-      }
-   }
+   // Macro to connect to proof. First argument useless for saf3
+   SetupAnalysis(runMode,analysisMode,inputName,inputOptions,softVersions,analysisOptions, "libPWGmuon.so AliAnalysisTaskEx02.cxx","$ALICE_ROOT/include $ALICE_PHYSICS/include");
+   
+   //Flag for MC
+   Bool_t isMC = IsMC(inputOptions);
 
-   TList *listManagers = CreateListOfManagersFromDir(alirsnliteManagers,alirsnlitetasks);
-   if (!listManagers) { Printf("Error : CreateListOfManagersFromDir failed !!!"); return kFALSE;}
+   Bool_t isAOD = IsAOD(inputName,inputOptions);
+   Bool_t isESD = IsESD(inputName,inputOptions);
+   TString dataType;
+   if(isAOD)dataType="aod";
+   if(isESD)dataType="esd";
 
-   // adds all tasks
-   if (!AddAllManagers(listManagers, anSrc, anMode,input,inputMC)) { Printf("Error : AddAllManagers failed !!!"); return kFALSE;}
+   // See inside
+   gROOT->LoadMacro("AddAMEventMixingTest.C");
+   AddAMEventMixingTest(runMode,analysisMode,dataType,isMC,"","");
+
+
+   // TList *listManagers = CreateListOfManagersFromDir(alirsnliteManagers,alirsnlitetasks);
+   // if (!listManagers) { Printf("Error : CreateListOfManagersFromDir failed !!!"); return kFALSE;}
+
+   // adds all tasks (useless due to Diego's launcher)
+   // if (!AddAllManagers(listManagers, anSrc, anMode,input,inputMC)) { Printf("Error : AddAllManagers failed !!!"); return kFALSE;}
 
    TStopwatch timer;
    timer.Start();
-   // runs analysis
-   if (!RunAnalysisManager(anSrc, anMode.Data(), nEvents, nSkip)) { Printf("Error : RunAnalysisManager failed !!!"); return kFALSE;}
+
+   // runs analysis  (useless due to tiedgo's launcher)
+   if (!RunAnalysisManager(runMode, analysisMode,inputName, nEvents, nSkip)) { Printf("Error : RunAnalysisManager failed !!!"); return kFALSE;}
+   
+
+   // // Start analysis
+   // //==============================================================================
+   // StartAnalysis(runMode,analysisMode,inputName,inputOptions);
 
    timer.Stop();
    timer.Print();
+   Printf("Working directory is %s ...", gSystem->WorkingDirectory());
    Printf("Done OK");
    return kTRUE;
 
 }
 
-Int_t LoadLibsBase(TString alirsnlitesrc) {
-   Int_t num = 0;
-   if (gSystem->Load("libTree.so") < 0) {num++; return num;}
-   if (gSystem->Load("libGeom.so") < 0) {num++; return num;}
-   if (gSystem->Load("libVMC.so") < 0) {num++; return num;}
-   if (gSystem->Load("libMinuit.so") < 0) {num++; return num;}
-   if (gSystem->Load("libPhysics.so") < 0) {num++; return num;}
-   if (gSystem->Load("libSTEERBase.so") < 0) {num++; return num;}
-   if (gSystem->Load("libESD.so") < 0) {num++; return num;}
-   if (gSystem->Load("libAOD.so") < 0) {num++; return num;}
-   if (gSystem->Load("libANALYSIS.so") < 0) {num++; return num;}
-   if (gSystem->Load("libOADB.so") < 0) {num++; return num;}
-   if (gSystem->Load("libANALYSISalice.so") < 0) {num++; return num;}
+//______________________________________________________________________
+Bool_t RunAnalysisManager( TString rMode, TString aMode, TString input, TString Opt  Long64_t nEvts = 1e10, Long64_t nSkp = 0)
+{
+  //
+  // Run the analysis
+  //
 
-   gSystem->AddIncludePath(Form("-I\"%s/include\"", gSystem->ExpandPathName(alirsnlitesrc.Data())));
-   gROOT->ProcessLine(Form(".include %s/include", gSystem->ExpandPathName(alirsnlitesrc.Data())));
+  if ( IsPod(aMode) && ! IsPodMachine(aMode) ) {
+    GetPodOutput(aMode);
+    rMode = "terminate";
+  }
+  TString sMode = GetMode(rMode,aMode);
+
+  if ( sMode.IsNull() ) return;
+
+  AliAnalysisManager* mgr = AliAnalysisManager::GetAnalysisManager();
+  if ( ! mgr->InitAnalysis()) {
+    printf("Fatal: Cannot initialize analysis\n");
+    return;
+  }
+  mgr->PrintStatus();
+
+  if ( sMode == "terminateonly" && gSystem->AccessPathName(mgr->GetCommonFileName())) {
+    printf("Cannot find %s : noting done\n",mgr->GetCommonFileName());
+    return;
+  }
+
+  TObject* inputObj = CreateInputObject(rMode,aMode,input,Opt);
+
+  TString mgrMode =( sMode == "terminateonly" ) ? "grid terminate" : sMode.Data();
+
+
+   if ((!aMode.CompareTo("proof")) || (!aMode.CompareTo("local"))) {
+      mgr->StartAnalysis(aMode.Data(), nEvts, nSkp);
+   } else {
+      mgr->StartAnalysis(aMode.Data());
+   }
+
+   return kTRUE;
 }
 
+//______________________________________________________________________
 Bool_t CreateInputHandlers(TString input,TString inputMC,Bool_t useAODOut=kFALSE,Bool_t useMultiHandler=kTRUE) {
 
    Bool_t useMC = !inputMC.CompareTo("mc");
@@ -116,7 +129,6 @@ Bool_t CreateInputHandlers(TString input,TString inputMC,Bool_t useAODOut=kFALSE
       } else if (!input.CompareTo("aod")) {
          mgr->SetInputEventHandler(new AliAODInputHandler());
       }
-      mgr->SetInputEventHandler(inputHandler);
    }
 
    if (useAODOut) {
@@ -125,8 +137,10 @@ Bool_t CreateInputHandlers(TString input,TString inputMC,Bool_t useAODOut=kFALSE
       mgr->SetOutputEventHandler(aodHandler);
    }
 
+   return kTRUE;
 }
 
+//______________________________________________________________________
 TList *CreateListOfManagersFromDir(TString listManagersNames="",TString dir="") {
 
    TList *listManagers = new TList;
@@ -169,6 +183,7 @@ TList *CreateListOfManagersFromDir(TString listManagersNames="",TString dir="") 
    return listManagers;
 }
 
+//______________________________________________________________________
 Bool_t AddAllManagers(TList *listManagers,TString anSrc, TString anMode,TString input,TString inputMC) {
    TIter next(listManagers);
    Int_t counter=0;
@@ -183,26 +198,9 @@ Bool_t AddAllManagers(TList *listManagers,TString anSrc, TString anMode,TString 
    return kTRUE;
 }
 
+//______________________________________________________________________
 Bool_t AddAnalysisManager(TString managerMacro, TString anSrc, TString anMode,TString input,TString inputMC, TString postfix,TString idStr) {
    gROOT->LoadMacro(Form("%s.C", managerMacro.Data()));
    return gROOT->ProcessLine(Form("%s\(\"%s\",\"%s\",\"%s\"\,\"%s\",\"%s\",\"%s\"\);", managerMacro.Data(), anSrc.Data(), anMode.Data(),input.Data(),inputMC.Data(), postfix.Data(),idStr.Data()));
 }
 
-Bool_t RunAnalysisManager(TString anSrc = "proof", TString anMode = "test", Long64_t nEvents = 1e10, Long64_t nSkip = 0) {
-
-   AliAnalysisManager *mgr = AliAnalysisManager::GetAnalysisManager();
-
-   if (!mgr) { Printf("Error [RunAnalysisManager] : mgr is null !!!"); return kFALSE; }
-
-   // Run analysis
-   mgr->InitAnalysis();
-   mgr->PrintStatus();
-
-   if ((!anSrc.CompareTo("proof")) || (!anSrc.CompareTo("local"))) {
-      mgr->StartAnalysis(anSrc.Data(), nEvents, nSkip);
-   } else {
-      mgr->StartAnalysis(anSrc.Data());
-   }
-
-   return kTRUE;
-}

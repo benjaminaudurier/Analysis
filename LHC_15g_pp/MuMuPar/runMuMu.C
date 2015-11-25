@@ -26,8 +26,7 @@ AliAnalysisTask* runMuMu(TString runMode,
     
      
     // Macro to connect to proof. First argument useless for saf3
-    SetupAnalysis(runMode,analysisMode,inputName,inputOptions,softVersions,analysisOptions, "libPWGPPMUONlite.so","$ALICE_ROOT/include $ALICE_PHYSICS/include");
-    cout <<"toto"<< endl;
+    SetupAnalysis(runMode,analysisMode,inputName,inputOptions,softVersions,analysisOptions, "libPWGmuon.so","$ALICE_ROOT/include $ALICE_PHYSICS/include");
     
     //Flag for MC
     Bool_t isMC = IsMC(inputOptions);
@@ -50,17 +49,18 @@ AliAnalysisTask* runMuMu(TString runMode,
     //==============================================================================
     TString sds(inputName);
     sds.ReplaceAll("/","-");
-    TString outputname = Form("%s.%s.MuMu.root",sds.Data(),analysisMode.Data()); // Create output name in case of no dataset selected
-  	// TString outputname = AliAnalysisManager::GetAnalysisManager()->GetCommonFileName();
+    // TString outputname = Form("%s.%s.MuMu.root",sds.Data(),analysisMode.Data()); // Create output name in case of no dataset selected
+  	TString outputname = AliAnalysisManager::GetAnalysisManager()->GetCommonFileName();
     gROOT->LoadMacro("AddTaskMuMu.C");
-  	cout <<"tata"<< endl;
     AddTaskMuMu(outputname.Data(),triggers,"pp2015",isMC);
     cout <<"add task mumu done"<< endl;
 
     // Start analysis
     //==============================================================================
-  
-    StartAnalysis(runMode,analysisMode,inputName,inputOptions);     
+    StartAnalysis(runMode,analysisMode,inputName,inputOptions);
+
+    gSystem->Exec(Form("cp -f %s %s",outputname.Data(),sds.Data()));
+     
    
     delete triggers;
 }

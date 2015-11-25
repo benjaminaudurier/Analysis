@@ -1,0 +1,1 @@
+Find;BasePath=/alice/data/2015/LHC15n/000244618/muon_calo_pass1/*;FileName=AliAOD.root;Mode=cache;

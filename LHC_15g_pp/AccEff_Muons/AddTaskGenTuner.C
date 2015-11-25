@@ -1,6 +1,6 @@
-AliAnalysisTaskGenTuner* AddTaskGenTuner()
+AliAnalysisTaskGenTunerLocal* AddTaskGenTuner()
 {
-  /// Add AliAnalysisTaskGenTuner to the train (Philippe Pillot)
+  /// Add AliAnalysisTaskGenTunerLocal to the train (Philippe Pillot)
   
   // Get the pointer to the existing analysis manager via the static access method.
   AliAnalysisManager *mgr = AliAnalysisManager::GetAnalysisManager();
@@ -17,12 +17,11 @@ AliAnalysisTaskGenTuner* AddTaskGenTuner()
   // }
   
   // Create and configure task
-  AliAnalysisTaskGenTuner *task = new AliAnalysisTaskGenTuner("GenTuner");
+  AliAnalysisTaskGenTunerLocal *task = new AliAnalysisTaskGenTunerLocal("GenTuner");
   if (!task) {
     Error("AddTaskGenTuner", "Muon physics task cannot be created!");
     return NULL;
   }
-  
   // Add task to analysis manager
   mgr->AddTask(task);
   
@@ -37,6 +36,8 @@ AliAnalysisTaskGenTuner* AddTaskGenTuner()
   }
   outputfile += ":MUON_GenTuner";
   
+  printf("outfile name = %s\n",outputfile.Data() );
+
   // Create and connect output containers
   AliAnalysisDataContainer *histo = mgr->CreateContainer("Histograms", TObjArray::Class(), AliAnalysisManager::kOutputContainer, outputfile);
   mgr->ConnectOutput(task, 1, histo);
