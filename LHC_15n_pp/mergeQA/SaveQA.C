@@ -20,7 +20,7 @@
 #include "TH1.h"
 #include "TH2.h"
 
-Bool_t isQATask = kFALSE;
+Bool_t isQATask = kTRUE;
 TString MultDirData = "LowMultiplicity";
 TString MultDirMC = "LowMultiplicity";
 
@@ -95,8 +95,8 @@ void SaveQA(TString inputDataFile, TString inputMCFile)
     if (isQATask)
     {
       objsData = static_cast<TObjArray*>(currDataFile->Get("MUON_QA/expert"));
-      objsMC = static_cast<TObjArray*>(currMCFile->Get("MUON_QA/expert"));
-      if (!objsData || !objsMC)
+      // objsMC = static_cast<TObjArray*>(currMCFile->Get("MUON_QA/expert"));
+      if (!objsData /*|| !objsMC*/)
       {
       	cout << "lists not found for run " << runNumber.Data() << endl;
       	break;
@@ -117,8 +117,8 @@ void SaveQA(TString inputDataFile, TString inputMCFile)
       static_cast<TH1*>(objsData->FindObject(Form("hClusterHitMapInCh%d",iCh))) :
       static_cast<TH1*>(currDataFile->Get(Form("MUON/ESDs/%s/Expert/%s_hESDClusterHitMap%d",
 					       MultDirData.Data(),MultDirData.Data(),iCh)));
-      TH1* clusterMapMC = isQATask ?
-      static_cast<TH1*>(objsMC->FindObject(Form("hClusterHitMapInCh%d",iCh))) :
+      TH1* clusterMapMC = /*isQATask ?
+      static_cast<TH1*>(objsMC->FindObject(Form("hClusterHitMapInCh%d",iCh))) :*/
       static_cast<TH1*>(currMCFile->Get(Form("MUON/ESDs/%s/Expert/%s_hESDClusterHitMap%d",
 					     MultDirMC.Data(),MultDirMC.Data(),iCh)));
       if (!clusterMapData || !clusterMapMC)

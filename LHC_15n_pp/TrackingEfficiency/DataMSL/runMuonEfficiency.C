@@ -10,10 +10,10 @@
 TString rootVersion = "v5-34-30";
 TString alirootVersion = "v5-07-01-3";
 TString aliphysicsVersion = "vAN-20151015-1";
-TString dataDir = "/alice/data/2015/LHC15g";
+TString dataDir = "/alice/data/2015/LHC15n";
 TString dataPattern = "muon_calo_pass1/*AliESDs.root";
 TString runFormat = "%09d";
-TString outDir = "Analysis/LHC15g/TrackingEfficiency/Data";
+TString outDir = "Analysis/LHC15n/TrackingEfficiency/Data";
 Int_t ttl = 30000;
 Int_t maxFilesPerJob = 150;
 Int_t maxMergeFiles = 10;
@@ -22,14 +22,14 @@ Int_t maxMergeStages = 4;
 // --- prepare environment ---
  TString extraLibs="";
  TString extraIncs="include";
- TString extraTasks="AliAnalysisTaskMuonTrackingEffLocal";
+ TString extraTasks="AliAnalysisTaskMuonTrackingEff";
 
 //TString alignStorage = "alien://folder=/alice/simulation/2008/v4-15-Release/Residual";
 TString alignStorage = "alien://folder=/alice/data/2015/OCDB";
 
 //______________________________________________________________________________
-void runMuonEfficiency(TString smode = "full", TString inputFileName = "runList.txt",
-		       Bool_t applyPhysSel = kTRUE, Bool_t mc = kFALSE, Bool_t embedding = kFALSE)
+void runMuonEfficiency(TString smode = "full", TString inputFileName = "../run-list.txt",
+		       Bool_t applyPhysSel = kFALSE, Bool_t mc = kFALSE, Bool_t embedding = kFALSE)
 {
   /// Study the MUON performances
   
@@ -42,21 +42,21 @@ void runMuonEfficiency(TString smode = "full", TString inputFileName = "runList.
     return;
   }
   
-  // --- copy files needed for this analysis ---
-  TList pathList; pathList.SetOwner();
-  pathList.Add(new TObjString("/Users/audurier/Documents/Analysis/Tasks"));
+  // // --- copy files needed for this analysis ---
+  // TList pathList; pathList.SetOwner();
+  // pathList.Add(new TObjString("/Users/audurier/Documents/Analysis/Tasks"));
 
-  TList fileList; fileList.SetOwner();
-  fileList.Add(new TObjString("AliAnalysisTaskMuonTrackingEffLocal.cxx"));
-  fileList.Add(new TObjString("AliAnalysisTaskMuonTrackingEffLocal.h"));
+  // TList fileList; fileList.SetOwner();
+  // fileList.Add(new TObjString("AliAnalysisTaskMuonTrackingEff.cxx"));
+  // fileList.Add(new TObjString("AliAnalysisTaskMuonTrackingEff.h"));
 
-  CopyFileLocally(pathList, fileList);
+  // CopyFileLocally(pathList, fileList);
   
   LoadAlirootLocally(extraLibs, extraIncs, extraTasks);
 
   AliAnalysisGrid *alienHandler = 0x0;
   
-  if (mode == kProof || mode == kProofLite) LoadAlirootOnProof(smode, rootVersion, aliphysicsVersion, extraLibs, extraIncs, extraTasks, kTRUE,"");
+  if (mode == kProof || mode == kProofLite) return;
   else if (mode == kGrid || mode == kTerminate) {
     TString analysisMacroName = "Eff";
     alienHandler = static_cast<AliAnalysisGrid*>(CreateAlienHandler(smode, rootVersion, alirootVersion, aliphysicsVersion, inputFileName, dataDir, dataPattern, outDir, extraLibs, extraIncs, extraTasks, analysisMacroName, runFormat, ttl, maxFilesPerJob, maxMergeFiles, maxMergeStages));
@@ -130,9 +130,9 @@ void CreateAnalysisTrain(Bool_t applyPhysSel, Bool_t mc, Bool_t embedding, TObje
   
   // Muon efficiency analysis
   gROOT->LoadMacro("AddTaskMUONTrackingEfficiency.C");
-  AliAnalysisTaskMuonTrackingEffLocal* muonEfficiency = AddTaskMUONTrackingEfficiency(trackCuts,"");
+  AliAnalysisTaskMuonTrackingEff* muonEfficiency = AddTaskMUONTrackingEfficiency(trackCuts,"");
   if(!muonEfficiency) {
-    Error("CreateAnalysisTrain","AliAnalysisTaskMuonTrackingEffLocal not created!");
+    Error("CreateAnalysisTrain","AliAnalysisTaskMuonTrackingEff not created!");
     return;
   }
   if (applyPhysSel) muonEfficiency->SelectCollisionCandidates(offlineTriggerMask);
