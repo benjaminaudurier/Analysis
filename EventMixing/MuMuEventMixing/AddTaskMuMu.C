@@ -133,15 +133,15 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   {
     // Cuts on tracks
     AliAnalysisMuMuCutElement* trackTrue = cr->AddTrackCut(*cr,"AlwaysTrue","const AliVParticle&",""); // Apply "AlwaysTrue" cut on AliVParticle derived from AliAnalysisMuMuSingle
-    // AliAnalysisMuMuCutElement* rabs = cr->AddTrackCut(*singleAnalysis,"IsRabsOK","const AliVParticle&","");
-    // AliAnalysisMuMuCutElement* matchlow = cr->AddTrackCut(*singleAnalysis,"IsMatchingTriggerLowPt","const AliVParticle&","");
-    // AliAnalysisMuMuCutElement* eta = cr->AddTrackCut(*singleAnalysis,"IsEtaInRange","const AliVParticle&","");
-    // AliAnalysisMuMuCutElement* pdca = cr->AddTrackCut(*singleAnalysis,"IsPDCAOK","const AliVParticle&","");
+    AliAnalysisMuMuCutElement* rabs = cr->AddTrackCut(*singleAnalysis,"IsRabsOK","const AliVParticle&","");
+    AliAnalysisMuMuCutElement* matchlow = cr->AddTrackCut(*singleAnalysis,"IsMatchingTriggerLowPt","const AliVParticle&","");
+    AliAnalysisMuMuCutElement* eta = cr->AddTrackCut(*singleAnalysis,"IsEtaInRange","const AliVParticle&","");
+    AliAnalysisMuMuCutElement* pdca = cr->AddTrackCut(*singleAnalysis,"IsPDCAOK","const AliVParticle&","");
     
     // Create combination of cuts to apply
     cr->AddCutCombination(trackTrue);
-    // cr->AddCutCombination(matchlow);
-    // cr->AddCutCombination(rabs,eta); 
+    cr->AddCutCombination(matchlow);
+    cr->AddCutCombination(rabs,eta); 
     // Adding the sub analysis
     task->AdoptSubAnalysis(singleAnalysis); 
 
@@ -152,15 +152,15 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
 
       // Cuts on track level
       AliAnalysisMuMuCutElement* pairTrue = cr->AddTrackPairCut(*cr,"AlwaysTrue","const AliVParticle&,const AliVParticle&","");// Apply "AlwaysTrue" cut on AliVParticle derived from AliAnalysisMuMuMinv
-      // AliAnalysisMuMuCutElement* pairy = cr->AddTrackPairCut(*minvAnalysis,"IsRapidityInRange","const AliVParticle&,const AliVParticle&","");
-      // AliAnalysisMuMuCutElement* ptRange = cr->AddTrackPairCut(*minvAnalysis,"IsPtInRange","const AliVParticle&,const AliVParticle&,Double_t&,Double_t&","0.,20.");
+      AliAnalysisMuMuCutElement* pairy = cr->AddTrackPairCut(*minvAnalysis,"IsRapidityInRange","const AliVParticle&,const AliVParticle&","");
+      AliAnalysisMuMuCutElement* ptRange = cr->AddTrackPairCut(*minvAnalysis,"IsPtInRange","const AliVParticle&,const AliVParticle&,Double_t&,Double_t&","0.,20.");
 
       cutElements.Add(pairTrue);
-      // cutElements.Add(pairy);
-      // cutElements.Add(ptRange);
-      // cutElements.Add(rabs);
-      // cutElements.Add(matchlow);
-      // cutElements.Add(eta);
+      cutElements.Add(pairy);
+      cutElements.Add(ptRange);
+      cutElements.Add(rabs);
+      cutElements.Add(matchlow);
+      cutElements.Add(eta);
 
       // add them
       cr->AddCutCombination(cutElements);    

@@ -1,0 +1,59 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+AddTaskMUONTrackingEfficiency	AddTaskMUONTrackingEfficiency.C	/^AliAnalysisTaskMuonTrackingEff *AddTaskMUONTrackingEfficiency(AliMuonTrackCuts &trackCuts, TString extension = "") $/;"	f
+BeautifyGraph	MuonTrackingEfficiency.C	/^void BeautifyGraph(TGraphAsymmErrors &g, const char* xAxisName, const char* yAxisName)$/;"	f
+BeautifyGraphs	MuonTrackingEfficiency.C	/^void BeautifyGraphs(TObjArray& array, const char* xAxisName, const char* yAxisName)$/;"	f
+ComputeStation45Efficiency	MuonTrackingEfficiency.C	/^void ComputeStation45Efficiency(TArrayD &chEff, TArrayD chEffErr[2], Double_t &st45Eff, Double_t st45EffErr[2])$/;"	f
+ComputeStationEfficiency	MuonTrackingEfficiency.C	/^void ComputeStationEfficiency(TArrayD &chEff, TArrayD chEffErr[2], Int_t iSt, Double_t &stEff, Double_t stEffErr[2])$/;"	f
+ComputeTrackingEfficiency	MuonTrackingEfficiency.C	/^void ComputeTrackingEfficiency(Double_t stEff[6], Double_t stEffErr[6][2], Double_t &spectroEff, Double_t spectroEffErr[2])$/;"	f
+CopyFromRemote	CopyFromRemote.C	/^void CopyFromRemote(const char* txtfile="grid.esd.txt")$/;"	f
+CreateAnalysisTrain	runMuonEfficiency.C	/^void CreateAnalysisTrain(Bool_t applyPhysSel, Bool_t mc, Bool_t embedding, TObject* alienHandler)$/;"	f
+CreateGraph	MuonTrackingEfficiency.C	/^TGraphAsymmErrors* CreateGraph(const char* name, const char* title, int value)$/;"	f
+GetChamberEfficiency	MuonTrackingEfficiency.C	/^Bool_t GetChamberEfficiency(THnSparse &TT, THnSparse &TD, TArrayD &chEff, TArrayD chEffErr[2], Bool_t printError)$/;"	f
+GetDEEfficiency	MuonTrackingEfficiency.C	/^void GetDEEfficiency(THnSparse &TT, THnSparse &TD, TGraphAsymmErrors &effVsDE)$/;"	f
+GetStation45Efficiency	MuonTrackingEfficiency.C	/^void GetStation45Efficiency(TArrayD &chEff, TArrayD chEffErr[2], TGraphAsymmErrors *effVsX[3], Int_t ip, Double_t xp)$/;"	f
+GetStationEfficiency	MuonTrackingEfficiency.C	/^void GetStationEfficiency(TArrayD &chEff, TArrayD chEffErr[2], Int_t iSt, TGraphAsymmErrors *effVsX[3], Int_t ip, Double_t xp)$/;"	f
+GetTrackingEfficiency	MuonTrackingEfficiency.C	/^void GetTrackingEfficiency(TArrayD &chEff, TArrayD chEffErr[2], TGraphAsymmErrors *effVsSt[3],$/;"	f
+IntegrateMuonEfficiency	MuonTrackingEfficiency.C	/^void IntegrateMuonEfficiency(TGraphAsymmErrors &effVsRunLow, TGraphAsymmErrors &effVsRunUp,$/;"	f
+LoadRunWeights	MuonTrackingEfficiency.C	/^void LoadRunWeights(TString fileName)$/;"	f
+MuonTrackingEfficiency	MuonTrackingEfficiency.C	/^void MuonTrackingEfficiency(TString runList = "runList.txt",$/;"	f
+PlotIntegratedMuonEfficiency	MuonTrackingEfficiency.C	/^void PlotIntegratedMuonEfficiency(TString fileNameWeights, TString fileNameSave, Bool_t print, Bool_t draw)$/;"	f
+PlotIntegratedMuonEfficiencyPerDE	MuonTrackingEfficiency.C	/^void PlotIntegratedMuonEfficiencyPerDE(TString fileNameWeights, TString fileNameSave)$/;"	f
+PlotIntegratedMuonEfficiencyVsX	MuonTrackingEfficiency.C	/^void PlotIntegratedMuonEfficiencyVsX(TString var, TString runList, TString fileNameWeights,$/;"	f
+PlotMuonEfficiency	MuonTrackingEfficiency.C	/^void PlotMuonEfficiency(TString fileNameData, TString fileNameSave, Bool_t saveEdges, Bool_t print, Bool_t draw)$/;"	f
+PlotMuonEfficiencyPerDE	MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyPerDE(TString fileNameData, TString fileNameSave, Bool_t saveEdges)$/;"	f
+PlotMuonEfficiencyPerDEVsRun	MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyPerDEVsRun(TString runList, TString fileNameData, TString fileNameSave)$/;"	f
+PlotMuonEfficiencyVsRun	MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyVsRun(TString runList, TString fileNameData, TString fileNameSave, Bool_t print, Bool_t draw)$/;"	f
+PlotMuonEfficiencyVsX	MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyVsX(TString var, TString fileNameData, TString fileNameSave, Bool_t saveEdges, Bool_t print, Bool_t draw)$/;"	f
+PlotMuonEfficiencyVsXY	MuonTrackingEfficiency.C	/^void PlotMuonEfficiencyVsXY(TString xVar, TString yVar, TString fileNameData, TString fileNameSave, Bool_t draw, Bool_t rap)$/;"	f
+SetCentPtCh	MuonTrackingEfficiency.C	/^void SetCentPtCh(THnSparse& SparseData)$/;"	f
+SetRunLabel	MuonTrackingEfficiency.C	/^void SetRunLabel(TGraphAsymmErrors &g, Int_t irun, const TList& runs)$/;"	f
+SetRunLabel	MuonTrackingEfficiency.C	/^void SetRunLabel(TObjArray& array, Int_t irun, const TList& runs)$/;"	f
+alignStorage	runMuonEfficiency.C	/^TString alignStorage = "alien:\/\/folder=\/alice\/simulation\/2008\/v4-15-Release\/Residual";$/;"	v
+aliphysicsVersion	runMuonEfficiency.C	/^TString aliphysicsVersion = "v5-06-31-01";$/;"	v
+alirootVersion	runMuonEfficiency.C	/^TString alirootVersion = "v5-06-30";$/;"	v
+centMax	MuonTrackingEfficiency.C	/^Double_t centMax = 999.;$/;"	v
+centMin	MuonTrackingEfficiency.C	/^Double_t centMin = -999.;$/;"	v
+charge	MuonTrackingEfficiency.C	/^Int_t charge = 0; \/\/ 0 selects + and -, -1 and +1 selects - or + muons respectively$/;"	v
+dataDir	runMuonEfficiency.C	/^TString dataDir = "\/alice\/cern.ch\/user\/b\/baudurie\/Analysis\/LHC15g\/simjpsi\/pp503";$/;"	v
+dataPattern	runMuonEfficiency.C	/^TString dataPattern = "\/*AliESDs.root";$/;"	v
+effErrMode	MuonTrackingEfficiency.C	/^const Char_t *effErrMode = "b(1,1)mode"; \/\/ Bayesian with uniform prior$/;"	v
+extraIncs	runMuonEfficiency.C	/^ TString extraIncs="";$/;"	v
+extraLibs	runMuonEfficiency.C	/^ TString extraLibs="";$/;"	v
+extraTasks	runMuonEfficiency.C	/^ TString extraTasks="";$/;"	v
+maxFilesPerJob	runMuonEfficiency.C	/^Int_t maxFilesPerJob = 9000;$/;"	v
+maxMergeFiles	runMuonEfficiency.C	/^Int_t maxMergeFiles = 5000;$/;"	v
+maxMergeStages	runMuonEfficiency.C	/^Int_t maxMergeStages = 4;$/;"	v
+moreTrackCandidates	MuonTrackingEfficiency.C	/^Bool_t moreTrackCandidates = kFALSE;$/;"	v
+outDir	runMuonEfficiency.C	/^TString outDir = "Data\/LHC15g\/Eff\/MonteCarlo";$/;"	v
+ptMax	MuonTrackingEfficiency.C	/^Double_t ptMax = -1.;$/;"	v
+ptMin	MuonTrackingEfficiency.C	/^Double_t ptMin = 0.;$/;"	v
+rootVersion	runMuonEfficiency.C	/^TString rootVersion = "v5-34-30-1";$/;"	v
+runFormat	runMuonEfficiency.C	/^TString runFormat = "%06d";$/;"	v
+runMuonEfficiency	runMuonEfficiency.C	/^void runMuonEfficiency(TString smode = "terminate", TString inputFileName = "runlist_15-07-2015-ESD.txt",$/;"	f
+runWeights	MuonTrackingEfficiency.C	/^THashList *runWeights = 0x0;$/;"	v
+ttl	runMuonEfficiency.C	/^Int_t ttl = 30000;$/;"	v

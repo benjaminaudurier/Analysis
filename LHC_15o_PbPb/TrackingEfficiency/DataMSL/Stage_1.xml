@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<alien>
+  <collection name="Stage_1">
+    <event name="1">
+      <file name="root_archive.zip" aclId="" broken="0" ctime="2015-10-21 09:44:55" dir="17412053" entryId="17412057" expiretime="" gowner="baudurie" guid="95EFDC2C-77C7-11E5-A91A-3B1B24B48F42" guidtime="11E577C7" jobid="566370364" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/results/000230697/001/root_archive.zip" md5="c76fe2262778c3dd0f2681da342efa20" owner="baudurie" perm="755" replicated="0" size="3383497" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/results/000230697/001/root_archive.zip" type="f" />
+    </event>
+    <event name="2">
+      <file name="root_archive.zip" aclId="" broken="0" ctime="2015-10-21 09:45:24" dir="17411994" entryId="17412119" expiretime="" gowner="baudurie" guid="550E54E0-77C7-11E5-B26F-DB1A054AE432" guidtime="11E577C7" jobid="566370365" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/results/000230697/002/root_archive.zip" md5="e4dca60fa3a7ac318aeb15709e47142b" owner="baudurie" perm="755" replicated="0" size="3827170" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/results/000230697/002/root_archive.zip" type="f" />
+    </event>
+    <event name="3">
+      <file name="root_archive.zip" aclId="" broken="0" ctime="2015-10-21 09:49:25" dir="17412324" entryId="17412334" expiretime="" gowner="baudurie" guid="327B47B6-77C8-11E5-BDA0-FB8BB23EED1E" guidtime="11E577C8" jobid="566370366" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/results/000230697/003/root_archive.zip" md5="242c5291bfaeabb91040e9e12219293e" owner="baudurie" perm="755" replicated="0" size="5476114" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/results/000230697/003/root_archive.zip" type="f" />
+    </event>
+    <event name="4">
+      <file name="root_archive.zip" aclId="" broken="0" ctime="2015-10-21 11:38:48" dir="17423037" entryId="17423101" expiretime="" gowner="baudurie" guid="4143D916-77D7-11E5-9C20-FB8BA1393C26" guidtime="11E577D7" jobid="566370367" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/results/000230697/004/root_archive.zip" md5="b8e085b4b6b9c66633da312078ef0f1c" owner="baudurie" perm="755" replicated="0" size="12912724" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/results/000230697/004/root_archive.zip" type="f" />
+    </event>
+    <event name="5">
+      <file name="root_archive.zip" aclId="" broken="0" ctime="2015-10-21 09:47:25" dir="17412216" entryId="17412255" expiretime="" gowner="baudurie" guid="EC603C50-77C7-11E5-A504-1FB07F49A125" guidtime="11E577C7" jobid="566370368" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/results/000230697/005/root_archive.zip" md5="7f040c492c06e3168bb2c3ee95bda13f" owner="baudurie" perm="755" replicated="0" size="3719858" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/results/000230697/005/root_archive.zip" type="f" />
+    </event>
+    <info command="[/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/results/]: find -z -x Stage_1 /alice/cern.ch/user/b/baudurie//Analysis/LHC15g/TrackingEfficiency/Data/results/000230697 *root_archive.zip" creator="admin" date="Thu Oct 22 08:22:24 CEST 2015" timestamp="1445494944" />
+  </collection>
+</alien>
+
+
+
+
+

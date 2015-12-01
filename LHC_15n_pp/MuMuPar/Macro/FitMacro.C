@@ -8,9 +8,9 @@
 
 // Macro to fit Minv Spectra and draw J/psi distribution vs pt and y
 
-TString striggerDimuon  ="CMUL7-B-NOPF-MUON";
+TString striggerDimuon  ="CMUL7-B-NOPF-MUFAST";
 TString seventType      ="ALL";
-TString spairCut        ="pALLPAIRYPAIRPTIN0.0-8.0RABSMATCHLOWETA";
+TString spairCut        ="pALLPAIRYPAIRPTIN0.0-10.0RABSMATCHLOWETA";
 TString sbinType        ="PT,Y";
 TString scentrality     ="V0A";
 TString sResName        ="";
@@ -23,7 +23,7 @@ void FitMacro(
 char           * sfile="../AnalysisResults.root",
 char           * sasso="",
 char           * sasso2="",
-char           * beamYear="mumu.ppb2013.config",
+char           * beamYear="mumu.pp2015.config",
 char           * what ="integrated,y,pt",
 Bool_t FitDist = kFALSE)
 {    

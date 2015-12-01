@@ -130,7 +130,7 @@ void SaveQA(TString inputDataFile, TString inputMCFile)
       // Save canvas with the two chambers hitmap
       cTmp.Clear();
       gStyle->SetOptStat(0);
-      cTmp.Divide(2,2/*,0.,0.*/);
+      cTmp.Divide(2,2,0.,0.);
 
      
 

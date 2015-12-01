@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<alien>
+  <collection name="collection">
+    <event name="1">
+      <file name="AliESDs.root" aclId="" broken="0" ctime="2015-10-21 09:04:56" dir="17393208" entryId="17408103" expiretime="" gowner="baudurie" guid="F4116024-77C1-11E5-B03D-23850F45D841" guidtime="11E577C1" jobid="566091608" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/228936/001/AliESDs.root" md5="6ce9b4a539b0b07ff0876fa8683dd02c" owner="baudurie" perm="755" replicated="0" size="39527915" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/228936/001/AliESDs.root" type="f" />
+    </event>
+    <info command="[/alice/cern.ch/user/b/baudurie/]: find -z -x collection -l 1 -o 0 /alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/228936 *AliESDs.root" creator="admin" date="Sun Oct 25 13:17:09 CET 2015" timestamp="1445775429" />
+  </collection>
+</alien>
+

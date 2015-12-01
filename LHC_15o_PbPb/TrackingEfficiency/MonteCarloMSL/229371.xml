@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<alien>
+  <collection name="collection">
+    <event name="1">
+      <file name="AliESDs.root" aclId="" broken="0" ctime="2015-10-20 19:54:58" dir="17398169" entryId="17398183" expiretime="" gowner="baudurie" guid="8FA7ECF2-7753-11E5-B54C-1BBB78D585BF" guidtime="11E57753" jobid="566112296" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/001/AliESDs.root" md5="9fd533ba6234fddec3f22c6273fb1607" owner="baudurie" perm="755" replicated="0" size="36860950" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/001/AliESDs.root" type="f" />
+    </event>
+    <event name="10">
+      <file name="AliESDs.root" aclId="" broken="0" ctime="2015-10-20 19:28:36" dir="17397419" entryId="17397721" expiretime="" gowner="baudurie" guid="9737ECB0-774E-11E5-8CCF-47362C8522B4" guidtime="11E5774E" jobid="566112313" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/010/AliESDs.root" md5="a5fe950d268f9af087f70728f70846b9" owner="baudurie" perm="755" replicated="0" size="36807645" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/010/AliESDs.root" type="f" />
+    </event>
+    <event name="11">
+      <file name="AliESDs.root" aclId="" broken="0" ctime="2015-10-20 19:30:25" dir="17397766" entryId="17397780" expiretime="" gowner="baudurie" guid="32B5B81A-7750-11E5-A23D-DF30C03D5E48" guidtime="11E57750" jobid="566112315" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/011/AliESDs.root" md5="2be56f99ce7e65de14067041ebf4b167" owner="baudurie" perm="755" replicated="0" size="36798081" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/011/AliESDs.root" type="f" />
+    </event>
+    <event name="12">
+      <file name="AliESDs.root" aclId="" broken="0" ctime="2015-10-20 19:18:39" dir="17397380" entryId="17397433" expiretime="" gowner="baudurie" guid="7EEA094A-774E-11E5-8CDF-CFB5646C4DD2" guidtime="11E5774E" jobid="566112316" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/012/AliESDs.root" md5="9fa2225bf1b8094e27f2e581bc74b08f" owner="baudurie" perm="755" replicated="0" size="36823664" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/012/AliESDs.root" type="f" />
+    </event>
+    <event name="13">
+      <file name="AliESDs.root" aclId="" broken="0" ctime="2015-10-20 19:16:49" dir="17397318" entryId="17397333" expiretime="" gowner="baudurie" guid="3E7571F6-774E-11E5-B2D6-8F87E7361E4C" guidtime="11E5774E" jobid="566112318" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/013/AliESDs.root" md5="701529f82a05cd07ef351a67a33f078f" owner="baudurie" perm="755" replicated="0" size="36903846" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/013/AliESDs.root" type="f" />
+    </event>
+    <event name="14">
+      <file name="AliESDs.root" aclId="" broken="0" ctime="2015-10-20 19:27:17" dir="17397645" entryId="17397681" expiretime="" gowner="baudurie" guid="BC7B6A0A-774F-11E5-B60C-13303A7991E4" guidtime="11E5774F" jobid="566112320" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/014/AliESDs.root" md5="e8b38573f01d67f92ebc59ce77190394" owner="baudurie" perm="755" replicated="0" size="36879614" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/014/AliESDs.root" type="f" />
+    </event>
+    <event name="15">
+      <file name="AliESDs.root" aclId="" broken="0" ctime="2015-10-20 20:26:47" dir="17398762" entryId="17398786" expiretime="" gowner="baudurie" guid="0A323EA6-7758-11E5-8D6B-DFA24283338E" guidtime="11E57758" jobid="566114030" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/015/AliESDs.root" md5="87fd653ad3fc19f7c12ec942b1c0b75f" owner="baudurie" perm="755" replicated="0" size="36845931" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/015/AliESDs.root" type="f" />
+    </event>
+    <event name="16">
+      <file name="AliESDs.root" aclId="" broken="0" ctime="2015-10-20 20:02:30" dir="17398303" entryId="17398323" expiretime="" gowner="baudurie" guid="8C25399E-7754-11E5-BB44-236470B7025F" guidtime="11E57754" jobid="566112324" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/016/AliESDs.root" md5="662e2463f198bbe516be75f15fc38662" owner="baudurie" perm="755" replicated="0" size="36809355" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/016/AliESDs.root" type="f" />
+    </event>
+    <event name="17">
+      <file name="AliESDs.root" aclId="" broken="0" ctime="2015-10-20 20:24:26" dir="17398699" entryId="17398713" expiretime="" gowner="baudurie" guid="C21888A0-7757-11E5-8E7A-570FEB711755" guidtime="11E57757" jobid="566112325" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/017/AliESDs.root" md5="9a1ad2c1d2b47d7ed53706933e083653" owner="baudurie" perm="755" replicated="0" size="36909165" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/017/AliESDs.root" type="f" />
+    </event>
+    <event name="18">
+      <file name="AliESDs.root" aclId="" broken="0" ctime="2015-10-20 20:31:48" dir="17398979" entryId="17399015" expiretime="" gowner="baudurie" guid="BFA2ABAE-7758-11E5-8461-BF8E53386E79" guidtime="11E57758" jobid="566114033" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/018/AliESDs.root" md5="a742be676074f487497aaf23a50ba9d8" owner="baudurie" perm="755" replicated="0" size="36859702" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/018/AliESDs.root" type="f" />
+    </event>
+    <event name="19">
+      <file name="AliESDs.root" aclId="" broken="0" ctime="2015-10-20 19:33:08" dir="17397829" entryId="17397844" expiretime="" gowner="baudurie" guid="8CED50D6-7750-11E5-916B-A71BC193C3FB" guidtime="11E57750" jobid="566112329" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/019/AliESDs.root" md5="125d94d527ce18b65350bbdb86de3cfe" owner="baudurie" perm="755" replicated="0" size="36740055" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/019/AliESDs.root" type="f" />
+    </event>
+    <event name="2">
+      <file name="AliESDs.root" aclId="" broken="0" ctime="2015-10-20 19:04:51" dir="17397038" entryId="17397053" expiretime="" gowner="baudurie" guid="9BE84676-774C-11E5-8927-AB337B2F7B41" guidtime="11E5774C" jobid="566112298" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/002/AliESDs.root" md5="c0ba9bd96fc4ee0d87ce5c249f5c2539" owner="baudurie" perm="755" replicated="0" size="36772222" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/002/AliESDs.root" type="f" />
+    </event>
+    <event name="20">
+      <file name="AliESDs.root" aclId="" broken="0" ctime="2015-10-20 19:42:02" dir="17398001" entryId="17398015" expiretime="" gowner="baudurie" guid="BD384254-7751-11E5-A75E-BB6A47F3F090" guidtime="11E57751" jobid="566112330" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/020/AliESDs.root" md5="5eb609829b7d1a0a1261e116496b2f60" owner="baudurie" perm="755" replicated="0" size="36839547" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/020/AliESDs.root" type="f" />
+    </event>
+    <event name="21">
+      <file name="AliESDs.root" aclId="" broken="0" ctime="2015-10-20 19:28:48" dir="17397706" entryId="17397740" expiretime="" gowner="baudurie" guid="F330C0B8-774F-11E5-AECA-AF74156828A2" guidtime="11E5774F" jobid="566112332" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/021/AliESDs.root" md5="3676dd99b0c2ac3892b49f436301ebae" owner="baudurie" perm="755" replicated="0" size="36831527" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/021/AliESDs.root" type="f" />
+    </event>
+    <event name="22">
+      <file name="AliESDs.root" aclId="" broken="0" ctime="2015-10-20 19:35:42" dir="17397897" entryId="17397912" expiretime="" gowner="baudurie" guid="EC4C755C-7750-11E5-80B7-B72A206C4381" guidtime="11E57750" jobid="566112334" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/022/AliESDs.root" md5="c5d22f12b59d42cefa0d1f22b70995e3" owner="baudurie" perm="755" replicated="0" size="36869825" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/022/AliESDs.root" type="f" />
+    </event>
+    <event name="23">
+      <file name="AliESDs.root" aclId="" broken="0" ctime="2015-10-20 19:33:25" dir="17397830" entryId="17397864" expiretime="" gowner="baudurie" guid="8DF219F8-7750-11E5-9CEB-CFAAFE0E649C" guidtime="11E57750" jobid="566112336" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/023/AliESDs.root" md5="a66c64f0694fbb9d5548d5ee8d332239" owner="baudurie" perm="755" replicated="0" size="36808755" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/023/AliESDs.root" type="f" />
+    </event>
+    <event name="24">
+      <file name="AliESDs.root" aclId="" broken="0" ctime="2015-10-20 19:40:24" dir="17397980" entryId="17397994" expiretime="" gowner="baudurie" guid="881F7BDC-7751-11E5-89B5-FBC6D871BB98" guidtime="11E57751" jobid="566112337" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/024/AliESDs.root" md5="10d3164df3124c04863a21d9485b9a0a" owner="baudurie" perm="755" replicated="0" size="36934410" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/024/AliESDs.root" type="f" />
+    </event>
+    <event name="25">
+      <file name="AliESDs.root" aclId="" broken="0" ctime="2015-10-20 21:15:07" dir="17401008" entryId="17401087" expiretime="" gowner="baudurie" guid="B37817A0-775E-11E5-9C5B-2B45BD22CAE7" guidtime="11E5775E" jobid="566114040" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/025/AliESDs.root" md5="9591f29df83d0e59f97ae1ea52cbc200" owner="baudurie" perm="755" replicated="0" size="36829400" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/025/AliESDs.root" type="f" />
+    </event>
+    <event name="26">
+      <file name="AliESDs.root" aclId="" broken="0" ctime="2015-10-20 20:51:47" dir="17399988" entryId="17400028" expiretime="" gowner="baudurie" guid="7658EBC2-775B-11E5-95ED-E317D458BCBC" guidtime="11E5775B" jobid="566114041" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/026/AliESDs.root" md5="ac5a4477e63fef72aad9c4a3dc5d958f" owner="baudurie" perm="755" replicated="0" size="36802412" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/026/AliESDs.root" type="f" />
+    </event>
+    <event name="27">
+      <file name="AliESDs.root" aclId="" broken="0" ctime="2015-10-20 20:29:18" dir="17398800" entryId="17398854" expiretime="" gowner="baudurie" guid="54290774-7758-11E5-8132-C302C7890B64" guidtime="11E57758" jobid="566112343" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/027/AliESDs.root" md5="ed6971c2907ba1d20bfaa43f659ee3f2" owner="baudurie" perm="755" replicated="0" size="36885891" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/027/AliESDs.root" type="f" />
+    </event>
+    <event name="28">
+      <file name="AliESDs.root" aclId="" broken="0" ctime="2015-10-20 20:54:48" dir="17400145" entryId="17400199" expiretime="" gowner="baudurie" guid="F24C6C72-775B-11E5-81E8-3BB5E6886828" guidtime="11E5775B" jobid="566114043" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/028/AliESDs.root" md5="24542532c347f09b7741879bd461d8ba" owner="baudurie" perm="755" replicated="0" size="36875774" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/028/AliESDs.root" type="f" />
+    </event>
+    <event name="29">
+      <file name="AliESDs.root" aclId="" broken="0" ctime="2015-10-20 20:20:04" dir="17398573" entryId="17398626" expiretime="" gowner="baudurie" guid="1D192828-7757-11E5-AB6A-0FA7F1A37048" guidtime="11E57757" jobid="566112346" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/029/AliESDs.root" md5="b4bfc0c929543faca481f1f4e8f38ea7" owner="baudurie" perm="755" replicated="0" size="36825467" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/029/AliESDs.root" type="f" />
+    </event>
+    <event name="3">
+      <file name="AliESDs.root" aclId="" broken="0" ctime="2015-10-20 19:05:15" dir="17397039" entryId="17397110" expiretime="" gowner="baudurie" guid="A62D8D44-774C-11E5-B813-C7F0EB724CC9" guidtime="11E5774C" jobid="566112300" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/003/AliESDs.root" md5="ee3414f76601d6414646aeb8d9b75ea4" owner="baudurie" perm="755" replicated="0" size="36867136" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/003/AliESDs.root" type="f" />
+    </event>
+    <event name="4">
+      <file name="AliESDs.root" aclId="" broken="0" ctime="2015-10-20 20:45:14" dir="17399503" entryId="17399617" expiretime="" gowner="baudurie" guid="6FFF389A-775A-11E5-AF06-17430445ACAB" guidtime="11E5775A" jobid="566114019" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/004/AliESDs.root" md5="4276e814a0370c164e57a4eff01cd92e" owner="baudurie" perm="755" replicated="0" size="36870881" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/004/AliESDs.root" type="f" />
+    </event>
+    <event name="5">
+      <file name="AliESDs.root" aclId="" broken="0" ctime="2015-10-20 19:32:26" dir="17397807" entryId="17397822" expiretime="" gowner="baudurie" guid="762E1178-7750-11E5-80C1-0367669A8F41" guidtime="11E57750" jobid="566112304" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/005/AliESDs.root" md5="2a3cd1d1c22609913bfea0c6738702c2" owner="baudurie" perm="755" replicated="0" size="36862882" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/005/AliESDs.root" type="f" />
+    </event>
+    <event name="6">
+      <file name="AliESDs.root" aclId="" broken="0" ctime="2015-10-20 19:22:54" dir="17397480" entryId="17397496" expiretime="" gowner="baudurie" guid="1971C124-774F-11E5-9FF4-57C6A8AE7ECF" guidtime="11E5774F" jobid="566112305" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/006/AliESDs.root" md5="df5727bc849f200794f8eced463b09d0" owner="baudurie" perm="755" replicated="0" size="36893899" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/006/AliESDs.root" type="f" />
+    </event>
+    <event name="7">
+      <file name="AliESDs.root" aclId="" broken="0" ctime="2015-10-20 19:18:16" dir="17397319" entryId="17397413" expiretime="" gowner="baudurie" guid="544C3F78-774E-11E5-BA73-67B4B5DD39D3" guidtime="11E5774E" jobid="566112307" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/007/AliESDs.root" md5="352876be7099f4803cf9937b91f12946" owner="baudurie" perm="755" replicated="0" size="36819120" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/007/AliESDs.root" type="f" />
+    </event>
+    <event name="8">
+      <file name="AliESDs.root" aclId="" broken="0" ctime="2015-10-20 19:25:53" dir="17397359" entryId="17397600" expiretime="" gowner="baudurie" guid="6D88860E-774E-11E5-AB45-B3EA91D3F2DB" guidtime="11E5774E" jobid="566112309" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/008/AliESDs.root" md5="fa21a6c348efdda387843ca305ed8a06" owner="baudurie" perm="755" replicated="0" size="36748463" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/008/AliESDs.root" type="f" />
+    </event>
+    <event name="9">
+      <file name="AliESDs.root" aclId="" broken="0" ctime="2015-10-20 19:53:38" dir="17398147" entryId="17398163" expiretime="" gowner="baudurie" guid="4B540554-7753-11E5-AE7D-334CE0661A1C" guidtime="11E57753" jobid="566112311" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/009/AliESDs.root" md5="e1794669d97ff334199fcc972419bdf1" owner="baudurie" perm="755" replicated="0" size="36919371" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371/009/AliESDs.root" type="f" />
+    </event>
+    <info command="[/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/MonteCarlo/singleMuon/]: find -z -x collection -l 15000 -o 0 /alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON/229371 *AliESDs.root" creator="admin" date="Sun Oct 25 13:25:24 CET 2015" timestamp="1445775924" />
+  </collection>
+</alien>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

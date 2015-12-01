@@ -29,7 +29,7 @@ TString alignStorage = "alien://folder=/alice/data/2015/OCDB";
 
 //______________________________________________________________________________
 void runMuonEfficiency(TString smode = "full", TString inputFileName = "../run-list.txt",
-		       Bool_t applyPhysSel = kFALSE, Bool_t mc = kFALSE, Bool_t embedding = kFALSE)
+		       Bool_t applyPhysSel = kTRUE, Bool_t mc = kFALSE, Bool_t embedding = kFALSE)
 {
   /// Study the MUON performances
   

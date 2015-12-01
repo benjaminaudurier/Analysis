@@ -7,7 +7,7 @@
  *
  */
 
-enum {kLocal, kProof, kProofLite, kGrid, kTerminate};
+enum {kLocal, kProof, kProofLite, kGrid, kTerminate, kSAF3Connect};
 
 //______________________________________________________________________________
 Int_t GetMode(TString smode, TString input)
@@ -17,8 +17,10 @@ Int_t GetMode(TString smode, TString input)
   else if (smode == "caf" || smode == "saf") return kProof;
   else if (smode == "prooflite" && input.EndsWith(".txt")) return kProofLite;
   else if ((smode == "test" || smode == "offline" || smode == "submit" || smode == "full" ||
-	    smode == "merge" || smode == "terminate") && input.EndsWith(".txt")) return kGrid;
+      smode == "merge" || smode == "terminate") && input.EndsWith(".txt")) return kGrid;
   else if (smode == "terminateonly") return kTerminate;
+  else if (smode == "saf3")
+    return (gSystem->GetFromPipe("hostname") == "nansafmaster3.in2p3.fr") ? kProof : kSAF3Connect;
   return -1;
 }
 
@@ -41,6 +43,8 @@ void CopyFileLocally(TList &pathList, TList &fileList, char overwrite = '\0')
 {
   /// Copy files needed for this analysis
   
+  if (gSystem->GetFromPipe("hostname") == "nansafmaster3.in2p3.fr") return; // files already there
+  
   TIter nextFile(&fileList);
   TObjString *file;
   while ((file = static_cast<TObjString*>(nextFile()))) {
@@ -50,12 +54,12 @@ void CopyFileLocally(TList &pathList, TList &fileList, char overwrite = '\0')
       overwrite = '\0';
       
       if (!gSystem->AccessPathName(file->GetName())) {
-	
-	while (overwrite != 'y' && overwrite != 'n' && overwrite != 'a' && overwrite != 'k') {
-	  cout<<Form("file %s exist in current directory. Overwrite? [y=yes, n=no, a=all, k=keep all] ",file->GetName())<<flush;
-	  cin>>overwrite;
-	}
-	
+  
+  while (overwrite != 'y' && overwrite != 'n' && overwrite != 'a' && overwrite != 'k') {
+    cout<<Form("file %s exist in current directory. Overwrite? [y=yes, n=no, a=all, k=keep all] ",file->GetName())<<flush;
+    cin>>overwrite;
+  }
+  
       } else overwrite = 'y';
       
     }
@@ -66,13 +70,13 @@ void CopyFileLocally(TList &pathList, TList &fileList, char overwrite = '\0')
       TObjString *path;
       Bool_t copied = kFALSE;
       while ((path = static_cast<TObjString*>(nextPath()))) {
-	
-	if (!gSystem->AccessPathName(Form("%s/%s", gSystem->ExpandPathName(path->GetName()), file->GetName()))) {
-	  gSystem->Exec(Form("cp %s/%s %s", path->GetName(), file->GetName(), file->GetName()));
-	  copied = kTRUE;
-	  break;
-	}
-	
+  
+  if (!gSystem->AccessPathName(Form("%s/%s", gSystem->ExpandPathName(path->GetName()), file->GetName()))) {
+    gSystem->Exec(Form("cp %s/%s %s", path->GetName(), file->GetName(), file->GetName()));
+    copied = kTRUE;
+    break;
+  }
+  
       }
       
       if (!copied) cout<<Form("file %s not found in any directory\n",file->GetName())<<flush;
@@ -84,26 +88,88 @@ void CopyFileLocally(TList &pathList, TList &fileList, char overwrite = '\0')
 }
 
 //______________________________________________________________________________
-void LoadAlirootLocally(TString& extraLibs, TString& extraIncs, TString& extraTasks)
+void CopyInputFileLocally(TString inFile, TString outFileName, char overwrite = '\0')
+{
+  /// Copy an input file needed for this analysis eventually changing its name
+  
+  if (gSystem->GetFromPipe("hostname") == "nansafmaster3.in2p3.fr") return; // files already there
+  
+  if (overwrite != 'a' && overwrite != 'k') {
+    
+    overwrite = '\0';
+    
+    if (!gSystem->AccessPathName(outFileName.Data())) {
+      
+      while (overwrite != 'y' && overwrite != 'n') {
+        cout<<Form("input file %s exist in current directory. Overwrite? [y=yes, n=no] ",outFileName.Data())<<flush;
+        cin>>overwrite;
+      }
+      
+    } else overwrite = 'y';
+    
+  }
+  
+  if (overwrite == 'y' || overwrite == 'a' || (overwrite == 'k' && gSystem->AccessPathName(outFileName.Data()))) {
+    
+    if (!gSystem->AccessPathName(Form("%s", gSystem->ExpandPathName(inFile.Data()))))
+      gSystem->Exec(Form("cp -p %s %s", inFile.Data(), outFileName.Data()));
+    else cout<<Form("file %s not found\n",inFile.Data())<<flush;
+    
+  }
+  
+}
+
+//______________________________________________________________________________
+Bool_t CopyFileOnSAF3(TList &fileList, TString dataset)
+{
+  /// Copy files needed for this analysis from current to saf3 directory
+  
+  TString saf3dir = gSystem->ExpandPathName("$HOME/saf3");
+  if (gSystem->AccessPathName(Form("%s/.vaf", saf3dir.Data()))) {
+    cout<<"saf3 folder is not mounted"<<endl;
+    cout<<"please retry as it can take some time to mount it"<<endl;
+    return kFALSE;
+  }
+  
+  TString remoteLocation = gSystem->pwd();
+  remoteLocation.ReplaceAll(gSystem->Getenv("HOME"),saf3dir.Data());
+  if (gSystem->AccessPathName(remoteLocation.Data())) gSystem->Exec(Form("mkdir -p %s", remoteLocation.Data()));
+  
+  TIter nextFile(&fileList);
+  TObjString *file;
+  while ((file = static_cast<TObjString*>(nextFile()))) {
+    
+    if (gSystem->AccessPathName(file->GetName())) {
+      cout<<Form("file %s not found in current directory\n",file->GetName())<<flush;
+      return kFALSE;
+    }
+    
+    TString remoteFile = remoteLocation+"/"+file->GetName();
+    gSystem->Exec(Form("cp -p %s %s", file->GetName(), remoteFile.Data()));
+    
+  }
+  
+  gSystem->Exec(Form("cp runAnalysis.sh %s/runAnalysis.sh", remoteLocation.Data()));
+  
+  if (gSystem->AccessPathName(Form("%s/Documents/Analysis/Macro_Utile", saf3dir.Data())))
+    gSystem->Exec(Form("mkdir -p %s/Documents/Analysis/Macro_Utile", saf3dir.Data()));
+  gSystem->Exec("cp -p $HOME/Documents/Analysis/Macro_Utile/runTaskFacilities.C $HOME/saf3/Documents/Analysis/Macro_Utile/runTaskFacilities.C");
+  
+  if (dataset.EndsWith(".txt")) {
+    gSystem->Exec(Form("cat %s | awk {'print $1\";Mode=cache\"}' > datasetSaf3.txt", dataset.Data()));
+    gSystem->Exec(Form("cp datasetSaf3.txt %s/datasetSaf3.txt", remoteLocation.Data()));
+  }
+  
+  return kTRUE;
+  
+}
+
+//______________________________________________________________________________
+void LoadAlirootLocally(TString& extraLibs, TString& extraIncs, TString& extraTasks, TString& extraPkgs)
 {
   /// Set environment locally
   
-  // Load common libraries
-  gSystem->Load("libVMC");
-  gSystem->Load("libTree.so");
-  gSystem->Load("libPhysics.so");
-  gSystem->Load("libMinuit.so");
-  gSystem->Load("libXMLParser.so");
-  gSystem->Load("libGui.so");
-  gSystem->Load("libSTEERBase");
-  gSystem->Load("libESD");
-  gSystem->Load("libAOD");
-  gSystem->Load("libANALYSIS");
-  gSystem->Load("libANALYSISalice");
-   gSystem->Load("libPWGmuon");
-  
   // Load additional libraries
-  gSystem->Load("libProofPlayer");
   TObjArray* libs = extraLibs.Tokenize(":");
   for (Int_t i = 0; i < libs->GetEntriesFast(); i++)
     gSystem->Load(Form("lib%s",static_cast<TObjString*>(libs->UncheckedAt(i))->GetName()));
@@ -117,118 +183,87 @@ void LoadAlirootLocally(TString& extraLibs, TString& extraIncs, TString& extraTa
   }
   delete incs;
   
+  // Optionally add packages
+  TObjArray* pkgs = extraPkgs.Tokenize(":");
+  for (Int_t i = 0; i < pkgs->GetEntriesFast(); i++) {
+    AliAnalysisAlien::SetupPar(Form("%s.par",static_cast<TObjString*>(pkgs->UncheckedAt(i))->GetName()));
+  }
+  delete pkgs;
+  
   // Compile additional tasks
   TObjArray* tasks = extraTasks.Tokenize(":");
   for (Int_t i = 0; i < tasks->GetEntriesFast(); i++)
-    gROOT->LoadMacro(Form("%s.cxx+g",static_cast<TObjString*>(tasks->UncheckedAt(i))->GetName()));
+    gROOT->LoadMacro(Form("%s.cxx+",static_cast<TObjString*>(tasks->UncheckedAt(i))->GetName()));
   delete tasks;
   
 }
 
 //______________________________________________________________________________
 void LoadAlirootOnProof(TString& aaf, TString rootVersion, TString aliphysicsVersion, TString& extraLibs,
-                        TString& extraIncs, TString& extraTasks, Bool_t notOnClient = kFALSE, TString& alirootMode )
+      TString& extraIncs, TString& extraTasks, TString& extraPkgs,
+                        Bool_t notOnClient = kFALSE, TString alirootMode = "base")
 {
-    // Load aliroot packages and set environment on Proof
-    
-    // set general environment
-    gEnv->SetValue("XSec.GSI.DelegProxy","2");
-    
-    // connect
-    // if (aaf == "prooflite") TProof::Open("");
-    if (aaf == "prooflite") TProof::Open("workers=2");
-    
-    else {
-        TString location, nWorkers;
-        if (aaf == "caf") {
-            location = "alice-caf.cern.ch";
-            nWorkers = ""; // "workers=40";
-        } else if (aaf == "saf") {
-            location = "baudurie@nansafmaster2.in2p3.fr"; // "localhost:1093"
-            nWorkers = ""; // "workers=8x";
-        } else return;
-        
-        TString user = (gSystem->Getenv("alien_API_USER") == NULL) ? "" : Form("%s@",gSystem->Getenv("alien_API_USER"));
-        TProof::Mgr(Form("%s%s",user.Data(), location.Data()))->SetROOTVersion(Form("VO_ALICE@ROOT::%s",rootVersion.Data()));
-        TProof::Open(Form("%s%s/?N",user.Data(), location.Data()), nWorkers.Data());
-        }
-    
-    if (!gProof)
-        {
-        cout << "Cannot connect to Proof : " << where << endl;
-        return;
-        }
-    
-    // set environment and load libraries on workers
-    TList* list = new TList();
-    
-    if (!alirootMode.IsNull())// Check if you have datas
-        {
-            if ( alirootMode == "PAR" )
-            {
-            cout << "Will work with PAR files" << endl;
-            
-            std::vector<std::string> pars;
-            
-            pars.push_back("~/alicesw/aliroot/mumu/build/STEERBase");
-            pars.push_back("~/alicesw/aliroot/mumu/build/ESD");
-            pars.push_back("~/alicesw/aliroot/mumu/build/AOD");
-            pars.push_back("~/alicesw/aliroot/mumu/build/ANALYSIS");
-            pars.push_back("~/alicesw/aliroot/mumu/build/OADB");
-            pars.push_back("~/alicesw/aliroot/mumu/build/ANALYSISalice");
-            pars.push_back("~/alicesw/aliroot/mumu/build/CORRFW");
-            pars.push_back("~/alicesw/aliroot/mumu/build/PWGmuon");
-            
-            Bool_t ok(kTRUE);
-            
-            for ( std::vector<std::string>::size_type i = 0; i < pars.size(); ++i )
-                {
-                std::string package = pars[i];
-                
-                if ( gProof->UploadPackage(package.c_str()) )ok = kFALSE;
-                
-                if ( gProof->EnablePackage(package.c_str(),"",kTRUE) )ok = kFALSE;
-            
-                if (!ok)
-                    {
-                    cout << "Problem with PAR " << package.c_str() << endl;
-                    return 0;
-                    }
-                }
-            }
-            else { list->Add(new TNamed("ALIROOT_MODE", alirootMode.Data()));}
-        }
-    else
-        {
-            list->Add(new TNamed("ALIROOT_MODE",""));
-        }
-    //list->Add(new TNamed("ALIROOT_MODE", alirootMode.Data()));
-    list->Add(new TNamed("ALIROOT_EXTRA_LIBS", extraLibs.Data()));// Load extra Libraries
-    list->Add(new TNamed("ALIROOT_EXTRA_INCLUDES", extraIncs.Data()));// Load extra Includes
-    if (aaf == "prooflite")
-        {
-        cout << "Will work in LITE mode" << endl;
-        gProof->UploadPackage("$ALICE_ROOT/ANALYSIS/macros/AliRootProofLite.par");
-        gProof->EnablePackage("$ALICE_ROOT/ANALYSIS/macros/AliRootProofLite.par", list);
-        }
-    else {
-      gProof->EnablePackage(Form("VO_ALICE@AliPhysics::%s",aliphysicsVersion.Data()), list, notOnClient);
-    }
-    
-    
-    // compile additional tasks on workers. To add tasks, use ":" (see in the main loop)
-    TObjArray* tasks = extraTasks.Tokenize(":");
-    for (Int_t i = 0; i < tasks->GetEntriesFast(); i++)
-        gProof->Load(Form("%s.cxx++g",static_cast<TObjString*>(tasks->UncheckedAt(i))->GetName()), e);
-    delete tasks;
+  /// Load aliroot packages and set environment on Proof
+  
+  // set general environment
+  gEnv->SetValue("XSec.GSI.DelegProxy","2");
+  
+  // connect
+  if (aaf == "prooflite") TProof::Open("");
+  //  if (aaf == "prooflite") TProof::Open("workers=2");
+  else if (aaf == "saf3") TProof::Open("pod://");
+  else {
+    TString location, nWorkers;
+    if (aaf == "caf") {
+      location = "alice-caf.cern.ch";
+      nWorkers = ""; // "workers=40";
+    } else if (aaf == "saf") {
+      location = "nansafmaster2.in2p3.fr"; // "localhost:1093"
+      nWorkers = ""; // "workers=8x";
+    } else return;
+    TString user = (gSystem->Getenv("alien_API_USER") == NULL) ? "" : Form("%s@",gSystem->Getenv("alien_API_USER"));
+    TProof::Mgr(Form("%s%s",user.Data(), location.Data()))->SetROOTVersion(Form("VO_ALICE@ROOT::%s",rootVersion.Data()));
+    TProof::Open(Form("%s%s/?N",user.Data(), location.Data()), nWorkers.Data());
+  }
+  if (!gProof) return;
+  
+  // set environment and load libraries on workers
+  TList* list = new TList();
+  list->Add(new TNamed("ALIROOT_MODE", alirootMode.Data()));
+  list->Add(new TNamed("ALIROOT_EXTRA_LIBS", extraLibs.Data()));
+  list->Add(new TNamed("ALIROOT_EXTRA_INCLUDES", extraIncs.Data()));
+//  list->Add(new TNamed("ALIROOT_ENABLE_ALIEN", "1"));
+  if (aaf == "prooflite") {
+    gProof->UploadPackage("$ALICE_ROOT/ANALYSIS/macros/AliRootProofLite.par");
+    gProof->EnablePackage("$ALICE_ROOT/ANALYSIS/macros/AliRootProofLite.par", list);
+  } else if (aaf == "saf3") {
+    TString home = gSystem->Getenv("HOME");
+    gProof->UploadPackage(Form("%s/AliceVaf.par", home.Data()));
+    gProof->EnablePackage(Form("%s/AliceVaf.par", home.Data()), list);
+  } else gProof->EnablePackage(Form("VO_ALICE@AliPhysics::%s",aliphysicsVersion.Data()), list, notOnClient);
+  
+  // Optionally add packages
+  TObjArray* pkgs = extraPkgs.Tokenize(":");
+  for (Int_t i = 0; i < pkgs->GetEntriesFast(); i++) {
+    gProof->UploadPackage(Form("%s.par",static_cast<TObjString*>(pkgs->UncheckedAt(i))->GetName()));
+    gProof->EnablePackage(Form("%s.par",static_cast<TObjString*>(pkgs->UncheckedAt(i))->GetName()), notOnClient);
+  }
+  delete pkgs;
+  
+  // compile additional tasks on workers
+  TObjArray* tasks = extraTasks.Tokenize(":");
+  for (Int_t i = 0; i < tasks->GetEntriesFast(); i++)
+    gProof->Load(Form("%s.cxx+g",static_cast<TObjString*>(tasks->UncheckedAt(i))->GetName()), notOnClient);
+  delete tasks;
+  
 }
 
 //______________________________________________________________________________
-TObject* CreateAlienHandler(TString runMode, TString& rootVersion,TString& alirootVersion, TString& aliphysicsVersion, TString& runListName,
-			    TString &dataDir, TString &dataPattern, TString &outDir, TString& extraLibs,
-			    TString& extraIncs, TString& extraTasks, TString& analysisMacroName,
-			    TString runFormat = "%09d", Int_t ttl = 30000, Int_t maxFilesPerJob = 100,
-			    Int_t maxMergeFiles = 10, Int_t maxMergeStages = 1)
+TObject* CreateAlienHandler(TString runMode, TString& alirootVersion, TString& aliphysicsVersion, TString& runListName,
+          TString &dataDir, TString &dataPattern, TString &outDir, TString& extraLibs,
+          TString& extraIncs, TString& extraTasks, TString& extraPkgs, TString& analysisMacroName,
+          TString runFormat = "%09d", Int_t ttl = 30000, Int_t maxFilesPerJob = 100,
+          Int_t maxMergeFiles = 10, Int_t maxMergeStages = 1)
 {
   // Configure the alien plugin
   AliAnalysisAlien *plugin = new AliAnalysisAlien();
@@ -247,9 +282,8 @@ TObject* CreateAlienHandler(TString runMode, TString& rootVersion,TString& aliro
   
   // Set versions of used packages
   plugin->SetAPIVersion("V1.1x");
-  // plugin->SetROOTVersion(rootVersion.Data());
-  plugin->SetAliROOTVersion(alirootVersion.Data());
-  plugin->SetAliPhysicsVersion(aliphysicsVersion.Data());
+  if (!alirootVersion.IsNull()) plugin->SetAliROOTVersion(alirootVersion.Data());
+  if (!aliphysicsVersion.IsNull()) plugin->SetAliPhysicsVersion(aliphysicsVersion.Data());
   
   // Declare input data to be processed
   plugin->SetGridDataDir(dataDir.Data());
@@ -306,6 +340,13 @@ TObject* CreateAlienHandler(TString runMode, TString& rootVersion,TString& aliro
   }
   delete incs;
   plugin->AddIncludePath("-I.");
+  
+  // Optionally add packages
+  TObjArray* pkgs = extraPkgs.Tokenize(":");
+  for (Int_t i = 0; i < pkgs->GetEntriesFast(); i++) {
+    plugin->EnablePackage(Form("%s.par",static_cast<TObjString*>(pkgs->UncheckedAt(i))->GetName()));
+  }
+  delete pkgs;
   
   // Optionally set a name for the generated analysis macro (default MyAnalysis.C)
   plugin->SetAnalysisMacro(Form("%s.C",analysisMacroName.Data()));
@@ -390,79 +431,74 @@ void StartAnalysis(Int_t mode, TObject* inputObj)
 }
 
 //______________________________________________________________________________
-void LoadLocalLibs(Bool_t localAnalysis=kTRUE)
+Bool_t RunAnalysisOnSAF3(TList &fileList, TString aliphysicsVersion, TString dataset)
 {
-    gSystem->Load("libVMC");
-    gSystem->Load("libMinuit");
-    gSystem->Load("libTree");
-    gSystem->Load("libProofPlayer");
-    gSystem->Load("libXMLParser");
-    gSystem->Load("libSTEERBase");
-    gSystem->Load("libSTEER");
-    gSystem->Load("libESD");
-    gSystem->Load("libAOD");
-    gSystem->Load("libANALYSIS");
-    gSystem->Load("libANALYSISalice");
-    gSystem->Load("libCORRFW");
-    
-    if (!localAnalysis)
-        {
-        //    gSystem->Load("libCORRFW");
-        }
-    else
-        {
-        gSystem->Load("libPWGmuon");
-        }
+  /// Run analysis on SAF3
+  
+  // --- mount nansafmaster3 ---
+  TString saf3dir = gSystem->ExpandPathName("$HOME/saf3");
+  if (gSystem->AccessPathName(saf3dir.Data())) gSystem->Exec(Form("mkdir %s", saf3dir.Data()));
+  if (gSystem->AccessPathName(Form("%s/.vaf", saf3dir.Data()))) {
+    Int_t ret = gSystem->Exec(Form("sshfs -o ssh_command=\"gsissh -p1975\" nansafmaster3.in2p3.fr: %s", saf3dir.Data()));
+    if (ret != 0) {
+      cout<<"mounting of saf3 folder failed"<<endl;
+      return kFALSE;
+    }
+  }
+  printf("nansafmaster3 done ! \n");
+
+  // --- create the executable to run on SAF3 ---
+  CreateSAF3Executable(dataset);
+  printf("Executable created ! \n");
+  
+  // --- copy files needed for this analysis ---
+  if (!CopyFileOnSAF3(fileList, dataset)) {
+    cout << "cp problem" << endl;
+    return kFALSE;
+  }
+  printf("Copy files done ! \n");
+
+
+  // --- change the AliPhysics version on SAF3 ---
+  gSystem->Exec(Form("sed -i '' 's/VafAliPhysicsVersion.*/VafAliPhysicsVersion=\"%s\"/g' $HOME/saf3/.vaf/vaf.conf", aliphysicsVersion.Data()));
+  printf("Change the AliPhysics version done ! \n");
+  
+  // --- enter SAF3 and run analysis ---
+  TString analysisLocation = gSystem->pwd();
+  printf("analysisLocation = %s\n",analysisLocation.Data() );
+  analysisLocation.ReplaceAll(Form("%s/", gSystem->Getenv("HOME")), "");
+  printf("analysisLocation = %s\n",analysisLocation.Data() );
+  gSystem->Exec(Form("gsissh -p 1975 -t -Y nansafmaster3.in2p3.fr 'cd %s; /opt/SAF3/bin/saf3-enter \"\" \"./runAnalysis.sh; exit\"'", analysisLocation.Data()));
+  printf("run analysis done ! \n");
+
+  
+  // --- copy analysis results (assuming analysis run smootly) ---
+  gSystem->Exec(Form("cp -p %s/%s/*.root .", saf3dir.Data(), analysisLocation.Data()));
+  
+  return kTRUE;
+  
 }
 
 //______________________________________________________________________________
-TString GetInputType(const TString& sds)
+void CreateSAF3Executable(TString dataset)
 {
-    if (sds.Length()==0 ) return "AOD";
-    
-    if (sds.Contains("SIM_JPSI")) return "AOD";
-    
-    if (sds.Contains("AOD")) return "AOD";
-    if (sds.Contains("ESD")) return "ESD";
-    
-    if ( gSystem->AccessPathName(gSystem->ExpandPathName(sds.Data())) )
-        {
-        // dataset is not a local file so it must be a dataset name
-        if (!gProof) return "NOPROOF";
-        
-        TFileCollection* fc = gProof->GetDataSet(sds.Data());
-        if (!fc) return "NODATASET";
-        
-        TIter next(fc->GetList());
-        TFileInfo* fi;
-        while ( ( fi = static_cast<TFileInfo*>(next()) ) )
-            {
-            TUrl url(*(fi->GetFirstUrl()));
-            TString surl(url.GetUrl());
-            
-            if (surl.Contains("AOD")) return "AOD";
-            if (surl.Contains("AliESD")) return "ESD";
-            }
-        
-        }
-    else
-        {
-        std::cout << "Will use datasets from file " << sds.Data() << std::endl;
-        
-        // dataset is a local text file containing a list of dataset names
-        std::ifstream in(sds.Data());
-        char line[1014];
-        
-        while (in.getline(line,1023,'\n'))
-            {
-            TString sline(line);
-            sline.ToUpper();
-            if ( sline.Contains("SIM_JPSI") ) return "AOD";
-            if ( sline.Contains("AOD") ) return "AOD";
-            if ( sline.Contains("ESD") ) return "ESD";
-            }
-        }
-    
-    return "BUG";   
+  /// Create the executable to run on SAF3
+  ofstream outFile("runAnalysis.sh");
+  outFile << "#!/bin/bash" << endl;
+  outFile << "vafctl start" << endl;
+  Int_t nWorkers = 88;
+  outFile << "nWorkers=" << nWorkers << endl;
+  outFile << "let \"nWorkers -= `pod-info -n`\"" << endl;
+  outFile << "echo \"requesting $nWorkers additional workers\"" << endl;
+  outFile << "vafreq $nWorkers" << endl;
+  outFile << "vafwait " << nWorkers << endl;
+  outFile << "root -b -q ";
+  TString macro = gSystem->GetFromPipe("tail -n 1 $HOME/.root_hist | sed 's/(.*)//g;s/^\.x\ //g;s:^.*/::g'");
+  TString arg = gSystem->GetFromPipe("tail -n 1 $HOME/.root_hist | sed 's/.*(/(/g'");
+  if (dataset.EndsWith(".txt")) arg.ReplaceAll(dataset.Data(), "datasetSaf3.txt");
+  outFile << "'" << macro.Data() << arg.Data() << "'" << endl;
+  outFile << "vafctl stop" << endl;
+  outFile.close();
+  gSystem->Exec("chmod u+x runAnalysis.sh");
 }
 

@@ -22,7 +22,7 @@ Bool_t RunALICE(TString runMode,
    // CreateInputHandlers(input,inputMC,useAODOut,useMultiHandler);
 
    // Macro to connect to proof. First argument useless for saf3
-   SetupAnalysis(runMode,analysisMode,inputName,inputOptions,softVersions,analysisOptions, "libPWGmuon.so AliAnalysisTaskEx02.cxx","$ALICE_ROOT/include $ALICE_PHYSICS/include");
+   SetupAnalysis(runMode,analysisMode,inputName,inputOptions,softVersions,analysisOptions, "libPWGmuon.so AliAnalysisTaskEx02.cxx",". $ALICE_ROOT/include $ALICE_PHYSICS/include");
    
    //Flag for MC
    Bool_t isMC = IsMC(inputOptions);
@@ -48,7 +48,7 @@ Bool_t RunALICE(TString runMode,
    timer.Start();
 
    // runs analysis  (useless due to tiedgo's launcher)
-   if (!RunAnalysisManager(runMode, analysisMode,inputName, nEvents, nSkip)) { Printf("Error : RunAnalysisManager failed !!!"); return kFALSE;}
+   if (!RunAnalysisManager(runMode, analysisMode,inputName, nEvents, nSkip,"")) { Printf("Error : RunAnalysisManager failed !!!"); return kFALSE;}
    
 
    // // Start analysis
@@ -64,7 +64,7 @@ Bool_t RunALICE(TString runMode,
 }
 
 //______________________________________________________________________
-Bool_t RunAnalysisManager( TString rMode, TString aMode, TString input, TString Opt  Long64_t nEvts = 1e10, Long64_t nSkp = 0)
+Bool_t RunAnalysisManager( TString rMode, TString aMode, TString input, Long64_t nEvts = 1e10, Long64_t nSkp = 0, TString Opt)
 {
   //
   // Run the analysis
@@ -94,11 +94,14 @@ Bool_t RunAnalysisManager( TString rMode, TString aMode, TString input, TString 
 
   TString mgrMode =( sMode == "terminateonly" ) ? "grid terminate" : sMode.Data();
 
+  printf("mode = %s\n", sMode.Data());
 
-   if ((!aMode.CompareTo("proof")) || (!aMode.CompareTo("local"))) {
-      mgr->StartAnalysis(aMode.Data(), nEvts, nSkp);
+
+   
+   if (sMode == "proof") {
+      mgr->StartAnalysis(mgrMode.Data(),inputObj->GetName(),nEvts,nSkp);
    } else {
-      mgr->StartAnalysis(aMode.Data());
+      mgr->StartAnalysis(mgrMode.Data(),static_cast<TChain*>(inputObj));
    }
 
    return kTRUE;

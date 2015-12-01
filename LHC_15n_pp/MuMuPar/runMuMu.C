@@ -5,17 +5,11 @@
 ///
 
 
-// Sim :
-// Find;BasePath=/alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/;FileName=AliAOD.Muons.root
-// 
-// Data:
-// Find;BasePath=/alice/data/2013/LHC13d/000195760/ESDs/muon_pass2/AOD134;FileName=AliAOD.root
-
 
 //______________________________________________________________________________
 AliAnalysisTask* runMuMu(TString runMode, 
                 TString analysisMode,
-                TString inputName       = "Find;BasePath=/alice/data/2015/LHC15n/000244618/muon_calo_pass1/*;FileName=AliAOD.root;Mode=cache;",
+                TString inputName       = "Find;BasePath=/alice/data/2015/LHC15n/000244340/muon_calo_pass1/AOD/*;FileName=AliAOD.Muons.root;Mode=cache;",
                 TString inputOptions    = "",
                 TString analysisOptions = "",
                 TString softVersions    = "aliphysics=vAN-20151115-1",
@@ -39,7 +33,7 @@ AliAnalysisTask* runMuMu(TString runMode,
     if (!isMC)
     {
         // pp trigger
-        triggers->Add(new TObjString("CMSL7-B-NOPF-MUFAST"));// Dimuon
+        triggers->Add(new TObjString("CMUL7-B-NOPF-MUFAST"));// Dimuon
     }
   
     // Load task

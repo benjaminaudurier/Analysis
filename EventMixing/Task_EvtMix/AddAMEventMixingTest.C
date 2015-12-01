@@ -79,7 +79,7 @@ void AddMixingHandler ( AliMultiInputEventHandler *multiInputHandler,TString for
    // AliMixEventCutObj *zvertex = new AliMixEventCutObj ( AliMixEventCutObj::kZVertex, -10, 10, 1 );
 
    AliMixEventCutObj *centrality = new AliMixEventCutObj(AliMixEventCutObj::kCentrality, 0, 20, 10, "V0A");
-//    AliMixEventCutObj *multi = new AliMixEventCutObj(AliMixEventCutObj::kMultiplicity, 2, 102, 10);
+   AliMixEventCutObj *multi = new AliMixEventCutObj(AliMixEventCutObj::kMultiplicity, 2, 102, 10);
 //    AliMixEventCutObj *zvertex = new AliMixEventCutObj(AliMixEventCutObj::kZVertex, -5, 5, 1);
 //
 //    AliMixEventCutObj *multi = new AliMixEventCutObj(AliMixEventCutObj::kMultiplicity, 2, 5002, 100);
@@ -89,7 +89,7 @@ void AddMixingHandler ( AliMultiInputEventHandler *multiInputHandler,TString for
 //     AliMixEventCutObj *zvertex = new AliMixEventCutObj ( AliMixEventCutObj::kZVertex, -10, 10, 1 );
 
    evPool->AddCut(centrality);
-   // evPool->AddCut(multi);
+   evPool->AddCut(multi);
    // evPool->AddCut ( zvertex );
 
    // adds event pool (comment it and u will have default mixing)
@@ -118,8 +118,11 @@ AliAnalysisTask *AddEventMixingTestTask(TString format = "esd", Bool_t useMC = k
    // create our task
    AliAnalysisTaskEx02 *task = new AliAnalysisTaskEx02("AliAnalysisTaskEx02");
 
+   // outputname
+   TString outputname = AliAnalysisManager::GetAnalysisManager()->GetCommonFileName();
+
    // create output container
-   AliAnalysisDataContainer *output1 = mgr->CreateContainer("cEx2", TList::Class(), AliAnalysisManager::kOutputContainer, "MixTestOutput.root");
+   AliAnalysisDataContainer *output1 = mgr->CreateContainer("cEx2", TList::Class(), AliAnalysisManager::kOutputContainer, outputname.Data());
 
    // add our task to the manager
    mgr->AddTask(task);
@@ -147,9 +150,12 @@ void AddAnalysisTaskMixInfo(TString opts = "")
 //    myclasses += ":AliAnalysisTaskEx02";
 
    if (!myclasses.IsNull()) task->SetLogType(AliLog::kDebug + debugLevel, myclasses);
+   
+   // outputname
+   TString outputname = AliAnalysisManager::GetAnalysisManager()->GetCommonFileName();
 
    // create mix output container
-   AliAnalysisDataContainer *outputMix = mgr->CreateContainer("cMixInfoList", TList::Class(), AliAnalysisManager::kOutputContainer, Form("MixInfo%s.root", opts.Data()));
+   AliAnalysisDataContainer *outputMix = mgr->CreateContainer("cMixInfoList", TList::Class(), AliAnalysisManager::kOutputContainer, Form("%sInfo-%s.root",outputname.Data(), opts.Data()));
 
    // add our task to the manager
    mgr->AddTask(task);

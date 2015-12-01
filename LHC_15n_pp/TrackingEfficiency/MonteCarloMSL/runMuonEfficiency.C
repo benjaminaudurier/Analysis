@@ -10,10 +10,10 @@
 TString rootVersion = "v5-34-30";
 TString alirootVersion = "v5-07-01-3";
 TString aliphysicsVersion = "vAN-20151015-1";
-TString dataDir = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/sim/singleMuon/CMSL7-B-NOPF-MUON";
+TString dataDir = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/singleMuon/CMSL7-B-NOPF-MUFAST";
 TString dataPattern = "*AliESDs.root";
 TString runFormat = "%06d";
-TString outDir = "Analysis/LHC15g/TrackingEfficiency/MonteCarlo/singleMuon";
+TString outDir = "Analysis/LHC15n/TrackingEfficiency/MonteCarlo/singleMuon";
 Int_t ttl = 30000;
 Int_t maxFilesPerJob = 150;
 Int_t maxMergeFiles = 10;
@@ -22,14 +22,14 @@ Int_t maxMergeStages = 4;
 // --- prepare environment ---
   TString extraLibs="";
  TString extraIncs="include";
- TString extraTasks="AliAnalysisTaskMuonTrackingEffLocal";
+ TString extraTasks="AliAnalysisTaskMuonTrackingEff";
 
 TString alignStorage = "alien://folder=/alice/data/2015/OCDB";
 // TString alignStorage = "alien://folder=/alice/simulation/2008/v4-15-Release/Residual";
 
 //______________________________________________________________________________
 void runMuonEfficiency(TString smode = "full", TString inputFileName = "runList.txt",
-		       Bool_t applyPhysSel = kFALSE, Bool_t mc = kTRUE, Bool_t embedding = kFALSE)
+		       Bool_t applyPhysSel = kTRUE, Bool_t mc = kTRUE, Bool_t embedding = kFALSE)
 {
   /// Study the MUON performances
 
@@ -47,8 +47,8 @@ void runMuonEfficiency(TString smode = "full", TString inputFileName = "runList.
   pathList.Add(new TObjString("/Users/audurier/Documents/Analysis/Tasks"));
 
   TList fileList; fileList.SetOwner();
-  fileList.Add(new TObjString("AliAnalysisTaskMuonTrackingEffLocal.cxx"));
-  fileList.Add(new TObjString("AliAnalysisTaskMuonTrackingEffLocal.h"));
+  fileList.Add(new TObjString("AliAnalysisTaskMuonTrackingEff.cxx"));
+  fileList.Add(new TObjString("AliAnalysisTaskMuonTrackingEff.h"));
 
   CopyFileLocally(pathList, fileList);
 
@@ -95,7 +95,7 @@ void CreateAnalysisTrain(Bool_t applyPhysSel, Bool_t mc, Bool_t embedding, TObje
   // event selectionMuon
   UInt_t offlineTriggerMask;
   if (applyPhysSel) {
-    gROOT->LoadMacro("$ALICE_ROOT/ANALYSIS/macros/AddTaskPhysicsSelection.C");
+    gROOT->LoadMacro("/Users/audurier/alicesw/aliphysics/mumu/inst/OADB/macros/AddTaskPhysicsSelection.C");
     AliPhysicsSelectionTask* physicsSelection = AddTaskPhysicsSelection(mc && !embedding);
     if(!physicsSelection) {
       Error("CreateAnalysisTrain","AliPhysicsSelectionTask not created!");
@@ -128,9 +128,9 @@ void CreateAnalysisTrain(Bool_t applyPhysSel, Bool_t mc, Bool_t embedding, TObje
 
   // Muon efficiency analysis
   gROOT->LoadMacro("AddTaskMUONTrackingEfficiency.C");
-  AliAnalysisTaskMuonTrackingEffLocal* muonEfficiency = AddTaskMUONTrackingEfficiency(trackCuts,"");
+  AliAnalysisTaskMuonTrackingEff* muonEfficiency = AddTaskMUONTrackingEfficiency(trackCuts,"");
   if(!muonEfficiency) {
-    Error("CreateAnalysisTrain","AliAnalysisTaskMuonTrackingEffLocal not created!");
+    Error("CreateAnalysisTrain","AliAnalysisTaskMuonTrackingEff not created!");
     return;
   }
   if (applyPhysSel) muonEfficiency->SelectCollisionCandidates(offlineTriggerMask);

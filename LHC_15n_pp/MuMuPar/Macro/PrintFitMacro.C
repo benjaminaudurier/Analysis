@@ -14,10 +14,10 @@ void PrintFitMacro(
 char         * sfile="../AnalysisResults.root",
 char         * sasso="",
 char         * sasso2="",
-char         * beamYear="mumu.ppb2013.config",
+char         * beamYear="mumu.pp2015.config",
 char         * what ="PT,Y,INTEGRATED",
 Bool_t Raa   = kFALSE, 
-Bool_t print = kFALSE)
+Bool_t print = kTRUE)
 {    
     
     //General conf.
@@ -39,6 +39,8 @@ Bool_t print = kFALSE)
         	else if(swhat->String().Contains("PT")) analysis.RAAasGraphic("PSI","PT","externFile_PT.txt","externFile_CENT.txt",kFALSE);
         	else continue;
         }
+        analysis.PrintNofParticle("PSI","NofJPsi",swhat->String().Data(),kFALSE);
+
     }
     return ;    
 
