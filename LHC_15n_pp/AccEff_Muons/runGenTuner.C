@@ -116,8 +116,8 @@ Bool_t newFixYParam[3] = {kFALSE, kFALSE, kFALSE};
 Double_t yRange[2] = {-4.2, -2.3};
 
 
-Bool_t isMC = kFALSE;
-Bool_t applyPhysicsSelection = kTRUE;
+Bool_t isMC = kTRUE;
+Bool_t applyPhysicsSelection = kFALSE;
 
 
 void UpdateParametersAndRanges(Int_t iStep);

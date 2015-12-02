@@ -140,8 +140,8 @@ private:
   //______ Specific datamembers for GenTunerJpsi compare to Gentuner _____
   Int_t     fPtNofBin;              // Number of Pt bin
   Int_t     fYNofBin;               // Number of Y bin 
-  TH1*      fHptRef;                //!< pt ref. data histo        
-  TH1*      fHyRef;                 //!< y ref. data histo
+  TH1*      fHptRef;                ///< pt ref. data histo        
+  TH1*      fHyRef;                 ///< y ref. data histo
   Double_t* fPtBin;                 //[fPtNofBin]
   Double_t* fYBin;                  //[fYNofBin] 
  

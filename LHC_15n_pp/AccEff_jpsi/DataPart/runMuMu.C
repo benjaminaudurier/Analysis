@@ -15,10 +15,10 @@
 //______________________________________________________________________________
 AliAnalysisTask* runMuMu(TString runMode, 
                         TString analysisMode,
-                        TString inputName       = "Find;BasePath=/alice/data/2015/LHC15n/000244340/muon_calo_pass1/AOD/*;FileName=AliAOD.Muons.root;Mode=cache;",
+                        TString inputName       = "Find;BasePath=/alice/data/2015/LHC15o/000245148/muon_calo_pass1/AOD/*;FileName=AliAOD.Muons.root;Mode=cache; ",
                         TString inputOptions    = "",
                         TString analysisOptions = "",
-                        TString softVersions    = "aliphysics=vAN-20151115-1",
+                        TString softVersions    = "aliphysics=v5-07-14-01-1",
                         TString taskOptions     = "" )
 {
     // path for macro usefull for saf3
@@ -38,15 +38,16 @@ AliAnalysisTask* runMuMu(TString runMode,
     if (!isMC)
     {
         // pp trigger
-        // triggers->Add(new TObjString("CINT7-B-NOPF-ALLNOTRD"));//MB
+        triggers->Add(new TObjString("CINT7-B-NOPF-MUFAST"));//MB
+        triggers->Add(new TObjString("CINT7-B-NOPF-MUFAST&0MUL"));//MB
         triggers->Add(new TObjString("CMUL7-B-NOPF-MUFAST"));// Dimuon
     }
   
     // Load task
     //==============================================================================
-    TString outputname = Form("AnalysisResultsReference.root"); // Create output name in case of no dataset selected
+    TString outputname = AliAnalysisManager::GetAnalysisManager()->GetCommonFileName(); // Create output name in case of no dataset selected
     gROOT->LoadMacro("AddTaskMuMu.C");
-    AddTaskMuMu(outputname.Data(),triggers,"pp2015",isMC);
+    AddTaskMuMu(outputname.Data(),triggers,"PbPb2015",isMC);
     cout <<"add task mumu done"<< endl;
 
     // Start analysis

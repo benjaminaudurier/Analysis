@@ -383,6 +383,7 @@ void AliAnalysisTaskGenTuner::Terminate(Option_t *)
   fcRes->Divide(3,2);
   fcRes->cd(1);
   gPad->SetLogy();
+
   if (hAccEff[0]) {
     if (fPtFuncMC) {
       fPtFuncMC->SetLineColor(3);
@@ -396,6 +397,7 @@ void AliAnalysisTaskGenTuner::Terminate(Option_t *)
       lRes->AddEntry(fPtFunc,"MC range Data","l");
     }
   }
+  
   if (hRef[0]) {
     hRef[0]->SetLineColor(2);
     if (fPtFuncNew) {
@@ -406,6 +408,7 @@ void AliAnalysisTaskGenTuner::Terminate(Option_t *)
   }
   lRes->Draw("same");
   fcRes->cd(2);
+  
   if (hAccEff[1]) {
     if (fYFuncMC) {
       fYFuncMC->SetLineColor(3);
@@ -417,6 +420,7 @@ void AliAnalysisTaskGenTuner::Terminate(Option_t *)
       h[1]->Fit(fYFunc, "IWLMR+");
     }
   }
+  
   if (hRef[1]) {
     hRef[1]->SetLineColor(2);
     if (fYFuncNew) {

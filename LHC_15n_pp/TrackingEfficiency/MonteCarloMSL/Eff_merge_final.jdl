@@ -17,14 +17,14 @@ Packages = {
 };
 # List of input files to be uploaded to workers
 InputFile = {
-   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/MonteCarlo/singleMuon/Eff_merge.C",
-   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/MonteCarlo/singleMuon/Eff.root",
-   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/MonteCarlo/singleMuon/AliAnalysisTaskMuonTrackingEffLocal.cxx",
-   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/MonteCarlo/singleMuon/AliAnalysisTaskMuonTrackingEffLocal.h",
+   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/TrackingEfficiency/MonteCarlo/singleMuon/Eff_merge.C",
+   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/TrackingEfficiency/MonteCarlo/singleMuon/Eff.root",
+   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/TrackingEfficiency/MonteCarlo/singleMuon/AliAnalysisTaskMuonTrackingEff.cxx",
+   "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/TrackingEfficiency/MonteCarlo/singleMuon/AliAnalysisTaskMuonTrackingEff.h",
    "LF:$1/Stage_$2.xml"
 };
 # This is the startup script
-Executable = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/MonteCarlo/singleMuon/Eff_merge.sh";
+Executable = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/TrackingEfficiency/MonteCarlo/singleMuon/Eff_merge.sh";
 # We split per SE for merging in stages
 # Time after which the job is killed (500 min.)
 TTL = "30000";
@@ -34,12 +34,12 @@ TTL = "30000";
 # List of output files and archives
 Output = {
    "log_archive.zip:std*@disk=1",
-   "root_archive.zip:AnalysisResults*.root,*.stat@disk=2"
+   "root_archive.zip:EventStat_temp*.root,AnalysisResults*.root,*.stat@disk=2"
 };
 Arguments = "Stage_$2.xml $2";
 # AliEn price for this job
 Price = "1";
 # Validation script to be run for each subjob
-Validationcommand = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/MonteCarlo/singleMuon/Eff_validation_merge.sh";
+Validationcommand = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/TrackingEfficiency/MonteCarlo/singleMuon/Eff_validation_merge.sh";
 User = "baudurie";
 Workdirectorysize = {"5000MB"};

@@ -1,32 +1,2 @@
-Eff.sh: line 19: free: command not found
- Generating stack trace...
- 0x000000010ca2ef64 in AliAnalysisSelector::SlaveBegin(TTree*) (in libANALYSIS.so) (AliAnalysisSelector.cxx:121)
- 0x000000010cb0fcd9 in TTreePlayer::Process(TSelector*, char const*, long long, long long) (in libTreePlayer.so) (TTreePlayer.cxx:2119)
- 0x000000010ca29fb0 in AliAnalysisManager::StartAnalysis(char const*, TTree*, long long, long long) (in libANALYSIS.so) (AliAnalysisManager.cxx:1985)
- 0x000000010ca5e3a3 in G__G__ANALYSIS_214_0_14(G__value*, char const*, G__param*, int) (in libANALYSIS.so) (G__ANALYSIS.cxx:4579)
- 0x00000001074fdc24 in Cint::G__ExceptionWrapper(int (*)(G__value*, char const*, G__param*, int), G__value*, char*, G__param*, int) (in libCint.5.so) (Api.cxx:393)
- 0x00000001076442a2 in G__execute_call (in libCint.5.so) (newlink.cxx:2413)
- 0x0000000107644be6 in G__call_cppfunc (in libCint.5.so) (newlink.cxx:2612)
- 0x00000001075ff226 in G__interpret_func (in libCint.5.so) (ifunc.cxx:5791)
- 0x00000001075e06dd in G__getfunction (in libCint.5.so) (func.cxx:2660)
- 0x0000000107788d1d in G__getstructmem(int, G__FastAllocString&, char*, int, char*, int*, G__var_array*, int) (in libCint.5.so) (var.cxx:6821)
- 0x0000000107776fb8 in G__getvariable (in libCint.5.so) (var.cxx:5405)
- 0x00000001075cf13c in G__getitem (in libCint.5.so) (expr.cxx:1906)
- 0x00000001075cda20 in G__getexpr (in libCint.5.so) (expr.cxx:1488)
- 0x000000010769cfbf in G__exec_function(G__FastAllocString&, int*, int*, int*, G__value*) (in libCint.5.so) (parse.cxx:645)
- 0x000000010769212a in G__exec_statement (in libCint.5.so) (parse.cxx:7371)
- 0x0000000107602a8e in G__interpret_func (in libCint.5.so) (ifunc.cxx:6710)
- 0x00000001075e166c in G__getfunction (in libCint.5.so) (func.cxx:2901)
- 0x00000001075cf21d in G__getitem (in libCint.5.so) (expr.cxx:1918)
- 0x00000001075cda20 in G__getexpr (in libCint.5.so) (expr.cxx:1488)
- 0x00000001075b8375 in G__calc_internal (in libCint.5.so) (expr.cxx:1071)
- 0x00000001076a8ac7 in G__process_cmd (in libCint.5.so) (pause.cxx:2333)
- 0x0000000106bed681 in TCint::ProcessLine(char const*, TInterpreter::EErrorCode*) (in libCore.5.so) (TCint.cxx:549)
- 0x0000000106bed9d9 in TCint::ProcessLineSynch(char const*, TInterpreter::EErrorCode*) (in libCore.5.so) (TCint.cxx:628)
- 0x0000000106b4a23b in TApplication::ExecuteFile(char const*, int*, bool) (in libCore.5.so) (TApplication.cxx:1111)
- 0x0000000106b4908f in TApplication::ProcessLine(char const*, bool, int*) (in libCore.5.so) (TApplication.cxx:959)
- 0x0000000107deb850 in TRint::Run(bool) (in libRint.5.so) (TRint.cxx:417)
- 0x0000000106b3fe2f in main (in root.exe) (rmain.cxx:31)
- 0x00007fff9387f5ad in start (in libdyld.dylib) + 1
-Output file AnalysisResults.root not found. Job FAILED !
-Output files were not validated by the analysis manager
+[TFile::Cp] Total 0.00 MB	|>...................| 0.00 % [0.0 MB/s][TFile::Cp] Total 0.00 MB	|====================| 100.00 % [0.1 MB/s]
+Eff.sh: line 40: free: command not found

@@ -103,7 +103,7 @@ void MuonTrackingEfficiency(TString runList = "runList.txt",
                             TString fileNameWeights = "",
                             TString fileNameData ="AnalysisResults.root",
                             TString fileNameSave = "efficiency_new.root",
-                            TString pathForRunResults = "alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/results")
+                            TString pathForRunResults = "alice/data/2015/LHC15n")
 {
   /// main function to compute, print and plot efficiencies
   
@@ -168,8 +168,8 @@ void PlotMuonEfficiencyVsX(TString var, TString fileNameData, TString fileNameSa
     printf("cannot open file %s \n",fileNameData.Data());
     return;
   }
-  TList *listTT = static_cast<TList*>(file->FindObjectAny("TotalTracksPerChamber"));
-  TList *listTD = static_cast<TList*>(file->FindObjectAny("TracksDetectedPerChamber"));
+  TList *listTT = static_cast<TList*>(file->FindObjectAny("TotalTracksPerChamber_1"));
+  TList *listTD = static_cast<TList*>(file->FindObjectAny("TracksDetectedPerChamber_1"));
   THnSparse *TT = static_cast<THnSparse*>(listTT->At(10));
   THnSparse *TD = static_cast<THnSparse*>(listTD->At(10));
   
@@ -294,8 +294,8 @@ void PlotIntegratedMuonEfficiencyVsX(TString var, TString runList, TString fileN
     printf("run %d: ", run);
     
     // compute efficiency vs var
-    TString dataFile = Form("%s/%09d/%s",spath, run, fileNameData.Data());
-    TString outFile = Form("%s/%09d/%s",spath, run, fileNameSave.Data());
+    TString dataFile = Form("%s/%09d/muon_calo_pass1/PWGDQ/DQ_Dimuons_pp_ESD/1_20151130-1155/%s",spath, run, fileNameData.Data());
+    TString outFile = Form("%s/%09d/muon_calo_pass1/PWGDQ/DQ_Dimuons_pp_ESD/1_20151130-1155/%s",spath, run, fileNameSave.Data());
     PlotMuonEfficiencyVsX(var, dataFile, outFile, kTRUE, print, kFALSE);
     // get input hists
     f = new TFile(dataFile.Data(), "read");
@@ -441,8 +441,8 @@ void PlotMuonEfficiencyVsXY(TString xVar, TString yVar, TString fileNameData, TS
     printf("cannot open file %s\n",fileNameData.Data());
     return;
   }
-  TList *listTT = static_cast<TList*>(file->FindObjectAny("TotalTracksPerChamber"));
-  TList *listTD = static_cast<TList*>(file->FindObjectAny("TracksDetectedPerChamber"));
+  TList *listTT = static_cast<TList*>(file->FindObjectAny("TotalTracksPerChamber_1"));
+  TList *listTD = static_cast<TList*>(file->FindObjectAny("TracksDetectedPerChamber_1"));
   THnSparse *TT = static_cast<THnSparse*>(listTT->At(10));
   THnSparse *TD = static_cast<THnSparse*>(listTD->At(10));
   
@@ -574,8 +574,8 @@ void PlotMuonEfficiency(TString fileNameData, TString fileNameSave, Bool_t saveE
     printf("cannot open file %s \n",fileNameData.Data());
     return;
   }
-  TList *listTT = static_cast<TList*>(file->FindObjectAny("TotalTracksPerChamber"));
-  TList *listTD = static_cast<TList*>(file->FindObjectAny("TracksDetectedPerChamber"));
+  TList *listTT = static_cast<TList*>(file->FindObjectAny("TotalTracksPerChamber_1"));
+  TList *listTD = static_cast<TList*>(file->FindObjectAny("TracksDetectedPerChamber_1"));
   THnSparse *TT = static_cast<THnSparse*>(listTT->At(10));
   THnSparse *TD = static_cast<THnSparse*>(listTD->At(10));
   
@@ -728,8 +728,8 @@ void PlotMuonEfficiencyVsRun(TString runList, TString fileNameData, TString file
     printf("run %d: ", run);
     
     // compute efficiencies for this run
-    TString dataFile = Form("%s/%09d/%s",spath, run, fileNameData.Data());
-    TString outFile = Form("%s/%09d/%s",spath, run, fileNameSave.Data());
+    TString dataFile = Form("%s/%09d/muon_calo_pass1/PWGDQ/DQ_Dimuons_pp_ESD/1_20151130-1155/%s",spath, run, fileNameData.Data());
+    TString outFile = Form("%s/%09d/muon_calo_pass1/PWGDQ/DQ_Dimuons_pp_ESD/1_20151130-1155/%s",spath, run, fileNameSave.Data());
     PlotMuonEfficiency(dataFile, outFile, kTRUE, print, kFALSE);
     
     TFile *file = new TFile(outFile.Data(), "read");
@@ -918,8 +918,8 @@ void PlotMuonEfficiencyPerDE(TString fileNameData, TString fileNameSave, Bool_t 
     printf("cannot open file %s \n",fileNameData.Data());
     return;
   }
-  TList *listTT = static_cast<TList*>(file->FindObjectAny("TotalTracksPerChamber"));
-  TList *listTD = static_cast<TList*>(file->FindObjectAny("TracksDetectedPerChamber"));
+  TList *listTT = static_cast<TList*>(file->FindObjectAny("TotalTracksPerChamber_1"));
+  TList *listTD = static_cast<TList*>(file->FindObjectAny("TracksDetectedPerChamber_1"));
   
   // output graph arrays
   TObjArray chamberVsDEGraphs; // 10 graphs: 1 for each chamber
@@ -1089,8 +1089,8 @@ void PlotMuonEfficiencyPerDEVsRun(TString runList, TString fileNameData, TString
     printf("run %d: ", run);
     
     // compute efficiencies for this run
-    TString dataFile = Form("%s/%09d/%s",spath, run, fileNameData.Data());
-    TString outFile = Form("%s/%09d/%s",spath, run, fileNameSave.Data());
+    TString dataFile = Form("%s/%09d/muon_calo_pass1/PWGDQ/DQ_Dimuons_pp_ESD/1_20151130-1155/%s",spath, run, fileNameData.Data());
+    TString outFile = Form("%s/%09d/muon_calo_pass1/PWGDQ/DQ_Dimuons_pp_ESD/1_20151130-1155/%s",spath, run, fileNameSave.Data());
     PlotMuonEfficiencyPerDE(dataFile, outFile, kTRUE);
     
     TFile *file = new TFile(outFile.Data(), "read");
@@ -1484,7 +1484,7 @@ void GetInnerRunCounts(TString runList, TString fileNameData, TString fileNameSa
     
     
     // compute efficiency vs var
-    TString dataFile = Form("%s/%09d/%s",spath, run, fileNameData.Data());
+    TString dataFile = Form("%s/%09d/muon_calo_pass1/PWGDQ/DQ_Dimuons_pp_ESD/1_20151130-1155/%s",spath, run, fileNameData.Data());
 
     // get input hists
     f1 = new TFile(dataFile.Data(), "read");
@@ -1865,7 +1865,7 @@ void IntegrateMuonEfficiency(TGraphAsymmErrors &effVsRunLow, TGraphAsymmErrors &
     
     // get run weight
     TString sRun = effVsRunLow.GetXaxis()->GetBinLabel(iRun+1);
-    TString dataFile = Form("%s/000%s/%s",spath, sRun.Data(), fileNameData.Data());
+    TString dataFile = Form("%s/000%s/muon_calo_pass1/PWGDQ/DQ_Dimuons_pp_ESD/1_20151130-1155/%s",spath, sRun.Data(), fileNameData.Data());
 
     f = new TFile(dataFile.Data(), "read");
     if (!f || !f->IsOpen()) {

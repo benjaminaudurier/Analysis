@@ -222,19 +222,18 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
    
    // yvspt bin
 
-    for (Double_t i = 0.; i < 8.; i++)
-    {
-      for (Double_t j = 0.; j < 6.; j++)
-      {
-        Double_t dpt = 1;
-        Double_t dy =0.25;
-
-        Double_t ptmin = 0.0 + i*dpt;
-        Double_t ymin  = -4.0 + j*dy;
-
-        binning->AddBin("psi","yvspt",ptmin,ptmin+dpt,ymin,ymin+dy ,"BENJ");
-        printf("Pt interval  =[%d,%d] y interval  =[%d,%d]\n",ptmin,ptmin+dpt,ymin,ymin+dy);
+     for ( Int_t i = 0; i < 2; ++i )
+    {  
+      Double_t dy= 0.75;
+      Double_t y = -4+i*dy;
+      
+      for (int j = 0; j < 8; ++j)
+      { 
+        Double_t dpt =1.;
+        Double_t pt = 0.+j*dpt;
+        binning->AddBin("psi","yvspt",pt, pt+dpt,y,y+dy,"BENJ");
       }
+      printf("Pt interval  =[%f,%f] y interval  =[%f,%f]\n",pt,pt+dpt,y,y+dy);
     }
   }
 

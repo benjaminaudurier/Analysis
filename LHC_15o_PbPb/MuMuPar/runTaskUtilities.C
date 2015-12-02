@@ -48,6 +48,7 @@
 #include "AliAODInputHandler.h"
 #include "AliAODHandler.h"
 #include "AliMCEventHandler.h"
+#include "AliMultiInputEventHandler.h"
 
 // ANALYSIS includes
 #include "AliAnalysisManager.h"
@@ -65,7 +66,7 @@ void PrintOptions()
   printf("  inputName: <runNumber> <fileWithRunList> <rootFileToAnalyse(absolute path)>\n");
   printf("  inputOptions: Data/MC FULL/NOVTX/EMBED AOD/ESD <period> <pass> <dataPattern> <dataDir>\n");
   printf("  softVersions: aliphysics=version,aliroot=version,root=version\n");
-  printf("  analysisOptions: NOPHYSSEL NOCENTR\n");
+  printf("  analysisOptions: NOPHYSSEL NOCENTR MIXED\n");
 }
 
 //_______________________________________________________
@@ -477,9 +478,11 @@ Bool_t CopyAdditionalFilesLocally ( TString additionalFile, Bool_t warnOnMissing
   for ( Int_t iarr=0; iarr<arr->GetEntries(); iarr++ ) {
     TString currFile = arr->At(iarr)->GetName();
     gSystem->ExpandPathName(currFile);
-    if ( gSystem->AccessPathName(currFile) && warnOnMissing ) {
-      printf("Error: could not copy %s\n", currFile.Data());
-      isOk = kFALSE;
+    if ( gSystem->AccessPathName(currFile) ) {
+      if ( warnOnMissing ) {
+        printf("Error: could not copy %s\n", currFile.Data());
+        isOk = kFALSE;
+      }
     }
     else PerformAction(Form("cp -p %s %s/",currFile.Data(),outDir.Data()), yesToAll);
   }
@@ -701,8 +704,10 @@ Bool_t LoadLibsProof ( TString libraries, TString includePaths, TString aaf, TSt
   TString mainPackage = "";
   if ( proofServer == "localhost" ) mainPackage = "$ALICE_ROOT/ANALYSIS/macros/AliRootProofLite.par";
   else if ( IsPod(aaf) ) {
-    mainPackage = "/afs/cern.ch/alice/offline/vaf/AliceVaf.par";
-    if ( gSystem->AccessPathName(mainPackage) ) mainPackage = gSystem->ExpandPathName("$TASKDIR/AliceVaf.par");
+    TString remotePar = "http://alibrary.web.cern.ch/alibrary/vaf/AliceVaf.par";
+    mainPackage = gSystem->BaseName(remotePar.Data());
+    TFile::Cp(remotePar.Data(), mainPackage.Data());
+    if ( gSystem->AccessPathName(mainPackage) ) printf("Error: cannot get %s from %s\n",mainPackage.Data(),remotePar.Data());
   }
   else {
     mainPackage = GetSoftVersion("aliphysics",softVersions);
@@ -792,9 +797,7 @@ Bool_t EditVafConf ( TString aaf, TString softVersions )
     PerformAction(rmdirCmd.Data(),yesToAll);
     return kFALSE;
   }
-  TString localFileTmp = Form("%s_tmp",localFile.Data());
-  PerformAction(Form("cp %s %s",localFile.Data(),localFileTmp.Data()),yesToAll);
-  command = Form("sed 's/VafAliPhysicsVersion=.*/VafAliPhysicsVersion=%s/' %s > %s; rm %s",GetSoftVersion("aliphysics",softVersions).Data(),localFileTmp.Data(),localFile.Data(),localFileTmp.Data());
+  command = Form("sed -i '' 's/VafAliPhysicsVersion=.*/VafAliPhysicsVersion=%s/' %s",GetSoftVersion("aliphysics",softVersions).Data(),localFile.Data());
   PerformAction(command.Data(),yesToAll);
   command = Form("%s %s/ %s/",copyCommand.Data(),localDir.Data(),remoteDir.Data());
   PerformAction(command.Data(),yesToAll);
@@ -828,7 +831,7 @@ void WritePodExecutable ( )
 }
 
 //______________________________________________________________________________
-void ConnectToPod ( TString aaf, TString softVersions )
+void ConnectToPod ( TString aaf, TString softVersions, TString analysisOptions )
 {
   if ( ! IsPod(aaf) ) return;
 
@@ -836,11 +839,18 @@ void ConnectToPod ( TString aaf, TString softVersions )
   TString openCommand = GetProofInfo("opencommand",aaf);
   TString aafEnter = GetProofInfo("aafenter",aaf);
 
+  Int_t nWorkers = 88;
+  TString nWorkersStr = analysisOptions(TRegexp("NWORKERS=[0-9]+"));
+  if ( ! nWorkersStr.IsNull() ) {
+    nWorkersStr.ReplaceAll("NWORKERS=","");
+    if ( nWorkersStr.IsDigit() ) nWorkers = nWorkersStr.Atoi();
+  }
+
   Bool_t yesToAll = kTRUE;
   TString remoteDir = GetProofInfo("proofserver",aaf);
   remoteDir += Form(":%s",GetPodOutDir().Data());
   TString baseExclude = "--exclude=\"*/\" --exclude=\"*.log\" --exclude=\"outputs_valid\" --exclude=\"*.xml\" --exclude=\"*.jdl\" --exclude=\"plugin_test_copy\" --exclude=\"*.so\" --exclude=\"*.d\"";
-  TString command = Form("%s --delete %s --exclude=\"*.root\" ./ %s/",copyCommand.Data(),baseExclude.Data(),remoteDir.Data());
+  TString command = Form("%s --delete %s ./ %s/",copyCommand.Data(),baseExclude.Data(),remoteDir.Data());
   PerformAction(command,yesToAll);
 //  command = Form("%s %s %s %s",baseSync.Data(),baseExclude.Data(),localDir.Data(),remoteDir.Data());
 //  PerformAction(command,yesToAll);
@@ -848,7 +858,7 @@ void ConnectToPod ( TString aaf, TString softVersions )
 //  remoteDir.ReplaceAll(Form("%s:",remote.Data()),"");
 //  printf("Please execute this on the remote machine:\n");
 //  printf("\n. %s/runPod.sh [nWorkers]\n\n",GetPodOutDir().Data());
-  TString execCommand = Form("\"\" \"%s/runPod.sh 88\"",GetPodOutDir().Data());
+  TString execCommand = Form("\"\" \"%s/runPod.sh %i\"",GetPodOutDir().Data(),nWorkers);
   gSystem->Exec(Form("%s '%s %s'", openCommand.Data(),GetProofInfo("aafenter",aaf).Data(),execCommand.Data()));
 //  gSystem->Exec(Form("%s -t %s", openCommand.Data(),GetProofInfo("aafenter",aaf).Data()));
 }
@@ -862,7 +872,7 @@ void GetPodOutput ( TString aaf )
   TString copyCommand = GetProofInfo("copycommand",aaf);
   TString remoteDir = GetProofInfo("proofserver",aaf);
   remoteDir += Form(":%s",GetPodOutDir().Data());
-  PerformAction(Form("%s --exclude=\"*/\" --exclude=\"*.so\" --exclude=\"*.d\" %s/ ./",copyCommand.Data(),remoteDir.Data()),yesToAll);
+  PerformAction(Form("%s --exclude=\"*/\" --exclude=\"*.so\" --exclude=\"*.d\" --exclude=\"*.par\" %s/ ./",copyCommand.Data(),remoteDir.Data()),yesToAll);
 }
 
 //______________________________________________________________________________
@@ -978,7 +988,7 @@ TMap* SetupAnalysis ( TString runMode = "test", TString analysisMode = "grid",
   if ( ! IsPodMachine(analysisMode) ) {
     if ( ! CopyFilesLocally(libraries,inputName,analysisMode) ) return 0x0;
     if ( IsPod(analysisMode) ) {
-      CopyAdditionalFilesLocally("$TASKDIR/runTaskUtilities.C $TASKDIR/BuildMuonEventCuts.C $TASKDIR/SetupMuonBasedTasks.C $TASKDIR/AliceVaf.par",kFALSE);
+      CopyAdditionalFilesLocally("$TASKDIR/runTaskUtilities.C $TASKDIR/BuildMuonEventCuts.C $TASKDIR/SetupMuonBasedTasks.C",kFALSE);
       WritePodExecutable();
     }
     LoadLibsLocally(libraries,includePaths);
@@ -998,7 +1008,7 @@ TMap* SetupAnalysis ( TString runMode = "test", TString analysisMode = "grid",
   else if ( sMode == "proof" ) {
     if ( runMode == "test" ) analysisMode = "prooflite";
     if ( ! IsPod(analysisMode) || IsPodMachine(analysisMode) ) LoadLibsProof(libraries,includePaths,analysisMode,softVersions);
-    else ConnectToPod(analysisMode,softVersions);
+    else ConnectToPod(analysisMode,softVersions,analysisOptions);
   }
 
   /// Some utilities for muon analysis
@@ -1045,11 +1055,18 @@ TMap* SetupAnalysis ( TString runMode = "test", TString analysisMode = "grid",
   map->Print();
   printf("\n");
 
+  AliMultiInputEventHandler* multiHandler = 0x0;
+  if ( analysisOptions.Contains("MIXED") ) {
+    multiHandler = new AliMultiInputEventHandler();
+    mgr->SetInputEventHandler(multiHandler);
+  }
+
   // input handler
   if ( isAOD ) {
     AliAODInputHandler* aodH = new AliAODInputHandler();
     //aodH->SetCheckStatistics(kTRUE); // Force to get statistics info from EventStat_temp.root // REMEMBER TO CHECK
-    mgr->SetInputEventHandler(aodH);
+    if ( multiHandler ) multiHandler->AddInputEventHandler(aodH);
+    else mgr->SetInputEventHandler(aodH);
   }
   else {
     AliESDInputHandler* esdH = new AliESDInputHandler();
@@ -1058,12 +1075,15 @@ TMap* SetupAnalysis ( TString runMode = "test", TString analysisMode = "grid",
       esdH->SetInactiveBranches("*");
       esdH->SetActiveBranches("MuonTracks MuonClusters MuonPads AliESDRun. AliESDHeader. AliMultiplicity. AliESDFMD. AliESDVZERO. AliESDTZERO. SPDVertex. PrimaryVertex. AliESDZDC. SPDPileupVertices");
     }
-    mgr->SetInputEventHandler(esdH);
+
+    if ( multiHandler ) multiHandler->AddInputEventHandler(esdH);
+    else mgr->SetInputEventHandler(esdH);
     
     if ( isMC ){
       // Monte Carlo handler
       AliMCEventHandler* mcHandler = new AliMCEventHandler();
-      mgr->SetMCtruthEventHandler(mcHandler);
+      if ( multiHandler ) multiHandler->AddInputEventHandler(mcHandler);
+      else mgr->SetMCtruthEventHandler(mcHandler);
       printf("\nMC event handler requested\n\n");
     }
 

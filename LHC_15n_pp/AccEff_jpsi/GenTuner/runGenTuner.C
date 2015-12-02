@@ -105,11 +105,11 @@ Bool_t newFixYParam[8] = {kFALSE, kTRUE, kTRUE, kFALSE, kTRUE, kFALSE, kTRUE, kT
 // Double_t yRange[2] = {-4.2, -2.3};
 
 // tune0 LHC15n jpsi
-TString oldYFormula = "[0] * ( 1 + [1]*x )";
-Double_t oldYParam[2] = {1.50913, 0.171768};
+TString oldYFormula = "[0] * ( 1 + [1]*x*x + [2]*x*x*x*x )";
+Double_t oldYParam[2] = {1.50913, 0.171768, 0.1};
 Bool_t oldFixYParam[4] = {kFALSE, kFALSE};
-TString newYFormula = "[0] * ( 1 + [1]*x )";
-Double_t newYParam[2] =  {1.50913, 0.171768};
+TString newYFormula = "[0] * ( 1 + [1]*x*x + [2]*x*x*x*x )";
+Double_t newYParam[2] =  {1.50913, 0.171768, 0.1};
 Bool_t newFixYParam[3] = {kFALSE, kFALSE};
 
 Double_t yRange[2] = {-4.2, -2.3};

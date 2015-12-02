@@ -109,7 +109,7 @@ Double_t normPol12Par(Double_t *x, Double_t *par)
   //2 parameters
   Double_t arg1 = 0;
   
-  arg1 = par[0] * ( 1 + par[1]*x[0] );
+  arg1 = par[0] * ( 1 + par[1]*x[0]*x[0] + par[2]*x[0]*x[0]*x[0]*x[0] ));
   
   
   return arg1;

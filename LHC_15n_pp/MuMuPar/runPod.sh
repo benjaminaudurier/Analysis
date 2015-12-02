@@ -6,7 +6,7 @@ vafwait $nWorkers
 export TASKDIR="$HOME/taskDir"
 cd $TASKDIR
 root -b <<EOF
-.x runMuMu.C("full","saf")
+.x runMuMu.C("full","saf","$DATASETDIR/datasetfull_saf_LHC15n_AOD_data.txt")
 .q
 EOF
 vafctl stop

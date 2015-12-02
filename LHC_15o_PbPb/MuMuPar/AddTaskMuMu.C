@@ -112,7 +112,7 @@ triggerInputsMap->Add(new TObjString("2DUM:12,"));
   }
 
   // Apply default cut
-  // cr->AddCutCombination(triggerSelection);
+  cr->AddCutCombination(eventTrue);
   cr->AddCutCombination(ps,triggerSelection);
 
   task->SetBeamYear(beamYear);
@@ -238,17 +238,19 @@ triggerInputsMap->Add(new TObjString("2DUM:12,"));
   // binning->AddBin("centrality","v0M",0.,7.5);
   // binning->AddBin("centrality","v0M",10.,50.);
   binning->AddBin("centrality","V0M");
-  binning->AddBin("centrality","V0M",0.,10.);
-  binning->AddBin("centrality","V0M",10.,20.);
-  binning->AddBin("centrality","V0M",20.,30.);
-  binning->AddBin("centrality","V0M",30.,40.);
-  binning->AddBin("centrality","V0M",40.,50.);
-  binning->AddBin("centrality","V0M",50.,60.);
-  binning->AddBin("centrality","V0M",60.,70.);
-  binning->AddBin("centrality","V0M",70.,80.);
-  binning->AddBin("centrality","V0M",80.,90.);
-  binning->AddBin("centrality","V0M",90,100);
+  // binning->AddBin("centrality","V0M",0.,10.);
+  // binning->AddBin("centrality","V0M",10.,20.);
+  // binning->AddBin("centrality","V0M",20.,30.);
+  // binning->AddBin("centrality","V0M",30.,40.);
+  // binning->AddBin("centrality","V0M",40.,50.);
+  // binning->AddBin("centrality","V0M",50.,60.);
+  // binning->AddBin("centrality","V0M",60.,70.);
+  // binning->AddBin("centrality","V0M",70.,80.);
+  // binning->AddBin("centrality","V0M",80.,90.);
+  // binning->AddBin("centrality","V0M",90.,100.);
 
+
+  task->Print("-");
 
   // add the configured task to the analysis manager
   mgr->AddTask(task);  

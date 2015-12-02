@@ -4,7 +4,7 @@
 
 
 TString Trigger = "CMSL7-B-NOPF-MUFAST";
-TString remoteDir =Form("/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/singleMuon/%s",Trigger.Data());
+TString remoteDir =Form("/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/singleMuon/tuned/%s",Trigger.Data());
 
 void runAccEffSubmitter(const char* mode)
 {
@@ -13,18 +13,20 @@ void runAccEffSubmitter(const char* mode)
 	a.SetRemoteDir(remoteDir.Data());
 	a.ShouldOverwriteFiles(true);
 	// a.MakeNofEventsFixed(10);
-	a.MakeNofEventsPropToTriggerCount(Trigger.Data());
+	a.MakeNofEventsPropToTriggerCount(Trigger.Data(),0.1);
 	a.SetVar("VAR_GENLIB_PARNAME","\"pp 5.03\"");
 
-	a.SetVar("VAR_GENPARAMCUSTOMSINGLE_PT_P0","0.675825");
-	a.SetVar("VAR_GENPARAMCUSTOMSINGLE_PT_P1","0.297392");
-	a.SetVar("VAR_GENPARAMCUSTOMSINGLE_PT_P2","0.853814");
-	a.SetVar("VAR_GENPARAMCUSTOMSINGLE_PT_P3","5.20967");
+	a.SetVar("VAR_GENPARAMCUSTOMSINGLE_PTMIN","0.8");
 
-	a.SetVar("VAR_GENPARAMCUSTOMSINGLE_Y_P0","1.17771");
-	a.SetVar("VAR_GENPARAMCUSTOMSINGLE_Y_P1","-0.591384");
-	a.SetVar("VAR_GENPARAMCUSTOMSINGLE_Y_P2","-0.418129");
-	a.SetVar("VAR_GENPARAMCUSTOMSINGLE_Y_P3","-0.0554779");
+	// a.SetVar("VAR_GENPARAMCUSTOMSINGLE_PT_P0","0.675825");
+	// a.SetVar("VAR_GENPARAMCUSTOMSINGLE_PT_P1","0.297392");
+	// a.SetVar("VAR_GENPARAMCUSTOMSINGLE_PT_P2","0.853814");
+	// a.SetVar("VAR_GENPARAMCUSTOMSINGLE_PT_P3","5.20967");
+
+	// a.SetVar("VAR_GENPARAMCUSTOMSINGLE_Y_P0","1.17771");
+	// a.SetVar("VAR_GENPARAMCUSTOMSINGLE_Y_P1","-0.591384");
+	// a.SetVar("VAR_GENPARAMCUSTOMSINGLE_Y_P2","-0.418129");
+	// a.SetVar("VAR_GENPARAMCUSTOMSINGLE_Y_P3","-0.0554779");
 
 	a.SetRunList("$DATASETDIR/runList_LHC15n.txt");
 	// a.SetAliPhysicsVersion("VO_ALICE@AliPhysics::vAN-20151015-1");

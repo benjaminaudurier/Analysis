@@ -69,7 +69,9 @@ fcRat(0x0),
 fPtNofBin(0),
 fYNofBin(0),
 fPtBin(0),
-fYBin(0)
+fYBin(0),
+fHptRef(0x0),
+fHyRef(0x0)
 {
   /// Dummy constructor
 }
@@ -221,7 +223,7 @@ void AliAnalysisTaskGenTunerJpsi::UserExec(Option_t *)
     Double_t y = mctrack->Y();
     Double_t pT = mctrack->Pt();
 
-    // Cut on muon
+    // Cut on j/psi
     if( pT>8 || pT<0 || y < -4 || y>-2.5 ) continue; 
     
     if (fWeight && fPtFuncOld && fPtFuncNew && fYFuncOld && fYFuncNew) 

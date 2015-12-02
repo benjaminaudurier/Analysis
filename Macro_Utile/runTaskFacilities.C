@@ -492,7 +492,7 @@ void CreateSAF3Executable(TString dataset)
   outFile << "echo \"requesting $nWorkers additional workers\"" << endl;
   outFile << "vafreq $nWorkers" << endl;
   outFile << "vafwait " << nWorkers << endl;
-  outFile << "root -b -q ";
+  outFile << "root -b  ";
   TString macro = gSystem->GetFromPipe("tail -n 1 $HOME/.root_hist | sed 's/(.*)//g;s/^\.x\ //g;s:^.*/::g'");
   TString arg = gSystem->GetFromPipe("tail -n 1 $HOME/.root_hist | sed 's/.*(/(/g'");
   if (dataset.EndsWith(".txt")) arg.ReplaceAll(dataset.Data(), "datasetSaf3.txt");
