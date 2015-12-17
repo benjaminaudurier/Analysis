@@ -109,10 +109,10 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   AliAnalysisMuMuCutElement * triggerSelection = cr->AddTriggerClassCut(*eventCutter,"SelectTriggerClass","const TString&,TString&,UInt_t,UInt_t,UInt_t","");
   AliAnalysisMuMuCutElement* ps = eventTrue;
   
-  // if (!simulations)
-  // {
-  //   ps = cr->AddEventCut(*eventCutter,"IsPhysicsSelected","const AliInputEventHandler&","");
-  // }
+  if (!simulations)
+  {
+    ps = cr->AddEventCut(*eventCutter,"IsPhysicsSelected","const AliInputEventHandler&","");
+  }
 
   // Apply default cut
   cr->AddCutCombination(triggerSelection);
@@ -142,12 +142,13 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
     AliAnalysisMuMuCutElement* rabs = cr->AddTrackCut(*singleAnalysis,"IsRabsOK","const AliVParticle&","");
     AliAnalysisMuMuCutElement* matchlow = cr->AddTrackCut(*singleAnalysis,"IsMatchingTriggerLowPt","const AliVParticle&","");
     AliAnalysisMuMuCutElement* eta = cr->AddTrackCut(*singleAnalysis,"IsEtaInRange","const AliVParticle&","");
-    // AliAnalysisMuMuCutElement* pdca = cr->AddTrackCut(*singleAnalysis,"IsPDCAOK","const AliVParticle&","");
+    AliAnalysisMuMuCutElement* pdca = cr->AddTrackCut(*singleAnalysis,"IsPDCAOK","const AliVParticle&","");
     
     // Create combination of cuts to apply
     cr->AddCutCombination(trackTrue);
     cr->AddCutCombination(matchlow);
     cr->AddCutCombination(rabs,eta); 
+    cr->AddCutCombination(pdca); 
     // Adding the sub analysis
     task->AdoptSubAnalysis(singleAnalysis); 
 
@@ -159,7 +160,7 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
       // Cuts on track level
       AliAnalysisMuMuCutElement* pairTrue = cr->AddTrackPairCut(*cr,"AlwaysTrue","const AliVParticle&,const AliVParticle&","");// Apply "AlwaysTrue" cut on AliVParticle derived from AliAnalysisMuMuMinv
       AliAnalysisMuMuCutElement* pairy = cr->AddTrackPairCut(*minvAnalysis,"IsRapidityInRange","const AliVParticle&,const AliVParticle&","");
-      AliAnalysisMuMuCutElement* ptRange = cr->AddTrackPairCut(*minvAnalysis,"IsPtInRange","const AliVParticle&,const AliVParticle&,Double_t&,Double_t&","0.,8.");
+      AliAnalysisMuMuCutElement* ptRange = cr->AddTrackPairCut(*minvAnalysis,"IsPtInRange","const AliVParticle&,const AliVParticle&,Double_t&,Double_t&","0.,7.");
 
       cutElements.Add(pairTrue);
       cutElements.Add(pairy);
@@ -167,7 +168,7 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
       cutElements.Add(rabs);
       cutElements.Add(matchlow);
       cutElements.Add(eta);
-      // cutElements.Add(pdca);
+      cutElements.Add(pdca);
       // cutElements.Add(ps);
       // add them
       cr->AddCutCombination(cutElements);    
@@ -192,22 +193,22 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
 
    
 
-    // pt binning
-    binning->AddBin("psi","pt", 0.0, 1.0,"BENJ");
-    binning->AddBin("psi","pt", 1.0, 2.0,"BENJ");
-    binning->AddBin("psi","pt", 2.0, 3.0,"BENJ");
-    binning->AddBin("psi","pt", 3.0, 4.0,"BENJ");
-    binning->AddBin("psi","pt", 4.0, 5.0,"BENJ");
-    binning->AddBin("psi","pt", 5.0, 6.0,"BENJ");
-    binning->AddBin("psi","pt", 6.0, 8.0,"BENJ");
+   //  // pt binning
+   //  binning->AddBin("psi","pt", 0.0, 1.0,"BENJ");
+   //  binning->AddBin("psi","pt", 1.0, 2.0,"BENJ");
+   //  binning->AddBin("psi","pt", 2.0, 3.0,"BENJ");
+   //  binning->AddBin("psi","pt", 3.0, 4.0,"BENJ");
+   //  binning->AddBin("psi","pt", 4.0, 5.0,"BENJ");
+   //  binning->AddBin("psi","pt", 5.0, 6.0,"BENJ");
+   //  binning->AddBin("psi","pt", 6.0, 8.0,"BENJ");
   
-   // y binning
-   binning->AddBin("psi","y",-4,-3.75,"BENJ");
-   binning->AddBin("psi","y",-3.75,-3.5,"BENJ");
-   binning->AddBin("psi","y",-3.5,-3.25,"BENJ");
-   binning->AddBin("psi","y",-3.25,-3,"BENJ");
-   binning->AddBin("psi","y",-3,-2.75,"BENJ");
-   binning->AddBin("psi","y",-2.75,-2.5,"BENJ");
+   // // y binning
+   // binning->AddBin("psi","y",-4,-3.75,"BENJ");
+   // binning->AddBin("psi","y",-3.75,-3.5,"BENJ");
+   // binning->AddBin("psi","y",-3.5,-3.25,"BENJ");
+   // binning->AddBin("psi","y",-3.25,-3,"BENJ");
+   // binning->AddBin("psi","y",-3,-2.75,"BENJ");
+   // binning->AddBin("psi","y",-2.75,-2.5,"BENJ");
 
     // phi binning
    // binning->AddBin("psi","phi",0,0.4,"BENJ");
@@ -222,26 +223,26 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
    
    // yvspt bin
 
-   for (Double_t i = 0.; i < 8.; i++)
-   {
-     for (Double_t j = 0.; j < 6.; j++)
-     {
-        Double_t dpt = 1;
-        Double_t dy =0.25;
+   for ( Int_t i = 0; i < 7; ++i )
+    {  
+      Double_t dy= 0.25;
+      Double_t y = -4+i*dy;
+      
+      for (int j = 0; j < 10; ++j)
+      { 
+        Double_t dpt =1.;
+        Double_t pt = 0.+j*dpt;
+        binning->AddBin("psi","yvspt",pt, pt+dpt,y,y+dy,"BENJ");
+        // printf("Pt interval  =[%f,%f] y interval  =[%f,%f]\n",pt,pt+dpt,y,y+dy);
 
-        Double_t ptmin = 0.0 + i*dpt;
-        Double_t ymin  = -4.0 + j*dy;
-
-        binning->AddBin("psi","yvspt",ptmin,ptmin+dpt,ymin,ymin+dy ,"BENJ");
-        printf("Pt interval  =[%d,%d] y interval  =[%d,%d]\n",ptmin,ptmin+dpt,ymin,ymin+dy);
-     }
-   }
+      }
+    }
   
   }
 
 
   // v0 centrality binning
-  binning->AddBin("centrality","v0a");
+  binning->AddBin("centrality","V0M");
 
   // add the configured task to the analysis manager
   mgr->AddTask(task);  

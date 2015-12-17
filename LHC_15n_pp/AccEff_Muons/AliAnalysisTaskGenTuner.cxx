@@ -266,6 +266,9 @@ void AliAnalysisTaskGenTuner::Terminate(Option_t *)
   TH1 *hAccEff[3] = {0x0, 0x0, 0x0};
   for (Int_t i = 0; i < 3 && h[i]->GetEntries() > 0; i++) {
     hAccEff[i] = ComputeAccEff(*(h[i]), *(h[i+3]), Form("%sOverGen",h[i+3]->GetName()), "Acc#{times}Eff");
+    // new TCanvas;
+    // hAccEff[i]->DrawCopy("");
+
   }
   
   // get reference data if provided

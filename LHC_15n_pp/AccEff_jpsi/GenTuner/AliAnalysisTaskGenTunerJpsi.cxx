@@ -350,14 +350,14 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
   //__________get the fit ranges
   Double_t fitRangeMC[2][2];
   fitRangeMC[0][0] = GetFitLowEdge(*(h[0]));
-  fitRangeMC[0][1] = 999.;
+  fitRangeMC[0][1] = 50.;
   fitRangeMC[1][0] = GetFitLowEdge(*(h[1]));
   fitRangeMC[1][1] = GetFitUpEdge(*(h[1]));
   Double_t fitRange[2][2];
   fitRange[0][0] = (fPtCut > 0.) ? TMath::Max(fitRangeMC[0][0], fPtCut) : fitRangeMC[0][0];
-  fitRange[0][1] = 8.;
+  fitRange[0][1] = 7.;
   fitRange[1][0] = -3.98; // not -4. because to the influence of the eta cut
-  fitRange[1][1] = -2.5;
+  fitRange[1][1] = -2.51;
   //__________
   
   //__________compute acc*eff corrections if it is simulated data
@@ -368,6 +368,9 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
   {
     hAccEff[i] = ComputeAccEff(*(h[i]), *(h[i+2]), Form("%sOverGen",h[i+2]->GetName()), "Acc#{times}Eff");
     hAccEff[i]->SetTitle("Acc#{times}Eff");
+    if(hAccEff[i])fList->Add(hAccEff[i]->Clone());
+    // new TCanvas;
+    // hAccEff[i]->DrawCopy("");
   }
   //__________
   
@@ -512,6 +515,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
   }
   //__________
   
+  
   //__________plot results
   fcRes = new TCanvas("cRes", "results", 900, 600);
   fcRes->Divide(2,2);
@@ -523,12 +527,11 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
 
   if (hAccEff[0]) 
   {
-
     if (fPtFuncMC) 
     {
       fPtFuncMC->SetLineColor(3);// Green
       fPtFuncMC->SetLineWidth(3);
-      h[0]->Fit(fPtFuncMC, "IWLMR", "e0sames");// Gen. pt histo.
+      h[0]->Fit(fPtFuncMC, "IWLR", "e0sames");// Gen. pt histo.
       leg->AddEntry(fPtFuncMC,"MC range MC","l");
     } 
     else h[0]->Draw("e0");
@@ -537,7 +540,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     if (fPtFunc) 
     {
       fPtFunc->SetLineColor(4); // Blue
-      h[0]->Fit(fPtFunc, "IWLMR+");
+      h[0]->Fit(fPtFunc, "IWLR+");
       leg->AddEntry(fPtFunc,"MC range Data","l");
     }
   }
@@ -548,7 +551,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     if (fPtFuncNew) 
     {
       fPtFuncNew->SetLineColor(2);// Red
-      hRef[0]->Fit(fPtFuncNew, "IWLMR", "e0sames");
+      hRef[0]->Fit(fPtFuncNew, "IWLR", "e0sames");
       leg->AddEntry(fPtFuncNew,"Data","l");
     } 
     else hRef[0]->Draw("e0sames");
@@ -566,7 +569,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     {
       fYFuncMC->SetLineColor(3);// Green
       fYFuncMC->SetLineWidth(3);
-      h[1]->Fit(fYFuncMC, "IWLMR", "e0sames");//  Gen. y histo.
+      h[1]->Fit(fYFuncMC, "IWLR", "e0sames");//  Gen. y histo.
       leg2->AddEntry(fYFuncMC,"MC fit function","l");
     } 
     else h[1]->Draw("");
@@ -575,7 +578,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     if (fYFunc) 
     {
       fYFunc->SetLineColor(4);// Blue
-      h[1]->Fit(fYFunc, "IWLMR+");
+      h[1]->Fit(fYFunc, "IWLR+");
       leg2->AddEntry(fYFunc,"Old Data fit function","l");
     }
   }
@@ -585,7 +588,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     if (fYFuncNew) 
     {
       fYFuncNew->SetLineColor(2); // Red
-      hRef[1]->Fit(fYFuncNew, "IWLMR", "e0sames");
+      hRef[1]->Fit(fYFuncNew, "IWLR", "e0sames");
       leg2->AddEntry(fYFuncNew,"New Data Fit function","l");
     } 
     else hRef[1]->Draw("e0sames");
@@ -613,47 +616,45 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
   }
   //__________
   
-  //__________normalize functions to their integral in the range used in MC
-  if (hAccEff[0] && fPtFunc) 
-  {
+  printf("Normalizing function....\n");
+  
+  //__________normalize functions to their integral in the range used in MC 
+  if (hAccEff[0] && fPtFunc) {
     fPtFunc->SetRange(fitRangeMC[0][0], fitRangeMC[0][1]);
     NormFunc(fPtFunc, fitRangeMC[0][0], fitRangeMC[0][1]);
   }
- 
-  if (hAccEff[0] && fPtFuncMC) 
-  {
+  if (hAccEff[0] && fPtFuncMC) {
     NormFunc(fPtFuncMC, fitRangeMC[0][0], fitRangeMC[0][1]);
   }
- 
-  if (hRef[0] && fPtFuncNew) 
-  {
+  if (hRef[0] && fPtFuncNew) {
     fPtFuncNew->SetRange(fitRangeMC[0][0], fitRangeMC[0][1]);
     NormFunc(fPtFuncNew, fitRangeMC[0][0], fitRangeMC[0][1]);
   }
-  
-  if (hAccEff[1] && fYFunc) 
-  {
+  if (hAccEff[1] && fYFunc) {
     fYFunc->SetRange(fitRangeMC[1][0], fitRangeMC[1][1]);
     NormFunc(fYFunc, fitRangeMC[1][0], fitRangeMC[1][1]);
   }
-  
-  if (hAccEff[1] && fYFuncMC)
-  {
+  if (hAccEff[1] && fYFuncMC) {
     NormFunc(fYFuncMC, fitRangeMC[1][0], fitRangeMC[1][1]);
   }
-  
-  if (hRef[1] && fYFuncNew) 
-  {
+  if (hRef[1] && fYFuncNew) {
     fYFuncNew->SetRange(fitRangeMC[1][0], fitRangeMC[1][1]);
     NormFunc(fYFuncNew, fitRangeMC[1][0], fitRangeMC[1][1]);
   }
-  //__________
+   //__________
   
-  //__________prepare data/MC function ratios
+    if (hRat[0])printf("!!!!!!!!!! \n hRat[0] = %p\n !!!!!!!!!! \n", hRat[0]);
+    if (hRat[0])printf("!!!!!!!!!! \n hRat[0]->GetXaxis()->GetXmax() = %f\n !!!!!!!!!! \n", hRat[0]->GetXaxis()->GetXmax());
+    if (fitRangeMC[0][0])printf("!!!!!!!!!! \n fitRangeMC[0][0] = %f\n !!!!!!!!!! \n", fitRangeMC[0][0]);
+
+
+
+  // prepare data/MC function ratios
   TF1 *ptRat = (hRat[0] && fPtFunc && fPtFuncNew) ? new TF1("ptRat", this, &AliAnalysisTaskGenTunerJpsi::PtRat, fitRangeMC[0][0], hRat[0]->GetXaxis()->GetXmax(), 0, "AliAnalysisTaskGenTunerJpsi", "PtRat") : 0x0;
   TF1 *yRat = (hRat[1] && fYFunc && fYFuncNew) ? new TF1("yRat", this, &AliAnalysisTaskGenTunerJpsi::YRat, fitRangeMC[1][0], fitRangeMC[1][1], 0, "AliAnalysisTaskGenTunerJpsi", "YRat") : 0x0;
   
-  //__________
+  if (ptRat)printf("!!!!!!!!!! \n ptRat = %p\n !!!!!!!!!! \n", ptRat);
+  if (ptRat)printf("!!!!!!!!!! \n ptRat(4) = %f\n !!!!!!!!!! \n", ptRat->Eval(4));
   
   //__________plot ratios
   fcRat = new TCanvas("cRat", "ratios", 900, 600);
@@ -666,7 +667,8 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     hRat[i]->Draw("e0");
     if (i == 0 && ptRat) 
     {
-      ptRat->Draw("same");
+      printf("ptRat = %p\n", ptRat);
+      ptRat->DrawCopy("same");
       leg->AddEntry(ptRat,"MC-Data fit function","l");
       leg->AddEntry(hRat[i],"Data Dist. / MC Gen. ","leg"); 
     }
@@ -930,6 +932,9 @@ void AliAnalysisTaskGenTunerJpsi::NormFunc(TF1 *f, Double_t min, Double_t max)
 Double_t AliAnalysisTaskGenTunerJpsi::PtRat(const Double_t *x, const Double_t */*p*/)
 {
   /// generated pT fit function ratio
+  // if (fPtFunc ) printf("fPtFunc = %p\n", fPtFunc);
+  // if (fPtFuncNew ) printf("fPtFuncNew = %p\n", fPtFuncNew);
+
   return (fPtFunc && fPtFuncNew) ? fPtFuncNew->Eval(*x) / fPtFunc->Eval(*x) : 0.;
 }
 

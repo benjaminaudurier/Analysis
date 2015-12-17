@@ -41,9 +41,9 @@ AliAnalysisTaskMuonTrackingEff *AddTaskMUONTrackingEfficiency(AliMuonTrackCuts &
   mgr->AddTask(taskMuonTrackingEff);
   
   // Connect input container
-  mgr->ConnectInput (taskMuonTrackingEff, 0, mgr->GetCommonInputContainer());
+  mgr->ConnectInput(taskMuonTrackingEff, 0, mgr->GetCommonInputContainer());
   
-  // Create and connect output containers
+   // Create and connect output containers
   AliAnalysisDataContainer *coutput1 = mgr->CreateContainer(Form("ClustersCounters%s",suffix.Data()), AliCounterCollection::Class(), AliAnalysisManager::kOutputContainer, fileName);
   AliAnalysisDataContainer *coutput2 = mgr->CreateContainer(Form("EventCounters%s",suffix.Data()), AliCounterCollection::Class(), AliAnalysisManager::kOutputContainer, fileName);
   AliAnalysisDataContainer *coutput3 = mgr->CreateContainer(Form("TracksDetectedPerChamber%s",suffix.Data()), TList::Class(), AliAnalysisManager::kOutputContainer, fileName);

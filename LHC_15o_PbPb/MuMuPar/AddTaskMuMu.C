@@ -45,53 +45,53 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   triggerInputsMap->SetOwner(kTRUE);
   
   // triggerInputsMap->Add(new TObjString("0VBA:1,")); 
- triggerInputsMap->Add(new TObjString("0VBA:1,"));
- triggerInputsMap->Add(new TObjString("0VBC:2,"));
- triggerInputsMap->Add(new TObjString("0TVX:3,"));
-triggerInputsMap->Add(new TObjString("0V0M:4,"));
-triggerInputsMap->Add(new TObjString("0T0A:5,"));
-triggerInputsMap->Add(new TObjString("0SMB:6,"));
-triggerInputsMap->Add(new TObjString("0UBA:7,"));
-triggerInputsMap->Add(new TObjString("0UBC:8,"));
-triggerInputsMap->Add(new TObjString("0PH0:9,"));
-triggerInputsMap->Add(new TObjString("0T0C:10,"));
-triggerInputsMap->Add(new TObjString("0VHM:11,"));
-triggerInputsMap->Add(new TObjString("0OMU:12,"));
-triggerInputsMap->Add(new TObjString("0SH1:13,"));
-triggerInputsMap->Add(new TObjString("0STP:14,"));
-triggerInputsMap->Add(new TObjString("0BPA:15,"));
-triggerInputsMap->Add(new TObjString("0BPC:16,"));
-triggerInputsMap->Add(new TObjString("0EMC:17,"));
-triggerInputsMap->Add(new TObjString("0MSL:18,"));
-triggerInputsMap->Add(new TObjString("0MSH:19,"));
-triggerInputsMap->Add(new TObjString("0MLL:20,"));
-triggerInputsMap->Add(new TObjString("0MUL:21,"));
-triggerInputsMap->Add(new TObjString("0OM2:22,"));
-triggerInputsMap->Add(new TObjString("0DMC:23,"));
-triggerInputsMap->Add(new TObjString("0LSR:24,"));
-triggerInputsMap->Add(new TObjString("1EJ1:1,"));
-triggerInputsMap->Add(new TObjString("1EG1:2,"));
-triggerInputsMap->Add(new TObjString("1EJ2:3,"));
-triggerInputsMap->Add(new TObjString("1EG2:4,"));
-triggerInputsMap->Add(new TObjString("1PHL:5,"));
-triggerInputsMap->Add(new TObjString("1PHM:6,"));
-triggerInputsMap->Add(new TObjString("1PHH:7,"));
-triggerInputsMap->Add(new TObjString("1HCO:9,"));
-triggerInputsMap->Add(new TObjString("1HJT:10,"));
-triggerInputsMap->Add(new TObjString("1HSE:11,"));
-triggerInputsMap->Add(new TObjString("1H12:12,"));
-triggerInputsMap->Add(new TObjString("1HQU:13,"));
-triggerInputsMap->Add(new TObjString("1H14:14,"));
-triggerInputsMap->Add(new TObjString("1ZED:15,"));
-triggerInputsMap->Add(new TObjString("1ZMS:16,"));
-triggerInputsMap->Add(new TObjString("1ZMB:17,"));
-triggerInputsMap->Add(new TObjString("1ZMD:18,"));
-triggerInputsMap->Add(new TObjString("1ZAC:19,"));
-triggerInputsMap->Add(new TObjString("1DJ1:20,"));
-triggerInputsMap->Add(new TObjString("1DG1:21,"));
-triggerInputsMap->Add(new TObjString("1DJ2:22,"));
-triggerInputsMap->Add(new TObjString("1DG2:23,"));
-triggerInputsMap->Add(new TObjString("2DUM:12,"));
+ triggerInputsMap->Add(new TObjString("0VBA:1"));
+ triggerInputsMap->Add(new TObjString("0VBC:2"));
+ triggerInputsMap->Add(new TObjString("0TVX:3"));
+triggerInputsMap->Add(new TObjString("0V0M:4"));
+triggerInputsMap->Add(new TObjString("0T0A:5"));
+triggerInputsMap->Add(new TObjString("0SMB:6"));
+triggerInputsMap->Add(new TObjString("0UBA:7"));
+triggerInputsMap->Add(new TObjString("0UBC:8"));
+triggerInputsMap->Add(new TObjString("0PH0:9"));
+triggerInputsMap->Add(new TObjString("0T0C:10"));
+triggerInputsMap->Add(new TObjString("0VHM:11"));
+triggerInputsMap->Add(new TObjString("0OMU:12"));
+triggerInputsMap->Add(new TObjString("0SH1:13"));
+triggerInputsMap->Add(new TObjString("0STP:14"));
+triggerInputsMap->Add(new TObjString("0BPA:15"));
+triggerInputsMap->Add(new TObjString("0BPC:16"));
+triggerInputsMap->Add(new TObjString("0EMC:17"));
+triggerInputsMap->Add(new TObjString("0MSL:18"));
+triggerInputsMap->Add(new TObjString("0MSH:19"));
+triggerInputsMap->Add(new TObjString("0MLL:20"));
+triggerInputsMap->Add(new TObjString("0MUL:21"));
+triggerInputsMap->Add(new TObjString("0OM2:22"));
+triggerInputsMap->Add(new TObjString("0DMC:23"));
+triggerInputsMap->Add(new TObjString("0LSR:24"));
+triggerInputsMap->Add(new TObjString("1EJ1:1"));
+triggerInputsMap->Add(new TObjString("1EG1:2"));
+triggerInputsMap->Add(new TObjString("1EJ2:3"));
+triggerInputsMap->Add(new TObjString("1EG2:4"));
+triggerInputsMap->Add(new TObjString("1PHL:5"));
+triggerInputsMap->Add(new TObjString("1PHM:6"));
+triggerInputsMap->Add(new TObjString("1PHH:7"));
+triggerInputsMap->Add(new TObjString("1HCO:9"));
+triggerInputsMap->Add(new TObjString("1HJT:10"));
+triggerInputsMap->Add(new TObjString("1HSE:11"));
+triggerInputsMap->Add(new TObjString("1H12:12"));
+triggerInputsMap->Add(new TObjString("1HQU:13"));
+triggerInputsMap->Add(new TObjString("1H14:14"));
+triggerInputsMap->Add(new TObjString("1ZED:15"));
+triggerInputsMap->Add(new TObjString("1ZMS:16"));
+triggerInputsMap->Add(new TObjString("1ZMB:17"));
+triggerInputsMap->Add(new TObjString("1ZMD:18"));
+triggerInputsMap->Add(new TObjString("1ZAC:19"));
+triggerInputsMap->Add(new TObjString("1DJ1:20"));
+triggerInputsMap->Add(new TObjString("1DG1:21"));
+triggerInputsMap->Add(new TObjString("1DJ2:22"));
+triggerInputsMap->Add(new TObjString("1DG2:23"));
+triggerInputsMap->Add(new TObjString("2DUM:12"));
 
   //===========================================================================
 
@@ -113,11 +113,12 @@ triggerInputsMap->Add(new TObjString("2DUM:12,"));
 
   // Apply default cut
   cr->AddCutCombination(eventTrue);
-  cr->AddCutCombination(ps,triggerSelection);
+  cr->AddCutCombination(ps);
+  cr->AddCutCombination(triggerSelection);
 
   task->SetBeamYear(beamYear);
 
-  AliAnalysisMuMuGlobal* globalAnalysis = 0x0; /*new AliAnalysisMuMuGlobal;*/ // Basic histograms analysis;
+  AliAnalysisMuMuGlobal* globalAnalysis =  new AliAnalysisMuMuGlobal; // Basic histograms analysis;
   AliAnalysisMuMuSingle* singleAnalysis = new AliAnalysisMuMuSingle;// Analysis dealing with single muon
   AliAnalysisMuMuMinv  * minvAnalysis = new AliAnalysisMuMuMinv;// Analysis creating invariant mass spectrum
 
@@ -143,10 +144,10 @@ triggerInputsMap->Add(new TObjString("2DUM:12,"));
     
     // Create combination of cuts to apply
     cr->AddCutCombination(trackTrue);
-    cr->AddCutCombination(matchlow);
-    cr->AddCutCombination(rabs); 
-    cr->AddCutCombination(eta); 
-    cr->AddCutCombination(pdca); 
+    // cr->AddCutCombination(matchlow);
+    // cr->AddCutCombination(rabs); 
+    // cr->AddCutCombination(eta); 
+    // cr->AddCutCombination(pdca); 
     // Adding the sub analysis
     task->AdoptSubAnalysis(singleAnalysis); 
 
@@ -196,61 +197,32 @@ triggerInputsMap->Add(new TObjString("2DUM:12,"));
     binning->AddBin("psi","pt", 3.0, 4.0,"BENJ");
     binning->AddBin("psi","pt", 4.0, 5.0,"BENJ");
     binning->AddBin("psi","pt", 5.0, 6.0,"BENJ");
-    binning->AddBin("psi","pt", 6.0, 7.0,"BENJ");
-    binning->AddBin("psi","pt", 7.0, 8.0,"BENJ");
-    binning->AddBin("psi","pt", 8.0, 9.0,"BENJ");
-    binning->AddBin("psi","pt", 9.0, 10.0,"BENJ");
-    // binning->AddBin("psi","pt", 10.0, 11.0,"BENJ");
-    // binning->AddBin("psi","pt", 11.0, 12.0,"BENJ");
-    // binning->AddBin("psi","pt", 12.0, 13.0,"BENJ");
-    // binning->AddBin("psi","pt", 13.0, 14.0,"BENJ");
-    // binning->AddBin("psi","pt", 14.0, 15.0,"BENJ");
-    // binning->AddBin("psi","pt", 15.0, 16.0,"BENJ");
-    // binning->AddBin("psi","pt", 16.0, 17.0,"BENJ");
-    // binning->AddBin("psi","pt", 17.0, 18.0,"BENJ");
-    // binning->AddBin("psi","pt", 18.0, 19.0,"BENJ");
-    // binning->AddBin("psi","pt", 19.0, 20.0,"BENJ");
+    binning->AddBin("psi","pt", 6.0, 8.0,"BENJ");
   
-   //  // y binning
-   binning->AddBin("psi","y",-4,-3.75,"BENJ");
-   binning->AddBin("psi","y",-3.75,-3.5,"BENJ");
-   binning->AddBin("psi","y",-3.5,-3.25,"BENJ");
-   binning->AddBin("psi","y",-3.25,-3,"BENJ");
-   binning->AddBin("psi","y",-3,-2.75,"BENJ");
-   binning->AddBin("psi","y",-2.75,-2.5,"BENJ");
-
-    // phi binning
-   // binning->AddBin("psi","phi",0,0.4,"BENJ");
-   // binning->AddBin("psi","phi",0.4,0.8,"BENJ");
-   // binning->AddBin("psi","phi",0.8,1.2,"BENJ");
-   // binning->AddBin("psi","phi",1.2,1.6,"BENJ");
-   // binning->AddBin("psi","phi",1.6,2,"BENJ");
-   // binning->AddBin("psi","phi",2,2.4,"BENJ");
-   // binning->AddBin("psi","phi",2.4,2.8,"BENJ");
-   // binning->AddBin("psi","phi",2.4,2.8,"BENJ");
-   // binning->AddBin("psi","phi",2.8,3.14,"BENJ");
+    // y binning
+    binning->AddBin("psi","y",-4,-3.75,"BENJ");
+    binning->AddBin("psi","y",-3.75,-3.5,"BENJ");
+    binning->AddBin("psi","y",-3.5,-3.25,"BENJ");
+    binning->AddBin("psi","y",-3.25,-3,"BENJ");
+    binning->AddBin("psi","y",-3,-2.75,"BENJ");
+    binning->AddBin("psi","y",-2.75,-2.5,"BENJ");
+   
   }
 
   // v0 centrality binning
-  
-  // binning->AddBin("centrality","v0a"); 
-  
-  // binning->AddBin("centrality","v0M",0.,7.5);
-  // binning->AddBin("centrality","v0M",10.,50.);
-  binning->AddBin("centrality","V0M");
-  // binning->AddBin("centrality","V0M",0.,10.);
-  // binning->AddBin("centrality","V0M",10.,20.);
-  // binning->AddBin("centrality","V0M",20.,30.);
-  // binning->AddBin("centrality","V0M",30.,40.);
-  // binning->AddBin("centrality","V0M",40.,50.);
-  // binning->AddBin("centrality","V0M",50.,60.);
-  // binning->AddBin("centrality","V0M",60.,70.);
-  // binning->AddBin("centrality","V0M",70.,80.);
-  // binning->AddBin("centrality","V0M",80.,90.);
-  // binning->AddBin("centrality","V0M",90.,100.);
+  binning->AddBin("centrality","V0M",0.,90.);
+  binning->AddBin("centrality","V0M",0.,10.);
+  binning->AddBin("centrality","V0M",10.,20.);
+  binning->AddBin("centrality","V0M",20.,30.);
+  binning->AddBin("centrality","V0M",30.,40.);
+  binning->AddBin("centrality","V0M",40.,50.);
+  binning->AddBin("centrality","V0M",50.,60.);
+  binning->AddBin("centrality","V0M",60.,70.);
+  binning->AddBin("centrality","V0M",70.,80.);
+  binning->AddBin("centrality","V0M",80.,90.);
 
 
-  task->Print("-");
+  // task->Print("-");
 
   // add the configured task to the analysis manager
   mgr->AddTask(task);  

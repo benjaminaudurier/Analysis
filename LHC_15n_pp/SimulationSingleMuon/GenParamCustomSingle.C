@@ -25,7 +25,7 @@ static Double_t V2Muon( const Double_t *pv, const Double_t */*dummy*/ );
 //-------------------------------------------------------------------------
 AliGenerator* GenParamCustomSingle()
 {
-  AliGenParam *singleMu = new AliGenParam(30,-1,PtMuon,YMuon,V2Muon,IpMuon);
+  AliGenParam *singleMu = new AliGenParam(3,-1,PtMuon,YMuon,V2Muon,IpMuon);
   singleMu->SetMomentumRange(0,1e6);
   singleMu->SetPtRange(0.8,999.);
   singleMu->SetYRange(-4.3, -2.3);

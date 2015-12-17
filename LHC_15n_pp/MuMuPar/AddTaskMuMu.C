@@ -113,10 +113,10 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   AliAnalysisMuMuCutElement * triggerSelection = cr->AddTriggerClassCut(*eventCutter,"SelectTriggerClass","const TString&,TString&,UInt_t,UInt_t,UInt_t","");
   AliAnalysisMuMuCutElement* ps = eventTrue;
   
-  // if (!simulations)
-  // {
-  //   ps = cr->AddEventCut(*eventCutter,"IsPhysicsSelected","const AliInputEventHandler&","");
-  // }
+  if (!simulations)
+  {
+    ps = cr->AddEventCut(*eventCutter,"IsPhysicsSelected","const AliInputEventHandler&","");
+  }
 
   // Apply default cut
   // cr->AddCutCombination(triggerSelection);
@@ -152,6 +152,7 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
     cr->AddCutCombination(trackTrue);
     cr->AddCutCombination(matchlow);
     cr->AddCutCombination(rabs,eta); 
+    cr->AddCutCombination(pdca); 
     // Adding the sub analysis
     task->AdoptSubAnalysis(singleAnalysis); 
 
@@ -242,7 +243,7 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   
   // binning->AddBin("centrality","v0M",0.,7.5);
   // binning->AddBin("centrality","v0M",10.,50.);
-  binning->AddBin("centrality","v0m");
+  binning->AddBin("centrality","V0A");
   // binning->AddBin("centrality","v0a",0.,10.);
   // binning->AddBin("centrality","v0a",10.,20.);
   // binning->AddBin("centrality","v0a",20.,30.);

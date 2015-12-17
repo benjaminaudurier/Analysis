@@ -141,7 +141,9 @@ void AddHisto(TString sfile[2], TH1 *hRes[nHist][3], Double_t weight)
       return;
     }
     if (file && file->IsOpen()) {
-      TList *list = static_cast<TList*>(file->FindObjectAny("ExtraHistos"));
+      TList *list =0x0;
+      if(j==0)list = static_cast<TList*>(file->FindObjectAny("ExtraHistos"));
+      else list = static_cast<TList*>(file->FindObjectAny("ExtraHistos"));
       if (!list) {
         printf("cannot find histograms\n");
         return;

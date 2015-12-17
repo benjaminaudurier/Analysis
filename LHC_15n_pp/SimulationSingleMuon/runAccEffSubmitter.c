@@ -13,7 +13,7 @@ void runAccEffSubmitter(const char* mode)
 	a.SetRemoteDir(remoteDir.Data());
 	a.ShouldOverwriteFiles(true);
 	// a.MakeNofEventsFixed(10);
-	a.MakeNofEventsPropToTriggerCount(Trigger.Data(),0.1);
+	a.MakeNofEventsPropToTriggerCount(Trigger.Data(),1);
 	a.SetVar("VAR_GENLIB_PARNAME","\"pp 5.03\"");
 
 	a.SetVar("VAR_GENPARAMCUSTOMSINGLE_PTMIN","0.8");

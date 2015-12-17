@@ -56,15 +56,34 @@ Bool_t newFixPtParam[6] = {kFALSE, kFALSE, kFALSE, kFALSE, kFALSE, kFALSE};
 
 // Double_t ptRange[2] = {0.8, 999.};
 
-// tune0 LHC15n jpsi
-TString oldPtFormula = "[0]*x / TMath::Power( 1 + [1]*x*x, [2])";
-Double_t oldPtParam[3] = {0.288315, 0.0593389, 3.42939};
-Bool_t oldFixPtParam[4] = {kFALSE, kFALSE, kFALSE};
-TString newPtFormula =  "[0]*x / TMath::Power( 1 + [1]*x*x, [2])";
-Double_t newPtParam[3] = {0.288315, 0.0593389, 3.42939};
-Bool_t newFixPtParam[6] = {kFALSE, kFALSE, kFALSE};
+//______
+// J/Psi pT
+// pp
+// from the fit of RHIC, CDF & LHC data, see arXiv:1103.2394
+//
+// const Double_t kpt0 = 1.04*TMath::Power(5020,0.101);
+// const Double_t kxn  = 3.9;
+// //
+// Double_t pass1 = 1.+0.363*(x/kpt0)*(x/kpt0);
+// return x/TMath::Power(pass1,kxn);
+// 
+//______
 
-Double_t ptRange[2] = {0.8, 999.};
+
+//x/TMath::Power(1.+0.363*(x/1.04*TMath::Power(7000,0.101))*(x/1.04*TMath::Power(7000,0.101)),kxn)
+
+
+// tune0 LHC15n jpsi
+
+TString oldPtFormula =   "[0]*x / TMath::Power(1 + [1]*x*x,[2])";
+Double_t oldPtParam[3] = {1., 0.060020 , 3.9}; 
+Bool_t oldFixPtParam[3] = {kFALSE, kFALSE,kFALSE};
+
+TString newPtFormula =  "[0]*x / TMath::Power(1 + [1]*x*x,[2])";
+Double_t newPtParam[3] = {1., 0.060020 , 3.9}; 
+Bool_t newFixPtParam[3] = {kFALSE, kFALSE,kFALSE};
+
+Double_t ptRange[2] = {0.8, 50.};
 
 /*
 // tune0 LHC13de
@@ -104,13 +123,26 @@ Bool_t newFixYParam[8] = {kFALSE, kTRUE, kTRUE, kFALSE, kTRUE, kFALSE, kTRUE, kT
 
 // Double_t yRange[2] = {-4.2, -2.3};
 
+
+//______
+// J/Psi y
+// pp
+// from the fit of RHIC + LHC data, see arXiv:1103.2394
+//
+// x = x/TMath::Log(energy/3.097);
+// x = x*x;
+// Double_t y = TMath::Exp(-x/0.4/0.4/2);
+// if(x > 1) y=0;
+// return y;
+//______
+
 // tune0 LHC15n jpsi
-TString oldYFormula = "[0] * ( 1 + [1]*x*x + [2]*x*x*x*x )";
-Double_t oldYParam[2] = {1.50913, 0.171768, 0.1};
-Bool_t oldFixYParam[4] = {kFALSE, kFALSE};
-TString newYFormula = "[0] * ( 1 + [1]*x*x + [2]*x*x*x*x )";
-Double_t newYParam[2] =  {1.50913, 0.171768, 0.1};
-Bool_t newFixYParam[3] = {kFALSE, kFALSE};
+TString oldYFormula = " TMath::Exp(- ( (x/TMath::Log([3]/[0])) * (x/TMath::Log([3]/[0])) ) /[1]/[1]/[2])";
+Double_t oldYParam[4] = {3.097, 0.4, 2,5030};
+Bool_t oldFixYParam[4] = {kFALSE, kFALSE,kFALSE,kFALSE};
+TString newYFormula = "[0] * ( 1 + [1]*x*x  )";
+Double_t newYParam[2] =  {2, 3};
+Bool_t newFixYParam[2] = {kFALSE, kFALSE};
 
 Double_t yRange[2] = {-4.2, -2.3};
 
@@ -124,7 +156,7 @@ void UpdateParametersAndRanges(Int_t iStep);
 //__________Setting for spectra path
 TString striggerDimuon  ="CMUL7-B-NOPF-MUFAST";
 TString seventType      ="PSALL";
-TString spairCut        ="pALLPAIRYPAIRPTIN0.0-8.0RABSMATCHLOWETA";
+TString spairCut        ="pALLPAIRYPAIRPTIN0.0-8.0RABSMATCHLOWETAPDCA";
 TString scentrality     ="V0A";
 TString subResultName   = "";/*"YVSPT_BENJ_02.00_04.00_m03.50_m03.00";*/
 //__________
@@ -132,7 +164,7 @@ TString subResultName   = "";/*"YVSPT_BENJ_02.00_04.00_m03.50_m03.00";*/
 
 //______________________________________________________________________________
 void runGenTuner(TString smode = "local", TString inputFileName = "AliAOD.root",
-     Int_t iStep = -1, char overwrite = '\0')
+     Int_t iStep = 0, char overwrite = '\0')
 {
   /// Tune single muon kinematics distribution
   
@@ -145,16 +177,17 @@ void runGenTuner(TString smode = "local", TString inputFileName = "AliAOD.root",
     return;
   }
   
-  // --- copy files needed for this analysis ---
+   // --- copy files needed for this analysis ---
   TList pathList; pathList.SetOwner();
   pathList.Add(new TObjString("/Users/audurier/Documents/Analysis/Tasks"));
   TList fileList; fileList.SetOwner();
-  // fileList.Add(new TObjString("runGenTuner.C"));
-  // fileList.Add(new TObjString("AddTaskGenTuner.C"));
   fileList.Add(new TObjString("AliAnalysisTaskGenTunerJpsi.cxx"));
   fileList.Add(new TObjString("AliAnalysisTaskGenTunerJpsi.h"));
-  CopyFileLocally(pathList, fileList, overwrite);
-  CopyInputFileLocally("/Users/audurier/Documents/Analysis/LHC_15n_pp/AccEff_jpsi/DataPart/AnalysisResultsReference.root", "AnalysisResultsReference.root", overwrite);
+  CopyFileLocally(pathList, fileList);
+   fileList.Add(new TObjString("runGenTunerLoop.C"));
+  fileList.Add(new TObjString("runGenTuner.C"));
+  fileList.Add(new TObjString("AddTaskGenTuner.C"));
+  CopyInputFileLocally("/Users/audurier/Documents/Analysis/LHC_15n_pp/AccEff_jpsi/DataPart/AnalysisResults.root", "AnalysisResultsReference.root", overwrite);
   fileList.Add(new TObjString("AnalysisResultsReference.root"));
   
   // --- saf3 case ---
@@ -220,7 +253,7 @@ void runGenTuner(TString smode = "local", TString inputFileName = "AliAOD.root",
 
   // save results of current step if running in a loop
   if (iStep > -1) gSystem->Exec(Form("cp -f AnalysisResults.root Results_step%d.root", iStep));
-  else gSystem->Exec(Form("cp -f AnalysisResults.root ReferenceResults.root"));
+  // else gSystem->Exec(Form("cp -f AnalysisResults.root ReferenceResults.root"));
 }
 
 //______________________________________________________________________________
@@ -278,25 +311,31 @@ TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)
   if (!oc) return;
 
    // Get spectras
-  AliAnalysisMuMuSpectra * spectra = static_cast<AliAnalysisMuMuSpectra*>(oc->GetObject(Form("/%s/%s/%s/%s/PSI-YVSPT",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data())));
-  if(!spectra)
+  AliAnalysisMuMuSpectra * spectraPT = static_cast<AliAnalysisMuMuSpectra*>(oc->GetObject(Form("/%s/%s/%s/%s/PSI-PT",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data())));
+  if(!spectraPT)
   {
-      cout << Form("Cannot find PT spectra in /%s/%s/%s/%s/PSI-YVSPT",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data()) << endl;
+      cout << Form("Cannot find PT spectra in /%s/%s/%s/%s/PSI-PT",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data()) << endl;
+      return;
+  }
+  AliAnalysisMuMuSpectra * spectraY = static_cast<AliAnalysisMuMuSpectra*>(oc->GetObject(Form("/%s/%s/%s/%s/PSI-Y",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data())));
+  if(!spectraY)
+  {
+      cout << Form("Cannot find PT spectra in /%s/%s/%s/%s/PSI-Y",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data()) << endl;
       return;
   }
 
 
-  Double_t* ptbin= spectra->Binning()->CreateBinArrayX();
-  Double_t* ybin= spectra->Binning()->CreateBinArrayY();
+  Double_t* ptbin= spectraPT->Binning()->CreateBinArray();
+  Double_t* ybin= spectraY->Binning()->CreateBinArray();
 
-  Int_t ptnofbin= spectra->Binning()->GetNBinsX();
-  Int_t ynofbin= spectra->Binning()->GetNBinsY();
+  Int_t ptnofbin= spectraPT->Binning()->GetNBinsX();
+  Int_t ynofbin= spectraY->Binning()->GetNBinsX();
 
   //___________Set ref.Spectra
   // Pt spectra
-  TH2* hpt= spectra->Plot("NofJPsi",subResultName,kTRUE);// new
+  TH1* hpt= spectraPT->Plot("NofJPsi",subResultName,kTRUE);// new
   //Y spectra
-  TH2* hy= spectra->Plot("NofJPsi",subResultName,kTRUE);// new
+  TH1* hy= spectraY->Plot("NofJPsi",subResultName,kFALSE);// new
 
   dataFile->Close();
 
@@ -326,8 +365,8 @@ TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)
   genTuner->SetYBin(ynofbin+1,ybin);
 
   if(hpt && hy){
-    genTuner->SetPtRefHisto(hpt->ProjectionX());
-    genTuner->SetYRefHisto(hy->ProjectionY());
+    genTuner->SetPtRefHisto(hpt);
+    genTuner->SetYRefHisto(hy);
   } else {
     cout << "Cannot set reference histo !" << endl;
     return;

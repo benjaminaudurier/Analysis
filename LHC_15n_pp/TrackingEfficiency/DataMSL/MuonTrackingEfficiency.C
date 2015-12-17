@@ -52,7 +52,7 @@ const Char_t *effErrMode = "b(1,1)mode"; // Bayesian with uniform prior
 
 Double_t centMin = -999.;
 Double_t centMax = 999.;
-Double_t ptMin = 0.;
+Double_t ptMin = 1.;
 Double_t ptMax = -1.;
 Int_t charge = 0; // 0 selects + and -, -1 and +1 selects - or + muons respectively
 
@@ -115,7 +115,7 @@ void MuonTrackingEfficiency(TString runList = "runList.txt",
   
 
   
-  // PlotMuonEfficiencyVsX("centrality", fileNameData, fileNameSave, kFALSE, kFALSE, kTRUE);
+  PlotMuonEfficiencyVsX("centrality", fileNameData, fileNameSave, kFALSE, kFALSE, kTRUE);
   PlotMuonEfficiencyVsX("pt", fileNameData, fileNameSave, kFALSE, kFALSE, kTRUE);
   PlotMuonEfficiencyVsX("y", fileNameData, fileNameSave, kFALSE, kFALSE, kTRUE);
   PlotMuonEfficiencyVsX("phi", fileNameData, fileNameSave, kFALSE, kFALSE, kTRUE);
@@ -142,7 +142,6 @@ void MuonTrackingEfficiency(TString runList = "runList.txt",
 
   
 }
-
 
 //---------------------------------------------------------------------------
 void PlotMuonEfficiencyVsX(TString var, TString fileNameData, TString fileNameSave, Bool_t saveEdges, Bool_t print, Bool_t draw)
@@ -205,6 +204,7 @@ void PlotMuonEfficiencyVsX(TString var, TString fileNameData, TString fileNameSa
       // compute the overall tracking efficiency
       TGraphAsymmErrors *dummy[3] = {0x0, 0x0, 0x0};
       GetTrackingEfficiency(chEff, chEffErr, dummy, effVsX, ix-1, TT->GetAxis(xDim)->GetBinCenter(ix), print);
+
       
     } else {
       
@@ -295,7 +295,7 @@ void PlotIntegratedMuonEfficiencyVsX(TString var, TString runList, TString fileN
     
     // compute efficiency vs var
     TString dataFile = Form("%s/%09d/muon_calo_pass1/PWGDQ/DQ_Dimuons_pp_ESD/1_20151130-1155/%s",spath, run, fileNameData.Data());
-    TString outFile = Form("%s/%09d/muon_calo_pass1/PWGDQ/DQ_Dimuons_pp_ESD/1_20151130-1155/%s",spath, run, fileNameSave.Data());
+    TString outFile  = Form("%s/%09d/muon_calo_pass1/PWGDQ/DQ_Dimuons_pp_ESD/1_20151130-1155/%s",spath, run, fileNameSave.Data());
     PlotMuonEfficiencyVsX(var, dataFile, outFile, kTRUE, print, kFALSE);
     // get input hists
     f = new TFile(dataFile.Data(), "read");
@@ -450,9 +450,9 @@ void PlotMuonEfficiencyVsXY(TString xVar, TString yVar, TString fileNameData, TS
   Int_t nxBins = TT->GetAxis(xDim)->GetNbins();
   Int_t nyBins = TT->GetAxis(yDim)->GetNbins();
   TH2F *effVsXY = new TH2F(Form("trackingEffVs%s-%s",xVar.Data(),yVar.Data()),
-			   Form("Measured tracking efficiency versus %s and %s",xVar.Data(),yVar.Data()),
-			   nxBins, TT->GetAxis(xDim)->GetBinLowEdge(1), TT->GetAxis(xDim)->GetBinUpEdge(nxBins),
-			   nyBins, TT->GetAxis(yDim)->GetBinLowEdge(1), TT->GetAxis(yDim)->GetBinUpEdge(nyBins));
+         Form("Measured tracking efficiency versus %s and %s",xVar.Data(),yVar.Data()),
+         nxBins, TT->GetAxis(xDim)->GetBinLowEdge(1), TT->GetAxis(xDim)->GetBinUpEdge(nxBins),
+         nyBins, TT->GetAxis(yDim)->GetBinLowEdge(1), TT->GetAxis(yDim)->GetBinUpEdge(nyBins));
   effVsXY->SetDirectory(0);
   
   // set the centrality and pT range for integration
@@ -490,8 +490,8 @@ void PlotMuonEfficiencyVsXY(TString xVar, TString yVar, TString fileNameData, TS
       } else {
         
         // fill histo with 0 ± 1
-	effVsXY->Fill(TT->GetAxis(xDim)->GetBinCenter(ix),TT->GetAxis(yDim)->GetBinCenter(iy),0.);
-	effVsXY->SetBinError(ix,iy,1.);
+  effVsXY->Fill(TT->GetAxis(xDim)->GetBinCenter(ix),TT->GetAxis(yDim)->GetBinCenter(iy),0.);
+  effVsXY->SetBinError(ix,iy,1.);
         
       }
       
@@ -1310,14 +1310,18 @@ Bool_t GetChamberEfficiency(THnSparse &TT, THnSparse &TD, TArrayD &chEff, TArray
   // project track hists over the chamber axis
   TH1D *TTdraw = TT.Projection(0,"e");
   TH1D *TDdraw = TD.Projection(0,"e");
+  new TCanvas;
+  // TTdraw->DrawCopy();
+  // new TCanvas;
+  // TDdraw->DrawCopy();
   
   // compute chamber efficiency and errors
   TGraphAsymmErrors *efficiency = (TTdraw->GetEntries() > 0) ? new TGraphAsymmErrors(TDdraw, TTdraw,Form("%se0",effErrMode)) : 0x0;
   Bool_t ok = (efficiency);
   
+  
   // fill arrays
   if (ok) {
-    
     Bool_t missingEff = kFALSE;
     
     for (Int_t i = 0; i < 10; i++) {
@@ -1697,9 +1701,9 @@ void ComputeTrackingEfficiency(Double_t stEff[6], Double_t stEffErr[6][2], Doubl
       
       spectroEffErr[i] = 0.;
       for (Int_t j = 1; j < 32; j++) {
-	Double_t sigmaAdd = 1.;
-	for (Int_t iSt = 0; iSt < 5; iSt++) sigmaAdd *= de[iSt][TESTBIT(j,iSt)];
-	spectroEffErr[i] += sigmaAdd;
+  Double_t sigmaAdd = 1.;
+  for (Int_t iSt = 0; iSt < 5; iSt++) sigmaAdd *= de[iSt][TESTBIT(j,iSt)];
+  spectroEffErr[i] += sigmaAdd;
       }
       spectroEffErr[i] = TMath::Sqrt(spectroEffErr[i]);
       
@@ -1715,9 +1719,9 @@ void ComputeTrackingEfficiency(Double_t stEff[6], Double_t stEffErr[6][2], Doubl
       
       spectroEffErr[i] = 0.;
       for (Int_t j = 1; j < 16; j++) {
-	Double_t sigmaAdd = de[5][TESTBIT(j,3)];
-	for (Int_t iSt = 0; iSt < 3; iSt++) sigmaAdd *= de[iSt][TESTBIT(j,iSt)];
-	spectroEffErr[i] += sigmaAdd;
+  Double_t sigmaAdd = de[5][TESTBIT(j,3)];
+  for (Int_t iSt = 0; iSt < 3; iSt++) sigmaAdd *= de[iSt][TESTBIT(j,iSt)];
+  spectroEffErr[i] += sigmaAdd;
       }
       spectroEffErr[i] = TMath::Sqrt(spectroEffErr[i]);
       
@@ -1749,14 +1753,14 @@ void GetTrackingEfficiency(TArrayD &chEff, TArrayD chEffErr[2], TGraphAsymmError
     // compute station efficiency
     for (Int_t iSt = 0; iSt < 5; ++iSt) ComputeStationEfficiency(chEff, chEffErr, iSt, stEff[iSt], stEffErr[iSt]);
     ComputeStation45Efficiency(chEff, chEffErr, stEff[5], stEffErr[5]);
-    
+
     // compute spectrometer efficiency
     Double_t spectroEff, spectroEffErr[2];
     ComputeTrackingEfficiency(stEff, stEffErr, spectroEff, spectroEffErr);
     chEff[0] = spectroEff;
     chEffErr[0][0] = spectroEffErr[0];
     chEffErr[1][0] = spectroEffErr[1];
-    
+
     // fill graphs if required
     for (Int_t i = 0; i < 3; ++i) {
       if (effVsX[i]) {
@@ -1786,10 +1790,10 @@ void GetTrackingEfficiency(TArrayD &chEff, TArrayD chEffErr[2], TGraphAsymmError
       // compute station efficiency
       for (Int_t iSt = 0; iSt < 5; ++iSt) ComputeStationEfficiency(chEffEdge[i], chEffErr, iSt, stEffEdge[i][iSt], stEffEdgeErr[i][iSt]);
       ComputeStation45Efficiency(chEffEdge[i], chEffErr, stEffEdge[i][5], stEffEdgeErr[i][5]);
-      
+
       // compute spectrometer efficiency
       ComputeTrackingEfficiency(stEffEdge[i], stEffEdgeErr[i], spectroEffEdge[i], spectroEffEdgeErr[i]);
-      
+
       // fill graph if required
       if (effVsX[i+1]) {
         effVsX[i+1]->SetPoint(ip,xp,spectroEffEdge[i]);

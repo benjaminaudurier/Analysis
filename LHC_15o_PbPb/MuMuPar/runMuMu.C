@@ -37,11 +37,20 @@ AliAnalysisTask* runMuMu(TString runMode,
     triggers->SetOwner(kTRUE); // Give rights to trigger liser
     if (!isMC)
     {
-        // pp trigger
-        triggers->Add(new TObjString("CINT7-B-NOPF-MUFAST"));//MB
-        triggers->Add(new TObjString("CINT7-B-NOPF-MUFAST&0MUL"));//MB
-        triggers->Add(new TObjString("CMUL7-B-NOPF-MUFAST"));// Dimuon
+        // PbPb trigger
+        
+        triggers->Add(new TObjString("CINT7-B-NOPF-MUFAST"));//MB &0MUL 
+        triggers->Add(new TObjString("CINT7-B-NOPF-MUFAST&0MSL"));//MB &0MUL 
+        triggers->Add(new TObjString("CINT7-B-NOPF-MUFAST&0MUL"));//MB &0MUL
+        triggers->Add(new TObjString("CMUL7-B-NOPF-MUFAST"));// MUL
+        triggers->Add(new TObjString("CMSL7-B-NOPF-MUFAST"));// MSL
+        triggers->Add(new TObjString("CMSL7-B-NOPF-MUFAST&0MUL"));// MSL &0MUL
     }
+
+    // Load centrality task
+    //==============================================================================
+    gROOT->LoadMacro("$ALICE_PHYSICS/OADB/COMMON/MULTIPLICITY/macros/AddTaskMultSelection.C");
+    AddTaskMultSelection(kFALSE); // user
   
     // Load task
     //==============================================================================

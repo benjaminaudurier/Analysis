@@ -21,10 +21,32 @@ const char* beamYear="mumu.PbPb2015.config",const int DebugLevel =0)
 
   AliAnalysisMuMu analysis(filename,associatedSimFileName,associatedSimFileName2,beamYear);
   AliLog::SetGlobalDebugLevel(DebugLevel);
-
+  // analysis.CleanFNorm();
+  
+  //_____ EquivalentNUmber
+  // analysis.ComputeNumberOfEvent();
 
   //_____ FNorm
-   analysis.ComputeIntFnormFromCounters("","CENTRALITY","V0M","","PbPb2015", kTRUE);
+  
+  // analysis.ComputeIntFnormFromCounters(AliAnalysisMuMuFnorm::kMUL,kFALSE); // kTRUE = PileUpCOrrected
+  // analysis.ComputeFnormScalers(AliAnalysisMuMuFnorm::kMUL,kTRUE);// kTRUE = PileUpCOrrected
+
+  //_____ Mean
+  // const char* patternOrList = "Offline";
+  // const char* graphName= "";
+
+  //   WeightedMeanGraphs("Offline");
+//   WeightedMeanGraphs("Scalers");
+//   WeightedMeanGraphs("FnormOffline2PUPS,FnormOffline1PUPS","FnormOffline12PUPS");
+  
+//   WeightedMeanGraphs("FnormOffline2PUPS,FnormScalersPUPS","FnormBest2");
+//   
+  // analysis.ComputeFnormWeightedMeanGraphs(AliAnalysisMuMuFnorm::kMUL,patternOrList,graphName);
+
+  // analysis.WeightedMeanGraphs(AliAnalysisMuMuFnorm::kMUL,"Scalers");
+  // analysis.WeightedMeanGraphs(AliAnalysisMuMuFnorm::kMUL,"FnormOffline2PUPS,FnormOffline1PUPS","FnormOffline12PUPS");
+  
+  // analysis.WeightedMeanGraphs(AliAnalysisMuMuFnorm::kMUL,"FnormOffline2PUPS,FnormScalersPUPS","FnormBest2");
   //_____ 
     
   // analysis.ComputeJpsiYield("INTEGRATED");
@@ -50,7 +72,127 @@ void PrintCounters(AliAnalysisMuMu &ana)
     // ana.CC()->Print("trigger/centrality/event","trigger:CVHN-B-NOPF-ALLNOTRD|CVHN_R2-B-NOPF-ALLNOTRD|CCENT-B-NOPF-ALLNOTRD|CCENT_R2-B-NOPF-ALLNOTRD&0MUL/centrality:V0M_00.00_07.50/event:ALL/run:169557");
     // ana.CC()->Print("run/trigger/centrality/event","trigger:CVLN_B2-B-NOPF-ALLNOTRD|CVLN-B-NOPF-ALLNOTRD|CVLN_R1-B-NOPF-ALLNOTRD|CSEMI-B-NOPF-ALLNOTRD|CSEMI_R1-B-NOPF-ALLNOTRD&0MUL/centrality:V0M_10.00_50.00/event:ALL");
     // ana.CC()->Print("run/trigger/centrality/event","trigger:CPBI2_B1-B-NOPF-ALLNOTRD&0MUL/centrality:V0M_00.00_90.00/event:ALL");
-    ana.CC()->Print("run/trigger/centrality/event/bin","trigger:CINT7-B-NOPF-MUFAST&0MUL/centrality:V0M");
+    // ana.CC()->Print("run/trigger","trigger:CINT7-B-NOPF-MUFAST&0MUL/centrality:V0M_00.00_100.00/event:PSALL");
+    // ana.CC()->Print("run/trigger","trigger:CINT7-B-NOPF-MUFAST/centrality:V0M_00.00_100.00/event:PSALL"); 
+    // ana.CC()->Print("run/trigger","trigger:CINT7-B-NOPF-MUFAST&0MUL/centrality:V0M_00.00_90.00/event:ALL");
+    ana.CC()->Print("run/event","trigger:CINT7-B-NOPF-MUFAST/centrality:V0M_00.00_90.00");
+    ana.CC()->Print("run/event","trigger:CINT7-B-NOPF-MUFAST&0MUL/centrality:V0M_00.00_90.00");
+    // ana.CC()->Print("");
+    // ana.CC()->PrintKeyWords();
+
+}
+
+
+
+//_____________________________________________________________________________
+void MeanFnorm(AliAnalysisMuMu &ana)
+{
+   if (!ana.OC() || !ana.CC())
+ {
+   AliError("No mergeable/counter collection. Consider Upgrade()");
+   return ;
+ }
+ else
+ {
+   cout <<      " ================================================================ " << endl;
+   cout <<      "                     ComputeIntFnormFromCounters                 " << endl;
+   cout <<      " ================================================================ " << endl;
+ }
+
+ //_______ Definitions of objects, pointers ...:
+ TString striggerDimuon     = ana.Config()->First(Config()->DimuonTriggerKey(),IsSimulation());
+ TString striggerMuon       = ana.Config()->First(Config()->MuonTriggerKey(),IsSimulation());
+ TString seventType         = ana.Config()->First(Config()->EventSelectionKey(),IsSimulation());
+ TString scentrality        = ana.Config()->First(Config()->CentralitySelectionKey(),IsSimulation());
+ TObjArray* triggerMBArray  = ana.Config()->GetListElements(Config()->MinbiasTriggerKey(),IsSimulation());
+
+
+
+ AliDebug(1,Form("Muon Trigger      : %s",striggerMuon.Data()));
+ AliDebug(1,Form("DiMuon Trigger    : %s",striggerDimuon.Data()));
+ AliDebug(1,Form("eventype          : %s",seventType.Data()));
+ AliDebug(1,Form("centrality Trigger: %s",scentrality.Data()));
+
+  //________Decoding of the pileup correction file
+ Bool_t corrPU(kFALSE);
+ TObjArray* pUCorr = new TObjArray();
+ if ( strlen(filePileUpCorr) > 0 )
+ {
+   std::cout << "Extracting Pile-Up correction factors from " << filePileUpCorr << std::endl;
+   char line[1024];
+   ifstream in(filePileUpCorr);
+
+   while ( in.getline(line,1024,'\n'))
+   {
+     TString lrun(line);
+     TString lvalue(line);
+
+     lrun.Remove(0,4);
+     lrun.Remove(6,67);
+
+     lvalue.Remove(0,lvalue.First("=")+1);
+
+     std::cout << "RUN: " << lrun.Data() << " PUFactor = " << lvalue.Data() << std::endl;
+
+     pUCorr->Add(new TParameter<Double_t>(lrun.Data(),lvalue.Atof()));
+   }
+   corrPU = kTRUE;
+ }
+ //________
+
+
+ //________Some needed quantities
+ TIter nextTriggerMB(triggerMBArray);
+ TObjString *st;
+
+ TH1* h=0x0;
+ // TH1* h1=0x0; futur pointer for syst. histo
+
+ const char* year = beamYear;
+ const TString syear(year);
+
+ TString sQuantity(quantity);
+ //________
+
+ // Run related quantities
+ TString sruns = CC()->GetKeyWords("run");
+ TObjArray* runs = sruns.Tokenize(",");
+ Double_t NofRuns = runs->GetEntries();
+ TIter nextRun(runs);
+ TObjString* s;
+ //________
+
+ //__________ Get binning
+ AliAnalysisMuMuBinning* binning = BIN()->Project(what,sQuantity.Data(),flavour);
+ if ( !binning )
+ {
+   AliError(Form("%s-%s-%s binning does not exist",what,sQuantity.Data(),flavour));
+   return;
+ }
+ TObjArray      * bin = binning->CreateBinObjArray(what,sQuantity.Data(),flavour);
+ Double_t       * binArray = binning->CreateBinArray();
+ Int_t nEntries = bin->GetEntries();
+ //___________
+
+ // Histo that will be saved
+ TH1* hNofEqMB = new TH1F(Form("hNofEqMBVS%s",sQuantity.Data()),Form("Equivalent MB events per CMUL vs %s",sQuantity.Data()),
+                          nEntries,binArray);
+ TH1* hFNormTot = new TH1F(Form("hFNormVS%s",sQuantity.Data()),Form("Normalization factor vs %s;%s;FNorm",sQuantity.Data(),
+                                                                    sQuantity.Data()),nEntries,binArray);
+
+ //Array to store FNorm
+ Double_t* FNormTot = new Double_t[nEntries];
+ Double_t* FNormTotError = new Double_t[nEntries];
+ Double_t* FNormTotErrorSyst = new Double_t[nEntries];
+
+ TString id(Form("/FNORM-%s/%s/%s/%s",striggerDimuon.Data(),seventType.Data(),scentrality.Data(),syear.Data())); // Path to save the Fnorm and EqNofMB histos in the mergeable collection
+ //________
+
+ TList* lRun2Reject = new TList();
+ lRun2Reject->SetOwner(kTRUE);
+
+ TIter nextBin(bin);
+ AliAnalysisMuMuBinning::Range* r;
 
 }
 

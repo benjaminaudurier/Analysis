@@ -7,116 +7,286 @@
  *
  */
 
-// --- prepare environment ---
-TString extraTasks="AliAnalysisTaskGenTunerLocal";
+
+TString rootVersion = "v5-34-30-1";
+TString alirootVersion = "";
+TString aliphysicsVersion = "v5-07-14-01-1";
+TString dataDir = "/alice/data/2010/LHC10h";
+TString dataPattern = "pass2/*AliESDs.root";
+TString runFormat = "%09d";
+TString outDir = "Data/LHC10h/pass2/Eff/pDCAChi2";
+Int_t ttl = 30000;
+Int_t maxFilesPerJob = 100;
+Int_t maxMergeFiles = 10;
+Int_t maxMergeStages = 2;
+
+// generator parameters used in the simulation
+/*
+// tune0 LHC13de
+Double_t oldPtParam[6] = {371.909, 0.84614, 0.560486, 9.34831, 0.000474983, -0.853963};
+Bool_t oldFixPtParam[6] = {kFALSE, kFALSE, kFALSE, kFALSE, kFALSE, kFALSE};
+Double_t newPtParam[6] = {371.909, 0.84614, 0.560486, 9.34831, 0.000474983, -0.853963};
+Bool_t newFixPtParam[6] = {kFALSE, kFALSE, kFALSE, kFALSE, kFALSE, kFALSE};
+*//*
+// tune1 LHC13de
+Double_t oldPtParam[6] = {371.665, 0.845642, 0.56192, 9.34859, 0.000474519, -0.851091};
+Bool_t oldFixPtParam[6] = {kFALSE, kFALSE, kFALSE, kFALSE, kFALSE, kFALSE};
+Double_t newPtParam[6] = {371.665, 0.845642, 0.56192, 9.34859, 0.000474519, -0.851091};
+Bool_t newFixPtParam[6] = {kFALSE, kFALSE, kFALSE, kFALSE, kFALSE, kFALSE};
+*//*
+// tune0 LHC13f
+Double_t oldPtParam[6] = {522.811, 0.997725, 0.705636, 8.52259, 0., -1.};
+Bool_t oldFixPtParam[6] = {kFALSE, kFALSE, kFALSE, kFALSE, kTRUE, kTRUE};
+Double_t newPtParam[6] = {522.811, 0.997725, 0.705636, 8.52259, 0.0001, -1.};
+Bool_t newFixPtParam[6] = {kFALSE, kFALSE, kFALSE, kFALSE, kFALSE, kFALSE};
+*//*
+// tune1 LHC13f
+Double_t oldPtParam[6] = {455.614, 0.942071, 0.706755, 8.69856, 0.000168775, -0.925487};
+Bool_t oldFixPtParam[6] = {kFALSE, kFALSE, kFALSE, kFALSE, kFALSE, kFALSE};
+Double_t newPtParam[6] = {455.614, 0.942071, 0.706755, 8.69856, 0.000168775, -0.925487};
+Bool_t newFixPtParam[6] = {kFALSE, kFALSE, kFALSE, kFALSE, kFALSE, kFALSE};
+*/
+// tune0 LHC15g
+// TString oldPtFormula = "[0]/TMath::Power([1]+TMath::Power(x,[2]),[3])";
+// Double_t oldPtParam[4] = {4.05962, 1.0, 2.46187, 2.08644};
+// Bool_t oldFixPtParam[4] = {kFALSE, kFALSE, kFALSE, kFALSE};
+// TString newPtFormula = "[0] * (1. / TMath::Power([1] + TMath::Power(x,[2]), [3]) + [4] * TMath::Exp([5]*x))";
+// Double_t newPtParam[6] = {455.614, 0.942071, 0.706755, 8.69856, 0.000168775, -0.925487};
+// Bool_t newFixPtParam[6] = {kFALSE, kFALSE, kFALSE, kFALSE, kFALSE, kFALSE};
+
+// Double_t ptRange[2] = {0.8, 999.};
+
+//______
+// J/Psi pT
+// pp
+// from the fit of RHIC, CDF & LHC data, see arXiv:1103.2394
+//
+// const Double_t kpt0 = 1.04*TMath::Power(energy,0.101);
+// const Double_t kxn  = 3.9;
+// //
+// Double_t pass1 = 1.+0.363*(x/kpt0)*(x/kpt0);
+// return x/TMath::Power(pass1,kxn);
+// 
+//______
+
+
+//x/TMath::Power(1.+0.363*(x/1.04*TMath::Power(7000,0.101))*(x/1.04*TMath::Power(7000,0.101)),kxn)
+
+
+// tune0 LHC15n jpsi
+TString oldPtFormula = "x/TMath::Power(1.+[0]*(x/([1]*TMath::Power([4],[2])))*(x/([1]*TMath::Power([4],[2]))),[3])";
+Double_t oldPtParam[5] = {0.363, 1.04, ,0.101,3.9,7000};
+Bool_t oldFixPtParam[5] = {kFALSE, kFALSE, kFALSE, kFALSE, kFALSE};
+// TString newPtFormula =  "[0]*x / TMath::Power(1 + [1]*x*x,[2])";
+// Double_t newPtParam[3] = {0.369545, 0.0552955, 4.34154};
+TString newPtFormula = "x/TMath::Power(1.+[0]*(x/([1]*TMath::Power([4],[2])))*(x/([1]*TMath::Power([4],[2]))),[3])";
+Double_t newPtParam[5] = {0.363, 1.04, ,0.101,3.9,7000};
+Bool_t newFixPtParam[5] = {kFALSE, kFALSE, kFALSE, kFALSE, kFALSE};
+
+Double_t ptRange[2] = {0.8, 50.};
+
+/*
+// tune0 LHC13de
+Double_t oldYParam[8] = {0.539134, 1, 0, 0.0499378, 0, -0.00450342, 0, 2};
+Bool_t oldFixYParam[8] = {kFALSE, kTRUE, kTRUE, kFALSE, kTRUE, kFALSE, kTRUE, kTRUE};
+Double_t newYParam[8] = {0.539134, 1, 0, 0.0499378, 0, -0.00450342, 0, 2};
+Bool_t newFixYParam[8] = {kFALSE, kTRUE, kTRUE, kFALSE, kTRUE, kFALSE, kTRUE, kTRUE};
+*//*
+// tune1 LHC13de
+Double_t oldYParam[8] = {0.777922, 1, 0, -0.0184202, 0, -0.00107081, 0, 2};
+Bool_t oldFixYParam[8] = {kFALSE, kTRUE, kTRUE, kFALSE, kTRUE, kFALSE, kTRUE, kTRUE};
+Double_t newYParam[8] = {0.777922, 1, 0, -0.0184202, 0, -0.00107081, 0, 2};
+Bool_t newFixYParam[8] = {kFALSE, kTRUE, kTRUE, kFALSE, kTRUE, kFALSE, kTRUE, kTRUE};
+*//*
+// tune0 LHC13f
+Double_t oldYParam[8] = {1.75646, 1., 8.70262e-05, -0.129939, -0.0190949, 0., 0., 2.};
+Bool_t oldFixYParam[8] = {kFALSE, kTRUE, kFALSE, kFALSE, kFALSE, kTRUE, kTRUE, kTRUE};
+Double_t newYParam[8] = {1.5712, 1., 0., -0.0893785, 0., 0.00228603, 0., 2.};
+Bool_t newFixYParam[8] = {kFALSE, kTRUE, kTRUE, kFALSE, kTRUE, kFALSE, kTRUE, kTRUE};
+//Double_t newYParam[8] = {1.8216, 0., 0., 0., 0., 0., 1., 2.0016};
+//Bool_t newFixYParam[8] = {kFALSE, kTRUE, kTRUE, kTRUE, kTRUE, kTRUE, kTRUE, kFALSE};
+*//*
+// tune1 LHC13f
+Double_t oldYParam[8] = {1.29511, 1., 0., -0.0767846, 0., 0.00176313, 0., 2.};
+Bool_t oldFixYParam[8] = {kFALSE, kTRUE, kTRUE, kFALSE, kTRUE, kFALSE, kTRUE, kTRUE};
+Double_t newYParam[8] = {1.29511, 1., 0., -0.0767846, 0., 0.00176313, 0., 2.};
+Bool_t newFixYParam[8] = {kFALSE, kTRUE, kTRUE, kFALSE, kTRUE, kFALSE, kTRUE, kTRUE};
+*/
+// tune0 LHC15g
+// TString oldYFormula = "[0]*(1.+[1]*x+[2]*x*x+[3]*x*x*x)";
+// Double_t oldYParam[4] = {0.729545, 0.53837, 0.141776, 0.0130173};
+// Bool_t oldFixYParam[4] = {kFALSE, kFALSE, kFALSE, kFALSE};
+// //TString newYFormula = "[0] * ([1] * (1. + [2]*x + [3]*x*x + [4]*x*x*x + [5]*x*x*x*x) + [6]*TMath::Exp(-0.5*x*x/[7]/[7]))";
+// TString newYFormula = "[0] * (1. + [1]*x*x + [2]*x*x*x*x)";
+// Double_t newYParam[3] = {1.29511, -0.0767846, 0.00176313};
+// Bool_t newFixYParam[3] = {kFALSE, kFALSE, kFALSE};
+
+// Double_t yRange[2] = {-4.2, -2.3};
+
+
+//______
+// J/Psi y
+// pp
+// from the fit of RHIC + LHC data, see arXiv:1103.2394
+//
+// x = x/TMath::Log(energy/3.097);
+// x = x*x;
+// Double_t y = TMath::Exp(-x/0.4/0.4/2);
+// if(x > 1) y=0;
+// return y;
+//______
+
+// tune0 LHC15n jpsi
+TString oldYFormula = " TMath::Exp(- ( (x/TMath::Log([3]/[0])) * (x/TMath::Log([3]/[0])) ) /[1]/[1]/[2])";
+Double_t oldYParam[4] = {3.097, 0.4, 2,7000};
+Bool_t oldFixYParam[4] = {kFALSE, kFALSE,kFALSE,kFALSE};
+TString newYFormula = "[0] * ( 1 + [1]*x*x + [2]*x*x*x*x )";
+Double_t newYParam[3] =  {2.812e-07, 559030, -29460.9};
+Bool_t newFixYParam[3] = {kFALSE, kFALSE, kFALSE};
+
+Double_t yRange[2] = {-4.2, -2.3};
+
+
+Bool_t isMC = kTRUE;
 Bool_t applyPhysicsSelection = kFALSE;
 
-//__________generator parameters used in the simulation
-// tune1 LHC13d pt param. (see AliAnalysisTaskGenTunerJpsi::Pt)
-Double_t oldPtParam[3] = {0.288315, 0.0593389, 3.42939};
-Bool_t oldFixPtParam[3] = {kFALSE, kFALSE, kFALSE};
-Double_t newPtParam[3] = {0.288315, 0.0593389, 3.42939};
-Bool_t newFixPtParam[3] = {kFALSE, kFALSE, kFALSE};
 
-Double_t ptRange[2] = {0.1, 6.5};
-
-// tune1 LHC13d y param. (see AliAnalysisTaskGenTunerJpsi::Y)
-Double_t oldYParam[2] = {1.50913, 0.171768};
-Bool_t oldFixYParam[2] = {kFALSE, kFALSE};
-Double_t newYParam[2] =  {1.50913, 0.171768};
-Bool_t newFixYParam[2] = {kFALSE, kFALSE};
-
-Double_t yRange[2] = {-3.8, -2.3};
-//__________
+void UpdateParametersAndRanges(Int_t iStep);
 
 //__________Setting for spectra path
-TString striggerDimuon  ="CMUL7-B-NOPF-MUON";
-TString seventType      ="ALL";
-TString spairCut        ="pALLPAIRYPAIRPTIN0.0-8.0RABSMATCHLOWETA";
+TString striggerDimuon  ="CMUL7-B-NOPF-MUFAST";
+TString seventType      ="PSALL";
+TString spairCut        ="pALLPAIRYPAIRPTIN0.0-8.0RABSMATCHLOWETAPDCA";
 TString scentrality     ="V0A";
-TString subResultName   = ""/*"YVSPT_BENJ_02.00_04.00_m03.50_m03.00";*/
+TString subResultName   = "";/*"YVSPT_BENJ_02.00_04.00_m03.50_m03.00";*/
 //__________
 
-// Sim :
-// Find;BasePath=/alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/;FileName=AliAOD.Muons.root
-// 
-// Data:
-// Find;BasePath=/alice/data/2013/LHC13d/000195760/ESDs/muon_pass2/AOD134;FileName=AliAOD.root
-
- 
 
 //______________________________________________________________________________
-void runGenTuner(TString runMode, TString analysisMode,
-TString inputName       = "Find;BasePath=/alice/data/2013/LHC13d/000195682/ESDs/muon_pass2/AOD134;FileName=AliAOD.root;Mode=cache",
-TString inputOptions    = "",
-Int_t iStep             = -1,
-TString analysisOptions = "",
-TString softVersions    = "aliphysics=vAN-20151115-1",
-TString taskOptions     = "")
+void runGenTuner(TString smode = "local", TString inputFileName = "AliAOD.root",
+     Int_t iStep = 0, char overwrite = '\0')
 {
-  /// Study the MUON performances
+  /// Tune single muon kinematics distribution
   
-  // Load macro used to connect to saf3
-  gROOT->LoadMacro(gSystem->ExpandPathName("$TASKDIR/runTaskUtilities.C"));
-
-  // Set Mc Flag
-  Bool_t isMC = IsMC(inputOptions);
-
-  // Macro to connect to proof. First argument useless for saf3
-  SetupAnalysis(runMode,analysisMode,inputName,inputOptions,softVersions,analysisOptions,Form("libPWGmuon.so %s.cxx",extraTasks.Data()),". $ALICE_ROOT/include $ALICE_PHYSICS/include");
-    
-  // --- Create the analysis train ---
-  AliAnalysisTaskGenTunerJpsi *genTuner = static_cast<AliAnalysisTaskGenTunerJpsi*>(CreateAnalysisTrain(iStep,isMC));
-  if (!genTuner) return;
-    
-  // --- start analysis ---
-  StartAnalysis(runMode,analysisMode,inputName,inputOptions);     
+  gROOT->LoadMacro("$HOME/Documents/Analysis/Macro_Utile/runTaskFacilities.C");
   
-  // --- save fitting functions ---
-  if(!IsPod(analysisMode) || IsPodMachine(analysisMode))
-  {
-    TString outFileName = AliAnalysisManager::GetCommonFileName();
-    TFile *outFile = (TFile*)gROOT->GetListOfFiles()->FindObject(outFileName.Data());
-    if (outFile) outFile->ReOpen("UPDATE");
-    else outFile = TFile::Open(outFileName.Data(),"UPDATE");
-    if (outFile && outFile->IsOpen()) 
-    {
-      outFile->Cd(Form("%s:/MUON_GenTuner",outFileName.Data()));
-      if (genTuner->GetOldPtFunc())   genTuner->GetOldPtFunc()->Write(0x0, TObject  ::kOverwrite);
-      if (genTuner->GetOldPtFuncMC()) genTuner->GetOldPtFuncMC()->Write(0x0, TObject::kOverwrite);
-      if (genTuner->GetNewPtFunc())   genTuner->GetNewPtFunc()->Write(0x0, TObject  ::kOverwrite);
-      if (genTuner->GetOldYFunc())    genTuner->GetOldYFunc()->Write(0x0, TObject   ::kOverwrite);
-      if (genTuner->GetOldYFuncMC())  genTuner->GetOldYFuncMC()->Write(0x0, TObject ::kOverwrite);
-      if (genTuner->GetNewYFunc())    genTuner->GetNewYFunc()->Write(0x0, TObject   ::kOverwrite);
-      if (genTuner->GetResults())     genTuner->GetResults()->Write(0x0, TObject    ::kOverwrite);
-      if (genTuner->GetRatios())      genTuner->GetRatios()->Write(0x0, TObject     ::kOverwrite);
+  // --- Check runing mode ---
+  Int_t mode = GetMode(smode, inputFileName);
+  if(mode < 0) {
+    Error("runGenTuner","Please provide either an AOD root file a collection of AODs or a dataset.");
+    return;
+  }
+  
+  // --- copy files needed for this analysis ---
+  TList pathList; pathList.SetOwner();
+  // pathList.Add(new TObjString("/Users/audurier/Documents/Analysis/Tasks"));
+  TList fileList; fileList.SetOwner();
+  fileList.Add(new TObjString("runGenTuner.C"));
+  fileList.Add(new TObjString("AddTaskGenTuner.C"));
+  fileList.Add(new TObjString("AliAnalysisTaskGenTunerJpsi.cxx"));
+  fileList.Add(new TObjString("AliAnalysisTaskGenTunerJpsi.h"));
+  // CopyFileLocally(pathList, fileList, overwrite);
+  CopyInputFileLocally("/Users/audurier/Documents/Analysis/LHC_15o_PbPb/AccEff_jpsi/DataPart/AnalysisResults.root", "AnalysisResultsReference.root", overwrite);
+  fileList.Add(new TObjString("AnalysisResultsReference.root"));
+  
+  // --- saf3 case ---
+  if (mode == kSAF3Connect) {
+    
+    // run on SAF3
+    if (!RunAnalysisOnSAF3(fileList, aliphysicsVersion, inputFileName)) return;
+    
+    // draw the results locally
+    outFile = TFile::Open(Form("Results_step%d.root", iStep),"READ");
+    if (outFile && outFile->IsOpen()) {
+      outFile->FindObjectAny("cRes")->Draw();
+      outFile->FindObjectAny("cRat")->Draw();
       outFile->Close();
     }
-    // save results of current step if running in a loop
-    if (iStep > -1) gSystem->Exec(Form("cp -f AnalysisResults.root Results_step%d.root", iStep)); 
+    
+    // do not try to re-run locally!
+    return;
+    
   }
+  
+  // --- prepare environment ---
+  TString extraLibs="PWGmuon";
+  TString extraIncs="include";
+  TString extraTasks="AliAnalysisTaskGenTunerJpsi";
+  TString extraPkgs="";
+  LoadAlirootLocally(extraLibs, extraIncs, extraTasks, extraPkgs);
+  AliAnalysisGrid *alienHandler = 0x0;
+  if (mode == kProof || mode == kProofLite) LoadAlirootOnProof(smode, rootVersion, aliphysicsVersion, extraLibs, extraIncs, extraTasks, extraPkgs, kTRUE);
+  else if (mode == kGrid || mode == kTerminate) {
+    TString analysisMacroName = "GenTuner";
+    alienHandler = static_cast<AliAnalysisGrid*>(CreateAlienHandler(smode, alirootVersion, aliphysicsVersion, inputFileName, dataDir, dataPattern, outDir, extraLibs, extraIncs, extraTasks, extraPkgs, analysisMacroName, runFormat, ttl, maxFilesPerJob, maxMergeFiles, maxMergeStages));
+    if (!alienHandler) return;
+  }
+
+  // --- Create the analysis train ---
+  AliAnalysisTaskGenTunerJpsi *genTuner = static_cast<AliAnalysisTaskGenTunerJpsi*>(CreateAnalysisTrain(alienHandler, iStep));
+  if (!genTuner) return;
+    
+  // --- Create input object ---
+  TObject* inputObj = CreateInputObject(mode, inputFileName);
+  
+  // --- start analysis ---
+  StartAnalysis(mode, inputObj);   
+  
+  // --- save fitting functions ---
+  TString outFileName = AliAnalysisManager::GetCommonFileName();
+  TFile *outFile = (TFile*)gROOT->GetListOfFiles()->FindObject(outFileName.Data());
+  if (outFile) outFile->ReOpen("UPDATE");
+  else outFile = TFile::Open(outFileName.Data(),"UPDATE");
+  if (outFile && outFile->IsOpen()) {
+    outFile->Cd(Form("%s:/MUON_GenTuner",outFileName.Data()));
+    if (genTuner->GetCurrentPtFunc()) genTuner->GetCurrentPtFunc()->Write(0x0, TObject::kOverwrite);
+    if (genTuner->GetCurrentPtFuncMC()) genTuner->GetCurrentPtFuncMC()->Write(0x0, TObject::kOverwrite);
+    if (genTuner->GetNewPtFunc()) genTuner->GetNewPtFunc()->Write(0x0, TObject::kOverwrite);
+    if (genTuner->GetCurrentYFunc()) genTuner->GetCurrentYFunc()->Write(0x0, TObject::kOverwrite);
+    if (genTuner->GetCurrentYFuncMC()) genTuner->GetCurrentYFuncMC()->Write(0x0, TObject::kOverwrite);
+    if (genTuner->GetNewYFunc()) genTuner->GetNewYFunc()->Write(0x0, TObject::kOverwrite);
+    if (genTuner->GetResults()) genTuner->GetResults()->Write(0x0, TObject::kOverwrite);
+    if (genTuner->GetRatios()) genTuner->GetRatios()->Write(0x0, TObject::kOverwrite);
+    outFile->Close();
+  }
+
+  // save results of current step if running in a loop
+  if (iStep > -1) gSystem->Exec(Form("cp -f AnalysisResults.root Results_step%d.root", iStep));
+  // else gSystem->Exec(Form("cp -f AnalysisResults.root ReferenceResults.root"));
 }
 
 //______________________________________________________________________________
-TObject* CreateAnalysisTrain(Int_t iStep , Bool_t mc )
+TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)
 {
   /// create the analysis train and configure it
   
-  AliAnalysisManager *mgr = AliAnalysisManager::GetAnalysisManager(); 
+  // analysis manager
+  AliAnalysisManager *mgr = new AliAnalysisManager("GenTunerAnalysis");
+  
+  // Connect plugin to the analysis manager if any
+  if (alienHandler) mgr->SetGridHandler(static_cast<AliAnalysisGrid*>(alienHandler));
+  
+  // AOD handler
+  AliInputEventHandler* aodH = new AliAODInputHandler;
+  mgr->SetInputEventHandler(aodH);
   
   // track selection
   AliMuonTrackCuts trackCuts("stdCuts", "stdCuts");
   trackCuts.SetAllowDefaultParams();
   trackCuts.SetFilterMask(AliMuonTrackCuts::kMuMatchLpt | AliMuonTrackCuts::kMuEta |
-			  AliMuonTrackCuts::kMuThetaAbs | AliMuonTrackCuts::kMuPdca);
+        AliMuonTrackCuts::kMuThetaAbs | AliMuonTrackCuts::kMuPdca);
+//  trackCuts.SetFilterMask(AliMuonTrackCuts::kMuMatchHpt | AliMuonTrackCuts::kMuEta |
+//        AliMuonTrackCuts::kMuThetaAbs | AliMuonTrackCuts::kMuPdca);
+  if (isMC) trackCuts.SetIsMC(kTRUE);
 
-  //Flag for MC
-  trackCuts.SetIsMC(mc);
-  
+
   // generator tuner
   gROOT->LoadMacro("AddTaskGenTuner.C");
 
-  //__________Config. Task
+  // =================================
+  //___________Config. Task___________
+  //==================================
+
   AliAnalysisTaskGenTunerJpsi* genTuner = AddTaskGenTuner();
   if(!genTuner) 
   {
@@ -127,9 +297,11 @@ TObject* CreateAnalysisTrain(Int_t iStep , Bool_t mc )
   // genTuner->SelectCentrality(0., 90.);
   genTuner->SetMuonTrackCuts(trackCuts);
 
-  //___________Set Bin
-  // Open file
-  TFile* dataFile = TFile::Open("../DataPart/AnalysisResultsReference.root","READ");
+
+
+
+  //___________Set Ref. Histo__________
+  TFile* dataFile = TFile::Open("AnalysisResultsReference.root","READ");
   if (!dataFile || !dataFile->IsOpen()) return;
 
   // Get HistoCollection
@@ -137,114 +309,123 @@ TObject* CreateAnalysisTrain(Int_t iStep , Bool_t mc )
   dataFile->GetObject("OC",oc);
   if (!oc) return;
 
-  // Get spectras
-  AliAnalysisMuMuSpectra * spectraPT = static_cast<AliAnalysisMuMuSpectra*>(oc->GetObject(Form("/%s/%s/%s/%s/PSI-YVSPT",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data())));
-  if(!spectraPT)
+   // Get spectras
+  AliAnalysisMuMuSpectra * spectra = static_cast<AliAnalysisMuMuSpectra*>(oc->GetObject(Form("/%s/%s/%s/%s/PSI-YVSPT",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data())));
+  if(!spectra)
   {
-      cout << Form("Cannot find PT spectra in /%s/%s/%s/%s/PSI-PT",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data()) << endl;
-      return;
-  }
-  AliAnalysisMuMuSpectra * spectraY = static_cast<AliAnalysisMuMuSpectra*>(oc->GetObject(Form("/%s/%s/%s/%s/PSI-YVSPT",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data())));
-  if(!spectraY)
-  {
-      cout << Form("Cannot find Y spectra in /%s/%s/%s/%s/PSI-Y",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data()) <<endl;
+      cout << Form("Cannot find PT spectra in /%s/%s/%s/%s/PSI-YVSPT",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data()) << endl;
       return;
   }
 
-  Double_t* ptbin= spectraPT->Binning()->CreateBinArray();
-  Double_t* ybin= spectraY->Binning()->CreateBinArray();
 
-  Int_t ptnofbin= spectraPT->Binning()->GetNBinsX();
-  Int_t ynofbin= spectraY->Binning()->GetNBinsX();
+  Double_t* ptbin= spectra->Binning()->CreateBinArrayX();
+  Double_t* ybin= spectra->Binning()->CreateBinArrayY();
+
+  Int_t ptnofbin= spectra->Binning()->GetNBinsX();
+  Int_t ynofbin= spectra->Binning()->GetNBinsY();
 
   //___________Set ref.Spectra
   // Pt spectra
-  TH1* hpt= spectraPT->Plot("NofJPsi",subResultName,kTRUE);// new
+  TH2* hpt= spectra->Plot("NofJPsi",subResultName,kTRUE);// new
   //Y spectra
-  TH1* hy= spectraY->Plot("NofJPsi",subResultName,kTRUE);// new
+  TH2* hy= spectra->Plot("NofJPsi",subResultName,kTRUE);// new
 
   dataFile->Close();
 
-  new TCanvas;
-  hpt->Draw("");
-  new TCanvas;
-  hy->Draw("");
-  return;
+  // new TCanvas;
+  // if(hpt)hpt->ProjectionX()->Draw("");
+  // new TCanvas;
+  // if(hy)hy->ProjectionY()->Draw("");
 
   // cout << "ptnofbin =" << ptnofbin << endl;
 
   // for (int i = 0; i < ptnofbin+1; ++i)
   // {
-  //   cout << "ptbin " << i << "=" << ptbin[i] << endl;
+  //   cout << "ptbin " << i << "=" << bin[i] << endl;
   // }
+  
+  // cout << "ynofbin =" << ynofbin << endl;
 
   // for (int i = 0; i < ynofbin+1; ++i)
   // {
-  //   cout << "ybin " << i << "=" << ybin[i] << endl;
+  //   cout << "ybin " << i << "=" << bin[i] << endl;
   // }
+  
+  
+  // return;
 
   genTuner->SetPtBin(ptnofbin+1,ptbin);
   genTuner->SetYBin(ynofbin+1,ybin);
-  //___________
 
-  if(hpt && hy)
-  {
-    genTuner->SetPtRefHisto(hpt);
-    genTuner->SetYRefHisto(hy);
-  }
-  else 
-  {
+  if(hpt && hy){
+    genTuner->SetPtRefHisto(hpt->ProjectionX());
+    genTuner->SetYRefHisto(hy->ProjectionY());
+  } else {
     cout << "Cannot set reference histo !" << endl;
     return;
   }
-  //___________
-
-  if (iStep == 0) // Set param. for fitting functions from this file
-  {
-    // set the generator parameters used in simulation
-    genTuner->SetPtParam(oldPtParam, oldFixPtParam, newPtParam, newFixPtParam, ptRange[0], ptRange[1]);
-    genTuner->SetYParam(oldYParam, oldFixYParam, newYParam, newFixYParam, yRange[0], yRange[1]); 
-  } 
-  else if (iStep > 0) // Set param. from precedent fitting results
-  {
-    // get the original generator parameters from first step if any
-    //    TFile *inFile = TFile::Open("Results_step0.root","READ");
-    //    if (inFile && inFile->IsOpen()) {
-    //      TF1 *fOldPtFunc = static_cast<TF1*>(inFile->FindObjectAny("fPtFunc"));
-    //      TF1 *fOldYFunc = static_cast<TF1*>(inFile->FindObjectAny("fYFunc"));
-    //      if (fOldPtFunc && fOldYFunc) {
-    // fOldPtFunc->GetParameters(oldPtParam);
-    // fOldYFunc->GetParameters(oldYParam);
-    //      }
-    //      inFile->Close();
-    //    }
+  //==================================
+  //==================================
     
     // get the new generator parameters from previous step if any and configure the tuner
-    TString inFileName = Form("Results_step%d.root",iStep-1);
-    inFile = TFile::Open(inFileName.Data(),"READ");
-    if (inFile && inFile->IsOpen()) 
-    { 
-      cout << "I'm in the file !" << endl;
-      TF1 *fNewPtFunc = static_cast<TF1*>(inFile->FindObjectAny("fPtFuncNew"));
-      TF1 *fNewYFunc = static_cast<TF1*>(inFile->FindObjectAny("fYFuncNew"));
-      TF1 *fPtFunc = static_cast<TF1*>(inFile->FindObjectAny("fPtFunc"));
-      TF1 *fYFunc = static_cast<TF1*>(inFile->FindObjectAny("fYFunc"));
-
-      if (fNewPtFunc && fNewYFunc && fPtFunc && fYFunc ) 
-      {
-      	genTuner->SetPtParam(oldPtParam, oldFixPtParam, fNewPtFunc->GetParameters(), newFixPtParam, fNewPtFunc->GetXmin(), fNewPtFunc->GetXmax());
-      	genTuner->SetYParam(oldYParam, oldFixYParam, fNewYFunc->GetParameters(), newFixYParam, fNewYFunc->GetXmin(), fNewYFunc->GetXmax());
-      }
-      else
-      {
-        cout << "Cannot acces to fit functions " << endl;
-      }
-      inFile->Close();
-    }
+    if (isMC) {
+    
+    // genTuner->SetDataFile("ReferenceResults.root");
+    
+    // update the parameters and the fitting ranges from the previous step if any
+    UpdateParametersAndRanges(iStep);
+    
+    // set the original function and parameters used in simulation
+    genTuner->SetOriginPtFunc(oldPtFormula.Data(), oldPtParam, oldFixPtParam, ptRange[0], ptRange[1]);
+    genTuner->SetOriginYFunc(oldYFormula.Data(), oldYParam, oldFixYParam, yRange[0], yRange[1]);
+    
+    // set the new function and initial parameters
+    genTuner->SetNewPtFunc(newPtFormula.Data(), newPtParam, newFixPtParam, ptRange[0], ptRange[1]);
+    genTuner->SetNewYFunc(newYFormula.Data(), newYParam, newFixYParam, yRange[0], yRange[1]);
+    
     // enable the weighing
-    genTuner->Weight(kTRUE);
-    //__________ 
+    if (iStep > 0) genTuner->Weight(kTRUE);
   }
+  
   return genTuner;
 }
 
+
+//______________________________________________________________________________
+void UpdateParametersAndRanges(Int_t iStep)
+{
+  /// update the parameters and the fitting ranges from the previous step
+  
+  if (iStep <= 0) return;
+  
+  TString inFileName = Form("Results_step%d.root",iStep-1);
+  inFile = TFile::Open(inFileName.Data(),"READ");
+  if (!inFile || !inFile->IsOpen()) {
+    printf("cannot open file from previous step\n");
+    exit(1);
+  }
+  
+  TF1 *fNewPtFunc = static_cast<TF1*>(inFile->FindObjectAny("fPtFuncNew"));
+  TF1 *fNewYFunc = static_cast<TF1*>(inFile->FindObjectAny("fYFuncNew"));
+  if (!fNewPtFunc || !fNewYFunc) {
+    printf("previous functions not found\n");
+    exit(1);
+  }
+  
+  if ((fNewPtFunc->GetNpar() != (Int_t)(sizeof(newPtParam)/sizeof(Double_t))) ||
+      (fNewYFunc->GetNpar() != (Int_t)(sizeof(newYParam)/sizeof(Double_t)))) {
+    printf("mismatch between the number of parameters in the previous step and in this macro\n");
+    exit(1);
+  }
+  
+  for (Int_t i = 0; i < fNewPtFunc->GetNpar(); ++i) newPtParam[i] = fNewPtFunc->GetParameter(i);
+  ptRange[0] = fNewPtFunc->GetXmin();
+  ptRange[1] = fNewPtFunc->GetXmax();
+  
+  for (Int_t i = 0; i < fNewYFunc->GetNpar(); ++i) newYParam[i] = fNewYFunc->GetParameter(i);
+  yRange[0] = fNewYFunc->GetXmin();
+  yRange[1] = fNewYFunc->GetXmax();
+  
+  inFile->Close();
+  
+}

@@ -116,15 +116,16 @@ Bool_t newFixYParam[3] = {kFALSE, kFALSE, kFALSE};
 Double_t yRange[2] = {-4.2, -2.3};
 
 
-Bool_t isMC = kTRUE;
-Bool_t applyPhysicsSelection = kFALSE;
+Bool_t isMC = kFALSE;
+Bool_t applyPhysicsSelection = kTRUE;
 
 
 void UpdateParametersAndRanges(Int_t iStep);
-
+// /Users/audurier/Documents/Analysis/Dataset/datasetfull_saf_LHC15n_AOD.txt
+// /Users/audurier/Documents/Analysis/Dataset/datasetfull_saf_LHC15n_AOD_sim_singlemuon_untuned.txt
 
 //______________________________________________________________________________
-void runGenTuner(TString smode = "local", TString inputFileName = "AliAOD.Muons.root",
+void runGenTuner(TString smode = "local", TString inputFileName = "",
 		 Int_t iStep = -1, char overwrite = '\0')
 {
   /// Tune single muon kinematics distribution
@@ -146,7 +147,7 @@ void runGenTuner(TString smode = "local", TString inputFileName = "AliAOD.Muons.
   fileList.Add(new TObjString("AddTaskGenTuner.C"));
   fileList.Add(new TObjString("AliAnalysisTaskGenTuner.cxx"));
   fileList.Add(new TObjString("AliAnalysisTaskGenTuner.h"));
-  CopyFileLocally(pathList, fileList, overwrite);
+  // CopyFileLocally(pathList, fileList, overwrite);
   // CopyInputFileLocally("/Users/pillot/Work/Alice/Data/2015/LHC15g/muon_calo_pass1/GenTuner/CMSL7/AnalysisResults.root", "ReferenceResults.root", overwrite);
   // fileList.Add(new TObjString("ReferenceResults.root"));
   

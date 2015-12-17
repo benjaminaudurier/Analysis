@@ -38,16 +38,21 @@ AliAnalysisTask* runMuMu(TString runMode,
     if (!isMC)
     {
         // pp trigger
-        triggers->Add(new TObjString("CINT7-B-NOPF-MUFAST"));//MB
-        triggers->Add(new TObjString("CINT7-B-NOPF-MUFAST&0MUL"));//MB
+        // triggers->Add(new TObjString("CINT7-B-NOPF-MUFAST"));//MB
+        // triggers->Add(new TObjString("CINT7-B-NOPF-MUFAST&0MUL"));//MB
         triggers->Add(new TObjString("CMUL7-B-NOPF-MUFAST"));// Dimuon
     }
+
+    // Load centrality task
+    //==============================================================================
+    gROOT->LoadMacro("$ALICE_PHYSICS/OADB/COMMON/MULTIPLICITY/macros/AddTaskMultSelection.C");
+    AddTaskMultSelection(kFALSE); // user
   
     // Load task
     //==============================================================================
     TString outputname = AliAnalysisManager::GetAnalysisManager()->GetCommonFileName(); // Create output name in case of no dataset selected
     gROOT->LoadMacro("AddTaskMuMu.C");
-    AddTaskMuMu(outputname.Data(),triggers,"PbPb2015",isMC);
+    AddTaskMuMu(outputname.Data(),triggers,"pp2015",isMC);
     cout <<"add task mumu done"<< endl;
 
     // Start analysis

@@ -11,7 +11,7 @@ TString rootVersion = "v5-34-30";
 TString alirootVersion = "v5-07-01-3";
 TString aliphysicsVersion = "vAN-20151015-1";
 TString dataDir = "/alice/data/2015/LHC15n";
-TString dataPattern = "muon_calo_pass1/*AliESDs.root";
+TString dataPattern = "muon_calo_pass1/*AliAOD.Muons.root";
 TString runFormat = "%09d";
 TString outDir = "Analysis/LHC15n/TrackingEfficiency/Data";
 Int_t ttl = 30000;
@@ -29,7 +29,7 @@ TString alignStorage = "alien://folder=/alice/data/2015/OCDB";
 
 //______________________________________________________________________________
 void runMuonEfficiency(TString smode = "full", TString inputFileName = "../run-list.txt",
-		       Bool_t applyPhysSel = kFALSE, Bool_t mc = kFALSE, Bool_t embedding = kFALSE)
+		       Bool_t applyPhysSel = kTRUE, Bool_t mc = kFALSE, Bool_t embedding = kFALSE)
 {
   /// Study the MUON performances
   
@@ -107,17 +107,17 @@ void CreateAnalysisTrain(Bool_t applyPhysSel, Bool_t mc, Bool_t embedding, TObje
     offlineTriggerMask = AliVEvent::kMUS7;
     // offlineTriggerMask = AliVEvent::kMUU7 | AliVEvent::kMuonUnlikeLowPt8;
   }
-  /*
-  // centrality selection
-  gROOT->LoadMacro("$ALICE_ROOT/ANALYSIS/macros/AddTaskCentrality.C");
-  AliCentralitySelectionTask *taskCentrality = AddTaskCentrality();
-  if(!taskCentrality) {
-    Error("CreateAnalysisTrain","AliCentralitySelectionTask not created!");
-    return;
-  }
+  
+  // // centrality selection
+  // gROOT->LoadMacro("$ALICE_ROOT/ANALYSIS/macros/AddTaskCentrality.C");
+  // AliCentralitySelectionTask *taskCentrality = AddTaskCentrality();
+  // if(!taskCentrality) {
+  //   Error("CreateAnalysisTrain","AliCentralitySelectionTask not created!");
+  //   return;
+  // }
   if (applyPhysSel) taskCentrality->SelectCollisionCandidates(offlineTriggerMask);
-  if (mc && !embedding) taskCentrality->SetMCInput();
-  */
+  // if (mc && !embedding) taskCentrality->SetMCInput();
+  
   // track selection
   AliMuonTrackCuts trackCuts("stdCuts", "stdCuts");
   trackCuts.SetAllowDefaultParams();

@@ -11,7 +11,7 @@
 TString aliphysicsVersion = "v5-07-14-01-1";
 
 //______________________________________________________________________________
-void runGenTunerLoop(TString smode = "local", TString inputFileName = "AliAOD.root", Int_t nStep)
+void runGenTunerLoop(TString smode = "local", TString inputFileName = "AliAOD.root", Int_t nStep,char overwrite = '\0')
 {
   /// run the generator tuner in a loop
   
@@ -30,13 +30,13 @@ void runGenTunerLoop(TString smode = "local", TString inputFileName = "AliAOD.ro
   TList pathList; pathList.SetOwner();
   pathList.Add(new TObjString("/Users/audurier/Documents/Analysis/Tasks"));
   TList fileList; fileList.SetOwner();
-  // fileList.Add(new TObjString("runGenTunerLoop.C"));
-  // fileList.Add(new TObjString("runGenTuner.C"));
-  // fileList.Add(new TObjString("AddTaskGenTuner.C"));
   fileList.Add(new TObjString("AliAnalysisTaskGenTunerJpsi.cxx"));
   fileList.Add(new TObjString("AliAnalysisTaskGenTunerJpsi.h"));
   CopyFileLocally(pathList, fileList);
-  CopyInputFileLocally("/Users/audurier/Documents/Analysis/LHC_15n_pp/AccEff_jpsi/DataPart/AnalysisResultsReference.root", "AnalysisResultsReference.root", overwrite);
+   fileList.Add(new TObjString("runGenTunerLoop.C"));
+  fileList.Add(new TObjString("runGenTuner.C"));
+  fileList.Add(new TObjString("AddTaskGenTuner.C"));
+  CopyInputFileLocally("/Users/audurier/Documents/Analysis/LHC_15n_pp/AccEff_jpsi/DataPart/AnalysisResults.root", "AnalysisResultsReference.root", overwrite);
   fileList.Add(new TObjString("AnalysisResultsReference.root"));
   
   // --- saf3 case ---
