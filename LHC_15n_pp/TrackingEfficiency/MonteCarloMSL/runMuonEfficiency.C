@@ -22,7 +22,7 @@ Int_t maxMergeStages = 4;
 // --- prepare environment ---
  TString extraLibs="";
  TString extraIncs="include";
- TString extraTasks="AliAnalysisTaskMuonTrackingEff";
+ TString extraTasks="AliAnalysisTaskMuonTrackingEffLocal";
 
 //TString alignStorage = "alien://folder=/alice/simulation/2008/v4-15-Release/Residual";
 TString alignStorage = "alien://folder=/alice/data/2015/OCDB";
@@ -63,7 +63,7 @@ void runMuonEfficiency(TString smode = "full", TString inputFileName = "runList.
  // --- prepare environment ---
   TString extraLibs="PWGmuon";
   TString extraIncs="include";
-  TString extraTasks="AliAnalysisTaskMuonTrackingEff";
+  TString extraTasks="AliAnalysisTaskMuonTrackingEffLocal";
   TString extraPkgs="";
   LoadAlirootLocally(extraLibs, extraIncs, extraTasks, extraPkgs);
   AliAnalysisGrid *alienHandler = 0x0;
@@ -75,7 +75,7 @@ void runMuonEfficiency(TString smode = "full", TString inputFileName = "runList.
   }
 
   // --- Create the analysis train ---
-  AliAnalysisTaskMuonTrackingEff *muonEfficiency = static_cast<AliAnalysisTaskMuonTrackingEff*>(CreateAnalysisTrain(applyPhysSel,mc,embedding,alienHandler));
+  AliAnalysisTaskMuonTrackingEffLocal *muonEfficiency = static_cast<AliAnalysisTaskMuonTrackingEffLocal*>(CreateAnalysisTrain(applyPhysSel,mc,embedding,alienHandler));
   if (!muonEfficiency) return;
     
   // --- Create input object ---
@@ -142,9 +142,9 @@ TObject* CreateAnalysisTrain(Bool_t applyPhysSel, Bool_t mc, Bool_t embedding, T
   
   // Muon efficiency analysis
   gROOT->LoadMacro("AddTaskMUONTrackingEfficiency.C");
-  AliAnalysisTaskMuonTrackingEff* muonEfficiency = AddTaskMUONTrackingEfficiency(trackCuts,"");
+  AliAnalysisTaskMuonTrackingEffLocal* muonEfficiency = AddTaskMUONTrackingEfficiency(trackCuts,"");
   if(!muonEfficiency) {
-    Error("CreateAnalysisTrain","AliAnalysisTaskMuonTrackingEff not created!");
+    Error("CreateAnalysisTrain","AliAnalysisTaskMuonTrackingEffLocal not created!");
     return;
   }
   if (applyPhysSel) muonEfficiency->SelectCollisionCandidates(offlineTriggerMask);
@@ -156,27 +156,27 @@ TObject* CreateAnalysisTrain(Bool_t applyPhysSel, Bool_t mc, Bool_t embedding, T
   
   // Muon efficiency analysis (old without cut but with MC label)
   // gROOT->LoadMacro("AddTaskMUONTrackingEfficiency_old.C");
-  // AliAnalysisTaskMuonTrackingEff_old* muonEfficiency_old_wocut_wMClabel = AddTaskMUONTrackingEfficiency_old(kFALSE, kFALSE,"old_wocut_wMClabel");
+  // AliAnalysisTaskMuonTrackingEffLocal_old* muonEfficiency_old_wocut_wMClabel = AddTaskMUONTrackingEfficiency_old(kFALSE, kFALSE,"old_wocut_wMClabel");
   // if(!muonEfficiency_old_wocut_wMClabel) {
-  //   Error("CreateAnalysisTrain","AliAnalysisTaskMuonTrackingEff_old not created!");
+  //   Error("CreateAnalysisTrain","AliAnalysisTaskMuonTrackingEffLocal_old not created!");
   //   return;
   // }
   // if (applyPhysSel) muonEfficiency_old_wocut_wMClabel->SelectCollisionCandidates(offlineTriggerMask);
   // muonEfficiency_old_wocut_wMClabel->UseMCLabel(kTRUE);
   
   // Muon efficiency analysis (old with cut)
-  // AliAnalysisTaskMuonTrackingEff_old* muonEfficiency_old_wcut = AddTaskMUONTrackingEfficiency_old(kTRUE, kTRUE,"old_wcut");
+  // AliAnalysisTaskMuonTrackingEffLocal_old* muonEfficiency_old_wcut = AddTaskMUONTrackingEfficiency_old(kTRUE, kTRUE,"old_wcut");
   // if(!muonEfficiency_old_wcut) {
-  //   Error("CreateAnalysisTrain","AliAnalysisTaskMuonTrackingEff_old not created!");
+  //   Error("CreateAnalysisTrain","AliAnalysisTaskMuonTrackingEffLocal_old not created!");
   //   return;
   // }
   // if (applyPhysSel) muonEfficiency_old_wcut->SelectCollisionCandidates(offlineTriggerMask);
   // muonEfficiency_old_wcut->PtCut(1.);
   
   // Muon efficiency analysis (old with cut and MC label)
-  // AliAnalysisTaskMuonTrackingEff_old* muonEfficiency_old_wcut_wMClabel = AddTaskMUONTrackingEfficiency_old(kTRUE, kTRUE,"old_wcut_wMClabel");
+  // AliAnalysisTaskMuonTrackingEffLocal_old* muonEfficiency_old_wcut_wMClabel = AddTaskMUONTrackingEfficiency_old(kTRUE, kTRUE,"old_wcut_wMClabel");
   // if(!muonEfficiency_old_wcut_wMClabel) {
-  //   Error("CreateAnalysisTrain","AliAnalysisTaskMuonTrackingEff_old not created!");
+  //   Error("CreateAnalysisTrain","AliAnalysisTaskMuonTrackingEffLocal_old not created!");
   //   return;
   // }
   // if (applyPhysSel) muonEfficiency_old_wcut_wMClabel->SelectCollisionCandidates(offlineTriggerMask);
@@ -186,9 +186,9 @@ TObject* CreateAnalysisTrain(Bool_t applyPhysSel, Bool_t mc, Bool_t embedding, T
   // Muon efficiency analysis -- with pDCA cut
   trackCuts.SetFilterMask(AliMuonTrackCuts::kMuMatchLpt | AliMuonTrackCuts::kMuEta |
 			  AliMuonTrackCuts::kMuThetaAbs | AliMuonTrackCuts::kMuPdca);
-  AliAnalysisTaskMuonTrackingEff* muonEfficiency2 = AddTaskMUONTrackingEfficiency(trackCuts,"pDCA");
+  AliAnalysisTaskMuonTrackingEffLocal* muonEfficiency2 = AddTaskMUONTrackingEfficiency(trackCuts,"pDCA");
   if(!muonEfficiency2) {
-    Error("CreateAnalysisTrain","AliAnalysisTaskMuonTrackingEff not created!");
+    Error("CreateAnalysisTrain","AliAnalysisTaskMuonTrackingEffLocal not created!");
     return;
   }
   if (applyPhysSel) muonEfficiency2->SelectCollisionCandidates(offlineTriggerMask);
@@ -196,9 +196,9 @@ TObject* CreateAnalysisTrain(Bool_t applyPhysSel, Bool_t mc, Bool_t embedding, T
   // Muon efficiency analysis -- with chi2 cut
   trackCuts.SetFilterMask(AliMuonTrackCuts::kMuMatchLpt | AliMuonTrackCuts::kMuEta |
 			  AliMuonTrackCuts::kMuThetaAbs | AliMuonTrackCuts::kMuTrackChiSquare);
-  AliAnalysisTaskMuonTrackingEff* muonEfficiency3 = AddTaskMUONTrackingEfficiency(trackCuts,"chi2");
+  AliAnalysisTaskMuonTrackingEffLocal* muonEfficiency3 = AddTaskMUONTrackingEfficiency(trackCuts,"chi2");
   if(!muonEfficiency3) {
-    Error("CreateAnalysisTrain","AliAnalysisTaskMuonTrackingEff not created!");
+    Error("CreateAnalysisTrain","AliAnalysisTaskMuonTrackingEffLocal not created!");
     return;
   }
   if (applyPhysSel) muonEfficiency3->SelectCollisionCandidates(offlineTriggerMask);
@@ -207,9 +207,9 @@ TObject* CreateAnalysisTrain(Bool_t applyPhysSel, Bool_t mc, Bool_t embedding, T
   trackCuts.SetFilterMask(AliMuonTrackCuts::kMuMatchLpt | AliMuonTrackCuts::kMuEta |
 			  AliMuonTrackCuts::kMuThetaAbs | AliMuonTrackCuts::kMuPdca |
 			  AliMuonTrackCuts::kMuTrackChiSquare);
-  AliAnalysisTaskMuonTrackingEff* muonEfficiency4 = AddTaskMUONTrackingEfficiency(trackCuts,"pDCAchi2");
+  AliAnalysisTaskMuonTrackingEffLocal* muonEfficiency4 = AddTaskMUONTrackingEfficiency(trackCuts,"pDCAchi2");
   if(!muonEfficiency4) {
-    Error("CreateAnalysisTrain","AliAnalysisTaskMuonTrackingEff not created!");
+    Error("CreateAnalysisTrain","AliAnalysisTaskMuonTrackingEffLocal not created!");
     return;
   }
   if (applyPhysSel) muonEfficiency4->SelectCollisionCandidates(offlineTriggerMask);

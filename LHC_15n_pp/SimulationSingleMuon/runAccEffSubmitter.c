@@ -9,33 +9,31 @@ TString remoteDir =Form("/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/sing
 void runAccEffSubmitter(const char* mode)
 {
 	gSystem->Load("libpythia6_4_28");
-	AliMuonAccEffSubmitter a("GenParamCustomSingle");
+	AliMuonAccEffSubmitter a("GenParamCustomSingleBen");
 	a.SetRemoteDir(remoteDir.Data());
 	a.ShouldOverwriteFiles(true);
 	// a.MakeNofEventsFixed(10);
 	a.MakeNofEventsPropToTriggerCount(Trigger.Data(),1);
 	a.SetVar("VAR_GENLIB_PARNAME","\"pp 5.03\"");
 
-	a.SetVar("VAR_GENPARAMCUSTOMSINGLE_PTMIN","0.8");
+	a.SetVar("VAR_GENPARAMCUSTOMSINGLEBEN_PTMIN","0.8");
+  	
+  	// LHC15n tuned param
+	a.SetVar("VAR_GENPARAMCUSTOMSINGLEBEN_PT_P0","135.137");
+	a.SetVar("VAR_GENPARAMCUSTOMSINGLEBEN_PT_P1","0.555323");
+	a.SetVar("VAR_GENPARAMCUSTOMSINGLEBEN_PT_P2","0.578374");
+	a.SetVar("VAR_GENPARAMCUSTOMSINGLEBEN_PT_P3","10.1345");
+	a.SetVar("VAR_GENPARAMCUSTOMSINGLEBEN_PT_P4","0.000232233");
+	a.SetVar("VAR_GENPARAMCUSTOMSINGLEBEN_PT_P5","-0.924726");
 
-	// a.SetVar("VAR_GENPARAMCUSTOMSINGLE_PT_P0","0.675825");
-	// a.SetVar("VAR_GENPARAMCUSTOMSINGLE_PT_P1","0.297392");
-	// a.SetVar("VAR_GENPARAMCUSTOMSINGLE_PT_P2","0.853814");
-	// a.SetVar("VAR_GENPARAMCUSTOMSINGLE_PT_P3","5.20967");
-
-	// a.SetVar("VAR_GENPARAMCUSTOMSINGLE_Y_P0","1.17771");
-	// a.SetVar("VAR_GENPARAMCUSTOMSINGLE_Y_P1","-0.591384");
-	// a.SetVar("VAR_GENPARAMCUSTOMSINGLE_Y_P2","-0.418129");
-	// a.SetVar("VAR_GENPARAMCUSTOMSINGLE_Y_P3","-0.0554779");
+	a.SetVar("VAR_GENPARAMCUSTOMSINGLEBEN_Y_P0","1.95551");
+	a.SetVar("VAR_GENPARAMCUSTOMSINGLEBEN_Y_P1","-0.104761");
+	a.SetVar("VAR_GENPARAMCUSTOMSINGLEBEN_Y_P2","0.00311324");
 
 	a.SetRunList("$DATASETDIR/runList_LHC15n.txt");
-	// a.SetAliPhysicsVersion("VO_ALICE@AliPhysics::vAN-20151015-1");
-	// a.SetAliRootVersion("VO_ALICE@AliROOT::v5-07-01-3");
+
 	a.SetCompactMode(0);
 	a.Print();
 	a.Run(mode);
 	a.Submit(false);
 }
-
-// Double_t newPtParam[4] = {0.675825, 0.297392, 0.853814, 5.20967};
-// Double_t newYParam[4] = {1.17771, -0.591384, -0.418129, -0.0554779};

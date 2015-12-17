@@ -282,7 +282,7 @@ TObject* CreateAlienHandler(TString runMode, TString& alirootVersion, TString& a
   
   // Set versions of used packages
   plugin->SetAPIVersion("V1.1x");
-  if (!alirootVersion.IsNull()) plugin->SetAliROOTVersion(alirootVersion.Data());
+  // if (!alirootVersion.IsNull()) plugin->SetAliROOTVersion(alirootVersion.Data());
   if (!aliphysicsVersion.IsNull()) plugin->SetAliPhysicsVersion(aliphysicsVersion.Data());
   
   // Declare input data to be processed

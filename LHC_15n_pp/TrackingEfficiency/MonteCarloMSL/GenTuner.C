@@ -58,7 +58,7 @@ void GenTuner()
    gSystem->Load("libPWGmuon");
 
 // analysis source to be compiled at runtime (if any)
-   gROOT->ProcessLine(".L AliAnalysisTaskMuonTrackingEff.cxx+g");
+   gROOT->ProcessLine(".L AliAnalysisTaskMuonTrackingEffLocal.cxx+g");
 
 // read the analysis manager from file
    AliAnalysisManager *mgr = AliAnalysisAlien::LoadAnalysisManager("GenTuner.root");

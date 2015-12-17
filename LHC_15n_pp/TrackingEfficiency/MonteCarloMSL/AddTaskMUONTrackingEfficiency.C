@@ -1,4 +1,4 @@
-AliAnalysisTaskMuonTrackingEff *AddTaskMUONTrackingEfficiency(AliMuonTrackCuts &trackCuts, TString extension = "") 
+AliAnalysisTaskMuonTrackingEffLocal *AddTaskMUONTrackingEfficiency(AliMuonTrackCuts &trackCuts, TString extension = "") 
 {
   //
   // Task for the determination of the MUON tracking chamber efficiency
@@ -34,7 +34,7 @@ AliAnalysisTaskMuonTrackingEff *AddTaskMUONTrackingEfficiency(AliMuonTrackCuts &
   
   // Create and configure task
   TString name = Form("MuonTrackingEfficiency%s",extension.Data());
-  AliAnalysisTaskMuonTrackingEff* taskMuonTrackingEff = new AliAnalysisTaskMuonTrackingEff(name.Data());
+  AliAnalysisTaskMuonTrackingEffLocal* taskMuonTrackingEff = new AliAnalysisTaskMuonTrackingEffLocal(name.Data());
   taskMuonTrackingEff->SetMuonTrackCuts(trackCuts);
   
   // Add to the manager

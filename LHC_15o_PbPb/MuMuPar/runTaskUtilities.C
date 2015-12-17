@@ -771,6 +771,8 @@ TObject* CreateInputObject ( TString runMode, TString analysisMode, TString inpu
     else {
       if ( analysisMode == "vaf" ) outName = gSystem->GetFromPipe(Form("cat %s",GetDatasetName().Data()));
       else outName = GetDatasetName().Data();
+      printf("outName = %s\n",outName.Data() );
+      gSystem->Exec(Form("cat %s ",outName.Data()));
     }
 
     TObjString *output = new TObjString(outName);
@@ -1132,7 +1134,7 @@ TMap* SetupAnalysis ( TString runMode = "test", TString analysisMode = "grid",
 
 
 //______________________________________________________________________________
-void StartAnalysis ( TString runMode, TString analysisMode, TString inputName, TString inputOptions )
+void StartAnalysis ( TString runMode, TString analysisMode, TString inputName, TString inputOptions, Bool_t runOnTFileCollection =kFALSE  )
 {
   //
   // Run the analysis
@@ -1144,7 +1146,9 @@ void StartAnalysis ( TString runMode, TString analysisMode, TString inputName, T
   }
   TString sMode = GetMode(runMode,analysisMode);
 
+
   if ( sMode.IsNull() ) return;
+  cout << "coucou !" << endl;
 
   AliAnalysisManager* mgr = AliAnalysisManager::GetAnalysisManager();
   if ( ! mgr->InitAnalysis()) {
@@ -1162,7 +1166,17 @@ void StartAnalysis ( TString runMode, TString analysisMode, TString inputName, T
 
   TString mgrMode =( sMode == "terminateonly" ) ? "grid terminate" : sMode.Data();
 
-  if ( sMode == "proof") mgr->StartAnalysis(mgrMode.Data(), inputObj->GetName());
+  if(inputObj)printf("Dataset : %s\n", inputObj->GetName());
+
+  if(runOnTFileCollection && inputName.EndsWith(".root"))    
+    {
+      TFile*f= TFile::Open(inputName.Data());
+      if(f) f->ls();
+      TFileCollection* fc = static_cast<TFileCollection*>(f->Get("dataset"));
+      if ( sMode == "proof" && fc) mgr->StartAnalysis(mgrMode.Data(),fc);
+      else{printf("Did not cast the object\n");return;}
+    } 
+  else if ( sMode == "proof") mgr->StartAnalysis(mgrMode.Data(), inputObj->GetName());
   else mgr->StartAnalysis(mgrMode.Data(), static_cast<TChain*>(inputObj));
 
   //mgr->ProfileTask("SingleMuonAnalysisTask"); // REMEMBER TO COMMENT (test memory)

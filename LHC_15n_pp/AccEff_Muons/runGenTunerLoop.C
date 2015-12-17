@@ -67,7 +67,7 @@ void runGenTunerLoop(TString smode = "local", TString inputFileName = "AliAOD.ro
 	  cout<<"Results already exist. Do you want to resume? [y/n] (if not previous results will be deleted) "<<flush;
 	  do {resume.Gets(stdin,kTRUE);} while (resume != "y" && resume != "n");
 	  if (resume == "n") gSystem->Exec("rm -f Results_step*.root");
-	}
+	}∏runGenTner
       } else resume = "n";
     }
     

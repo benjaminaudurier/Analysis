@@ -17,7 +17,7 @@ TString scentrality     ="V0M_00.00_90.00";
 void PrintFitMacro(
 char         * what ="INTEGRATED",
 Bool_t PrintDistribution= kFALSE,
-Bool_t Raa   = kTRUE, 
+Bool_t Raa   = kFALSE, 
 Bool_t print = kFALSE,
 char         * sfile="../AnalysisResults.root",
 char         * sasso="",
@@ -36,7 +36,7 @@ char         * beamYear="mumu.PbPb2015.config")
     //_____ Draw 
     while ( ( swhat = static_cast<TObjString*>(nextWhat()) ) )
     {
-        // analysis.DrawFitResults("PSI",swhat->String().Data(),"histo",print);
+        analysis.DrawFitResults("PSI",swhat->String().Data(),"histo",print);
         analysis.PrintNofParticle("PSI","NofJPsi",swhat->String(),kFALSE);
         
         if (Raa)

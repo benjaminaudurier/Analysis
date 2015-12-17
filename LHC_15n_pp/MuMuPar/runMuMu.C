@@ -10,12 +10,12 @@
 // 
 // Data:
 // Find;BasePath=/alice/data/2013/LHC13d/000195760/ESDs/muon_pass2/AOD134;FileName=AliAOD.root
-
+Bool_t runOnTFileCollection =kTRUE;
 
 //______________________________________________________________________________
 AliAnalysisTask* runMuMu(TString runMode, 
                         TString analysisMode,
-                        TString inputName       = "Find;BasePath=/alice/data/2015/LHC15o/000245148/muon_calo_pass1/AOD/*;FileName=AliAOD.Muons.root;Mode=cache; ",
+                        TString inputName       = "ds.61.muononly_pbpb2015.root",
                         TString inputOptions    = "",
                         TString analysisOptions = "",
                         TString softVersions    = "aliphysics=v5-07-14-01-1",
@@ -52,7 +52,7 @@ AliAnalysisTask* runMuMu(TString runMode,
     //==============================================================================
     TString outputname = AliAnalysisManager::GetAnalysisManager()->GetCommonFileName(); // Create output name in case of no dataset selected
     gROOT->LoadMacro("AddTaskMuMu.C");
-    AddTaskMuMu(outputname.Data(),triggers,"PbPb2015",isMC);
+    AddTaskMuMu(outputname.Data(),triggers,"PbPb2015",isMC,runOnTFileCollection);
     cout <<"add task mumu done"<< endl;
 
     // Start analysis
