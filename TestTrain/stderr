@@ -1,0 +1,3 @@
+Info in <AliAnalysisAlien::SetDefaultOutputs>: Plugin will use the output files taken from analysis manager
+Info in <AliAnalysisManager::PrintStatus>: System information will be collected each 100 events
+./lego_train.sh: line 40: free: command not found
