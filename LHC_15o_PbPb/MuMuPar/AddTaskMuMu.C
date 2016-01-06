@@ -45,53 +45,12 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   triggerInputsMap->SetOwner(kTRUE);
   
   // triggerInputsMap->Add(new TObjString("0VBA:1,")); 
- triggerInputsMap->Add(new TObjString("0VBA:1"));
- triggerInputsMap->Add(new TObjString("0VBC:2"));
- triggerInputsMap->Add(new TObjString("0TVX:3"));
-triggerInputsMap->Add(new TObjString("0V0M:4"));
-triggerInputsMap->Add(new TObjString("0T0A:5"));
-triggerInputsMap->Add(new TObjString("0SMB:6"));
-triggerInputsMap->Add(new TObjString("0UBA:7"));
-triggerInputsMap->Add(new TObjString("0UBC:8"));
-triggerInputsMap->Add(new TObjString("0PH0:9"));
-triggerInputsMap->Add(new TObjString("0T0C:10"));
-triggerInputsMap->Add(new TObjString("0VHM:11"));
-triggerInputsMap->Add(new TObjString("0OMU:12"));
-triggerInputsMap->Add(new TObjString("0SH1:13"));
-triggerInputsMap->Add(new TObjString("0STP:14"));
-triggerInputsMap->Add(new TObjString("0BPA:15"));
-triggerInputsMap->Add(new TObjString("0BPC:16"));
-triggerInputsMap->Add(new TObjString("0EMC:17"));
-triggerInputsMap->Add(new TObjString("0MSL:18"));
-triggerInputsMap->Add(new TObjString("0MSH:19"));
-triggerInputsMap->Add(new TObjString("0MLL:20"));
-triggerInputsMap->Add(new TObjString("0MUL:21"));
-triggerInputsMap->Add(new TObjString("0OM2:22"));
-triggerInputsMap->Add(new TObjString("0DMC:23"));
-triggerInputsMap->Add(new TObjString("0LSR:24"));
-triggerInputsMap->Add(new TObjString("1EJ1:1"));
-triggerInputsMap->Add(new TObjString("1EG1:2"));
-triggerInputsMap->Add(new TObjString("1EJ2:3"));
-triggerInputsMap->Add(new TObjString("1EG2:4"));
-triggerInputsMap->Add(new TObjString("1PHL:5"));
-triggerInputsMap->Add(new TObjString("1PHM:6"));
-triggerInputsMap->Add(new TObjString("1PHH:7"));
-triggerInputsMap->Add(new TObjString("1HCO:9"));
-triggerInputsMap->Add(new TObjString("1HJT:10"));
-triggerInputsMap->Add(new TObjString("1HSE:11"));
-triggerInputsMap->Add(new TObjString("1H12:12"));
-triggerInputsMap->Add(new TObjString("1HQU:13"));
-triggerInputsMap->Add(new TObjString("1H14:14"));
-triggerInputsMap->Add(new TObjString("1ZED:15"));
-triggerInputsMap->Add(new TObjString("1ZMS:16"));
-triggerInputsMap->Add(new TObjString("1ZMB:17"));
-triggerInputsMap->Add(new TObjString("1ZMD:18"));
-triggerInputsMap->Add(new TObjString("1ZAC:19"));
-triggerInputsMap->Add(new TObjString("1DJ1:20"));
-triggerInputsMap->Add(new TObjString("1DG1:21"));
-triggerInputsMap->Add(new TObjString("1DJ2:22"));
-triggerInputsMap->Add(new TObjString("1DG2:23"));
-triggerInputsMap->Add(new TObjString("2DUM:12"));
+
+triggerInputsMap->Add(new TObjString("0MSL:17"));
+triggerInputsMap->Add(new TObjString("0MSH:18"));
+triggerInputsMap->Add(new TObjString("0MLL:19"));
+triggerInputsMap->Add(new TObjString("0MUL:20"));
+
 
   //===========================================================================
 

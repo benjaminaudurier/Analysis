@@ -47,24 +47,24 @@ void mergeLocally(TString fileList = "fileList.txt", Bool_t skipParamContainers 
   /// merge all files in the list
   /// *** to be compiled ***
   
-  paramContainers.SetOwner();
-  // performance task
-  paramContainers.AddLast(new TObjString("Efficiency"));
-  paramContainers.AddLast(new TObjString("MomentumAtVtx"));
-  paramContainers.AddLast(new TObjString("SlopeAtVtx"));
-  paramContainers.AddLast(new TObjString("EtaAtVtx"));
-  paramContainers.AddLast(new TObjString("PhiAtVtx"));
-  paramContainers.AddLast(new TObjString("MomentumAtFirstCl"));
-  paramContainers.AddLast(new TObjString("SlopeAtFirstCl"));
-  paramContainers.AddLast(new TObjString("DCA"));
-  paramContainers.AddLast(new TObjString("Clusters"));
-  // efficiency task
-  paramContainers.AddLast(new TObjString("ClustersCounters"));
-  // QA task
-  paramContainers.AddLast(new TObjString("general2"));
+  // paramContainers.SetOwner();
+  // // performance task
+  // paramContainers.AddLast(new TObjString("Efficiency"));
+  // paramContainers.AddLast(new TObjString("MomentumAtVtx"));
+  // paramContainers.AddLast(new TObjString("SlopeAtVtx"));
+  // paramContainers.AddLast(new TObjString("EtaAtVtx"));
+  // paramContainers.AddLast(new TObjString("PhiAtVtx"));
+  // paramContainers.AddLast(new TObjString("MomentumAtFirstCl"));
+  // paramContainers.AddLast(new TObjString("SlopeAtFirstCl"));
+  // paramContainers.AddLast(new TObjString("DCA"));
+  // paramContainers.AddLast(new TObjString("Clusters"));
+  // // efficiency task
+  // paramContainers.AddLast(new TObjString("ClustersCounters"));
+  // // QA task
+  // paramContainers.AddLast(new TObjString("general2"));
   
   // load potentially needed libraries
-  gROOT->LoadMacro("$HOME/Work/Alice/Macros/Facilities/runTaskFacilities.C");
+  gROOT->LoadMacro("$MACRODIR/Philippe/runTaskFacilities.C");
   TString extraLibs="";
   TString extraPkgs="";
 //  TString extraPkgs="PWGPPMUONdep:PWGPPMUONlite";

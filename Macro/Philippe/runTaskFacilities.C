@@ -183,10 +183,10 @@ Bool_t CopyFileOnSAF3(TList &fileList, TString dataset)
   
   gSystem->Exec(Form("cp runAnalysis.sh %s/runAnalysis.sh", remoteLocation.Data()));
   
-  if (gSystem->AccessPathName(Form("%s/Work/Alice/Macros/Facilities", saf3dir.Data())))
-    gSystem->Exec(Form("mkdir -p %s/Work/Alice/Macros/Facilities", saf3dir.Data()));
-  gSystem->Exec("cp -p $HOME/Work/Alice/Macros/Facilities/runTaskFacilities.C $HOME/saf3/Work/Alice/Macros/Facilities/runTaskFacilities.C");
-  gSystem->Exec("cp -p $HOME/Work/Alice/Macros/Facilities/mergeLocally.C $HOME/saf3/Work/Alice/Macros/Facilities/mergeLocally.C");
+  if (gSystem->AccessPathName(Form("%s/Documents/Analysis/Macro/Philippe", saf3dir.Data())))
+    gSystem->Exec(Form("mkdir -p %s/Documents/Analysis/Macro/Philippe", saf3dir.Data()));
+  gSystem->Exec("cp -p $HOME/Documents/Analysis/Macro/Philippe/runTaskFacilities.C $HOME/saf3/Documents/Analysis/Macro/Philippe/runTaskFacilities.C");
+  gSystem->Exec("cp -p $HOME/Documents/Analysis/Macro/Philippe/mergeLocally.C $HOME/saf3/Documents/Analysis/Macro/Philippe/mergeLocally.C");
   
   if (dataset.EndsWith(".txt")) {
     gSystem->Exec(Form("cat %s | awk {'print $1\";Mode=cache\"}' > datasetSaf3.txt", dataset.Data()));
@@ -346,7 +346,7 @@ TObject* CreateAlienHandler(TString runMode, TString& alirootVersion, TString& a
   
   // Set versions of used packages
   plugin->SetAPIVersion("V1.1x");
-  if (!alirootVersion.IsNull()) plugin->SetAliROOTVersion(alirootVersion.Data());
+  // if (!alirootVersion.IsNull()) plugin->SetAliROOTVersion(alirootVersion.Data());
   if (!aliphysicsVersion.IsNull()) plugin->SetAliPhysicsVersion(aliphysicsVersion.Data());
   
   // Declare input data to be processed
@@ -558,7 +558,7 @@ void CreateSAF3ExecutableLoop(TString dataset)
     outFile << "  mv AnalysisResults.root results/$run/." << endl;
     outFile << "done" << endl;
     outFile << "ls `pwd`/results/*/AnalysisResults.root > files2merge.txt" << endl;
-    outFile << "root -b -q '$HOME/Work/Alice/Macros/Facilities/mergeLocally.C+(\"files2merge.txt\", kTRUE, kFALSE)'" << endl;
+    outFile << "root -b -q '$HOME/Documents/Analysis/Macro/Philippe/mergeLocally.C+(\"files2merge.txt\", kTRUE, kFALSE)'" << endl;
     arg.ReplaceAll("saf3", "terminateonly");
   } else if (dataset.EndsWith(".root")) arg.ReplaceAll(dataset.Data(), gSystem->BaseName(dataset.Data()));
   outFile << "root -b -q '" << macro.Data() << arg.Data() << "'" << endl;
@@ -643,25 +643,34 @@ Bool_t RunAnalysisOnSAF3(TList &fileList, TString aliphysicsVersion, TString dat
       return kFALSE;
     }
   }
+  printf("nansafmaster3 mount ! \n");
   
   // --- create the executable to run on SAF3 ---
-  CreateSAF3Executable(dataset);
-//  CreateSAF3ExecutableLoop(dataset);
+  // CreateSAF3Executable(dataset);
+ CreateSAF3ExecutableLoop(dataset);
+  printf("Executable done ! \n");
+
   
   // --- copy files needed for this analysis ---
   if (!CopyFileOnSAF3(fileList, dataset)) {
     cout << "cp problem" << endl;
     return kFALSE;
   }
+  printf("Copy files done ! \n");
+
   
   // --- change the AliPhysics version on SAF3 ---
   gSystem->Exec(Form("sed -i '' 's/VafAliPhysicsVersion.*/VafAliPhysicsVersion=\"%s\"/g' $HOME/saf3/.vaf/vaf.conf", aliphysicsVersion.Data()));
+  printf("AliPhysics version set ! \n");
   
   // --- enter SAF3 and run analysis ---
   TString analysisLocation = gSystem->pwd();
+  printf("analysisLocation = %s\n",analysisLocation.Data() );
   analysisLocation.ReplaceAll(Form("%s/", gSystem->Getenv("HOME")), "");
-  gSystem->Exec(Form("gsissh -p 1975 -t -Y nansafmaster3.in2p3.fr 'cd %s; ~/saf3-enter \"\" \"./runAnalysis.sh 2>&1 | tee runAnalysis.log; exit\"'", analysisLocation.Data()));
-  
+  printf("analysisLocation = %s\n",analysisLocation.Data() );
+  gSystem->Exec(Form("gsissh -p 1975 -t -Y nansafmaster3.in2p3.fr 'cd %s; /opt/SAF3/bin/saf3-enter \"\" \"./runAnalysis.sh 2>&1 | tee runAnalysis.log; exit\"'", analysisLocation.Data()));
+  printf("In saf3 ! \n");
+
   // --- copy analysis results (assuming analysis run smootly) ---
   gSystem->Exec(Form("cp -p %s/%s/*.root .", saf3dir.Data(), analysisLocation.Data()));
   

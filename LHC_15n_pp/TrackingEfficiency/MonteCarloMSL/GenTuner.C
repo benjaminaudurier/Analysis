@@ -54,11 +54,8 @@ void GenTuner()
    gROOT->ProcessLine(".include $ALICE_ROOT/include");
    printf("Include path: %s\n", gSystem->GetIncludePath());
 
-// Add aditional AliRoot libraries
-   gSystem->Load("libPWGmuon");
 
 // analysis source to be compiled at runtime (if any)
-   gROOT->ProcessLine(".L AliAnalysisTaskMuonTrackingEffLocal.cxx+g");
 
 // read the analysis manager from file
    AliAnalysisManager *mgr = AliAnalysisAlien::LoadAnalysisManager("GenTuner.root");

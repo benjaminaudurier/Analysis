@@ -1,4 +1,4 @@
-AliAnalysisTaskMuonTrackingEffLocal *AddTaskMUONTrackingEfficiency(AliMuonTrackCuts &trackCuts, TString extension = "") 
+AliAnalysisTaskMuonTrackingEff *AddTaskMUONTrackingEfficiency(AliMuonTrackCuts &trackCuts, TString extension = "") 
 {
   //
   // Task for the determination of the MUON tracking chamber efficiency
@@ -34,7 +34,7 @@ AliAnalysisTaskMuonTrackingEffLocal *AddTaskMUONTrackingEfficiency(AliMuonTrackC
   
   // Create and configure task
   TString name = Form("MuonTrackingEfficiency%s",extension.Data());
-  AliAnalysisTaskMuonTrackingEffLocal* taskMuonTrackingEff = new AliAnalysisTaskMuonTrackingEffLocal(name.Data());
+  AliAnalysisTaskMuonTrackingEff* taskMuonTrackingEff = new AliAnalysisTaskMuonTrackingEff(name.Data());
   taskMuonTrackingEff->SetMuonTrackCuts(trackCuts);
   
   // Add to the manager
@@ -45,7 +45,7 @@ AliAnalysisTaskMuonTrackingEffLocal *AddTaskMUONTrackingEfficiency(AliMuonTrackC
   
    // Create and connect output containers
   AliAnalysisDataContainer *coutput1 = mgr->CreateContainer(Form("ClustersCounters%s",suffix.Data()), AliCounterCollection::Class(), AliAnalysisManager::kOutputContainer, fileName);
-  AliAnalysisDataContainer *coutput2 = mgr->CreateContainer(Form("EventCounters%s",suffix.Data()), AliCounterCollection::Class(), AliAnalysisManager::kOutputContainer, fileName);
+  AliAnalysisDataContainer *coutput2 = mgr->CreateContainer(Form("EventsCounters%s",suffix.Data()), AliCounterCollection::Class(), AliAnalysisManager::kOutputContainer, fileName);
   AliAnalysisDataContainer *coutput3 = mgr->CreateContainer(Form("TracksDetectedPerChamber%s",suffix.Data()), TList::Class(), AliAnalysisManager::kOutputContainer, fileName);
   AliAnalysisDataContainer *coutput4 = mgr->CreateContainer(Form("TotalTracksPerChamber%s",suffix.Data()), TList::Class(), AliAnalysisManager::kOutputContainer, fileName);
   AliAnalysisDataContainer *coutput5 = mgr->CreateContainer(Form("SingleDetectedPerChamber%s",suffix.Data()), TList::Class(), AliAnalysisManager::kOutputContainer, fileName);

@@ -1,2 +1,6 @@
 [TFile::Cp] Total 0.00 MB	|>...................| 0.00 % [0.0 MB/s][TFile::Cp] Total 0.00 MB	|====================| 100.00 % [0.1 MB/s]
-Eff.sh: line 40: free: command not found
+
+ *** Break *** keyboard interrupt GenTuner.C:67:
+
+ *** Break *** keyboard interrupt
+GenTuner.sh: line 40: free: command not found

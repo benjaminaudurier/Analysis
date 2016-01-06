@@ -84,7 +84,7 @@
 ./MuonTrackingEfficiency_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/ESTLType.h
 ./MuonTrackingEfficiency_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/ThreadLocalStorage.h
 ./MuonTrackingEfficiency_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/RConfigure.h
-./MuonTrackingEfficiency_C.so: /Users/audurier/alicesw/aliroot/v5-07-01/inst/include/AliCounterCollection.h
+./MuonTrackingEfficiency_C.so: /Users/audurier/alicesw/aliroot/master/inst/include/AliCounterCollection.h
 ./MuonTrackingEfficiency_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/TText.h
 ./MuonTrackingEfficiency_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/include/cintdictversion.h /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/include/RVersion.h
 MuonTrackingEfficiency_C__ROOTBUILDVERSION= 5.34/30

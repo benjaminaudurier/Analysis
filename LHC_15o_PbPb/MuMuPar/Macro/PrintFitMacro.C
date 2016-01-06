@@ -17,7 +17,7 @@ TString scentrality     ="V0M_00.00_90.00";
 void PrintFitMacro(
 char         * what ="INTEGRATED",
 Bool_t PrintDistribution= kFALSE,
-Bool_t Raa   = kFALSE, 
+Bool_t Raa   = kTRUE, 
 Bool_t print = kFALSE,
 char         * sfile="../AnalysisResults.root",
 char         * sasso="",

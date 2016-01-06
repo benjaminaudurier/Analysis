@@ -2,9 +2,9 @@
 <alien>
   <collection name="collection">
     <event name="1">
-      <file name="AliESDs.root" aclId="" broken="0" ctime="2015-11-23 18:38:01" dir="17785126" entryId="17785168" expiretime="" gowner="baudurie" guid="DA7D35DC-9208-11E5-8851-6BEC33CDB1F2" guidtime="11E59208" jobid="579887745" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/singleMuon/CMSL7-B-NOPF-MUFAST/244343/001/AliESDs.root" md5="082c32f3d8aa75bd27027a1efba1148e" owner="baudurie" perm="755" replicated="0" size="61207816" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/singleMuon/CMSL7-B-NOPF-MUFAST/244343/001/AliESDs.root" type="f" />
+      <file name="AliESDs.root" aclId="" broken="0" ctime="2015-12-04 12:34:48" dir="18043418" entryId="18043631" expiretime="" gowner="baudurie" guid="E4C2D96E-9A7A-11E5-88F9-4F08B4D1420F" guidtime="11E59A7A" jobid="586026104" lfn="/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/singleMuon/tuned/CMSL7-B-NOPF-MUFAST/244340/002/AliESDs.root" md5="f1e3ffd7afd4ac0d3effde2204beb4ae" owner="baudurie" perm="755" replicated="0" size="137881569" turl="alien:///alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/singleMuon/tuned/CMSL7-B-NOPF-MUFAST/244340/002/AliESDs.root" type="f" />
     </event>
-    <info command="[/alice/cern.ch/user/b/baudurie/]: find -z -x collection -l 1 -o 0 /alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/singleMuon/CMSL7-B-NOPF-MUFAST/244343 *AliESDs.root" creator="admin" date="Mon Nov 30 10:49:56 CET 2015" timestamp="1448876996" />
+    <info command="[/alice/cern.ch/user/b/baudurie/]: find -z -x collection -l 1 -o 0 /alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/singleMuon/tuned/CMSL7-B-NOPF-MUFAST/244340 */AliESDs.root" creator="admin" date="Wed Jan  6 10:02:22 CET 2016" timestamp="1452070942" />
   </collection>
 </alien>
 

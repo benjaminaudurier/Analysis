@@ -28,7 +28,7 @@ const char* beamYear="mumu.PbPb2015.config",const int DebugLevel =0)
 
   //_____ FNorm
   
-  // analysis.ComputeIntFnormFromCounters(AliAnalysisMuMuFnorm::kMUL,kFALSE); // kTRUE = PileUpCOrrected
+   analysis.ComputeIntFnormFromCounters(AliAnalysisMuMuFnorm::kMUL,kFALSE); // kTRUE = PileUpCOrrected
   // analysis.ComputeFnormScalers(AliAnalysisMuMuFnorm::kMUL,kTRUE);// kTRUE = PileUpCOrrected
 
   //_____ Mean
@@ -76,7 +76,7 @@ void PrintCounters(AliAnalysisMuMu &ana)
     // ana.CC()->Print("run/trigger","trigger:CINT7-B-NOPF-MUFAST/centrality:V0M_00.00_100.00/event:PSALL"); 
     // ana.CC()->Print("run/trigger","trigger:CINT7-B-NOPF-MUFAST&0MUL/centrality:V0M_00.00_90.00/event:ALL");
     ana.CC()->Print("run/event","trigger:CINT7-B-NOPF-MUFAST/centrality:V0M_00.00_90.00");
-    ana.CC()->Print("run/event","trigger:CINT7-B-NOPF-MUFAST&0MUL/centrality:V0M_00.00_90.00");
+    ana.CC()->Print("run/event","trigger:CINT7-B-NOPF-MUFAST&0MUL/centrality:V0M_00.00_90.00");   
     // ana.CC()->Print("");
     // ana.CC()->PrintKeyWords();
 
