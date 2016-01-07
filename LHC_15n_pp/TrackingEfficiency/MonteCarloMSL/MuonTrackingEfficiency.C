@@ -117,28 +117,28 @@ void MuonTrackingEfficiency(TString runList = "runList.txt",
   
   // PlotMuonEfficiencyVsX("centrality", fileNameData, fileNameSave, kFALSE, kFALSE, kTRUE);
   PlotMuonEfficiencyVsX("pt", fileNameData, fileNameSave, kFALSE, kFALSE, kTRUE);
-  // PlotMuonEfficiencyVsX("y", fileNameData, fileNameSave, kFALSE, kFALSE, kTRUE);
-  // PlotMuonEfficiencyVsX("phi", fileNameData, fileNameSave, kFALSE, kFALSE, kTRUE);
-  // PlotMuonEfficiencyVsX("charge", fileNameData, fileNameSave, kFALSE, kFALSE, kTRUE);
+   PlotMuonEfficiencyVsX("y", fileNameData, fileNameSave, kFALSE, kFALSE, kTRUE);
+   PlotMuonEfficiencyVsX("phi", fileNameData, fileNameSave, kFALSE, kFALSE, kTRUE);
+   PlotMuonEfficiencyVsX("charge", fileNameData, fileNameSave, kFALSE, kFALSE, kTRUE);
   
-  // // PlotIntegratedMuonEfficiencyVsX("centrality", runList, fileNameWeights, fileNameData, fileNameSave, kFALSE, kTRUE);
-  // PlotIntegratedMuonEfficiencyVsX("pt", runList, fileNameWeights, fileNameData, fileNameSave, kFALSE, kTRUE,path);
-  // PlotIntegratedMuonEfficiencyVsX("y", runList, fileNameWeights, fileNameData, fileNameSave, kFALSE, kTRUE,path);
-  // PlotIntegratedMuonEfficiencyVsX("phi", runList, fileNameWeights, fileNameData, fileNameSave, kFALSE, kTRUE,path);
-  // PlotIntegratedMuonEfficiencyVsX("charge", runList, fileNameWeights, fileNameData, fileNameSave, kFALSE, kTRUE,path);
+   // PlotIntegratedMuonEfficiencyVsX("centrality", runList, fileNameWeights, fileNameData, fileNameSave, kFALSE, kTRUE);
+   PlotIntegratedMuonEfficiencyVsX("pt", runList, fileNameWeights, fileNameData, fileNameSave, kFALSE, kTRUE,path);
+   PlotIntegratedMuonEfficiencyVsX("y", runList, fileNameWeights, fileNameData, fileNameSave, kFALSE, kTRUE,path);
+   PlotIntegratedMuonEfficiencyVsX("phi", runList, fileNameWeights, fileNameData, fileNameSave, kFALSE, kTRUE,path);
+   PlotIntegratedMuonEfficiencyVsX("charge", runList, fileNameWeights, fileNameData, fileNameSave, kFALSE, kTRUE,path);
   
-  // // PlotMuonEfficiencyVsXY("pt", "centrality", fileNameData, fileNameSave, kTRUE);
-  // // PlotMuonEfficiencyVsXY("y", "centrality", fileNameData, fileNameSave, kTRUE);
-  // PlotMuonEfficiencyVsXY("pt", "y", fileNameData, fileNameSave, kTRUE);
-  // PlotMuonEfficiencyVsXY("phi", "y", fileNameData, fileNameSave, kTRUE, kTRUE);
+   // PlotMuonEfficiencyVsXY("pt", "centrality", fileNameData, fileNameSave, kTRUE);
+   // PlotMuonEfficiencyVsXY("y", "centrality", fileNameData, fileNameSave, kTRUE);
+   PlotMuonEfficiencyVsXY("pt", "y", fileNameData, fileNameSave, kTRUE);
+   PlotMuonEfficiencyVsXY("phi", "y", fileNameData, fileNameSave, kTRUE, kTRUE);
   
-  // PlotMuonEfficiency(fileNameData, fileNameSave, kFALSE, kTRUE, kTRUE);
-  // PlotMuonEfficiencyVsRun(runList, fileNameData, fileNameSave, kFALSE, kTRUE,path);
-  // PlotIntegratedMuonEfficiency(fileNameWeights,fileNameData, fileNameSave, kTRUE, kTRUE,path);
+   PlotMuonEfficiency(fileNameData, fileNameSave, kFALSE, kTRUE, kTRUE);
+   PlotMuonEfficiencyVsRun(runList, fileNameData, fileNameSave, kFALSE, kTRUE,path);
+   PlotIntegratedMuonEfficiency(fileNameWeights,fileNameData, fileNameSave, kTRUE, kTRUE,path);
   
-  // PlotMuonEfficiencyPerDE(fileNameData, fileNameSave, kFALSE);
-  // PlotMuonEfficiencyPerDEVsRun(runList, fileNameData, fileNameSave,path);
-  // PlotIntegratedMuonEfficiencyPerDE(fileNameWeights, fileNameData, fileNameSave,path);
+   PlotMuonEfficiencyPerDE(fileNameData, fileNameSave, kFALSE);
+   PlotMuonEfficiencyPerDEVsRun(runList, fileNameData, fileNameSave,path);
+   PlotIntegratedMuonEfficiencyPerDE(fileNameWeights, fileNameData, fileNameSave,path);
 
   
 }

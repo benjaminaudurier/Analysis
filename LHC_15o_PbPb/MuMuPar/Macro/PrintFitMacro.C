@@ -7,6 +7,7 @@
 //
 
 // Macro who prints fit results
+
 TString striggerDimuon  ="CMUL7-B-NOPF-MUFAST";
 TString seventType      ="PSALL";
 TString spairCut        ="pALLPAIRYPAIRPTIN0.0-10.0RABSMATCHLOWETAPDCA";
@@ -17,7 +18,7 @@ TString scentrality     ="V0M_00.00_90.00";
 void PrintFitMacro(
 char         * what ="INTEGRATED",
 Bool_t PrintDistribution= kFALSE,
-Bool_t Raa   = kTRUE, 
+Bool_t Raa   = kFALSE,
 Bool_t print = kFALSE,
 char         * sfile="../AnalysisResults.root",
 char         * sasso="",
@@ -38,7 +39,7 @@ char         * beamYear="mumu.PbPb2015.config")
     {
         analysis.DrawFitResults("PSI",swhat->String().Data(),"histo",print);
         analysis.PrintNofParticle("PSI","NofJPsi",swhat->String(),kFALSE);
-        
+    
         if (Raa)
         {
         	if(swhat->String().Contains("INTEGRATED")) analysis.RAAasGraphic("PSI",swhat->String().Data(),"externFile_PT.txt","externFile_CENT.txt","V0M_00.00_90.00",kFALSE);
