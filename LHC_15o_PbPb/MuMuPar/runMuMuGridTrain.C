@@ -9,13 +9,13 @@
 // -----grid------
 TString rootVersion = "v5-34-30";//v5-34-30-alice-7 
 TString alirootVersion = "v5-07-19-1";
-TString aliphysicsVersion = "vAN-20151215-1";
+TString aliphysicsVersion = "vAN-20160105-1";
 
 // -----For data-----
 TString dataDir = "/alice/data/2015/LHC15o";
 TString dataPattern = "muon_calo_pass1/AOD/*AliAOD.Muons.root";
 TString runFormat = "%09d";
-TString outDir = "Analysis/LHC15o/LowPt";
+TString outDir = "Analysis/LHC15o/MuMuPar";
 
 
 // extra to be load on CF
@@ -85,17 +85,11 @@ AliAnalysisTask* runMuMuGrid(const char* dataset="runList-AOD.txt",
   }
 
   mgr->SetInputEventHandler(input); // Set the input handler
-  TList* triggers = new TList; // Create pointer for trigger list
-  triggers->SetOwner(kTRUE); // Give rights to trigger liser
     
-
-    
-  // Fill the trigger list with desired trigger combinations (See on ALICE log book for denomination)
-  //==============================================================================
-  if (!simulations)
-  {
-    triggers->Add(new TObjString("CMUL7-B-NOPF-MUFAST"));// MUL
-  }
+  //For the train version
+  char * triggerlist = "CINT7-B-NOPF-MUFAST,CINT7-B-NOPF-MUFAST&0MSL,CINT7-B-NOPF-MUFAST&0MUL,CMUL7-B-NOPF-MUFAST,CMSL7-B-NOPF-MUFAST,CMSL7-B-NOPF-MUFAST&0MUL";
+  
+  char * inputs = "0MSL:17,0MSH:18,0MLL:19,0MUL:20,0V0M:3";
 
   TString outputname("LHC15o.MuMu.1.root"); // Create output name in case of no dataset selected 
   
@@ -104,8 +98,9 @@ AliAnalysisTask* runMuMuGrid(const char* dataset="runList-AOD.txt",
   if (!baseline){
     gROOT->LoadMacro("$ALICE_PHYSICS/OADB/COMMON/MULTIPLICITY/macros/AddTaskMultSelection.C");
     AddTaskMultSelection(kFALSE); 
-    gROOT->LoadMacro("AddTaskMuMu.C");
-    AddTaskMuMu(outputname.Data(),triggers,"PbPb2015",simulations);
+    
+    gROOT->LoadMacro("$ALICE_PHYSICS/PWG/muon/AddTaskMuMuMinvBA.C");
+    AddTaskMuMuMinvBA("MuMu",triggerlist,inputs,"PbPb2015",simulations);
   }
   else{
       gROOT->LoadMacro("$ALICE_ROOT/ANALYSIS/macros/train/AddTaskBaseLine.C");
@@ -136,7 +131,6 @@ AliAnalysisTask* runMuMuGrid(const char* dataset="runList-AOD.txt",
 //    mgr->SetDebugLevel(10);
     mgr->StartAnalysis("local",c);
     timer.Print();
-//    mgr->ProfileTask("AliAnalysisTaskMuMu");
 //    if (baseline) mgr->ProfileTask("baseline");
   }
   AliCodeTimer::Instance()->Print();// Timer
