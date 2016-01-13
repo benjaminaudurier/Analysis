@@ -1,0 +1,47 @@
+From 3b5b3ea80e686f682d16fd4ff3cb184c5d12fa03 Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Thu, 29 Jan 2015 18:34:38 +0100
+Subject: [PATCH] Adding phi bin to AddTaskMuMuMinvBA.C
+
+---
+ PWG/muon/AddTaskMuMuMinvBA.C    | 11 +++++++++++
+ PWG/muon/AddTaskMuMuMinvLowPt.C |  1 +
+ 2 files changed, 12 insertions(+)
+
+diff --git a/PWG/muon/AddTaskMuMuMinvBA.C b/PWG/muon/AddTaskMuMuMinvBA.C
+index f1244e8..d45ff0e 100644
+--- a/PWG/muon/AddTaskMuMuMinvBA.C
++++ b/PWG/muon/AddTaskMuMuMinvBA.C
+@@ -156,6 +156,17 @@ AliAnalysisTask* AddTaskMuMuMinvBA(const char* outputname,
+     binning->AddBin("psi","y",-3.25,-3,"BENJ");
+     binning->AddBin("psi","y",-3,-2.75,"BENJ");
+     binning->AddBin("psi","y",-2.75,-2.5,"BENJ");
++
++     // phi binning
++   binning->AddBin("psi","phi",0,0.4,"BENJ");
++   binning->AddBin("psi","phi",0.4,0.8,"BENJ");
++   binning->AddBin("psi","phi",0.8,1.2,"BENJ");
++   binning->AddBin("psi","phi",1.2,1.6,"BENJ");
++   binning->AddBin("psi","phi",1.6,2,"BENJ");
++   binning->AddBin("psi","phi",2,2.4,"BENJ");
++   binning->AddBin("psi","phi",2.4,2.8,"BENJ");
++   binning->AddBin("psi","phi",2.4,2.8,"BENJ");
++   binning->AddBin("psi","phi",2.8,3.14,"BENJ");
+   }
+   // v0 centrality binning
+   binning->AddBin("centrality","V0M",0.,90.);
+diff --git a/PWG/muon/AddTaskMuMuMinvLowPt.C b/PWG/muon/AddTaskMuMuMinvLowPt.C
+index 90c8adf..655835c 100644
+--- a/PWG/muon/AddTaskMuMuMinvLowPt.C
++++ b/PWG/muon/AddTaskMuMuMinvLowPt.C
+@@ -5,6 +5,7 @@
+ ///
+ 
+ AliAnalysisTask* AddTaskMuMuMinvLowPt(const char* outputname,
++
+                                    const char     * triggerClassesToConsider,
+                                    const char     * triggerInputsToUse,
+                                    const char     * beamYear,
+-- 
+2.5.4 (Apple Git-61)
+

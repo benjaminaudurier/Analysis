@@ -7,29 +7,57 @@
 //
 
 // Macro who prints fit results
+
+#include <AliLog.h>
+#include <TObjArray.h>
+#include <TObjString.h>
+#include <AliAnalysisMuMu.h>
+#include <AliAnalysisMuMuSpectra.h>
+#include <AliMergeableCollection.h>
+#include <AliCounterCollection.h>
+#include <TCanvas.h>
+#include <TH1.h>
+#include <TROOT.h>
+#include <iostream> 
+
+//Some strings and constants
+char                   * sfile="AnalysisResultsNew.root";
+char                   * sasso="";
+char                   * sasso2="";
+char                   * beamYear="mumu.PbPb2015.config";
+
 TString striggerDimuon ="CMUL7-B-NOPF-MUFAST";
 TString striggerMB     ="CINT7-B-NOPF-MUFAST";
 TString seventType     ="PSALL";
 TString spairCut       ="pALLPAIRYPAIRPTIN0.0-10.0RABSMATCHLOWETAPDCA";
-// TString scentrality    ="V0M";
-TString scentrality    ="V0M_60.00_90.00";
+TString scentrality    ="V0M_00.00_90.00,V0M_00.00_10.00,V0M_10.00_30.00,V0M_30.00_50.00,V0M_50.00_70.00,V0M_70.00_90.00";
+
 Double_t FNorm         =15.22;
 Double_t BR            =0.005;
 
+void PrintDist(TObjString* swhat,Bool_t yield,AliAnalysisMuMu &ana);
+void PrintYield(AliAnalysisMuMuSpectra *spec,AliAnalysisMuMu &an,TObjString* cent);
 
 //_____________________________________________________________________________
 void PrintFitMacro(
 char         * what ="PT",
-Bool_t PrintDistribution= kTRUE,
-Bool_t Raa   = kFALSE, 
-Bool_t print = kTRUE,
-Bool_t yield = kTRUE,
-char         * sfile="../AnalysisResults.root",
-char         * sasso="",
-char         * sasso2="",
-char         * beamYear="mumu.PbPb2015.config")
+const char * printWhat = "distribution"
+)
 {    
+    Bool_t PrintDistribution = kFALSE;
+    Bool_t Raa               = kFALSE; 
+    Bool_t print             = kFALSE;
+    Bool_t yield             = kFALSE;
+
+    TObjArray* sprint = TString(printWhat).Tokenize(",");
     
+    //Set bool
+    if(sprint->FindObject("raa")) Raa                        =kTRUE;
+    if(sprint->FindObject("distribution")) PrintDistribution =kTRUE;
+    if(sprint->FindObject("save")) print                     =kTRUE;
+    if(sprint->FindObject("yield")) yield                    =kTRUE;
+
+
     //General conf.
     TObjArray* whatArray= TString(what).Tokenize(",");
     TIter nextWhat(whatArray);
@@ -44,45 +72,61 @@ char         * beamYear="mumu.PbPb2015.config")
         analysis.DrawFitResults("PSI",swhat->String().Data(),"histo",print);
         analysis.PrintNofParticle("PSI","NofJPsi",swhat->String(),kFALSE);
         
-        if (Raa)
-        {
-        	if(swhat->String().Contains("INTEGRATED")) analysis.RAAasGraphic("PSI",swhat->String().Data(),"externFile_PT.txt","externFile_CENT.txt",kFALSE);
-        	else if(swhat->String().Contains("Y")) analysis.RAAasGraphic("PSI","Y","externFile_Y.txt","externFile_CENT.txt",kFALSE);
-        	else if(swhat->String().Contains("PT")) analysis.RAAasGraphic("PSI","PT","externFile_PT.txt","externFile_CENT.txt",kFALSE);
+        if (Raa) {
+        	if(swhat->String().Contains("INTEGRATED")) analysis.RAAasGraphic("PSI",swhat->String().Data(),"externFile_PT.txt","externFile_CENT.txt",scentrality.Data(),kFALSE);
+        	else if(swhat->String().Contains("Y")) analysis.RAAasGraphic("PSI","Y","externFile_Y.txt","externFile_CENT.txt",scentrality.Data(),kFALSE);
+        	else if(swhat->String().Contains("PT")) analysis.RAAasGraphic("PSI","PT","externFile_PT.txt","externFile_CENT.txt",scentrality.Data(),kFALSE);
         	else continue;
         }
-        if (PrintDistribution)
-        { 
-           //________Get spectra
-            TString spectraPath= Form("/%s/%s/%s/%s/%s-%s",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data(),"PSI",swhat->String().Data());
 
-            AliAnalysisMuMuSpectra * spectra = static_cast<AliAnalysisMuMuSpectra*>(analysis.OC()->GetObject(spectraPath.Data()));
-            if(!spectra)
-            {
-                cout << Form("Cannot find spectra with name %s",spectraPath.Data()) <<endl;
-                return;
-            }
-
-            new TCanvas;
-            spectra->Plot("NofJPsi","",kFALSE)->DrawCopy("");
-            if (yield)
-            {
-                TH1* hyield = static_cast<TH1*>(spectra->Plot("NofJPsi","",kTRUE)->Clone());
-                Double_t MUL = analysis.CC()->GetSum(Form("trigger:%s/centrality:%s/event:%s",striggerDimuon.Data(),scentrality.Data(),seventType.Data()));
-                // printf("Number of MUL = %0.f\n", MUL);
-                hyield->Scale(1/(MUL*FNorm*BR));
-
-                hyield->SetTitle(Form("J/psi Yield with MUL = %0.f and FNorm = %0.2f ",MUL,FNorm));
-                hyield->GetYaxis()->SetTitle(Form("Yield w/o AccxEff corr."));
-                new TCanvas;
-                hyield->DrawCopy("e0");
-            }
-        }
-       
-
-
+        if (PrintDistribution) PrintDist(swhat,yield,analysis);
     }
-    return ;    
 
+    return ;    
 } 
+
+//___________________________________________
+void PrintDist(TObjString* swhat,Bool_t yield,AliAnalysisMuMu &ana)
+{
+    
+
+    TObjArray* whatCent= TString(scentrality.Data()).Tokenize(",");
+    TIter nextCent(whatCent);
+    TObjString* scent;
+
+    while ( ( scent = static_cast<TObjString*>(nextCent()) ) ) 
+    {
+        //________Get spectra
+        TString spectraPath= Form("/%s/%s/%s/%s/%s-%s",seventType.Data(),striggerDimuon.Data(),scent->String().Data(),spairCut.Data(),"PSI",swhat->String().Data());
+        printf("--- Centrality = %s\n", scent->String().Data());
+
+        AliAnalysisMuMuSpectra * spectra = static_cast<AliAnalysisMuMuSpectra*>(ana.OC()->GetObject(spectraPath.Data()));
+        if(!spectra)
+        {
+            cout << Form("Cannot find spectra with name %s",spectraPath.Data()) <<endl;
+            return;
+        }
+        new TCanvas;
+        spectra->Plot("NofJPsi","",kFALSE)->DrawCopy("");
+
+        if (yield) PrintYield(spectra,ana,scent); 
+    }
+
+    
+
+}
+
+//___________________________________________
+void PrintYield(AliAnalysisMuMuSpectra *spec,AliAnalysisMuMu &an,TObjString* cent)
+{
+    TH1* hyield = static_cast<TH1*>(spec->Plot("NofJPsi","",kTRUE)->Clone());
+    Double_t MUL = an.CC()->GetSum(Form("trigger:%s/centrality:%s/event:%s",striggerDimuon.Data(),cent->String().Data(),seventType.Data()));
+    // printf("Number of MUL = %0.f\n", MUL);
+    hyield->Scale(1/(MUL*FNorm*BR));
+
+    hyield->SetTitle(Form("J/psi Yield with MUL = %0.f and FNorm = %0.2f ",MUL,FNorm));
+    hyield->GetYaxis()->SetTitle(Form("Yield w/o AccxEff corr."));
+    new TCanvas;
+    hyield->DrawCopy("e0");
+}
 

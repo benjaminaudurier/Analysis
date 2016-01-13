@@ -12,7 +12,7 @@
 
 //_____________________________________________________________________________
 void FNormMacro(
-const char* filename="../AnalysisResults.root",
+const char* filename="AnalysisResultsNewESDs.root",
 const char* associatedSimFileName="",
 const char* associatedSimFileName2="",
 const char* beamYear="mumu.PbPb2015.config",const int DebugLevel =0)
@@ -28,12 +28,11 @@ const char* beamYear="mumu.PbPb2015.config",const int DebugLevel =0)
 
   //_____ FNorm
   
-   analysis.ComputeIntFnormFromCounters(AliAnalysisMuMuFnorm::kMUL,kFALSE); // kTRUE = PileUpCOrrected
-  // analysis.ComputeFnormScalers(AliAnalysisMuMuFnorm::kMUL,kTRUE);// kTRUE = PileUpCOrrected
+   // analysis.ComputeIntFnormFromCounters(AliAnalysisMuMuFnorm::kMUL,kTRUE); // kTRUE = PileUpCOrrected
+   analysis.ComputeFnormScalers(AliAnalysisMuMuFnorm::kMUL,kFALSE);// kTRUE = PileUpCOrrected
 
   //_____ Mean
-  // const char* patternOrList = "Offline";
-  // const char* graphName= "";
+  const char* patternOrList= "FnormOffline2PUPS,FnormOffline1PUPS";
 
   //   WeightedMeanGraphs("Offline");
 //   WeightedMeanGraphs("Scalers");
@@ -41,7 +40,9 @@ const char* beamYear="mumu.PbPb2015.config",const int DebugLevel =0)
   
 //   WeightedMeanGraphs("FnormOffline2PUPS,FnormScalersPUPS","FnormBest2");
 //   
-  // analysis.ComputeFnormWeightedMeanGraphs(AliAnalysisMuMuFnorm::kMUL,patternOrList,graphName);
+  // analysis.ComputeFnormWeightedMeanGraphs(AliAnalysisMuMuFnorm::kMUL,"FnormOffline2PUPS:FnormOffline1PUPS");
+  // analysis.ComputeFnormWeightedMeanGraphs(AliAnalysisMuMuFnorm::kMUL,"FnormOffline1PUPS");
+  // analysis.ComputeFnormWeightedMeanGraphs(AliAnalysisMuMuFnorm::kMUL,patternOrList);
 
   // analysis.WeightedMeanGraphs(AliAnalysisMuMuFnorm::kMUL,"Scalers");
   // analysis.WeightedMeanGraphs(AliAnalysisMuMuFnorm::kMUL,"FnormOffline2PUPS,FnormOffline1PUPS","FnormOffline12PUPS");
@@ -58,7 +59,7 @@ const char* beamYear="mumu.PbPb2015.config",const int DebugLevel =0)
   // h->Scale()
   // h->Draw("Clone"); 
   
-  PrintCounters(analysis);
+  // PrintCounters(analysis);
 
   // Compute Mean Fnorm From all Fnorm result   
   // MeanFnorm(analysis);
@@ -75,8 +76,13 @@ void PrintCounters(AliAnalysisMuMu &ana)
     // ana.CC()->Print("run/trigger","trigger:CINT7-B-NOPF-MUFAST&0MUL/centrality:V0M_00.00_100.00/event:PSALL");
     // ana.CC()->Print("run/trigger","trigger:CINT7-B-NOPF-MUFAST/centrality:V0M_00.00_100.00/event:PSALL"); 
     // ana.CC()->Print("run/trigger","trigger:CINT7-B-NOPF-MUFAST&0MUL/centrality:V0M_00.00_90.00/event:ALL");
-    ana.CC()->Print("run/event","trigger:CINT7-B-NOPF-MUFAST/centrality:V0M_00.00_90.00");
-    ana.CC()->Print("run/event","trigger:CINT7-B-NOPF-MUFAST&0MUL/centrality:V0M_00.00_90.00");   
+    // ana.CC()->Print("run/event","trigger:CINT7-B-NOPF-MUFAST/centrality:V0M_00.00_90.00");
+    // ana.CC()->Print("run/event","trigger:CINT7-B-NOPF-MUFAST&0MUL/centrality:V0M_00.00_90.00");   
+    // ana.CC()->Print("run/event","trigger:CMUL7-B-NOPF-MUFAST/centrality:V0M_00.00_90.00");
+    ana.CC()->Print("centrality/event","trigger:CINT7-B-NOPF-MUFAST");
+    ana.CC()->Print("centrality/event","trigger:CINT7-B-NOPF-MUFAST&0MUL");
+    // Int_t NofMUL = TMath::Nint(ana.CC()->GetSum(Form("trigger:CMUL7-B-NOPF-MUFAST/event:PSALL/centrality:V0M_00.00_90.00")));
+    // cout <<"Nofmul = " << NofMUL << endl;   
     // ana.CC()->Print("");
     // ana.CC()->PrintKeyWords();
 

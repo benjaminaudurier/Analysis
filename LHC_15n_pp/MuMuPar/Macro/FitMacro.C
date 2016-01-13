@@ -50,9 +50,9 @@ char           * beamYear="mumu.pp2015.config")
         else analysis.Jpsi(swhat->String().Data(),"BENJ",kFALSE,kFALSE);
     }
 
-    // analysis.PrintNofParticle("PSI","NofJPsi","YVSPT",kFALSE);
-    analysis.PrintNofParticle("PSI","NofJPsi","Y",kFALSE);
-    analysis.PrintNofParticle("PSI","NofJPsi","PT",kFALSE);    
+    analysis.PrintNofParticle("PSI","NofJPsi","INTEGRATED",kFALSE);
+    // analysis.PrintNofParticle("PSI","NofJPsi","Y",kFALSE);
+    // analysis.PrintNofParticle("PSI","NofJPsi","PT",kFALSE);    
 }
 
 

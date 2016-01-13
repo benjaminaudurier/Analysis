@@ -8,40 +8,45 @@
 
 // Macro to fit Minv Spectra and draw J/psi distribution vs pt and y
 
-TString striggerDimuon  ="CMUL7-B-NOPF-MUON";
-TString seventType      ="ALL";
-TString spairCut        ="pALLPAIRYPAIRPTIN0.0-8.0RABSMATCHLOWETA";
-TString sbinType        ="PT,Y";
-TString scentrality     ="V0A";
-TString sResName        ="";
-Bool_t divideByBinWidth =kTRUE; 
-Double_t parPOWLAW[3] = {80.,1.,1.};
+#include <AliLog.h>
+#include <TObjArray.h>
+#include <TObjString.h>
+#include <AliAnalysisMuMu.h>
+#include <TROOT.h>
+
+char           * sfile="AnalysisResultsNew.root";
+char           * sasso="";
+char           * sasso2="";
+char           * beamYear="mumu.PbPb2015.config";
 
 
 //_____________________________________________________________________________
-void FitMacro(
-char           * sfile="../LHC15g.MuMu.1.root",
-char           * sasso="",
-char           * sasso2="",
-char           * beamYear="PbPb2011",
-char           * what ="integrated,pt,y",
-Bool_t FitDist = kTRUE)
-{    
+void FitMacro( char* what ="pt",const char* printWhat = "", int debug =0 )
+{
+
+    AliLog::SetGlobalDebugLevel(debug);
+
+    Bool_t rawcount = kFALSE;
+    Bool_t clean = kFALSE;
+    Bool_t print = kFALSE;
+
+    TObjArray* sprint = TString(printWhat).Tokenize(",");
     
-    //General conf.
+    //Set bool
+    if(sprint->FindObject("rawcount")) rawcount =kTRUE;
+    if(sprint->FindObject("clean")) clean       =kTRUE;
+    if(sprint->FindObject("print")) print       =kTRUE;
+
+   //General conf.
     TObjArray* whatArray= TString(what).Tokenize(",");
     TIter nextWhat(whatArray);
     TObjString* swhat;
-
-    TObjArray* WHATArray= TString(sbinType).Tokenize(",");
-    TIter nextWHAT(WHATArray);
-    TObjString* sWHAT;
-	
+    
     // main object
     AliAnalysisMuMu analysis(sfile,sasso,sasso2,beamYear);
 
-    // // Clean   
-    // analysis.CleanAllSpectra();    
+    // Clean   
+    if(clean) analysis.CleanAllSpectra();    
 
     //_____ Fit 
     while ( ( swhat = static_cast<TObjString*>(nextWhat()) ) )
@@ -51,64 +56,18 @@ Bool_t FitDist = kTRUE)
         else analysis.Jpsi(swhat->String().Data(),"BENJ",kFALSE,kFALSE);
     }
 
-    analysis.PrintNofParticle("PSI","NofJPsi","INTEGRATED",kFALSE);
+    // analysis.PrintNofParticle("PSI","NofJPsi","YVSPT",kFALSE);
     // analysis.PrintNofParticle("PSI","NofJPsi","Y",kFALSE);
-    // analysis.PrintNofParticle("PSI","NofJPsi","PT",kFALSE);
- 
-    //_______Fit  J/psi vs pt or J/psi vs y 
-    if(FitDist)
-    {   
-       // analysis.PrintDistribution(sbinType);
-        while ( ( sWHAT = static_cast<TObjString*>(nextWHAT()) ) )
-        {
-           //________Get spectra
-            TString spectraPath= Form("/%s/%s/%s/%s/%s-%s",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data(),"PSI",sWHAT->String().Data());
+    if(print && what == "pt") analysis.PrintNofParticle("PSI","NofJPsi","PT",kFALSE);
+    if(print && what == "y") analysis.PrintNofParticle("PSI","NofJPsi","Y",kFALSE);
+    if(print && what == "integrated") analysis.PrintNofParticle("PSI","NofJPsi","INTEGRATED",kFALSE);
+    if(print && what == "yvspt") analysis.PrintNofParticle("PSI","NofJPsi","YVSPT",kFALSE);
 
-            AliAnalysisMuMuSpectra * spectra = static_cast<AliAnalysisMuMuSpectra*>(analysis.OC()->GetObject(spectraPath.Data()));
-            if(!spectra)
-            {
-                cout << Form("Cannot find spectra with name %s",spectraPath.Data()) <<endl;
-                return;
-            }
-            TObject* o= static_cast<TObject*>(spectra->Plot("NofJPsi",sResName,divideByBinWidth));
-            cout << o << endl;
-            TH1* h= static_cast<TH1*>(o->Clone());
-            cout << h<< endl;
-            TCanvas *c = new TCanvas;
-            c->SetLogy();
-
-            //________
-            
-            //________Fit function
-            gROOT->LoadMacro("/Users/audurier/Documents/Analysis/Macro_Utile/FittingFunctions.C");
-
-            TF1 * f =0x0;
-            if (sWHAT->String().Contains("PT"))
-            {
-                f = new TF1("Fit",powerLaw3Par,0.,8.,3);
-                f->SetParameters(&parPOWLAW[0]);
-                f->SetParNames("C","p_0","n");
-                f->SetLineColor(36);
-                f->SetLineStyle(5);
-
-                h->Fit(f);
-            
-            h->DrawCopy();
-            f->Draw("same");
-            delete h;
-            delete f;
-            }
-            else if (sWHAT->String().Contains("Y"))
-            {
-                h->Fit("pol4");
-                h->DrawCopy();
-                delete h;
-            }
-            //________
-        }    
+    if(rawcount){
+        analysis.ComputeDimuonRawCount(2.8,3.4); 
+        analysis.ComputeDimuonRawCount(2.1,2.8); 
     }
-        
-    return ;    
+
 }
 
 

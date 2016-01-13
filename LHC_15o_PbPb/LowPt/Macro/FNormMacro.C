@@ -25,7 +25,7 @@ const char* beamYear="mumu.PbPb2015.config",const int DebugLevel =2)
 
   //_____ FNorm
   // analysis.CleanFNorm();
-  analysis.ComputeIntFnormFromCounters(AliAnalysisMuMuFnorm::kMUL,kFALSE); // kTRUE = PileUpCOrrected
+  // analysis.ComputeIntFnormFromCounters(AliAnalysisMuMuFnorm::kMUL,kFALSE); // kTRUE = PileUpCOrrected
   // analysis.ComputeFnormScalers(AliAnalysisMuMuFnorm::kMUL,kTRUE);// kTRUE = PileUpCOrrected
 
   //_____ Mean

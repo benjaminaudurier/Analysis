@@ -1,4 +1,30 @@
-LHC_15n_pp/mergeQA/.DS_Store
-LHC_15n_pp/TrackingEfficiency/DataMSL/.DS_Store
-LHC_15g_pp/.DS_Store
+# Compiled Object files
+*.slo
+*.lo
+*.o
+
+
+#xcode
 *.DS_Store
+*.xworkspace
+*.xcodeproj
+
+
+# Compiled Dynamic libraries
+*.so
+*.so.[0-9]*
+*.dylib
+*.dll
+*.libs
+*.lib
+
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
+# Dictionary source files
+G__*.c
+G__*.cxx
+G__*.h

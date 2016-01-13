@@ -248,7 +248,8 @@ void LoadAlirootOnProof(TString& aaf, TString rootVersion, TString aliphysicsVer
   
   // set general environment
   gEnv->SetValue("XSec.GSI.DelegProxy","2");
-  
+  cout << "loading aliroot on proof..."<< endl;
+
   // connect
   if (aaf == "prooflite") TProof::Open("");
   //  if (aaf == "prooflite") TProof::Open("workers=2");
@@ -646,8 +647,8 @@ Bool_t RunAnalysisOnSAF3(TList &fileList, TString aliphysicsVersion, TString dat
   printf("nansafmaster3 mount ! \n");
   
   // --- create the executable to run on SAF3 ---
-  // CreateSAF3Executable(dataset);
- CreateSAF3ExecutableLoop(dataset);
+  CreateSAF3Executable(dataset);
+ // CreateSAF3ExecutableLoop(dataset);
   printf("Executable done ! \n");
 
   

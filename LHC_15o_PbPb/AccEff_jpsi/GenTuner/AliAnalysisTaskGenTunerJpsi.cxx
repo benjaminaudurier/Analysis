@@ -151,11 +151,6 @@ if (nofptbin==0 || nofybin==0 )
   return;
 }
 
-// if(!fPtBin || !fYBin) return;
-
- // const Double_t* ptbin[fPtNofBin] ={0.,1,2.,3.,4.,5.,6.,8.};
- // const Double_t* ybin[fYNofBin] ={-4,-3.75,-3.5,-3.25,-3.0,-2.75,-2.5};
-
   TH1* hPtGen = new TH1D("hPtGen","generated p_{T} distribution;p_{T} (GeV/c);dN/dp_{T}",nofptbin,fPtBin);
   hPtGen->Sumw2();// Create structure to store sum of squares of weights
   fList->AddAtAndExpand(hPtGen, kPtGen);// Double array size if reach the end
@@ -224,11 +219,12 @@ void AliAnalysisTaskGenTunerJpsi::UserExec(Option_t *)
     Double_t pT = mctrack->Pt();
 
     // Cut on j/psi
-    if( pT>7 || pT<0 || y < -4 || y>-2.5 ) continue; 
+    if( pT > 8. || pT < 0. || y < -4. || y > -2.5 ) continue; 
     
     if (fWeight && fPtFuncOld && fPtFuncNew && fYFuncOld && fYFuncNew) 
     {
-      weight[i] = fPtFuncNew->Eval(pT) / fPtFuncOld->Eval(pT) * fYFuncNew->Eval(y) / fYFuncOld->Eval(y);        if (weight[i] < 0.) 
+      weight[i] = fPtFuncNew->Eval(pT) / fPtFuncOld->Eval(pT) * fYFuncNew->Eval(y) / fYFuncOld->Eval(y);       
+      if (weight[i] < 0.) 
       {
         AliError(Form("negative weight: y = %g, pT = %g: w = %g", y, pT, weight[i]));
         weight[i] = 0.;
@@ -237,9 +233,9 @@ void AliAnalysisTaskGenTunerJpsi::UserExec(Option_t *)
     else weight[i] = 1.;
     
     Double_t w = weight[i];
-    ((TH1*)fList->UncheckedAt(kPtGen))->Fill(pT, w); // fill PtGenHisto
+
+    ((TH1*)fList->UncheckedAt(kPtGen))->Fill(pT, w);
     ((TH1*)fList->UncheckedAt(kYGen))->Fill(y, w); // fill YGenHisto
-    
   }
     
    
@@ -293,11 +289,12 @@ void AliAnalysisTaskGenTunerJpsi::UserExec(Option_t *)
       TLorentzVector Dimu = vec2+vec;
 
       // Cut on paire
-      if( Dimu.Pt()>7 || Dimu.Pt()<0 || Dimu.Rapidity() < -4 || Dimu.Rapidity()>-2.5 ) continue; 
+      if( Dimu.Pt() > 8. || Dimu.Pt()<0. || Dimu.Rapidity() < -4. || Dimu.Rapidity()>-2.5 ) continue; 
 
       if (fWeight && fPtFuncOld && fPtFuncNew && fYFuncOld && fYFuncNew) 
       {
-        weight[i] = fPtFuncNew->Eval(Dimu.Pt()) / fPtFuncOld->Eval(Dimu.Pt()) * fYFuncNew->Eval(Dimu.Rapidity()) / fYFuncOld->Eval(Dimu.Rapidity());        if (weight[i] < 0.) 
+        weight[i] = fPtFuncNew->Eval(Dimu.Pt()) / fPtFuncOld->Eval(Dimu.Pt()) * fYFuncNew->Eval(Dimu.Rapidity()) / fYFuncOld->Eval(Dimu.Rapidity());        
+        if (weight[i] < 0.) 
         {
           AliError(Form("negative weight: Dimu.Rapidity() = %g, Dimu.Pt() = %g: w = %g", Dimu.Rapidity(), Dimu.Pt(), weight[i]));
           weight[i] = 0.;
@@ -307,10 +304,7 @@ void AliAnalysisTaskGenTunerJpsi::UserExec(Option_t *)
       //________
       Double_t w = weight[i];
 
-      // cout << "Dimu.Pt() = " <<Dimu.Pt()<< endl; 
-      // cout << "Diff = " << Dimu.Rapidity() -y << endl; 
-      // cout << "vec2.Y() = " <<vec2.Y()<< endl; 
-      ((TH1*)fList->UncheckedAt(kPtRec))->Fill(Dimu.Pt(), w); // fill PtGenHisto
+      ((TH1*)fList->UncheckedAt(kPtRec))->Fill(Dimu.Pt(), w);
       ((TH1*)fList->UncheckedAt(kYRec))->Fill(Dimu.Rapidity(), w); // fill YGenHisto
     } 
   } 
@@ -318,7 +312,6 @@ void AliAnalysisTaskGenTunerJpsi::UserExec(Option_t *)
 
    
   // Post final data. It will be written to a file with option "RECREATE"
-
   PostData(1, fList);
 }
 
@@ -337,15 +330,6 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     h[i]->SetDirectory(0);
     h[i]->Scale(1,"width");// Normalize
   }
-  //  new TCanvas;
-  // h[0]->Draw("");
-  // new TCanvas;
-  // h[1]->Draw("");
-  // new TCanvas;
-  // h[2]->Draw("");
-  // new TCanvas;
-  // h[3]->Draw("");
-  // return; 
 
   //__________get the fit ranges
   Double_t fitRangeMC[2][2];
@@ -355,11 +339,11 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
   fitRangeMC[1][1] = GetFitUpEdge(*(h[1]));
   Double_t fitRange[2][2];
   fitRange[0][0] = (fPtCut > 0.) ? TMath::Max(fitRangeMC[0][0], fPtCut) : fitRangeMC[0][0];
-  fitRange[0][1] = 7.;
-  fitRange[1][0] = -3.98; // not -4. because to the influence of the eta cut
-  fitRange[1][1] = -2.51;
+  fitRange[0][1] = 8.;
+  fitRange[1][0] = -4.; // not -4. because to the influence of the eta cut
+  fitRange[1][1] = -2.5;
   //__________
-  
+  //
   //__________compute acc*eff corrections if it is simulated data
   TH1 *hAccEff[2] = {0x0,       0x0/*,      0x0*/};
   //                 AccEffPt   AccEffY   AccEffPhi
@@ -368,8 +352,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
   {
     hAccEff[i] = ComputeAccEff(*(h[i]), *(h[i+2]), Form("%sOverGen",h[i+2]->GetName()), "Acc#{times}Eff");
     hAccEff[i]->SetTitle("Acc#{times}Eff");
-    // new TCanvas;
-    // hAccEff[i]->DrawCopy("");
+    fList->Add(hAccEff[i]);
   }
   //__________
   
@@ -377,20 +360,10 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
   TH1 *hRef[4] = {0x0,            0x0,             0x0,          0x0};
   //              ptAccEffCorr.   yAccEffCorr.     RefPtHisto,   RefYHisto, 
 
-  // J/psi vs PT histo
+  // J/psi ref. histo
   if(fHptRef) hRef[2] = static_cast<TH1*>(fHptRef->Clone());
-  // J/psi vs Y histo
   if(fHyRef) hRef[3]  = static_cast<TH1*>(fHyRef->Clone());
   //__________
-  
-
-  // new TCanvas;
-  // hRef[2]->Draw();
-  // new TCanvas;
-  // hRef[3]->Draw();
-  // return;
-  
-  
 
   //__________compute corrected data
   for (Int_t i = 0; i < 2 && hRef[i+2] && hAccEff[i]; i++) 
@@ -411,23 +384,22 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
   }
   //__________
   
-
   //__________normalize histograms
   Bool_t normalized = kFALSE;
   for (Int_t i = 0; i < 2 && hRef[i]; i++) 
   {
-    Double_t integral = h[i]->Integral(h[i]->FindBin(fitRange[i][0]), h[i]->FindBin(fitRange[i][1]), "width");
+    Double_t integral = h[i]->Integral("width");
     Double_t norm = (integral != 0.) ? 1./integral : 1.;
     h[i]->Scale(norm);
     h[i+2]->Scale(norm);
-    integral = hRef[i]->Integral(hRef[i]->FindBin(fitRange[i][0]), hRef[i]->FindBin(fitRange[i][1]), "width");
+    integral = hRef[i]->Integral("width");
     norm = (integral != 0.) ? 1./integral : 1.;
     hRef[i]->Scale(norm);
     hRef[i+2]->Scale(norm);
-    normalized = kTRUE;
+    normalized = kTRUE; 
   }
   //_________
-   
+
   //__________compute dataCorr/MC ratios
   TH1 *hRat[4] = {0x0,                  0x0,                 0x0,              0x0            };
   //              ptAccEffCorr./ptGen   yAccEffCorr./yGen    RefPtHisto/RecPt  RefYHisto/RecY 
@@ -437,6 +409,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     hRat[i]->SetTitle("data / MC");
     hRat[i]->Divide(h[i]);
     if(!hRat[i]) cout << Form("Cannot divide histo %d",i) << endl;
+    ;
   }
   //__________
 
@@ -519,7 +492,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
   fcRes = new TCanvas("cRes", "results", 900, 600);
   fcRes->Divide(2,2);
 
-//------Pad 1
+  //------Pad 1
   fcRes->cd(1);
   gPad->SetLogy();
   TLegend*leg = new TLegend(0.48,0.7,0.70,0.9);
@@ -539,7 +512,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     if (fPtFunc) 
     {
       fPtFunc->SetLineColor(4); // Blue
-      h[0]->Fit(fPtFunc, "IWLR+");
+      h[0]->Fit(fPtFunc, "IWLR");
       leg->AddEntry(fPtFunc,"MC range Data","l");
     }
   }
@@ -577,11 +550,11 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     if (fYFunc) 
     {
       fYFunc->SetLineColor(4);// Blue
-      h[1]->Fit(fYFunc, "IWLR+");
+      h[1]->Fit(fYFunc, "IWLR");
       leg2->AddEntry(fYFunc,"Old Data fit function","l");
     }
   }
-  if (hRef[1])  // AccEff corrected Data pt histo. 
+  if (hRef[1])  // AccEff corrected Data y histo. 
   {
     hRef[1]->SetLineColor(2);// Red
     if (fYFuncNew) 
@@ -642,18 +615,9 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
   }
    //__________
   
-    if (hRat[0])printf("!!!!!!!!!! \n hRat[0] = %p\n !!!!!!!!!! \n", hRat[0]);
-    if (hRat[0])printf("!!!!!!!!!! \n hRat[0]->GetXaxis()->GetXmax() = %f\n !!!!!!!!!! \n", hRat[0]->GetXaxis()->GetXmax());
-    if (fitRangeMC[0][0])printf("!!!!!!!!!! \n fitRangeMC[0][0] = %f\n !!!!!!!!!! \n", fitRangeMC[0][0]);
-
-
-
   // prepare data/MC function ratios
   TF1 *ptRat = (hRat[0] && fPtFunc && fPtFuncNew) ? new TF1("ptRat", this, &AliAnalysisTaskGenTunerJpsi::PtRat, fitRangeMC[0][0], hRat[0]->GetXaxis()->GetXmax(), 0, "AliAnalysisTaskGenTunerJpsi", "PtRat") : 0x0;
   TF1 *yRat = (hRat[1] && fYFunc && fYFuncNew) ? new TF1("yRat", this, &AliAnalysisTaskGenTunerJpsi::YRat, fitRangeMC[1][0], fitRangeMC[1][1], 0, "AliAnalysisTaskGenTunerJpsi", "YRat") : 0x0;
-  
-  if (ptRat)printf("!!!!!!!!!! \n ptRat = %p\n !!!!!!!!!! \n", ptRat);
-  if (ptRat)printf("!!!!!!!!!! \n ptRat(4) = %f\n !!!!!!!!!! \n", ptRat->Eval(4));
   
   //__________plot ratios
   fcRat = new TCanvas("cRat", "ratios", 900, 600);

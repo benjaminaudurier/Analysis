@@ -1,0 +1,1910 @@
+From 208ddb6a47d3aad5e67c1794b1a85d80ba7db1ae Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Thu, 29 Jan 2015 18:34:38 +0100
+Subject: [PATCH 1/5] dummy commit
+
+---
+ PWG/muon/AddTaskMuMuMinvTrain.C       | 203 +++++++++++++++++
+ PWG/muon/AliAnalysisMuMuEventPool.cxx | 415 ++++++++++++++++++++++++++++++++++
+ PWG/muon/AliAnalysisMuMuEventPool.h   | 121 ++++++++++
+ PWG/muon/AliAnalysisMuMuMinv.cxx      |   5 +
+ PWG/muon/AliAnalysisTaskMuMu.cxx      |   7 +-
+ 5 files changed, 748 insertions(+), 3 deletions(-)
+ create mode 100644 PWG/muon/AddTaskMuMuMinvTrain.C
+ create mode 100644 PWG/muon/AliAnalysisMuMuEventPool.cxx
+ create mode 100644 PWG/muon/AliAnalysisMuMuEventPool.h
+
+diff --git a/PWG/muon/AddTaskMuMuMinvTrain.C b/PWG/muon/AddTaskMuMuMinvTrain.C
+new file mode 100644
+index 0000000..8783dbe
+--- /dev/null
++++ b/PWG/muon/AddTaskMuMuMinvTrain.C
+@@ -0,0 +1,203 @@
++///
++/// Configuration example of a task to get invariant mass spectrum of dimuons
++///
++/// \author: L. Aphecetche (Subatech) (laurent.aphecetche - at - subatech.in2p3.fr)
++///
++
++AliAnalysisTask* AddTaskMuMuMinvTrain(const char* outputname,
++const char     * triggerClassesToConsider,
++const char     * triggerInputsToUse,
++const char     * beamYear,
++Bool_t simulations)
++{
++
++  AliAnalysisManager *mgr = AliAnalysisManager::GetAnalysisManager(); // Get the manager
++  if (!mgr) {
++    ::Error("AddTaskMuMu", "No analysis manager to connect to.");
++    return NULL;
++  }  
++  
++  // Check the analysis type using the event handlers connected to the analysis manager.
++  //==============================================================================
++  if (!mgr->GetInputEventHandler()) {
++    ::Error("AddTaskMuMu", "This task requires an input event handler");
++    return NULL;
++  }
++
++  //  Configure task
++  //===========================================================================
++  AliAnalysisTaskMuMu       * task = new AliAnalysisTaskMuMu; // Call the task
++  task->SetBeamYear(beamYear);
++
++  AliAnalysisMuMuEventCutter* eventCutter = new AliAnalysisMuMuEventCutter(triggerClassesToConsider,triggerInputsToUse); // To handle cuts on event
++  AliAnalysisMuMuCutRegistry* cr = task->CutRegistry(); // Set CutRegistry
++
++  // Default cuts on trigger and event level
++  AliAnalysisMuMuCutElement* eventTrue = cr->AddEventCut(*eventCutter,"IsTrue","const AliVEvent&",""); 
++  AliAnalysisMuMuCutElement* triggerSelection = cr->AddTriggerClassCut(*eventCutter,"SelectTriggerClass","const TString&,TString&,UInt_t,UInt_t,UInt_t","");
++  AliAnalysisMuMuCutElement* ps = eventTrue;
++  
++  if (!simulations)
++  {
++    ps = cr->AddEventCut(*eventCutter,"IsPhysicsSelected","const AliInputEventHandler&","");
++  }
++
++  // Apply default cut
++  cr->AddCutCombination(eventTrue);
++  cr->AddCutCombination(ps);
++  cr->AddCutCombination(triggerSelection);
++
++  
++  AliAnalysisMuMuGlobal* globalAnalysis =  new AliAnalysisMuMuGlobal; // Basic histograms analysis;
++  AliAnalysisMuMuSingle* singleAnalysis = new AliAnalysisMuMuSingle;// Analysis dealing with single muon
++  AliAnalysisMuMuMinv  * minvAnalysis = new AliAnalysisMuMuMinv;// Analysis creating invariant mass spectrum
++
++    
++  // Configure sub analysis
++  //===========================================================================
++  if ( globalAnalysis )
++  {
++    // Cuts on trigger level
++    AliAnalysisMuMuCutElement* triggerAll = cr->AddTriggerClassCut(*globalAnalysis,"SelectAnyTriggerClass","const TString&,TString&","");
++    // Adding this cut on trigger level  
++    cr->AddCutCombination(triggerAll);
++    task->AdoptSubAnalysis(globalAnalysis);
++  }
++  if ( singleAnalysis )
++  {
++    // Cuts on tracks
++    AliAnalysisMuMuCutElement* trackTrue = cr->AddTrackCut(*cr,"AlwaysTrue","const AliVParticle&",""); // Apply "AlwaysTrue" cut on AliVParticle derived from AliAnalysisMuMuSingle
++    AliAnalysisMuMuCutElement* rabs = cr->AddTrackCut(*singleAnalysis,"IsRabsOK","const AliVParticle&","");
++    AliAnalysisMuMuCutElement* matchlow = cr->AddTrackCut(*singleAnalysis,"IsMatchingTriggerLowPt","const AliVParticle&","");
++    AliAnalysisMuMuCutElement* eta = cr->AddTrackCut(*singleAnalysis,"IsEtaInRange","const AliVParticle&","");
++    AliAnalysisMuMuCutElement* pdca = cr->AddTrackCut(*singleAnalysis,"IsPDCAOK","const AliVParticle&","");
++    
++    // Create combination of cuts to apply
++    cr->AddCutCombination(trackTrue);
++    cr->AddCutCombination(matchlow);
++    cr->AddCutCombination(rabs); 
++    cr->AddCutCombination(eta); 
++    cr->AddCutCombination(pdca); 
++    // Adding the sub analysis
++    task->AdoptSubAnalysis(singleAnalysis); 
++
++    if ( minvAnalysis )
++    {
++      // Array of cut elements
++      TObjArray cutElements;
++
++      // Cuts on track level
++      AliAnalysisMuMuCutElement* pairTrue = cr->AddTrackPairCut(*cr,"AlwaysTrue","const AliVParticle&,const AliVParticle&","");// Apply "AlwaysTrue" cut on AliVParticle derived from AliAnalysisMuMuMinv
++      AliAnalysisMuMuCutElement* pairy = cr->AddTrackPairCut(*minvAnalysis,"IsRapidityInRange","const AliVParticle&,const AliVParticle&","");
++      AliAnalysisMuMuCutElement* ptRange = cr->AddTrackPairCut(*minvAnalysis,"IsPtInRange","const AliVParticle&,const AliVParticle&,Double_t&,Double_t&","0.,10.");
++
++      cutElements.Add(pairTrue);
++      cutElements.Add(pairy);
++      cutElements.Add(ptRange);
++      cutElements.Add(rabs);
++      cutElements.Add(matchlow);
++      cutElements.Add(eta);
++      cutElements.Add(pdca);
++
++      // add them
++      cr->AddCutCombination(cutElements);    
++      // Adding the sub analysis
++      task->AdoptSubAnalysis(minvAnalysis); 
++    }
++  }
++
++  /// below are the kind of configurations that can be performed :
++  /// - adding cuts (at event, track or pair level)
++  /// - adding bins (in pt, y, centrality, etc...) for minv (and meanpt)
++    
++  // Configure sub analysis
++  //===========================================================================
++  AliAnalysisMuMuBinning* binning = task->Binning(); // Create and set the "binning manager"
++  
++  if (minvAnalysis)
++  {  
++    // Integrated
++    binning->AddBin("psi","integrated");
++    // pt binning for low pt exces
++    binning->AddBin("psi","pt", 0.0, 0.1,"BENJ");
++    binning->AddBin("psi","pt", 0.1, 0.2,"BENJ");
++    binning->AddBin("psi","pt", 0.2, 0.3,"BENJ");
++    binning->AddBin("psi","pt", 0.3, 0.4,"BENJ");
++    binning->AddBin("psi","pt", 0.4, 0.5,"BENJ");
++    binning->AddBin("psi","pt", 0.5, 0.6,"BENJ");
++    binning->AddBin("psi","pt", 0.6, 0.7,"BENJ");
++    binning->AddBin("psi","pt", 0.7, 0.8,"BENJ");
++    binning->AddBin("psi","pt", 0.8, 0.9,"BENJ");
++    binning->AddBin("psi","pt", 0.9, 1.0,"BENJ");
++    binning->AddBin("psi","pt", 1.0, 1.1,"BENJ");
++    binning->AddBin("psi","pt", 1.1, 1.2,"BENJ");
++    binning->AddBin("psi","pt", 1.2, 1.3,"BENJ");
++    binning->AddBin("psi","pt", 1.3, 1.4,"BENJ");
++    binning->AddBin("psi","pt", 1.4, 1.5,"BENJ");
++    binning->AddBin("psi","pt", 1.5, 1.6,"BENJ");
++    binning->AddBin("psi","pt", 1.6, 1.7,"BENJ");
++    binning->AddBin("psi","pt", 1.7, 1.8,"BENJ");
++    binning->AddBin("psi","pt", 0.0, 0.3,"BENJ");
++    binning->AddBin("psi","pt", 0.3, 1.0,"BENJ");
++    binning->AddBin("psi","pt", 1.0, 8.0,"BENJ");
++    // pt binning
++    binning->AddBin("psi","pt", 0.0, 1.0,"BENJ");
++    binning->AddBin("psi","pt", 1.0, 2.0,"BENJ");
++    binning->AddBin("psi","pt", 2.0, 3.0,"BENJ");
++    binning->AddBin("psi","pt", 3.0, 4.0,"BENJ");
++    binning->AddBin("psi","pt", 4.0, 5.0,"BENJ");
++    binning->AddBin("psi","pt", 5.0, 6.0,"BENJ");
++    binning->AddBin("psi","pt", 6.0, 8.0,"BENJ");
++    // y binning
++    binning->AddBin("psi","y",-4,-3.75,"BENJ");
++    binning->AddBin("psi","y",-3.75,-3.5,"BENJ");
++    binning->AddBin("psi","y",-3.5,-3.25,"BENJ");
++    binning->AddBin("psi","y",-3.25,-3,"BENJ");
++    binning->AddBin("psi","y",-3,-2.75,"BENJ");
++    binning->AddBin("psi","y",-2.75,-2.5,"BENJ");
++  }
++  // v0 centrality binning
++  binning->AddBin("centrality","V0M",0.,90.);
++  binning->AddBin("centrality","V0M",0.,10.);
++  binning->AddBin("centrality","V0M",10.,20.);
++  binning->AddBin("centrality","V0M",20.,30.);
++  binning->AddBin("centrality","V0M",30.,40.);
++  binning->AddBin("centrality","V0M",40.,50.);
++  binning->AddBin("centrality","V0M",50.,60.);
++  binning->AddBin("centrality","V0M",60.,70.);
++  binning->AddBin("centrality","V0M",70.,80.);
++  binning->AddBin("centrality","V0M",80.,90.);
++  // v0 centrality binning for low pt exces
++  binning->AddBin("centrality","V0M",0.,10.);
++  binning->AddBin("centrality","V0M",10.,30.);
++  binning->AddBin("centrality","V0M",30.,50.);
++  binning->AddBin("centrality","V0M",50.,70.);
++  binning->AddBin("centrality","V0M",70.,90.);
++
++  // add the configured task to the analysis manager
++  mgr->AddTask(task);
++  
++  TString output;
++  output.Form("%s:%s",AliAnalysisManager::GetCommonFileName(),outputname);
++  
++  // Create containers for input/output
++  AliAnalysisDataContainer *cinput = mgr->GetCommonInputContainer();
++  
++  AliAnalysisDataContainer *coutputHC =
++  mgr->CreateContainer("OC",AliMergeableCollection::Class(),AliAnalysisManager::kOutputContainer,output.Data());
++  
++  AliAnalysisDataContainer *coutputCC =
++  mgr->CreateContainer("CC",AliCounterCollection::Class(),AliAnalysisManager::kOutputContainer,output.Data());
++  
++  AliAnalysisDataContainer* cparam =
++  mgr->CreateContainer("BIN", AliAnalysisMuMuBinning::Class(),AliAnalysisManager::kParamContainer,output.Data());
++  
++  // Connect input/output
++  mgr->ConnectInput(task, 0, cinput);
++  mgr->ConnectOutput(task, 1, coutputHC);
++  mgr->ConnectOutput(task, 2, coutputCC);
++  mgr->ConnectOutput(task, 3, cparam);
++  
++  return task;
++}
++
+diff --git a/PWG/muon/AliAnalysisMuMuEventPool.cxx b/PWG/muon/AliAnalysisMuMuEventPool.cxx
+new file mode 100644
+index 0000000..b8139c3
+--- /dev/null
++++ b/PWG/muon/AliAnalysisMuMuEventPool.cxx
+@@ -0,0 +1,415 @@
++#include "AliAnalysisMuMuEventPool.h"
++
++/**
++ *
++ * \ingroup pwg-muon-mumu
++ *
++ * \class AliAnalysisMuMuEventPool
++ *
++ * Histogramming of single muon tracks. Mostly to get control plots for
++ * the AliAnalysisMuMuMinv sub-analysis, with respect to track cuts used,
++ * like Rabs, p x DCA, etc...
++ *
++ */
++
++#include "TH2F.h"
++#include "AliCodeTimer.h"
++#include "AliMuonTrackCuts.h"
++#include "AliAnalysisMuonUtility.h"
++#include "TMath.h"
++#include "AliLog.h"
++#include "AliVParticle.h"
++#include "TLorentzVector.h"
++#include "AliAnalysisMuMuCutCombination.h"
++#include "AliAnalysisMuMuCutRegistry.h"
++#include "AliMergeableCollection.h"
++#include "AliVEvent.h"
++
++ClassImp(AliAnalysisMuMuEventPool)
++
++//_____________________________________________________________________________
++AliAnalysisMuMuEventPool::AliAnalysisMuMuEventPool()
++: AliAnalysisMuMuBase(),
++fMuonTrackCuts(0x0),
++fShouldSeparatePlusAndMinus(kFALSE)
++{
++  /// ctor
++}
++
++//_____________________________________________________________________________
++AliAnalysisMuMuEventPool::~AliAnalysisMuMuEventPool()
++{
++  /// dtor
++  delete fMuonTrackCuts;
++  delete fPool;
++}
++
++
++//_____________________________________________________________________________
++void
++AliAnalysisMuMuEventPool::CreateTrackHisto(const char* eventSelection,
++                                        const char* triggerClassName,
++                                        const char* centrality,
++                                        const char* hname, const char* htitle,
++                                        Int_t nbinsx, Double_t xmin, Double_t xmax,
++                                        Int_t nbinsy, Double_t ymin, Double_t ymax,
++                                        Bool_t separatePlusAndMinus) const
++{
++  /// Append histograms for single track to our histogram collection
++  
++  if ( IsHistogramDisabled(hname) ) return;
++  
++  if ( separatePlusAndMinus )
++  {
++    const char* suffix[] = { "Plus", "Minus" };
++    const char* symbol[] = { "+", "-" };
++    
++    for ( Int_t i = 0; i < 2; ++i )
++    {
++      TString shtitle(htitle);
++      TString shname(hname);
++      
++      shtitle.ReplaceAll("#mu",Form("#mu^{%s}",symbol[i]));
++      
++      shname += suffix[i];
++      
++      CreateTrackHistos(kHistoForData | kHistoForMCInput,eventSelection,triggerClassName,centrality,shname.Data(),shtitle.Data(),
++                        nbinsx,xmin,xmax,nbinsy,ymin,ymax);
++    }
++  }
++  else
++  {
++    CreateTrackHistos(kHistoForData | kHistoForMCInput,eventSelection,triggerClassName,centrality,hname,htitle,
++                nbinsx,xmin,xmax,nbinsy,ymin,ymax);
++  }
++}
++
++//_____________________________________________________________________________
++Bool_t AliAnalysisMuMuEventPool::IsPDCAOK(const AliVParticle& part)
++{
++  UInt_t selectionMask = MuonTrackCuts() ? MuonTrackCuts()->GetSelectionMask(&part) : 0;
++
++  return ( ( selectionMask & AliMuonTrackCuts::kMuPdca ) == AliMuonTrackCuts::kMuPdca );
++}
++
++//_____________________________________________________________________________
++Bool_t AliAnalysisMuMuEventPool::IsRabsOK(const AliVParticle& part) const
++{
++  Double_t thetaAbsEndDeg = AliAnalysisMuonUtility::GetThetaAbsDeg(&part);
++  
++  return ( thetaAbsEndDeg > 2. && thetaAbsEndDeg < 10. );
++}
++
++//_____________________________________________________________________________
++Bool_t AliAnalysisMuMuEventPool::IsEtaInRange(const AliVParticle& part) const
++{
++  return (part.Eta() > -4.0 && part.Eta() < -2.5);
++}
++
++//_____________________________________________________________________________
++void AliAnalysisMuMuEventPool::SetRun(const AliInputEventHandler* eventHandler)
++{
++  MuonTrackCuts()->SetRun(eventHandler);
++}
++
++//_____________________________________________________________________________
++Int_t AliAnalysisMuMuEventPool::EAGetNumberOfMuonTracks() const
++{
++  // Get the number of muon tracks *that are not ghosts*
++  
++  Int_t ntracks = AliAnalysisMuonUtility::GetNTracks(Event());
++  
++  for ( Int_t i = 0; i < ntracks; ++i )
++  {
++    AliVParticle* track = AliAnalysisMuonUtility::GetTrack(i,Event());
++    if (AliAnalysisMuonUtility::IsMuonGhost(track)) --ntracks;
++  }
++  
++  return ntracks;
++}
++
++////_____________________________________________________________________________
++//Int_t AliAnalysisMuMuEventPool::EAGetNumberOfSelectMuonTracks() const
++//{
++//  // Get the number of "very good" muon tracks :
++//  // Rabs + DCA + pT > 1.5 Gev/C
++//  
++//  Int_t nTracks = AliAnalysisMuonUtility::GetNTracks(Event());
++//  
++//  UInt_t check = kAll | kMatched | kRabs | kDCA | kEta | kPt1dot5;
++//  
++//  Int_t nGood(0);
++//  
++//  for ( Int_t i = 0; i < nTracks; ++i )
++//  {
++//    ULong64_t m = GetTrackMask(i);
++//    if ( ( m & check ) == check )
++//    {
++//      ++nGood;
++//    }
++//  }
++//  return nGood;
++//}
++
++//_____________________________________________________________________________
++Double_t AliAnalysisMuMuEventPool::EAGetTrackDCA(const AliVParticle& track) const
++{
++  // Get track DCA
++  
++  Double_t xdca = AliAnalysisMuonUtility::GetXatDCA(&track);
++  Double_t ydca = AliAnalysisMuonUtility::GetYatDCA(&track);
++  
++  return TMath::Sqrt(xdca*xdca+ydca*ydca);
++}
++
++//_____________________________________________________________________________
++void AliAnalysisMuMuEventPool::DefineHistogramCollection(const char* eventSelection,
++                                                      const char* triggerClassName,
++                                                      const char* centrality)
++{
++  /// Actually create the histograms for phyics/triggerClassName
++ 
++  
++  if ( Histo(eventSelection,triggerClassName,centrality,"AliAnalysisMuMuEventPool") )
++  {
++    return;
++  }
++
++  AliAnalysisMuMuBase::EDataType dt = AliAnalysisMuMuBase::kHistoForData;
++  
++  // dummy histogram to signal that we already defined all our histograms (see above)
++  CreateEventHistos(dt,eventSelection,triggerClassName,centrality,"AliAnalysisMuMuEventPool","Dummy semaphore",1,0,1);
++  
++  Double_t ptMin = 0;
++  Double_t ptMax = 12*3;
++  Int_t nbinsPt = GetNbins(ptMin,ptMax,0.5);
++  Double_t pMin = 0;
++  Double_t pMax = 100*3;
++  Int_t nbinsP = GetNbins(pMin,pMax,2.0);
++  Double_t etaMin = -5;
++  Double_t etaMax = -2;
++  Int_t nbinsEta = GetNbins(etaMin,etaMax,0.05);
++  
++  Double_t rapidityMin = -5;
++  Double_t rapidityMax = -2;
++  Int_t nbinsRapidity = GetNbins(rapidityMin,rapidityMax,0.05);
++  
++  Double_t phiMin = -TMath::Pi();
++  Double_t phiMax = TMath::Pi();
++  Int_t nbinsPhi = GetNbins(phiMin,phiMax,0.05);
++  
++  CreateTrackHisto(eventSelection,triggerClassName,centrality,"Chi2MatchTrigger","Chi2 Match Trigger",72,0,72);
++  
++  CreateTrackHisto(eventSelection,triggerClassName,centrality,"EtaRapidityMu", "Eta distribution vs Rapidity for #mu", nbinsRapidity,rapidityMin,rapidityMax,nbinsEta,etaMin,etaMax, fShouldSeparatePlusAndMinus);
++  
++  CreateTrackHisto(eventSelection,triggerClassName,centrality,"PtEtaMu", "P_{T} distribution vs Eta for #mu", nbinsEta,etaMin,etaMax, nbinsPt,ptMin,ptMax,fShouldSeparatePlusAndMinus);
++  
++  CreateTrackHisto(eventSelection,triggerClassName,centrality,"PtRapidityMu", "P_{T} distribution vs Rapidity for #mu", nbinsRapidity,rapidityMin,rapidityMax, nbinsPt,ptMin,ptMax,fShouldSeparatePlusAndMinus);
++  
++  CreateTrackHisto(eventSelection,triggerClassName,centrality,"PtPhiMu", "P_{T} distribution vs phi for #mu", nbinsPhi,phiMin,phiMax, nbinsPt,ptMin,ptMax,fShouldSeparatePlusAndMinus);
++  
++  
++  CreateTrackHisto(eventSelection,triggerClassName,centrality,"PEtaMu", "P distribution for #mu",nbinsEta,etaMin,etaMax,nbinsP,pMin,pMax,fShouldSeparatePlusAndMinus);
++  
++  Double_t chi2min = 0;
++  Double_t chi2max = 20;
++  Int_t nbinchi2 = GetNbins(chi2min,chi2max,0.05);
++  
++  CreateTrackHisto(eventSelection, triggerClassName, centrality, "Chi2Mu", "chisquare per NDF #mu", nbinchi2, chi2min, chi2max,-1, 0.0, 0.0, fShouldSeparatePlusAndMinus);
++  
++  Double_t xmin = 0;
++  Double_t xmax = 150;
++  Int_t nbins = GetNbins(xmin,xmax,2.0);
++  
++  CreateTrackHisto(eventSelection,triggerClassName,centrality,"dcaP23Mu","#mu DCA vs P for 2-3 degrees;P (GeV);DCA (cm)",nbinsP,pMin,pMax,nbins,xmin,xmax,fShouldSeparatePlusAndMinus);
++  
++  CreateTrackHisto(eventSelection,triggerClassName,centrality,"dcaP310Mu","#mu DCA vs P for 3-10 degrees;P (GeV);DCA (cm)",nbinsP,pMin,pMax,nbins,xmin,xmax,fShouldSeparatePlusAndMinus);
++  
++  CreateTrackHisto(eventSelection,triggerClassName,centrality,"dcaPwPtCut23Mu","#mu DCA vs P for 2-3 degrees with Pt Cut;P (GeV);DCA (cm)",nbinsP,pMin,pMax,nbins,xmin,xmax,fShouldSeparatePlusAndMinus);
++  
++  CreateTrackHisto(eventSelection,triggerClassName,centrality,"dcaPwPtCut310Mu","#mu DCA vs P for 3-10 degrees with Pt Cut;P (GeV);DCA (cm)",nbinsP,pMin,pMax,nbins,xmin,xmax,fShouldSeparatePlusAndMinus);
++  
++  xmin = 0;
++  xmax = 3564;
++  nbins = GetNbins(xmin,xmax,1.0);
++  
++  CreateTrackHisto(eventSelection,triggerClassName,centrality,"BCX","bunch-crossing ids",nbins,xmin-0.5,xmax-0.5);
++}
++
++
++//_____________________________________________________________________________
++void AliAnalysisMuMuEventPool::FillHistosForMuonTrack(AliMergeableCollectionProxy& proxy,
++                                                   const AliVParticle& track)
++{
++  /// Fill histograms for one track
++ 
++  AliCodeTimerAuto("",0);
++  
++  if ( HasMC() )
++  {
++    MuonTrackCuts()->SetIsMC();
++  }
++  
++  TLorentzVector p(track.Px(),track.Py(),track.Pz(),
++                   TMath::Sqrt(AliAnalysisMuonUtility::MuonMass2()+track.P()*track.P()));
++  
++  
++  TString charge("");
++  
++  if ( ShouldSeparatePlusAndMinus() )
++  {
++    if ( track.Charge() < 0 )
++    {
++      charge = "Minus";
++    }
++    else
++    {
++      charge = "Plus";
++    }
++  }
++  
++  Double_t dca = EAGetTrackDCA(track);
++  
++  Double_t theta = AliAnalysisMuonUtility::GetThetaAbsDeg(&track);
++  
++  if (!IsHistogramDisabled("BCX"))
++  {
++    proxy.Histo("BCX")->Fill(1.0*Event()->GetBunchCrossNumber());
++  }
++  
++  if (!IsHistogramDisabled("Chi2MatchTrigger"))
++  {
++    proxy.Histo("Chi2MatchTrigger")->Fill(AliAnalysisMuonUtility::GetChi2MatchTrigger(&track));
++  }
++  
++  if (!IsHistogramDisabled("EtaRapidityMu*"))
++  {
++    proxy.Histo(Form("EtaRapidityMu%s",charge.Data()))->Fill(p.Rapidity(),p.Eta());
++  }
++  
++  if (!IsHistogramDisabled("PtEtaMu*"))
++  {
++    TH1* h = proxy.Histo(Form("PtEtaMu%s",charge.Data()));
++    
++    h->Fill(p.Eta(),p.Pt());
++
++    if  ( fPtEtaSpectraPerBCX )
++    {
++      if (!IsHistogramDisabled("BCX"))
++      {
++        TH1* hbcx = proxy.Histo(Form("PtEtaMu%sBCX%d",charge.Data(),Event()->GetBunchCrossNumber()));
++      
++        if (!hbcx)
++        {
++          hbcx = static_cast<TH1*>(h->Clone(Form("PtEtaMu%sBCX%d",charge.Data(),Event()->GetBunchCrossNumber())));
++          proxy.Adopt(hbcx);
++        }
++      }
++    }
++  }
++  
++  if (!IsHistogramDisabled("PtRapidityMu*"))
++  {
++    proxy.Histo(Form("PtRapidityMu%s",charge.Data()))->Fill(p.Rapidity(),p.Pt());
++  }
++  
++  if (!IsHistogramDisabled("PEtaMu*"))
++  {
++    proxy.Histo(Form("PEtaMu%s",charge.Data()))->Fill(p.Eta(),p.P());
++  }
++  
++  if (!IsHistogramDisabled("PtPhiMu*"))
++  {
++    proxy.Histo(Form("PtPhiMu%s",charge.Data()))->Fill(p.Phi(),p.Pt());
++  }
++  
++  if (!IsHistogramDisabled("Chi2Mu*"))
++  {
++    proxy.Histo(Form("Chi2Mu%s",charge.Data()))->Fill(AliAnalysisMuonUtility::GetChi2perNDFtracker(&track));
++  }
++  
++  if (!fDCAHistos)
++  {
++    return;
++  }
++  
++  if ( theta >= 2.0 && theta < 3.0 )
++  {
++    
++    if (!IsHistogramDisabled("dcaP23Mu*"))
++    {
++      proxy.Histo(Form("dcaP23Mu%s",charge.Data()))->Fill(p.P(),dca);
++    }
++    
++    if ( p.Pt() > 2 )
++    {
++      if (!IsHistogramDisabled("dcaPwPtCut23Mu*"))
++      {
++        proxy.Histo(Form("dcaPwPtCut23Mu%s",charge.Data()))->Fill(p.P(),dca);
++      }
++    }
++  }
++  else if ( theta >= 3.0 && theta < 10.0 )
++  {
++    if (!IsHistogramDisabled("dcaP310Mu*"))
++    {
++      proxy.Histo(Form("dcaP310Mu%s",charge.Data()))->Fill(p.P(),dca);
++    }
++    if ( p.Pt() > 2 )
++    {
++      if (!IsHistogramDisabled("dcaPwPtCut310Mu*"))
++      {
++        proxy.Histo(Form("dcaPwPtCut310Mu%s",charge.Data()))->Fill(p.P(),dca);
++      }
++    }
++  }
++}
++
++//_____________________________________________________________________________
++void AliAnalysisMuMuEventPool::FillHistosForTrack(const char* eventSelection,
++                                               const char* triggerClassName,
++                                               const char* centrality,
++                                               const char* trackCutName,
++                                               const AliVParticle& track)
++{
++  /// Fill histograms for one track
++
++  if (!AliAnalysisMuonUtility::IsMuonTrack(&track) ) return;
++
++  AliMergeableCollectionProxy* proxy = HistogramCollection()->CreateProxy(BuildPath(eventSelection,triggerClassName,centrality,trackCutName));
++
++  FillHistosForMuonTrack(*proxy,track);
++  
++  delete proxy;
++}
++
++//_____________________________________________________________________________
++AliMuonTrackCuts* AliAnalysisMuMuEventPool::MuonTrackCuts()
++{
++  /// Get (and create the first time) our internal track cuts
++  if (!fMuonTrackCuts)
++  {
++    fMuonTrackCuts = new AliMuonTrackCuts;
++    
++    fMuonTrackCuts->SetAllowDefaultParams(kTRUE);
++    
++    fMuonTrackCuts->SetFilterMask(AliMuonTrackCuts::kMuEta |
++                                  AliMuonTrackCuts::kMuThetaAbs |
++                                  AliMuonTrackCuts::kMuPdca |
++                                  AliMuonTrackCuts::kMuMatchApt |
++                                  AliMuonTrackCuts::kMuMatchLpt |
++                                  AliMuonTrackCuts::kMuMatchHpt |
++                                  AliMuonTrackCuts::kMuTrackChiSquare);
++    
++  }
++  
++  return fMuonTrackCuts;
++}
++
++//_____________________________________________________________________________
++void AliAnalysisMuMuEventPool::SetMuonTrackCuts(const AliMuonTrackCuts& trackCuts)
++{
++  /// Set our muontrackcuts from external source
++  delete fMuonTrackCuts;
++  fMuonTrackCuts = static_cast<AliMuonTrackCuts*>(trackCuts.Clone());
++}
+diff --git a/PWG/muon/AliAnalysisMuMuEventPool.h b/PWG/muon/AliAnalysisMuMuEventPool.h
+new file mode 100644
+index 0000000..a2f6355
+--- /dev/null
++++ b/PWG/muon/AliAnalysisMuMuEventPool.h
+@@ -0,0 +1,121 @@
++#ifndef ALIANALYSISMUMUEVENTPOOL_H
++#define ALIANALYSISMUMUEVENTPOOL_H
++
++#include "AliAnalysisMuMuBase.h"
++
++/**
++ *
++ * \class AliAnalysisMuMuEventPool
++ *
++ * \brief Histogramming of single muon tracks.
++ *
++ * \author L. Aphecetche (Subatech)
++ *
++ */
++
++#include "AliAnalysisMuonUtility.h"
++
++class AliMergeableCollectionProxy;
++class AliMuonTrackCuts;
++class TH2F;
++class TObjArray;
++
++class AliAnalysisMuMuEventPool : public AliAnalysisMuMuBase
++{
++public:
++  
++  AliAnalysisMuMuEventPool();
++  virtual ~AliAnalysisMuMuEventPool();
++  
++  virtual void ShouldSeparatePlusAndMinus(Bool_t value) { fShouldSeparatePlusAndMinus = value; }
++  
++  virtual Bool_t ShouldSeparatePlusAndMinus() const { return fShouldSeparatePlusAndMinus; }
++
++  AliMuonTrackCuts* MuonTrackCuts();
++  
++  void SetMuonTrackCuts(const AliMuonTrackCuts& trackCuts);
++  
++  Bool_t IsPDCAOK(const AliVParticle& part);
++  void NameOfIsPDCAOK(TString& name) const { name = "PDCA";}
++  
++  Bool_t IsMatchingTriggerAnyPt(const AliVParticle& part) const { return ( AliAnalysisMuonUtility::GetMatchTrigger(&part) >= 1 ); }
++  void NameOfIsMatchingTriggerAnyPt(TString& name) const { name = "MATCHANY";}
++  
++  Bool_t IsMatchingTriggerLowPt(const AliVParticle& part) const { return ( AliAnalysisMuonUtility::GetMatchTrigger(&part) >= 2 ); }
++  void NameOfIsMatchingTriggerLowPt(TString& name) const { name = "MATCHLOW";}
++  
++  Bool_t IsMatchingTriggerHighPt(const AliVParticle& part) const { return ( AliAnalysisMuonUtility::GetMatchTrigger(&part) >= 3 ); }
++  void NameOfIsMatchingTriggerHighPt(TString& name) const { name = "MATCHHIGH";}
++  
++  Bool_t IsRabsOK(const AliVParticle& part) const;
++  void NameOfIsRabsOK(TString& name) const { name = "RABS"; }
++
++  Bool_t IsEtaInRange(const AliVParticle& part) const;
++  void NameOfIsEtaInRange(TString& name) const
++  { name = "ETA"; }
++
++  void SetBufferSize(Int_t buffer) { fBufferSize = buffer; }
++
++  void SetMixNumber(Int_t numMix) { fMixNumber = numMix; }
++
++  void SetRun(const AliInputEventHandler* eventHandler);
++
++
++    
++protected:
++  
++  void DefineHistogramCollection(const char* eventSelection, const char* triggerClassName,
++                                 const char* centrality);
++
++  virtual void FillHistosForTrack(const char* eventSelection, const char* triggerClassName,
++                                  const char* centrality,
++                                  const char* trackCutName,
++                                  const AliVParticle& part);
++  
++  void FillHistosForMuonTrack(AliMergeableCollectionProxy& proxy, const AliVParticle& track);
++
++
++private:
++  
++  void CreateTrackHisto(const char* eventSelection,
++                        const char* triggerClassName,
++                        const char* centrality,
++                        const char* hname, const char* htitle,
++                        Int_t nbinsx, Double_t xmin, Double_t xmax,
++                        Int_t nbinsy=-1, Double_t ymin=0.0, Double_t ymax=0.0,
++                        Bool_t separatePlusAndMinus=kFALSE) const;
++
++  Double_t GetTrackTheta(const AliVParticle& particle) const;
++  
++  /* methods prefixed with EA should really not exist at all. They are there
++   only because the some of our base interfaces are shamelessly incomplete or
++   inadequate...
++   */
++  
++  Int_t EAGetNumberOfMuonTracks() const;
++  
++//  Int_t EAGetNumberOfSelectMuonTracks() const;
++  
++  Double_t EAGetTrackDCA(const AliVParticle& particle) const;
++     
++private:
++  
++  /// not implemented on purpose
++  AliAnalysisMuMuEventPool& operator=(const AliAnalysisMuMuEventPool& rhs);
++  /// not implemented on purpose
++  AliAnalysisMuMuEventPool(const AliAnalysisMuMuEventPool& rhs);
++  
++  AliMuonTrackCuts* fMuonTrackCuts; //! common cuts for muon tracks (from Diego)
++  Bool_t fShouldSeparatePlusAndMinus; // whether or not to histogram mu+ and mu- separately
++
++  TObjArray *fPool;
++
++  Int_t       fMixNumber;             // mixing number
++  Int_t nGoodClusters[5];
++  Int_t nGoodClusters2[5];
++  
++  
++  ClassDef(AliAnalysisMuMuEventPool,1) // implementation of AliAnalysisMuMuBase for single mu analysis
++};
++
++#endif
+diff --git a/PWG/muon/AliAnalysisMuMuMinv.cxx b/PWG/muon/AliAnalysisMuMuMinv.cxx
+index b62d351..7e244eb 100644
+--- a/PWG/muon/AliAnalysisMuMuMinv.cxx
++++ b/PWG/muon/AliAnalysisMuMuMinv.cxx
+@@ -89,11 +89,13 @@ AliAnalysisMuMuMinv::DefineHistogramCollection(const char* eventSelection,
+   Int_t nMinvBins = GetNbins(minvMin,minvMax,fMinvBinSize);
+   
+   Int_t nMCMinvBins = GetNbins(minvMin,minvMax,0.1);
++  //__________
+   
+   // Rapidity range
+   Double_t rapidityMin = -5;
+   Double_t rapidityMax = -2;
+   Int_t nbinsRapidity = GetNbins(rapidityMin,rapidityMax,0.05);
++  //__________
+   
+   // eta range
+   Double_t etaMin = -5;
+@@ -204,6 +206,7 @@ AliAnalysisMuMuMinv::DefineHistogramCollection(const char* eventSelection,
+       //        HistogramCollection()->Adopt(Form("/%s/INYRANGE",MCInputPrefix()),static_cast<TH1*>(h->Clone()));
+       //      }
+     }
++
+     // Create corrected histo
+     if ( ShouldCorrectDimuonForAccEff() )
+     {
+@@ -879,6 +882,7 @@ void AliAnalysisMuMuMinv::FillHistosForMCEvent(const char* eventSelection,const
+         mcInYRangeProxy->Histo("Y")->Fill(part->Y(),inputWeight);
+         mcInYRangeProxy->Histo("Eta")->Fill(part->Eta());
+       }
++      //__________
+       
+       nextBin.Reset();
+       
+@@ -921,6 +925,7 @@ void AliAnalysisMuMuMinv::FillHistosForMCEvent(const char* eventSelection,const
+             ok = r->IsInRange(part->Phi());
+           }
+         }
++        //__________
+         
+         // Fill histo if bin is in range
+         if ( ok )
+diff --git a/PWG/muon/AliAnalysisTaskMuMu.cxx b/PWG/muon/AliAnalysisTaskMuMu.cxx
+index b6fd1db..df5629e 100644
+--- a/PWG/muon/AliAnalysisTaskMuMu.cxx
++++ b/PWG/muon/AliAnalysisTaskMuMu.cxx
+@@ -463,7 +463,7 @@ void AliAnalysisTaskMuMu::GetSelectedTrigClassesInEvent(const AliVEvent* event,
+   
+   if (!event)
+   {
+-    AliError("Will get a hard time selecting trigger classes with an empty event...");
++    AliError("Will get a hard time selecting trigger classes with an empty event...");// Ah ah ah ...
+     return;
+   }
+   
+@@ -697,11 +697,10 @@ void AliAnalysisTaskMuMu::UserExec(Option_t* /*opt*/)
+ 
+ 
+   TString firedTriggerClasses(Event()->GetFiredTriggerClasses());
+-
+   TIter nextEventCutCombination(CutRegistry()->GetCutCombinations(AliAnalysisMuMuCutElement::kEvent));
+   AliAnalysisMuMuCutCombination* cutCombination;
+ 
+-  // loop over cut combination on event level. Fill counters
++  // ----- loop over cut combination on event level. Fill counters ------
+   while ( ( cutCombination = static_cast<AliAnalysisMuMuCutCombination*>(nextEventCutCombination())))
+   {
+     if ( cutCombination->Pass(*fInputHandler) ) // If event pass the cut
+@@ -716,6 +715,7 @@ void AliAnalysisTaskMuMu::UserExec(Option_t* /*opt*/)
+       }
+     }
+   }
++  //==============================================================================
+ 
+   // loop over trigger selected list and cut combination on event level. Fill histos
+   TObjArray selectedTriggerClasses;
+@@ -738,6 +738,7 @@ void AliAnalysisTaskMuMu::UserExec(Option_t* /*opt*/)
+       }
+     }
+   }
++  //==============================================================================
+   
+   // Post output data.
+   PostData(1, fHistogramCollection);
+-- 
+2.5.4 (Apple Git-61)
+
+
+From 840abc82bd13d97ed619bc6e642ddb7dbfe64808 Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Tue, 5 Jan 2016 12:52:48 +0100
+Subject: [PATCH 2/5] Delete AliAnalysisMuMuEventPool class
+
+---
+ PWG/muon/AliAnalysisMuMuEventPool.cxx | 415 ----------------------------------
+ PWG/muon/AliAnalysisMuMuEventPool.h   | 121 ----------
+ 2 files changed, 536 deletions(-)
+ delete mode 100644 PWG/muon/AliAnalysisMuMuEventPool.cxx
+ delete mode 100644 PWG/muon/AliAnalysisMuMuEventPool.h
+
+diff --git a/PWG/muon/AliAnalysisMuMuEventPool.cxx b/PWG/muon/AliAnalysisMuMuEventPool.cxx
+deleted file mode 100644
+index b8139c3..0000000
+--- a/PWG/muon/AliAnalysisMuMuEventPool.cxx
++++ /dev/null
+@@ -1,415 +0,0 @@
+-#include "AliAnalysisMuMuEventPool.h"
+-
+-/**
+- *
+- * \ingroup pwg-muon-mumu
+- *
+- * \class AliAnalysisMuMuEventPool
+- *
+- * Histogramming of single muon tracks. Mostly to get control plots for
+- * the AliAnalysisMuMuMinv sub-analysis, with respect to track cuts used,
+- * like Rabs, p x DCA, etc...
+- *
+- */
+-
+-#include "TH2F.h"
+-#include "AliCodeTimer.h"
+-#include "AliMuonTrackCuts.h"
+-#include "AliAnalysisMuonUtility.h"
+-#include "TMath.h"
+-#include "AliLog.h"
+-#include "AliVParticle.h"
+-#include "TLorentzVector.h"
+-#include "AliAnalysisMuMuCutCombination.h"
+-#include "AliAnalysisMuMuCutRegistry.h"
+-#include "AliMergeableCollection.h"
+-#include "AliVEvent.h"
+-
+-ClassImp(AliAnalysisMuMuEventPool)
+-
+-//_____________________________________________________________________________
+-AliAnalysisMuMuEventPool::AliAnalysisMuMuEventPool()
+-: AliAnalysisMuMuBase(),
+-fMuonTrackCuts(0x0),
+-fShouldSeparatePlusAndMinus(kFALSE)
+-{
+-  /// ctor
+-}
+-
+-//_____________________________________________________________________________
+-AliAnalysisMuMuEventPool::~AliAnalysisMuMuEventPool()
+-{
+-  /// dtor
+-  delete fMuonTrackCuts;
+-  delete fPool;
+-}
+-
+-
+-//_____________________________________________________________________________
+-void
+-AliAnalysisMuMuEventPool::CreateTrackHisto(const char* eventSelection,
+-                                        const char* triggerClassName,
+-                                        const char* centrality,
+-                                        const char* hname, const char* htitle,
+-                                        Int_t nbinsx, Double_t xmin, Double_t xmax,
+-                                        Int_t nbinsy, Double_t ymin, Double_t ymax,
+-                                        Bool_t separatePlusAndMinus) const
+-{
+-  /// Append histograms for single track to our histogram collection
+-  
+-  if ( IsHistogramDisabled(hname) ) return;
+-  
+-  if ( separatePlusAndMinus )
+-  {
+-    const char* suffix[] = { "Plus", "Minus" };
+-    const char* symbol[] = { "+", "-" };
+-    
+-    for ( Int_t i = 0; i < 2; ++i )
+-    {
+-      TString shtitle(htitle);
+-      TString shname(hname);
+-      
+-      shtitle.ReplaceAll("#mu",Form("#mu^{%s}",symbol[i]));
+-      
+-      shname += suffix[i];
+-      
+-      CreateTrackHistos(kHistoForData | kHistoForMCInput,eventSelection,triggerClassName,centrality,shname.Data(),shtitle.Data(),
+-                        nbinsx,xmin,xmax,nbinsy,ymin,ymax);
+-    }
+-  }
+-  else
+-  {
+-    CreateTrackHistos(kHistoForData | kHistoForMCInput,eventSelection,triggerClassName,centrality,hname,htitle,
+-                nbinsx,xmin,xmax,nbinsy,ymin,ymax);
+-  }
+-}
+-
+-//_____________________________________________________________________________
+-Bool_t AliAnalysisMuMuEventPool::IsPDCAOK(const AliVParticle& part)
+-{
+-  UInt_t selectionMask = MuonTrackCuts() ? MuonTrackCuts()->GetSelectionMask(&part) : 0;
+-
+-  return ( ( selectionMask & AliMuonTrackCuts::kMuPdca ) == AliMuonTrackCuts::kMuPdca );
+-}
+-
+-//_____________________________________________________________________________
+-Bool_t AliAnalysisMuMuEventPool::IsRabsOK(const AliVParticle& part) const
+-{
+-  Double_t thetaAbsEndDeg = AliAnalysisMuonUtility::GetThetaAbsDeg(&part);
+-  
+-  return ( thetaAbsEndDeg > 2. && thetaAbsEndDeg < 10. );
+-}
+-
+-//_____________________________________________________________________________
+-Bool_t AliAnalysisMuMuEventPool::IsEtaInRange(const AliVParticle& part) const
+-{
+-  return (part.Eta() > -4.0 && part.Eta() < -2.5);
+-}
+-
+-//_____________________________________________________________________________
+-void AliAnalysisMuMuEventPool::SetRun(const AliInputEventHandler* eventHandler)
+-{
+-  MuonTrackCuts()->SetRun(eventHandler);
+-}
+-
+-//_____________________________________________________________________________
+-Int_t AliAnalysisMuMuEventPool::EAGetNumberOfMuonTracks() const
+-{
+-  // Get the number of muon tracks *that are not ghosts*
+-  
+-  Int_t ntracks = AliAnalysisMuonUtility::GetNTracks(Event());
+-  
+-  for ( Int_t i = 0; i < ntracks; ++i )
+-  {
+-    AliVParticle* track = AliAnalysisMuonUtility::GetTrack(i,Event());
+-    if (AliAnalysisMuonUtility::IsMuonGhost(track)) --ntracks;
+-  }
+-  
+-  return ntracks;
+-}
+-
+-////_____________________________________________________________________________
+-//Int_t AliAnalysisMuMuEventPool::EAGetNumberOfSelectMuonTracks() const
+-//{
+-//  // Get the number of "very good" muon tracks :
+-//  // Rabs + DCA + pT > 1.5 Gev/C
+-//  
+-//  Int_t nTracks = AliAnalysisMuonUtility::GetNTracks(Event());
+-//  
+-//  UInt_t check = kAll | kMatched | kRabs | kDCA | kEta | kPt1dot5;
+-//  
+-//  Int_t nGood(0);
+-//  
+-//  for ( Int_t i = 0; i < nTracks; ++i )
+-//  {
+-//    ULong64_t m = GetTrackMask(i);
+-//    if ( ( m & check ) == check )
+-//    {
+-//      ++nGood;
+-//    }
+-//  }
+-//  return nGood;
+-//}
+-
+-//_____________________________________________________________________________
+-Double_t AliAnalysisMuMuEventPool::EAGetTrackDCA(const AliVParticle& track) const
+-{
+-  // Get track DCA
+-  
+-  Double_t xdca = AliAnalysisMuonUtility::GetXatDCA(&track);
+-  Double_t ydca = AliAnalysisMuonUtility::GetYatDCA(&track);
+-  
+-  return TMath::Sqrt(xdca*xdca+ydca*ydca);
+-}
+-
+-//_____________________________________________________________________________
+-void AliAnalysisMuMuEventPool::DefineHistogramCollection(const char* eventSelection,
+-                                                      const char* triggerClassName,
+-                                                      const char* centrality)
+-{
+-  /// Actually create the histograms for phyics/triggerClassName
+- 
+-  
+-  if ( Histo(eventSelection,triggerClassName,centrality,"AliAnalysisMuMuEventPool") )
+-  {
+-    return;
+-  }
+-
+-  AliAnalysisMuMuBase::EDataType dt = AliAnalysisMuMuBase::kHistoForData;
+-  
+-  // dummy histogram to signal that we already defined all our histograms (see above)
+-  CreateEventHistos(dt,eventSelection,triggerClassName,centrality,"AliAnalysisMuMuEventPool","Dummy semaphore",1,0,1);
+-  
+-  Double_t ptMin = 0;
+-  Double_t ptMax = 12*3;
+-  Int_t nbinsPt = GetNbins(ptMin,ptMax,0.5);
+-  Double_t pMin = 0;
+-  Double_t pMax = 100*3;
+-  Int_t nbinsP = GetNbins(pMin,pMax,2.0);
+-  Double_t etaMin = -5;
+-  Double_t etaMax = -2;
+-  Int_t nbinsEta = GetNbins(etaMin,etaMax,0.05);
+-  
+-  Double_t rapidityMin = -5;
+-  Double_t rapidityMax = -2;
+-  Int_t nbinsRapidity = GetNbins(rapidityMin,rapidityMax,0.05);
+-  
+-  Double_t phiMin = -TMath::Pi();
+-  Double_t phiMax = TMath::Pi();
+-  Int_t nbinsPhi = GetNbins(phiMin,phiMax,0.05);
+-  
+-  CreateTrackHisto(eventSelection,triggerClassName,centrality,"Chi2MatchTrigger","Chi2 Match Trigger",72,0,72);
+-  
+-  CreateTrackHisto(eventSelection,triggerClassName,centrality,"EtaRapidityMu", "Eta distribution vs Rapidity for #mu", nbinsRapidity,rapidityMin,rapidityMax,nbinsEta,etaMin,etaMax, fShouldSeparatePlusAndMinus);
+-  
+-  CreateTrackHisto(eventSelection,triggerClassName,centrality,"PtEtaMu", "P_{T} distribution vs Eta for #mu", nbinsEta,etaMin,etaMax, nbinsPt,ptMin,ptMax,fShouldSeparatePlusAndMinus);
+-  
+-  CreateTrackHisto(eventSelection,triggerClassName,centrality,"PtRapidityMu", "P_{T} distribution vs Rapidity for #mu", nbinsRapidity,rapidityMin,rapidityMax, nbinsPt,ptMin,ptMax,fShouldSeparatePlusAndMinus);
+-  
+-  CreateTrackHisto(eventSelection,triggerClassName,centrality,"PtPhiMu", "P_{T} distribution vs phi for #mu", nbinsPhi,phiMin,phiMax, nbinsPt,ptMin,ptMax,fShouldSeparatePlusAndMinus);
+-  
+-  
+-  CreateTrackHisto(eventSelection,triggerClassName,centrality,"PEtaMu", "P distribution for #mu",nbinsEta,etaMin,etaMax,nbinsP,pMin,pMax,fShouldSeparatePlusAndMinus);
+-  
+-  Double_t chi2min = 0;
+-  Double_t chi2max = 20;
+-  Int_t nbinchi2 = GetNbins(chi2min,chi2max,0.05);
+-  
+-  CreateTrackHisto(eventSelection, triggerClassName, centrality, "Chi2Mu", "chisquare per NDF #mu", nbinchi2, chi2min, chi2max,-1, 0.0, 0.0, fShouldSeparatePlusAndMinus);
+-  
+-  Double_t xmin = 0;
+-  Double_t xmax = 150;
+-  Int_t nbins = GetNbins(xmin,xmax,2.0);
+-  
+-  CreateTrackHisto(eventSelection,triggerClassName,centrality,"dcaP23Mu","#mu DCA vs P for 2-3 degrees;P (GeV);DCA (cm)",nbinsP,pMin,pMax,nbins,xmin,xmax,fShouldSeparatePlusAndMinus);
+-  
+-  CreateTrackHisto(eventSelection,triggerClassName,centrality,"dcaP310Mu","#mu DCA vs P for 3-10 degrees;P (GeV);DCA (cm)",nbinsP,pMin,pMax,nbins,xmin,xmax,fShouldSeparatePlusAndMinus);
+-  
+-  CreateTrackHisto(eventSelection,triggerClassName,centrality,"dcaPwPtCut23Mu","#mu DCA vs P for 2-3 degrees with Pt Cut;P (GeV);DCA (cm)",nbinsP,pMin,pMax,nbins,xmin,xmax,fShouldSeparatePlusAndMinus);
+-  
+-  CreateTrackHisto(eventSelection,triggerClassName,centrality,"dcaPwPtCut310Mu","#mu DCA vs P for 3-10 degrees with Pt Cut;P (GeV);DCA (cm)",nbinsP,pMin,pMax,nbins,xmin,xmax,fShouldSeparatePlusAndMinus);
+-  
+-  xmin = 0;
+-  xmax = 3564;
+-  nbins = GetNbins(xmin,xmax,1.0);
+-  
+-  CreateTrackHisto(eventSelection,triggerClassName,centrality,"BCX","bunch-crossing ids",nbins,xmin-0.5,xmax-0.5);
+-}
+-
+-
+-//_____________________________________________________________________________
+-void AliAnalysisMuMuEventPool::FillHistosForMuonTrack(AliMergeableCollectionProxy& proxy,
+-                                                   const AliVParticle& track)
+-{
+-  /// Fill histograms for one track
+- 
+-  AliCodeTimerAuto("",0);
+-  
+-  if ( HasMC() )
+-  {
+-    MuonTrackCuts()->SetIsMC();
+-  }
+-  
+-  TLorentzVector p(track.Px(),track.Py(),track.Pz(),
+-                   TMath::Sqrt(AliAnalysisMuonUtility::MuonMass2()+track.P()*track.P()));
+-  
+-  
+-  TString charge("");
+-  
+-  if ( ShouldSeparatePlusAndMinus() )
+-  {
+-    if ( track.Charge() < 0 )
+-    {
+-      charge = "Minus";
+-    }
+-    else
+-    {
+-      charge = "Plus";
+-    }
+-  }
+-  
+-  Double_t dca = EAGetTrackDCA(track);
+-  
+-  Double_t theta = AliAnalysisMuonUtility::GetThetaAbsDeg(&track);
+-  
+-  if (!IsHistogramDisabled("BCX"))
+-  {
+-    proxy.Histo("BCX")->Fill(1.0*Event()->GetBunchCrossNumber());
+-  }
+-  
+-  if (!IsHistogramDisabled("Chi2MatchTrigger"))
+-  {
+-    proxy.Histo("Chi2MatchTrigger")->Fill(AliAnalysisMuonUtility::GetChi2MatchTrigger(&track));
+-  }
+-  
+-  if (!IsHistogramDisabled("EtaRapidityMu*"))
+-  {
+-    proxy.Histo(Form("EtaRapidityMu%s",charge.Data()))->Fill(p.Rapidity(),p.Eta());
+-  }
+-  
+-  if (!IsHistogramDisabled("PtEtaMu*"))
+-  {
+-    TH1* h = proxy.Histo(Form("PtEtaMu%s",charge.Data()));
+-    
+-    h->Fill(p.Eta(),p.Pt());
+-
+-    if  ( fPtEtaSpectraPerBCX )
+-    {
+-      if (!IsHistogramDisabled("BCX"))
+-      {
+-        TH1* hbcx = proxy.Histo(Form("PtEtaMu%sBCX%d",charge.Data(),Event()->GetBunchCrossNumber()));
+-      
+-        if (!hbcx)
+-        {
+-          hbcx = static_cast<TH1*>(h->Clone(Form("PtEtaMu%sBCX%d",charge.Data(),Event()->GetBunchCrossNumber())));
+-          proxy.Adopt(hbcx);
+-        }
+-      }
+-    }
+-  }
+-  
+-  if (!IsHistogramDisabled("PtRapidityMu*"))
+-  {
+-    proxy.Histo(Form("PtRapidityMu%s",charge.Data()))->Fill(p.Rapidity(),p.Pt());
+-  }
+-  
+-  if (!IsHistogramDisabled("PEtaMu*"))
+-  {
+-    proxy.Histo(Form("PEtaMu%s",charge.Data()))->Fill(p.Eta(),p.P());
+-  }
+-  
+-  if (!IsHistogramDisabled("PtPhiMu*"))
+-  {
+-    proxy.Histo(Form("PtPhiMu%s",charge.Data()))->Fill(p.Phi(),p.Pt());
+-  }
+-  
+-  if (!IsHistogramDisabled("Chi2Mu*"))
+-  {
+-    proxy.Histo(Form("Chi2Mu%s",charge.Data()))->Fill(AliAnalysisMuonUtility::GetChi2perNDFtracker(&track));
+-  }
+-  
+-  if (!fDCAHistos)
+-  {
+-    return;
+-  }
+-  
+-  if ( theta >= 2.0 && theta < 3.0 )
+-  {
+-    
+-    if (!IsHistogramDisabled("dcaP23Mu*"))
+-    {
+-      proxy.Histo(Form("dcaP23Mu%s",charge.Data()))->Fill(p.P(),dca);
+-    }
+-    
+-    if ( p.Pt() > 2 )
+-    {
+-      if (!IsHistogramDisabled("dcaPwPtCut23Mu*"))
+-      {
+-        proxy.Histo(Form("dcaPwPtCut23Mu%s",charge.Data()))->Fill(p.P(),dca);
+-      }
+-    }
+-  }
+-  else if ( theta >= 3.0 && theta < 10.0 )
+-  {
+-    if (!IsHistogramDisabled("dcaP310Mu*"))
+-    {
+-      proxy.Histo(Form("dcaP310Mu%s",charge.Data()))->Fill(p.P(),dca);
+-    }
+-    if ( p.Pt() > 2 )
+-    {
+-      if (!IsHistogramDisabled("dcaPwPtCut310Mu*"))
+-      {
+-        proxy.Histo(Form("dcaPwPtCut310Mu%s",charge.Data()))->Fill(p.P(),dca);
+-      }
+-    }
+-  }
+-}
+-
+-//_____________________________________________________________________________
+-void AliAnalysisMuMuEventPool::FillHistosForTrack(const char* eventSelection,
+-                                               const char* triggerClassName,
+-                                               const char* centrality,
+-                                               const char* trackCutName,
+-                                               const AliVParticle& track)
+-{
+-  /// Fill histograms for one track
+-
+-  if (!AliAnalysisMuonUtility::IsMuonTrack(&track) ) return;
+-
+-  AliMergeableCollectionProxy* proxy = HistogramCollection()->CreateProxy(BuildPath(eventSelection,triggerClassName,centrality,trackCutName));
+-
+-  FillHistosForMuonTrack(*proxy,track);
+-  
+-  delete proxy;
+-}
+-
+-//_____________________________________________________________________________
+-AliMuonTrackCuts* AliAnalysisMuMuEventPool::MuonTrackCuts()
+-{
+-  /// Get (and create the first time) our internal track cuts
+-  if (!fMuonTrackCuts)
+-  {
+-    fMuonTrackCuts = new AliMuonTrackCuts;
+-    
+-    fMuonTrackCuts->SetAllowDefaultParams(kTRUE);
+-    
+-    fMuonTrackCuts->SetFilterMask(AliMuonTrackCuts::kMuEta |
+-                                  AliMuonTrackCuts::kMuThetaAbs |
+-                                  AliMuonTrackCuts::kMuPdca |
+-                                  AliMuonTrackCuts::kMuMatchApt |
+-                                  AliMuonTrackCuts::kMuMatchLpt |
+-                                  AliMuonTrackCuts::kMuMatchHpt |
+-                                  AliMuonTrackCuts::kMuTrackChiSquare);
+-    
+-  }
+-  
+-  return fMuonTrackCuts;
+-}
+-
+-//_____________________________________________________________________________
+-void AliAnalysisMuMuEventPool::SetMuonTrackCuts(const AliMuonTrackCuts& trackCuts)
+-{
+-  /// Set our muontrackcuts from external source
+-  delete fMuonTrackCuts;
+-  fMuonTrackCuts = static_cast<AliMuonTrackCuts*>(trackCuts.Clone());
+-}
+diff --git a/PWG/muon/AliAnalysisMuMuEventPool.h b/PWG/muon/AliAnalysisMuMuEventPool.h
+deleted file mode 100644
+index a2f6355..0000000
+--- a/PWG/muon/AliAnalysisMuMuEventPool.h
++++ /dev/null
+@@ -1,121 +0,0 @@
+-#ifndef ALIANALYSISMUMUEVENTPOOL_H
+-#define ALIANALYSISMUMUEVENTPOOL_H
+-
+-#include "AliAnalysisMuMuBase.h"
+-
+-/**
+- *
+- * \class AliAnalysisMuMuEventPool
+- *
+- * \brief Histogramming of single muon tracks.
+- *
+- * \author L. Aphecetche (Subatech)
+- *
+- */
+-
+-#include "AliAnalysisMuonUtility.h"
+-
+-class AliMergeableCollectionProxy;
+-class AliMuonTrackCuts;
+-class TH2F;
+-class TObjArray;
+-
+-class AliAnalysisMuMuEventPool : public AliAnalysisMuMuBase
+-{
+-public:
+-  
+-  AliAnalysisMuMuEventPool();
+-  virtual ~AliAnalysisMuMuEventPool();
+-  
+-  virtual void ShouldSeparatePlusAndMinus(Bool_t value) { fShouldSeparatePlusAndMinus = value; }
+-  
+-  virtual Bool_t ShouldSeparatePlusAndMinus() const { return fShouldSeparatePlusAndMinus; }
+-
+-  AliMuonTrackCuts* MuonTrackCuts();
+-  
+-  void SetMuonTrackCuts(const AliMuonTrackCuts& trackCuts);
+-  
+-  Bool_t IsPDCAOK(const AliVParticle& part);
+-  void NameOfIsPDCAOK(TString& name) const { name = "PDCA";}
+-  
+-  Bool_t IsMatchingTriggerAnyPt(const AliVParticle& part) const { return ( AliAnalysisMuonUtility::GetMatchTrigger(&part) >= 1 ); }
+-  void NameOfIsMatchingTriggerAnyPt(TString& name) const { name = "MATCHANY";}
+-  
+-  Bool_t IsMatchingTriggerLowPt(const AliVParticle& part) const { return ( AliAnalysisMuonUtility::GetMatchTrigger(&part) >= 2 ); }
+-  void NameOfIsMatchingTriggerLowPt(TString& name) const { name = "MATCHLOW";}
+-  
+-  Bool_t IsMatchingTriggerHighPt(const AliVParticle& part) const { return ( AliAnalysisMuonUtility::GetMatchTrigger(&part) >= 3 ); }
+-  void NameOfIsMatchingTriggerHighPt(TString& name) const { name = "MATCHHIGH";}
+-  
+-  Bool_t IsRabsOK(const AliVParticle& part) const;
+-  void NameOfIsRabsOK(TString& name) const { name = "RABS"; }
+-
+-  Bool_t IsEtaInRange(const AliVParticle& part) const;
+-  void NameOfIsEtaInRange(TString& name) const
+-  { name = "ETA"; }
+-
+-  void SetBufferSize(Int_t buffer) { fBufferSize = buffer; }
+-
+-  void SetMixNumber(Int_t numMix) { fMixNumber = numMix; }
+-
+-  void SetRun(const AliInputEventHandler* eventHandler);
+-
+-
+-    
+-protected:
+-  
+-  void DefineHistogramCollection(const char* eventSelection, const char* triggerClassName,
+-                                 const char* centrality);
+-
+-  virtual void FillHistosForTrack(const char* eventSelection, const char* triggerClassName,
+-                                  const char* centrality,
+-                                  const char* trackCutName,
+-                                  const AliVParticle& part);
+-  
+-  void FillHistosForMuonTrack(AliMergeableCollectionProxy& proxy, const AliVParticle& track);
+-
+-
+-private:
+-  
+-  void CreateTrackHisto(const char* eventSelection,
+-                        const char* triggerClassName,
+-                        const char* centrality,
+-                        const char* hname, const char* htitle,
+-                        Int_t nbinsx, Double_t xmin, Double_t xmax,
+-                        Int_t nbinsy=-1, Double_t ymin=0.0, Double_t ymax=0.0,
+-                        Bool_t separatePlusAndMinus=kFALSE) const;
+-
+-  Double_t GetTrackTheta(const AliVParticle& particle) const;
+-  
+-  /* methods prefixed with EA should really not exist at all. They are there
+-   only because the some of our base interfaces are shamelessly incomplete or
+-   inadequate...
+-   */
+-  
+-  Int_t EAGetNumberOfMuonTracks() const;
+-  
+-//  Int_t EAGetNumberOfSelectMuonTracks() const;
+-  
+-  Double_t EAGetTrackDCA(const AliVParticle& particle) const;
+-     
+-private:
+-  
+-  /// not implemented on purpose
+-  AliAnalysisMuMuEventPool& operator=(const AliAnalysisMuMuEventPool& rhs);
+-  /// not implemented on purpose
+-  AliAnalysisMuMuEventPool(const AliAnalysisMuMuEventPool& rhs);
+-  
+-  AliMuonTrackCuts* fMuonTrackCuts; //! common cuts for muon tracks (from Diego)
+-  Bool_t fShouldSeparatePlusAndMinus; // whether or not to histogram mu+ and mu- separately
+-
+-  TObjArray *fPool;
+-
+-  Int_t       fMixNumber;             // mixing number
+-  Int_t nGoodClusters[5];
+-  Int_t nGoodClusters2[5];
+-  
+-  
+-  ClassDef(AliAnalysisMuMuEventPool,1) // implementation of AliAnalysisMuMuBase for single mu analysis
+-};
+-
+-#endif
+-- 
+2.5.4 (Apple Git-61)
+
+
+From 2c3b32583d62392d22b68504ca31a4d3f069a632 Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Fri, 8 Jan 2016 15:57:40 +0100
+Subject: [PATCH 3/5] Deleting MuMuMinvTrain.C
+
+---
+ PWG/muon/AddTaskMuMuMinvTrain.C | 203 ----------------------------------------
+ 1 file changed, 203 deletions(-)
+ delete mode 100644 PWG/muon/AddTaskMuMuMinvTrain.C
+
+diff --git a/PWG/muon/AddTaskMuMuMinvTrain.C b/PWG/muon/AddTaskMuMuMinvTrain.C
+deleted file mode 100644
+index 8783dbe..0000000
+--- a/PWG/muon/AddTaskMuMuMinvTrain.C
++++ /dev/null
+@@ -1,203 +0,0 @@
+-///
+-/// Configuration example of a task to get invariant mass spectrum of dimuons
+-///
+-/// \author: L. Aphecetche (Subatech) (laurent.aphecetche - at - subatech.in2p3.fr)
+-///
+-
+-AliAnalysisTask* AddTaskMuMuMinvTrain(const char* outputname,
+-const char     * triggerClassesToConsider,
+-const char     * triggerInputsToUse,
+-const char     * beamYear,
+-Bool_t simulations)
+-{
+-
+-  AliAnalysisManager *mgr = AliAnalysisManager::GetAnalysisManager(); // Get the manager
+-  if (!mgr) {
+-    ::Error("AddTaskMuMu", "No analysis manager to connect to.");
+-    return NULL;
+-  }  
+-  
+-  // Check the analysis type using the event handlers connected to the analysis manager.
+-  //==============================================================================
+-  if (!mgr->GetInputEventHandler()) {
+-    ::Error("AddTaskMuMu", "This task requires an input event handler");
+-    return NULL;
+-  }
+-
+-  //  Configure task
+-  //===========================================================================
+-  AliAnalysisTaskMuMu       * task = new AliAnalysisTaskMuMu; // Call the task
+-  task->SetBeamYear(beamYear);
+-
+-  AliAnalysisMuMuEventCutter* eventCutter = new AliAnalysisMuMuEventCutter(triggerClassesToConsider,triggerInputsToUse); // To handle cuts on event
+-  AliAnalysisMuMuCutRegistry* cr = task->CutRegistry(); // Set CutRegistry
+-
+-  // Default cuts on trigger and event level
+-  AliAnalysisMuMuCutElement* eventTrue = cr->AddEventCut(*eventCutter,"IsTrue","const AliVEvent&",""); 
+-  AliAnalysisMuMuCutElement* triggerSelection = cr->AddTriggerClassCut(*eventCutter,"SelectTriggerClass","const TString&,TString&,UInt_t,UInt_t,UInt_t","");
+-  AliAnalysisMuMuCutElement* ps = eventTrue;
+-  
+-  if (!simulations)
+-  {
+-    ps = cr->AddEventCut(*eventCutter,"IsPhysicsSelected","const AliInputEventHandler&","");
+-  }
+-
+-  // Apply default cut
+-  cr->AddCutCombination(eventTrue);
+-  cr->AddCutCombination(ps);
+-  cr->AddCutCombination(triggerSelection);
+-
+-  
+-  AliAnalysisMuMuGlobal* globalAnalysis =  new AliAnalysisMuMuGlobal; // Basic histograms analysis;
+-  AliAnalysisMuMuSingle* singleAnalysis = new AliAnalysisMuMuSingle;// Analysis dealing with single muon
+-  AliAnalysisMuMuMinv  * minvAnalysis = new AliAnalysisMuMuMinv;// Analysis creating invariant mass spectrum
+-
+-    
+-  // Configure sub analysis
+-  //===========================================================================
+-  if ( globalAnalysis )
+-  {
+-    // Cuts on trigger level
+-    AliAnalysisMuMuCutElement* triggerAll = cr->AddTriggerClassCut(*globalAnalysis,"SelectAnyTriggerClass","const TString&,TString&","");
+-    // Adding this cut on trigger level  
+-    cr->AddCutCombination(triggerAll);
+-    task->AdoptSubAnalysis(globalAnalysis);
+-  }
+-  if ( singleAnalysis )
+-  {
+-    // Cuts on tracks
+-    AliAnalysisMuMuCutElement* trackTrue = cr->AddTrackCut(*cr,"AlwaysTrue","const AliVParticle&",""); // Apply "AlwaysTrue" cut on AliVParticle derived from AliAnalysisMuMuSingle
+-    AliAnalysisMuMuCutElement* rabs = cr->AddTrackCut(*singleAnalysis,"IsRabsOK","const AliVParticle&","");
+-    AliAnalysisMuMuCutElement* matchlow = cr->AddTrackCut(*singleAnalysis,"IsMatchingTriggerLowPt","const AliVParticle&","");
+-    AliAnalysisMuMuCutElement* eta = cr->AddTrackCut(*singleAnalysis,"IsEtaInRange","const AliVParticle&","");
+-    AliAnalysisMuMuCutElement* pdca = cr->AddTrackCut(*singleAnalysis,"IsPDCAOK","const AliVParticle&","");
+-    
+-    // Create combination of cuts to apply
+-    cr->AddCutCombination(trackTrue);
+-    cr->AddCutCombination(matchlow);
+-    cr->AddCutCombination(rabs); 
+-    cr->AddCutCombination(eta); 
+-    cr->AddCutCombination(pdca); 
+-    // Adding the sub analysis
+-    task->AdoptSubAnalysis(singleAnalysis); 
+-
+-    if ( minvAnalysis )
+-    {
+-      // Array of cut elements
+-      TObjArray cutElements;
+-
+-      // Cuts on track level
+-      AliAnalysisMuMuCutElement* pairTrue = cr->AddTrackPairCut(*cr,"AlwaysTrue","const AliVParticle&,const AliVParticle&","");// Apply "AlwaysTrue" cut on AliVParticle derived from AliAnalysisMuMuMinv
+-      AliAnalysisMuMuCutElement* pairy = cr->AddTrackPairCut(*minvAnalysis,"IsRapidityInRange","const AliVParticle&,const AliVParticle&","");
+-      AliAnalysisMuMuCutElement* ptRange = cr->AddTrackPairCut(*minvAnalysis,"IsPtInRange","const AliVParticle&,const AliVParticle&,Double_t&,Double_t&","0.,10.");
+-
+-      cutElements.Add(pairTrue);
+-      cutElements.Add(pairy);
+-      cutElements.Add(ptRange);
+-      cutElements.Add(rabs);
+-      cutElements.Add(matchlow);
+-      cutElements.Add(eta);
+-      cutElements.Add(pdca);
+-
+-      // add them
+-      cr->AddCutCombination(cutElements);    
+-      // Adding the sub analysis
+-      task->AdoptSubAnalysis(minvAnalysis); 
+-    }
+-  }
+-
+-  /// below are the kind of configurations that can be performed :
+-  /// - adding cuts (at event, track or pair level)
+-  /// - adding bins (in pt, y, centrality, etc...) for minv (and meanpt)
+-    
+-  // Configure sub analysis
+-  //===========================================================================
+-  AliAnalysisMuMuBinning* binning = task->Binning(); // Create and set the "binning manager"
+-  
+-  if (minvAnalysis)
+-  {  
+-    // Integrated
+-    binning->AddBin("psi","integrated");
+-    // pt binning for low pt exces
+-    binning->AddBin("psi","pt", 0.0, 0.1,"BENJ");
+-    binning->AddBin("psi","pt", 0.1, 0.2,"BENJ");
+-    binning->AddBin("psi","pt", 0.2, 0.3,"BENJ");
+-    binning->AddBin("psi","pt", 0.3, 0.4,"BENJ");
+-    binning->AddBin("psi","pt", 0.4, 0.5,"BENJ");
+-    binning->AddBin("psi","pt", 0.5, 0.6,"BENJ");
+-    binning->AddBin("psi","pt", 0.6, 0.7,"BENJ");
+-    binning->AddBin("psi","pt", 0.7, 0.8,"BENJ");
+-    binning->AddBin("psi","pt", 0.8, 0.9,"BENJ");
+-    binning->AddBin("psi","pt", 0.9, 1.0,"BENJ");
+-    binning->AddBin("psi","pt", 1.0, 1.1,"BENJ");
+-    binning->AddBin("psi","pt", 1.1, 1.2,"BENJ");
+-    binning->AddBin("psi","pt", 1.2, 1.3,"BENJ");
+-    binning->AddBin("psi","pt", 1.3, 1.4,"BENJ");
+-    binning->AddBin("psi","pt", 1.4, 1.5,"BENJ");
+-    binning->AddBin("psi","pt", 1.5, 1.6,"BENJ");
+-    binning->AddBin("psi","pt", 1.6, 1.7,"BENJ");
+-    binning->AddBin("psi","pt", 1.7, 1.8,"BENJ");
+-    binning->AddBin("psi","pt", 0.0, 0.3,"BENJ");
+-    binning->AddBin("psi","pt", 0.3, 1.0,"BENJ");
+-    binning->AddBin("psi","pt", 1.0, 8.0,"BENJ");
+-    // pt binning
+-    binning->AddBin("psi","pt", 0.0, 1.0,"BENJ");
+-    binning->AddBin("psi","pt", 1.0, 2.0,"BENJ");
+-    binning->AddBin("psi","pt", 2.0, 3.0,"BENJ");
+-    binning->AddBin("psi","pt", 3.0, 4.0,"BENJ");
+-    binning->AddBin("psi","pt", 4.0, 5.0,"BENJ");
+-    binning->AddBin("psi","pt", 5.0, 6.0,"BENJ");
+-    binning->AddBin("psi","pt", 6.0, 8.0,"BENJ");
+-    // y binning
+-    binning->AddBin("psi","y",-4,-3.75,"BENJ");
+-    binning->AddBin("psi","y",-3.75,-3.5,"BENJ");
+-    binning->AddBin("psi","y",-3.5,-3.25,"BENJ");
+-    binning->AddBin("psi","y",-3.25,-3,"BENJ");
+-    binning->AddBin("psi","y",-3,-2.75,"BENJ");
+-    binning->AddBin("psi","y",-2.75,-2.5,"BENJ");
+-  }
+-  // v0 centrality binning
+-  binning->AddBin("centrality","V0M",0.,90.);
+-  binning->AddBin("centrality","V0M",0.,10.);
+-  binning->AddBin("centrality","V0M",10.,20.);
+-  binning->AddBin("centrality","V0M",20.,30.);
+-  binning->AddBin("centrality","V0M",30.,40.);
+-  binning->AddBin("centrality","V0M",40.,50.);
+-  binning->AddBin("centrality","V0M",50.,60.);
+-  binning->AddBin("centrality","V0M",60.,70.);
+-  binning->AddBin("centrality","V0M",70.,80.);
+-  binning->AddBin("centrality","V0M",80.,90.);
+-  // v0 centrality binning for low pt exces
+-  binning->AddBin("centrality","V0M",0.,10.);
+-  binning->AddBin("centrality","V0M",10.,30.);
+-  binning->AddBin("centrality","V0M",30.,50.);
+-  binning->AddBin("centrality","V0M",50.,70.);
+-  binning->AddBin("centrality","V0M",70.,90.);
+-
+-  // add the configured task to the analysis manager
+-  mgr->AddTask(task);
+-  
+-  TString output;
+-  output.Form("%s:%s",AliAnalysisManager::GetCommonFileName(),outputname);
+-  
+-  // Create containers for input/output
+-  AliAnalysisDataContainer *cinput = mgr->GetCommonInputContainer();
+-  
+-  AliAnalysisDataContainer *coutputHC =
+-  mgr->CreateContainer("OC",AliMergeableCollection::Class(),AliAnalysisManager::kOutputContainer,output.Data());
+-  
+-  AliAnalysisDataContainer *coutputCC =
+-  mgr->CreateContainer("CC",AliCounterCollection::Class(),AliAnalysisManager::kOutputContainer,output.Data());
+-  
+-  AliAnalysisDataContainer* cparam =
+-  mgr->CreateContainer("BIN", AliAnalysisMuMuBinning::Class(),AliAnalysisManager::kParamContainer,output.Data());
+-  
+-  // Connect input/output
+-  mgr->ConnectInput(task, 0, cinput);
+-  mgr->ConnectOutput(task, 1, coutputHC);
+-  mgr->ConnectOutput(task, 2, coutputCC);
+-  mgr->ConnectOutput(task, 3, cparam);
+-  
+-  return task;
+-}
+-
+-- 
+2.5.4 (Apple Git-61)
+
+
+From f934f8b89aaded5f69a4cee738d4964e28e3b8c8 Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Fri, 8 Jan 2016 16:00:25 +0100
+Subject: [PATCH 4/5] Cleaning remaining comments from rebasing on master
+
+---
+ PWG/muon/AliAnalysisMuMuMinv.cxx | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/PWG/muon/AliAnalysisMuMuMinv.cxx b/PWG/muon/AliAnalysisMuMuMinv.cxx
+index 7e244eb..b62d351 100644
+--- a/PWG/muon/AliAnalysisMuMuMinv.cxx
++++ b/PWG/muon/AliAnalysisMuMuMinv.cxx
+@@ -89,13 +89,11 @@ AliAnalysisMuMuMinv::DefineHistogramCollection(const char* eventSelection,
+   Int_t nMinvBins = GetNbins(minvMin,minvMax,fMinvBinSize);
+   
+   Int_t nMCMinvBins = GetNbins(minvMin,minvMax,0.1);
+-  //__________
+   
+   // Rapidity range
+   Double_t rapidityMin = -5;
+   Double_t rapidityMax = -2;
+   Int_t nbinsRapidity = GetNbins(rapidityMin,rapidityMax,0.05);
+-  //__________
+   
+   // eta range
+   Double_t etaMin = -5;
+@@ -206,7 +204,6 @@ AliAnalysisMuMuMinv::DefineHistogramCollection(const char* eventSelection,
+       //        HistogramCollection()->Adopt(Form("/%s/INYRANGE",MCInputPrefix()),static_cast<TH1*>(h->Clone()));
+       //      }
+     }
+-
+     // Create corrected histo
+     if ( ShouldCorrectDimuonForAccEff() )
+     {
+@@ -882,7 +879,6 @@ void AliAnalysisMuMuMinv::FillHistosForMCEvent(const char* eventSelection,const
+         mcInYRangeProxy->Histo("Y")->Fill(part->Y(),inputWeight);
+         mcInYRangeProxy->Histo("Eta")->Fill(part->Eta());
+       }
+-      //__________
+       
+       nextBin.Reset();
+       
+@@ -925,7 +921,6 @@ void AliAnalysisMuMuMinv::FillHistosForMCEvent(const char* eventSelection,const
+             ok = r->IsInRange(part->Phi());
+           }
+         }
+-        //__________
+         
+         // Fill histo if bin is in range
+         if ( ok )
+-- 
+2.5.4 (Apple Git-61)
+
+
+From 01b8df8ca41d1b0ee2accb1c600eced03b37a98b Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Mon, 11 Jan 2016 08:45:59 +0100
+Subject: [PATCH 5/5] Add Minv task for very low pt excess
+
+---
+ PWG/muon/AddTaskMuMuMinvLowPt.C | 188 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 188 insertions(+)
+ create mode 100644 PWG/muon/AddTaskMuMuMinvLowPt.C
+
+diff --git a/PWG/muon/AddTaskMuMuMinvLowPt.C b/PWG/muon/AddTaskMuMuMinvLowPt.C
+new file mode 100644
+index 0000000..03b2cda
+--- /dev/null
++++ b/PWG/muon/AddTaskMuMuMinvLowPt.C
+@@ -0,0 +1,188 @@
++///
++/// Configuration example of a task to get invariant mass spectrum of dimuons
++///
++/// \author: B. Audurier (Subatech) (benjamin.audurier - at - subatech.in2p3.fr)
++///
++
++AliAnalysisTask* AddTaskMuMuMinvBA(const char* outputname,
++                                   const char     * triggerClassesToConsider,
++                                   const char     * triggerInputsToUse,
++                                   const char     * beamYear,
++                                   Bool_t simulations)
++{
++
++  AliAnalysisManager *mgr = AliAnalysisManager::GetAnalysisManager(); // Get the manager
++  if (!mgr) {
++    ::Error("AddTaskMuMu", "No analysis manager to connect to.");
++    return NULL;
++  }  
++  
++  // Check the analysis type using the event handlers connected to the analysis manager.
++  //==============================================================================
++  if (!mgr->GetInputEventHandler()) {
++    ::Error("AddTaskMuMu", "This task requires an input event handler");
++    return NULL;
++  }
++
++  //  Configure task
++  //===========================================================================
++  AliAnalysisTaskMuMu       * task = new AliAnalysisTaskMuMu; // Call the task
++  task->SetBeamYear(beamYear);
++
++  AliAnalysisMuMuEventCutter* eventCutter = new AliAnalysisMuMuEventCutter(triggerClassesToConsider,triggerInputsToUse); // To handle cuts on event
++  AliAnalysisMuMuCutRegistry* cr = task->CutRegistry(); // Set CutRegistry
++
++  // Default cuts on trigger and event level
++  AliAnalysisMuMuCutElement* eventTrue = cr->AddEventCut(*eventCutter,"IsTrue","const AliVEvent&",""); 
++  AliAnalysisMuMuCutElement* triggerSelection = cr->AddTriggerClassCut(*eventCutter,"SelectTriggerClass","const TString&,TString&,UInt_t,UInt_t,UInt_t","");
++  AliAnalysisMuMuCutElement* ps = eventTrue;
++  
++  if (!simulations)
++  {
++    ps = cr->AddEventCut(*eventCutter,"IsPhysicsSelected","const AliInputEventHandler&","");
++  }
++
++  // Apply default cut
++  cr->AddCutCombination(eventTrue);
++  cr->AddCutCombination(ps);
++  cr->AddCutCombination(triggerSelection);
++
++  
++  AliAnalysisMuMuGlobal* globalAnalysis =  0x0; // Basic histograms analysis;
++  AliAnalysisMuMuSingle* singleAnalysis = new AliAnalysisMuMuSingle;// Analysis dealing with single muon
++  AliAnalysisMuMuMinv  * minvAnalysis = new AliAnalysisMuMuMinv;// Analysis creating invariant mass spectrum
++
++  
++  // Configure sub analysis
++  //===========================================================================
++  if ( globalAnalysis )
++  {
++    // Cuts on trigger level
++    AliAnalysisMuMuCutElement* triggerAll = cr->AddTriggerClassCut(*globalAnalysis,"SelectAnyTriggerClass","const TString&,TString&","");
++    // Adding this cut on trigger level  
++    cr->AddCutCombination(triggerAll);
++    task->AdoptSubAnalysis(globalAnalysis);
++  }
++  if ( singleAnalysis )
++  {
++    // Cuts on tracks
++    AliAnalysisMuMuCutElement* trackTrue = cr->AddTrackCut(*cr,"AlwaysTrue","const AliVParticle&",""); // Apply "AlwaysTrue" cut on AliVParticle derived from AliAnalysisMuMuSingle
++    AliAnalysisMuMuCutElement* rabs = cr->AddTrackCut(*singleAnalysis,"IsRabsOK","const AliVParticle&","");
++    AliAnalysisMuMuCutElement* matchlow = cr->AddTrackCut(*singleAnalysis,"IsMatchingTriggerLowPt","const AliVParticle&","");
++    AliAnalysisMuMuCutElement* eta = cr->AddTrackCut(*singleAnalysis,"IsEtaInRange","const AliVParticle&","");
++    AliAnalysisMuMuCutElement* pdca = cr->AddTrackCut(*singleAnalysis,"IsPDCAOK","const AliVParticle&","");
++    
++    // Create combination of cuts to apply
++    cr->AddCutCombination(trackTrue);
++    cr->AddCutCombination(matchlow);
++    cr->AddCutCombination(rabs); 
++    cr->AddCutCombination(eta); 
++    cr->AddCutCombination(pdca); 
++    // Adding the sub analysis
++    task->AdoptSubAnalysis(singleAnalysis); 
++
++    if ( minvAnalysis )
++    {
++      // Array of cut elements
++      TObjArray cutElements;
++
++      // Cuts on track level
++      AliAnalysisMuMuCutElement* pairTrue = cr->AddTrackPairCut(*cr,"AlwaysTrue","const AliVParticle&,const AliVParticle&","");// Apply "AlwaysTrue" cut on AliVParticle derived from AliAnalysisMuMuMinv
++      AliAnalysisMuMuCutElement* pairy = cr->AddTrackPairCut(*minvAnalysis,"IsRapidityInRange","const AliVParticle&,const AliVParticle&","");
++      AliAnalysisMuMuCutElement* ptRange = cr->AddTrackPairCut(*minvAnalysis,"IsPtInRange","const AliVParticle&,const AliVParticle&,Double_t&,Double_t&","0.,10.");
++
++      cutElements.Add(pairTrue);
++      cutElements.Add(pairy);
++      cutElements.Add(ptRange);
++      cutElements.Add(rabs);
++      cutElements.Add(matchlow);
++      cutElements.Add(eta);
++      cutElements.Add(pdca);
++
++      // add them
++      cr->AddCutCombination(cutElements);    
++      // Adding the sub analysis
++      task->AdoptSubAnalysis(minvAnalysis); 
++    }
++  }
++
++  /// below are the kind of configurations that can be performed :
++  /// - adding cuts (at event, track or pair level)
++  /// - adding bins (in pt, y, centrality, etc...) for minv (and meanpt)
++    
++  // Configure sub analysis
++  //===========================================================================
++  AliAnalysisMuMuBinning* binning = task->Binning(); // Create and set the "binning manager"
++  
++  if (minvAnalysis)
++  {
++    minvAnalysis->DefineMinvRange(2,8,0.05);
++    // Integrated
++    binning->AddBin("psi","integrated");
++    // pt binning for low pt exces
++    binning->AddBin("psi","pt", 0.0, 0.1,"BENJ");
++    binning->AddBin("psi","pt", 0.1, 0.2,"BENJ");
++    binning->AddBin("psi","pt", 0.2, 0.3,"BENJ");
++    binning->AddBin("psi","pt", 0.3, 0.4,"BENJ");
++    binning->AddBin("psi","pt", 0.4, 0.5,"BENJ");
++    binning->AddBin("psi","pt", 0.5, 0.6,"BENJ");
++    binning->AddBin("psi","pt", 0.6, 0.7,"BENJ");
++    binning->AddBin("psi","pt", 0.7, 0.8,"BENJ");
++    binning->AddBin("psi","pt", 0.8, 0.9,"BENJ");
++    binning->AddBin("psi","pt", 0.9, 1.0,"BENJ");
++    binning->AddBin("psi","pt", 1.0, 1.1,"BENJ");
++    binning->AddBin("psi","pt", 1.1, 1.2,"BENJ");
++    binning->AddBin("psi","pt", 1.2, 1.3,"BENJ");
++    binning->AddBin("psi","pt", 1.3, 1.4,"BENJ");
++    binning->AddBin("psi","pt", 1.4, 1.5,"BENJ");
++    binning->AddBin("psi","pt", 1.5, 1.6,"BENJ");
++    binning->AddBin("psi","pt", 1.6, 1.7,"BENJ");
++    binning->AddBin("psi","pt", 1.7, 1.8,"BENJ");
++    binning->AddBin("psi","pt", 0.0, 0.3,"BENJ");
++    binning->AddBin("psi","pt", 0.3, 1.0,"BENJ");
++    binning->AddBin("psi","pt", 1.0, 8.0,"BENJ");
++
++    // y binning
++    binning->AddBin("psi","y",-4,-3.75,"BENJ");
++    binning->AddBin("psi","y",-3.75,-3.5,"BENJ");
++    binning->AddBin("psi","y",-3.5,-3.25,"BENJ");
++    binning->AddBin("psi","y",-3.25,-3,"BENJ");
++    binning->AddBin("psi","y",-3,-2.75,"BENJ");
++    binning->AddBin("psi","y",-2.75,-2.5,"BENJ");
++  }
++
++  // v0 centrality binning for low pt exces
++  binning->AddBin("centrality","V0M",0.,90.);
++  binning->AddBin("centrality","V0M",0.,10.);
++  binning->AddBin("centrality","V0M",10.,30.);
++  binning->AddBin("centrality","V0M",30.,50.);
++  binning->AddBin("centrality","V0M",50.,70.);
++  binning->AddBin("centrality","V0M",70.,90.);
++
++  // add the configured task to the analysis manager
++  mgr->AddTask(task);
++  
++  TString output;
++  output.Form("%s:%s",AliAnalysisManager::GetCommonFileName(),outputname);
++  
++  // Create containers for input/output
++  AliAnalysisDataContainer *cinput = mgr->GetCommonInputContainer();
++  
++  AliAnalysisDataContainer *coutputHC =
++  mgr->CreateContainer("OC",AliMergeableCollection::Class(),AliAnalysisManager::kOutputContainer,output.Data());
++  
++  AliAnalysisDataContainer *coutputCC =
++  mgr->CreateContainer("CC",AliCounterCollection::Class(),AliAnalysisManager::kOutputContainer,output.Data());
++  
++  AliAnalysisDataContainer* cparam =
++  mgr->CreateContainer("BIN", AliAnalysisMuMuBinning::Class(),AliAnalysisManager::kParamContainer,output.Data());
++  
++  // Connect input/output
++  mgr->ConnectInput(task, 0, cinput);
++  mgr->ConnectOutput(task, 1, coutputHC);
++  mgr->ConnectOutput(task, 2, coutputCC);
++  mgr->ConnectOutput(task, 3, cparam);
++  
++  return task;
++}
++
+-- 
+2.5.4 (Apple Git-61)
+

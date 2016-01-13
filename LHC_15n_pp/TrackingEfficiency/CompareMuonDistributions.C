@@ -59,8 +59,8 @@ void CompareMuonDistributions(TString dir1, TString dir2, TString fileNameWeight
     TParameter<Double_t> *weight = 0x0;
     while ((weight = static_cast<TParameter<Double_t>*>(next()))) {
       TString sfile[2];
-      sfile[0] = Form("%s/runs/%s/AnalysisResults.root", dir1.Data(), weight->GetName());
-      sfile[1] = Form("%s/runs/%s/AnalysisResults.root", dir2.Data(), weight->GetName());
+      sfile[0] = Form("%s/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/TrackingEfficiency/MonteCarlo/singleMuon/tuned/WiththnSparse/results/%s/AnalysisResults.root", dir1.Data(), weight->GetName());
+      sfile[1] = Form("%s/alice/cern.ch/user/p/ppillot/Sim/LHC15n/muTune2/results/%s/AnalysisResults.root", dir2.Data(), weight->GetName());
       AddHisto(sfile, hRes, weight->GetVal());
       AddHistoProj(sfile, hProj, weight->GetVal());
     }
@@ -191,7 +191,7 @@ void AddHistoProj(TString sfile[2], TH1 *hProj[4][3], Double_t weight)
           }
         } else {
           TH1* h = hKine->Projection(i+1,"eo");
-          Double_t nEntries = static_cast<Double_t>(hProj[i][j]->GetEntries());
+          Double_t nEntries = static_cast<Double_t>(h->GetEntries());
           hProj[i][j]->Add(h, weight/nEntries);
           delete h;
         }

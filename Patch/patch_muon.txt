@@ -1,20 +1,20 @@
-diff --git a/PWG/muon/AddTaskMuMuMinvTrain.C b/PWG/muon/AddTaskMuMuMinvTrain.C
+diff --git a/PWG/muon/AddTaskMuMuMinvLowPt.C b/PWG/muon/AddTaskMuMuMinvLowPt.C
 new file mode 100644
-index 0000000..8783dbe
+index 0000000..03b2cda
 --- /dev/null
-+++ b/PWG/muon/AddTaskMuMuMinvTrain.C
-@@ -0,0 +1,203 @@
++++ b/PWG/muon/AddTaskMuMuMinvLowPt.C
+@@ -0,0 +1,188 @@
 +///
 +/// Configuration example of a task to get invariant mass spectrum of dimuons
 +///
-+/// \author: L. Aphecetche (Subatech) (laurent.aphecetche - at - subatech.in2p3.fr)
++/// \author: B. Audurier (Subatech) (benjamin.audurier - at - subatech.in2p3.fr)
 +///
 +
-+AliAnalysisTask* AddTaskMuMuMinvTrain(const char* outputname,
-+const char     * triggerClassesToConsider,
-+const char     * triggerInputsToUse,
-+const char     * beamYear,
-+Bool_t simulations)
++AliAnalysisTask* AddTaskMuMuMinvBA(const char* outputname,
++                                   const char     * triggerClassesToConsider,
++                                   const char     * triggerInputsToUse,
++                                   const char     * beamYear,
++                                   Bool_t simulations)
 +{
 +
 +  AliAnalysisManager *mgr = AliAnalysisManager::GetAnalysisManager(); // Get the manager
@@ -54,11 +54,11 @@ index 0000000..8783dbe
 +  cr->AddCutCombination(triggerSelection);
 +
 +  
-+  AliAnalysisMuMuGlobal* globalAnalysis =  new AliAnalysisMuMuGlobal; // Basic histograms analysis;
++  AliAnalysisMuMuGlobal* globalAnalysis =  0x0; // Basic histograms analysis;
 +  AliAnalysisMuMuSingle* singleAnalysis = new AliAnalysisMuMuSingle;// Analysis dealing with single muon
 +  AliAnalysisMuMuMinv  * minvAnalysis = new AliAnalysisMuMuMinv;// Analysis creating invariant mass spectrum
 +
-+    
++  
 +  // Configure sub analysis
 +  //===========================================================================
 +  if ( globalAnalysis )
@@ -121,7 +121,8 @@ index 0000000..8783dbe
 +  AliAnalysisMuMuBinning* binning = task->Binning(); // Create and set the "binning manager"
 +  
 +  if (minvAnalysis)
-+  {  
++  {
++    minvAnalysis->DefineMinvRange(2,8,0.05);
 +    // Integrated
 +    binning->AddBin("psi","integrated");
 +    // pt binning for low pt exces
@@ -146,14 +147,7 @@ index 0000000..8783dbe
 +    binning->AddBin("psi","pt", 0.0, 0.3,"BENJ");
 +    binning->AddBin("psi","pt", 0.3, 1.0,"BENJ");
 +    binning->AddBin("psi","pt", 1.0, 8.0,"BENJ");
-+    // pt binning
-+    binning->AddBin("psi","pt", 0.0, 1.0,"BENJ");
-+    binning->AddBin("psi","pt", 1.0, 2.0,"BENJ");
-+    binning->AddBin("psi","pt", 2.0, 3.0,"BENJ");
-+    binning->AddBin("psi","pt", 3.0, 4.0,"BENJ");
-+    binning->AddBin("psi","pt", 4.0, 5.0,"BENJ");
-+    binning->AddBin("psi","pt", 5.0, 6.0,"BENJ");
-+    binning->AddBin("psi","pt", 6.0, 8.0,"BENJ");
++
 +    // y binning
 +    binning->AddBin("psi","y",-4,-3.75,"BENJ");
 +    binning->AddBin("psi","y",-3.75,-3.5,"BENJ");
@@ -162,18 +156,9 @@ index 0000000..8783dbe
 +    binning->AddBin("psi","y",-3,-2.75,"BENJ");
 +    binning->AddBin("psi","y",-2.75,-2.5,"BENJ");
 +  }
-+  // v0 centrality binning
-+  binning->AddBin("centrality","V0M",0.,90.);
-+  binning->AddBin("centrality","V0M",0.,10.);
-+  binning->AddBin("centrality","V0M",10.,20.);
-+  binning->AddBin("centrality","V0M",20.,30.);
-+  binning->AddBin("centrality","V0M",30.,40.);
-+  binning->AddBin("centrality","V0M",40.,50.);
-+  binning->AddBin("centrality","V0M",50.,60.);
-+  binning->AddBin("centrality","V0M",60.,70.);
-+  binning->AddBin("centrality","V0M",70.,80.);
-+  binning->AddBin("centrality","V0M",80.,90.);
++
 +  // v0 centrality binning for low pt exces
++  binning->AddBin("centrality","V0M",0.,90.);
 +  binning->AddBin("centrality","V0M",0.,10.);
 +  binning->AddBin("centrality","V0M",10.,30.);
 +  binning->AddBin("centrality","V0M",30.,50.);
@@ -207,50 +192,8 @@ index 0000000..8783dbe
 +  return task;
 +}
 +
-diff --git a/PWG/muon/AliAnalysisMuMuMinv.cxx b/PWG/muon/AliAnalysisMuMuMinv.cxx
-index 0c40242..f128410 100644
---- a/PWG/muon/AliAnalysisMuMuMinv.cxx
-+++ b/PWG/muon/AliAnalysisMuMuMinv.cxx
-@@ -86,11 +86,13 @@ AliAnalysisMuMuMinv::DefineHistogramCollection(const char* eventSelection,
-   Int_t nMinvBins = GetNbins(minvMin,minvMax,0.025);
-   
-   Int_t nMCMinvBins = GetNbins(minvMin,minvMax,0.1);
-+  //__________
-   
-   // Rapidity range
-   Double_t rapidityMin = -5;
-   Double_t rapidityMax = -2;
-   Int_t nbinsRapidity = GetNbins(rapidityMin,rapidityMax,0.05);
-+  //__________
-   
-   // eta range
-   Double_t etaMin = -5;
-@@ -201,6 +203,7 @@ AliAnalysisMuMuMinv::DefineHistogramCollection(const char* eventSelection,
-       //        HistogramCollection()->Adopt(Form("/%s/INYRANGE",MCInputPrefix()),static_cast<TH1*>(h->Clone()));
-       //      }
-     }
-+
-     // Create corrected histo
-     if ( ShouldCorrectDimuonForAccEff() )
-     {
-@@ -866,6 +869,7 @@ void AliAnalysisMuMuMinv::FillHistosForMCEvent(const char* eventSelection,const
-         mcInYRangeProxy->Histo("Y")->Fill(part->Y(),inputWeight);
-         mcInYRangeProxy->Histo("Eta")->Fill(part->Eta());
-       }
-+      //__________
-       
-       nextBin.Reset();
-       
-@@ -908,6 +912,7 @@ void AliAnalysisMuMuMinv::FillHistosForMCEvent(const char* eventSelection,const
-             ok = r->IsInRange(part->Phi());
-           }
-         }
-+        //__________
-         
-         // Fill histo if bin is in range
-         if ( ok )
 diff --git a/PWG/muon/AliAnalysisTaskMuMu.cxx b/PWG/muon/AliAnalysisTaskMuMu.cxx
-index 3e79a40..11cea39 100644
+index b6fd1db..df5629e 100644
 --- a/PWG/muon/AliAnalysisTaskMuMu.cxx
 +++ b/PWG/muon/AliAnalysisTaskMuMu.cxx
 @@ -463,7 +463,7 @@ void AliAnalysisTaskMuMu::GetSelectedTrigClassesInEvent(const AliVEvent* event,
@@ -283,7 +226,7 @@ index 3e79a40..11cea39 100644
  
    // loop over trigger selected list and cut combination on event level. Fill histos
    TObjArray selectedTriggerClasses;
-@@ -737,6 +737,7 @@ void AliAnalysisTaskMuMu::UserExec(Option_t* /*opt*/)
+@@ -738,6 +738,7 @@ void AliAnalysisTaskMuMu::UserExec(Option_t* /*opt*/)
        }
      }
    }

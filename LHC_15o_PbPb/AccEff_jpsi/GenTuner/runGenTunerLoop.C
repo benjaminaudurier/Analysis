@@ -8,7 +8,7 @@
  */
 
 
-TString aliphysicsVersion = "v5-07-14-01-1";
+TString aliphysicsVersion = "vAN-20160116-1";
 
 //______________________________________________________________________________
 void runGenTunerLoop(TString smode = "local", TString inputFileName = "AliAOD.root", Int_t nStep,char overwrite = '\0')
@@ -17,7 +17,7 @@ void runGenTunerLoop(TString smode = "local", TString inputFileName = "AliAOD.ro
   
   if (nStep <= 0) return;
   
-  gROOT->LoadMacro("$HOME/Documents/Analysis/Macro_Utile/runTaskFacilities.C");
+  gROOT->LoadMacro("$HOME/Documents/Analysis/Macro/Philippe/runTaskFacilities.C");
   
   // --- Check runing mode ---
   Int_t mode = GetMode(smode, inputFileName);
@@ -36,21 +36,17 @@ void runGenTunerLoop(TString smode = "local", TString inputFileName = "AliAOD.ro
   fileList.Add(new TObjString("AliAnalysisTaskGenTunerJpsi.cxx"));
   fileList.Add(new TObjString("AliAnalysisTaskGenTunerJpsi.h"));
   // CopyFileLocally(pathList, fileList);
-  CopyInputFileLocally("/Users/audurier/Documents/Analysis/LHC_15n_pp/AccEff_jpsi/DataPart/AnalysisResults.root", "AnalysisResultsReference.root", overwrite);
+  CopyInputFileLocally("/Users/audurier/Documents/Analysis/LHC_15o_PbPb/AccEff_jpsi/DataPart/AnalysisResults.root", "AnalysisResultsReference.root", overwrite);
   fileList.Add(new TObjString("AnalysisResultsReference.root"));
   
   // --- saf3 case ---
   if (mode == kSAF3Connect) {
-    
     // run on SAF3
     RunAnalysisOnSAF3(fileList, aliphysicsVersion, inputFileName);
-    
     // draw the results locally
     ShowResults(nStep);
-    
     // do not try to re-run locally!
-    return;
-    
+    return; 
   }
   
   TString resume = "";
@@ -141,11 +137,8 @@ void runGenTunerLoop(TString smode = "local", TString inputFileName = "AliAOD.ro
     //gNewYParam[j]->SetPointError(iStep, 0., fNewYFunc->GetParError(j));
   }
       }
-      
       inFile->Close();
-      
     }
-    
   }
   
   // display trending plots
