@@ -11,6 +11,7 @@ void runAccEffSubmitter(const char* mode)
 	gSystem->Load("libpythia6_4_28");
 	AliMuonAccEffSubmitter a("GenParamCustomSingleBen");
 	a.SetRemoteDir(remoteDir.Data());
+	//a.SetMaxEventsPerChunk(10000);
 	a.ShouldOverwriteFiles(true);
 	// a.MakeNofEventsFixed(10);
 	a.MakeNofEventsPropToTriggerCount(Trigger.Data(),1);

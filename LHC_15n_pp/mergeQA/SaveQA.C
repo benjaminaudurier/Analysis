@@ -63,6 +63,8 @@ void SaveQA(TString inputDataFile, TString inputMCFile)
     Int_t c = runNumber.Last('/');
     runNumber.Remove(c);
     c = runNumber.Last('/');
+    runNumber.Remove(c);
+    c = runNumber.Last('/');
     runNumber.Remove(0,c+1);
 
     printf("run number data : %s\n",runNumber.Data() );

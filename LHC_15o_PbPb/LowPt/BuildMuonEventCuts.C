@@ -16,7 +16,9 @@
 //_______________________________________
 Bool_t SetTriggerInfo ( TString period, Bool_t isMC, AliMuonEventCuts* eventCuts )
 {
-  TString trigClasses = "", trigLevels = "", trigInputs = "";
+  TString trigClasses = "kINT7,kMB,kCentral,kSemiCentral,kMUS7:Lpt,kMUSPB:Lpt,kMUSH7:Hpt,kMUU7:Lpt2,kINT8,kMuonSingleLowPt8:Lpt,kMuonSingleHighPt8:Hpt,kMuonUnlikeLowPt8:Lpt2,kMuonUnlikeLowPt0:Lpt2";
+//  TString trigLevels = "";
+  TString trigInputs = "";
   
   if ( isMC ) {
 //    trigClasses = "ANY,CM*,MU*";
@@ -45,6 +47,9 @@ Bool_t SetTriggerInfo ( TString period, Bool_t isMC, AliMuonEventCuts* eventCuts
       trigClasses = "CINT7-B-NOPF-ALLNOTRD,CINT7-B-NOPF-ALLNOTRD&0MSL,CINT7-B-NOPF-ALLNOTRD&0MSH,CMSL7-B-NOPF-MUON:Lpt,CMSL7-B-NOPF-MUON&0MSH:Lpt,CMSH7-B-NOPF-MUON:Hpt";
       trigInputs = "0MSL:12,0MSH:13,0MUL:14";
     }
+    else if ( period == "LHC15o" ) {
+      trigInputs = "0MSL:17,0MSH:18,0MLL:19,0MUL:20";
+    }
   }
   
   if ( ! trigClasses.IsNull() ) eventCuts->SetTrigClassPatterns(trigClasses,trigInputs);
@@ -66,7 +71,7 @@ Bool_t SetCentralityBins ( TString period, AliMuonEventCuts* eventCuts )
   
   TString sCentrBins = "";
   if ( period == "LHC13d" || period == "LHC13e" || period == "LHC13f" ) {
-    sCentrBins = "-5.,0.,20.,40.,60.,80.,100.,105.";
+    sCentrBins = "-5.,0.,2.,5.,20.,40.,60.,80.,100.,105.";
   }
   else return kFALSE;
   

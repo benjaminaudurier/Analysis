@@ -32,7 +32,7 @@ TString seventType     ="PSALL";
 TString spairCut       ="pALLPAIRYPAIRPTIN0.0-10.0RABSMATCHLOWETAPDCA";
 TString scentrality    ="V0M_00.00_90.00,V0M_00.00_10.00,V0M_10.00_30.00,V0M_30.00_50.00,V0M_50.00_70.00,V0M_70.00_90.00";
 
-Double_t FNorm         =15.22;
+Double_t FNorm         =11.82;
 Double_t BR            =0.005;
 
 void PrintDist(TObjString* swhat,Bool_t yield,AliAnalysisMuMu &ana);

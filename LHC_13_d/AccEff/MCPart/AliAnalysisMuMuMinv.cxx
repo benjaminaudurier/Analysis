@@ -1449,5 +1449,5 @@ Bool_t AliAnalysisMuMuMinv::IsRapidityInRange(const AliVParticle& t1, const AliV
   
   Double_t y = total.Rapidity();
 
-  return  ( y < -2.5 && y > -4.0 );
+  return  ( y <= -2.5 && y >= -4.0 );
 }

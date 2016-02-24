@@ -1,4 +1,4 @@
-void sim(Int_t nev=5000)
+void sim(Int_t nev=10000)
 {
 
 #if defined(__CINT__)

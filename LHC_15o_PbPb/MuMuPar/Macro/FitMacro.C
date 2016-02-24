@@ -14,7 +14,7 @@
 #include <AliAnalysisMuMu.h>
 #include <TROOT.h>
 
-char           * sfile="New_AnalysisResults_27_20160120-2124.root";
+char           * sfile="../TrainRootFile/AnalysisResults_25_20160118-2330.root:MuMuBA";
 char           * sasso="";
 char           * sasso2="";
 char           * beamYear="mumu.PbPb2015.config";
@@ -57,7 +57,8 @@ void FitMacro( char* what ="pt",const char* printWhat = "", int debug =0 )
     }
 
     // analysis.PrintNofParticle("PSI","NofJPsi","YVSPT",kFALSE);
-    // analysis.PrintNofParticle("PSI","NofJPsi","Y",kFALSE);
+    analysis.PrintNofParticle("PSI","NofJPsi","PT",kFALSE);
+    analysis.PrintNofParticle("PSI","NofJPsi","INTEGRATED",kFALSE);
     if(print && what == "pt") analysis.PrintNofParticle("PSI","NofJPsi","PT",kFALSE);
     if(print && what == "y") analysis.PrintNofParticle("PSI","NofJPsi","Y",kFALSE);
     if(print && what == "integrated") analysis.PrintNofParticle("PSI","NofJPsi","INTEGRATED",kFALSE);

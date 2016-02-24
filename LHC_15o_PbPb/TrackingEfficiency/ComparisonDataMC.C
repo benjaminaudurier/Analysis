@@ -315,7 +315,6 @@ void ComparisonDataMC(TString fileNameData = "Data/efficiency_new.root", TString
     return;
   }
   
-  
   TGraphAsymmErrors *effVSyData = static_cast<TGraphAsymmErrors*>(fileData->FindObjectAny(Form("%sEffVsy",hname.Data())));
   if (!effVSyData) {
     printf("Efficiency vs rapidity from data not found\n");
@@ -369,7 +368,7 @@ void ComparisonDataMC(TString fileNameData = "Data/efficiency_new.root", TString
   
   globalRatiosAndEff.Add(DrawRatio("RatioEffVSRunAndEff","Comparison Data&MC tracking efficiency versus run", effVSrunDataCopy,effVSrunSimCopy,ratioRunCopy));
   //-----
-  
+
   //---- Eff vs y
   TGraphAsymmErrors* effVSyDataCopy = static_cast<TGraphAsymmErrors*>(effVSyData->Clone()); // We make clones to do not modify them
   TGraphAsymmErrors* effVSySimCopy = static_cast<TGraphAsymmErrors*>(effVSySim->Clone());

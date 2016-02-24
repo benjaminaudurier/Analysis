@@ -5,8 +5,8 @@
 
 /// \ingroup muondep
 /// \class AliAnalysisTaskGenTunerJpsi
-/// \brief task to tune the muon or JPsi pt/y generated distributions
-//Author: Philippe Pillot - SUBATECH Nantes
+/// \brief task to tune the Jpsi pt/y generated distributions
+//Author: Benjamin Audurier & Philippe Pillot - SUBATECH Nantes
 
 #include <TObject.h>
 #include "AliAnalysisTaskSE.h"

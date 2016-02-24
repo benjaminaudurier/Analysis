@@ -7,6 +7,8 @@
 //
 
 #include <TH1.h>
+#include <THnSparse.h>
+#include <TAxis.h>
 #include <TString.h>
 #include <Riostream.h>
 #include <TFile.h>
@@ -14,7 +16,16 @@
 #include <TCanvas.h>
 #include <THashList.h>
 #include <TParameter.h>
-#include <TGraph.h>
+#include <TLegend.h>
+
+// kinematics range for histogram projection (pT, y, phi, charge)
+const Float_t kineRange[4][2] = {{1., 999.}, {-3.9, -2.51}, {-999., 999.}, {-999., 999.}};
+
+// centrality range for each input file
+const Float_t centRange[2][2] = {{30., 90.}, {60., 90.}};
+
+// in case the ouput containers of the efficiency task have an extension in their name (like in the train)
+TString extension[2] = {"_1","_1"};
 
 const Int_t nHist = 3;
 TString sRes[nHist] = {"fHistPt", "fHistY", "fHistPhi"};
@@ -22,6 +33,9 @@ THashList *runWeights = 0x0;
 
 void LoadRunWeights(TString fileName);
 void AddHisto(TString sfile[2], TH1 *hRes[nHist][3], Double_t weight);
+void AddHistoProj(TString sfile[2], TH1 *hProj[4][3], Double_t weight);
+void SetKineRange(THnSparse& hKine);
+void SetCentRange(THnSparse& hKine, const Float_t centRange[2]);
 
 //______________________________________________________________________________
 void CompareMuonDistributions(TString dir1, TString dir2, TString fileNameWeights = "")
@@ -36,70 +50,26 @@ void CompareMuonDistributions(TString dir1, TString dir2, TString fileNameWeight
   
   TH1 *hRes[nHist][3];
   for (Int_t i = 0; i < nHist; i++) for (Int_t j = 0; j < 3; j++) hRes[i][j] = 0x0;
+  TH1 *hProj[4][3];
+  for (Int_t i = 0; i < 4; i++) for (Int_t j = 0; j < 3; j++) hProj[i][j] = 0x0;
   
-  Bool_t ok =kTRUE;
-
   // get results
   if (runWeights) {
     TIter next(runWeights);
     TParameter<Double_t> *weight = 0x0;
     while ((weight = static_cast<TParameter<Double_t>*>(next()))) {
       TString sfile[2];
-      sfile[0] = Form("%s/runs/%s/AnalysisResults.root", dir1.Data(), weight->GetName());
-      sfile[1] = Form("%s/runs/%s/AnalysisResults.root", dir2.Data(), weight->GetName());
+      sfile[0] = Form("%s/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/TrackingEfficiency/MonteCarlo/singleMuon/tuned/WiththnSparse/results/%s/AnalysisResults.root", dir1.Data(), weight->GetName());
+      sfile[1] = Form("%s/alice/cern.ch/user/p/ppillot/Sim/LHC15n/muTune2/results/%s/AnalysisResults.root", dir2.Data(), weight->GetName());
       AddHisto(sfile, hRes, weight->GetVal());
+      AddHistoProj(sfile, hProj, weight->GetVal());
     }
   } else {
     TString sfile[2];
     sfile[0] = Form("%s/AnalysisResults.root", dir1.Data());
     sfile[1] = Form("%s/AnalysisResults.root", dir2.Data());
     AddHisto(sfile, hRes, 1.);
-
-    TGraph* sgaph[2];
-
-    TString sfile2[2];
-    sfile2[0] = Form("%s/efficiency_new.root", dir1.Data());
-    sfile2[1] = Form("%s/efficiency_new.root", dir2.Data());
-
-    // get couts histogrammes
-    for (Int_t j = 0; j < 2; j++) {
-      TFile *file = TFile::Open(sfile2[j].Data(),"READ");
-      if (!file || !file->IsOpen()) {
-        printf("cannot open file\n");
-        return;
-      }
-      // sgaph[j] = static_cast<TGraph*>(file->FindObjectAny("COUNTS")->Clone());
-      // if(!sgaph[j]){
-      //   Form("Cannot ind counts histo in %s",sfile2[j].Data());
-      //   ok =kFALSE;
-      // }
-      file->Close();
-    }
-    
-
-    // if(ok){
-    //   TCanvas*c = new TCanvas();
-    //   c->Divide(1,2);
-    //   c->cd(1);
-    //   sgaph[0]->Draw("AP");
-    //   sgaph[0]->SetMarkerColor(4);
-    //   sgaph[0]->SetMarkerStyle(20);
-    //   sgaph[0]->SetMarkerSize(0.7);
-    //   sgaph[0]->GetXaxis()->SetTitle("RUN");
-    //   sgaph[0]->GetYaxis()->SetTitle("COUNTS"); 
-    //   sgaph[0]->SetTitle("Data"); 
-    //   sgaph[0]->Draw("AP");
-
-    //   c->cd(2);
-    //   sgaph[1]->Draw("AP");
-    //   sgaph[1]->SetMarkerColor(2);
-    //   sgaph[1]->SetMarkerStyle(20);
-    //   sgaph[1]->SetMarkerSize(0.7);
-    //   sgaph[1]->GetXaxis()->SetTitle("RUN");
-    //   sgaph[1]->GetYaxis()->SetTitle("COUNTS"); 
-    //   sgaph[1]->SetTitle("Sim"); 
-    //   sgaph[1]->Draw("AP");
-    // }
+    AddHistoProj(sfile, hProj, 1.);
   }
   
   // compute ratios
@@ -107,22 +77,45 @@ void CompareMuonDistributions(TString dir1, TString dir2, TString fileNameWeight
     hRes[i][2] = static_cast<TH1*>(hRes[i][1]->Clone(Form("%sOver1",hRes[i][1]->GetName())));
     hRes[i][2]->Divide(hRes[i][0]);
   }
+  for (Int_t i = 0; i < 4 && hProj[i][0] && hProj[i][1]; i++) {
+    hProj[i][2] = static_cast<TH1*>(hProj[i][1]->Clone(Form("%sOver1",hProj[i][1]->GetName())));
+    hProj[i][2]->Divide(hProj[i][0]);
+  }
   
   // display results at the reconstruction level
+  TLegend *lRes = new TLegend(0.5,0.55,0.85,0.75);
   TCanvas *cRec = new TCanvas("cRec", "cRec", 1200, 800);
   cRec->Divide(nHist,2);
   for (Int_t i = 0; i < nHist; i++) {
     cRec->cd(i+1);
     if (i == 0) gPad->SetLogy();
     for (Int_t j = 0; j < 2 && hRes[i][j]; j++) {
+      if (i == 0) lRes->AddEntry(hRes[i][j],Form("dir%d",j+1),"l");
       hRes[i][j]->SetLineColor(2*j+2);
       hRes[i][j]->Draw((j == 0) ? "" : "sames");
     }
+    if (i == 0) lRes->Draw("same");
     cRec->cd(i+nHist+1);
     if (hRes[i][2]) {
       hRes[i][2]->Draw();
       hRes[i][2]->SetMinimum(0.5);
       hRes[i][2]->SetMaximum(1.5);
+    }
+  }
+  TCanvas *cRecProj = new TCanvas("cRecProj", "cRecProj", 1600, 800);
+  cRecProj->Divide(4,2);
+  for (Int_t i = 0; i < 4; i++) {
+    cRecProj->cd(i+1);
+    if (i == 0) gPad->SetLogy();
+    for (Int_t j = 0; j < 2 && hProj[i][j]; j++) {
+      hProj[i][j]->SetLineColor(2*j+2);
+      hProj[i][j]->Draw((j == 0) ? "" : "sames");
+    }
+    cRecProj->cd(i+5);
+    if (hProj[i][2]) {
+      hProj[i][2]->Draw();
+      hProj[i][2]->SetMinimum(0.5);
+      hProj[i][2]->SetMaximum(1.5);
     }
   }
   
@@ -141,7 +134,7 @@ void AddHisto(TString sfile[2], TH1 *hRes[nHist][3], Double_t weight)
       return;
     }
     if (file && file->IsOpen()) {
-      TList *list = static_cast<TList*>(file->FindObjectAny("ExtraHistos"));
+      TList *list = static_cast<TList*>(file->FindObjectAny(Form("ExtraHistos%s",extension[j].Data())));
       if (!list) {
         printf("cannot find histograms\n");
         return;
@@ -164,6 +157,78 @@ void AddHisto(TString sfile[2], TH1 *hRes[nHist][3], Double_t weight)
     }
     file->Close();
   }
+  
+}
+//______________________________________________________________________________
+void AddHistoProj(TString sfile[2], TH1 *hProj[4][3], Double_t weight)
+{
+  /// get or add histograms with given weight
+  
+  // get results
+  for (Int_t j = 0; j < 2; j++) {
+    TFile *file = TFile::Open(sfile[j].Data(),"READ");
+    if (!file || !file->IsOpen()) {
+      printf("cannot open file\n");
+      return;
+    }
+    if (file && file->IsOpen()) {
+      TList *list = static_cast<TList*>(file->FindObjectAny(Form("ExtraHistos%s",extension[j].Data())));
+      if (!list) {
+        printf("cannot find histograms\n");
+        return;
+      }
+      THnSparse *hKine = static_cast<THnSparse*>(list->FindObject("hKine"));
+      if (!hKine) return;
+      SetKineRange(*hKine);
+      SetCentRange(*hKine, centRange[j]);
+      for (Int_t i = 0; i < 4; i++) {
+        if (!hProj[i][j]) {
+          hProj[i][j] = hKine->Projection(i+1,"eo");
+          if (hProj[i][j]) {
+            hProj[i][j]->SetDirectory(0);
+            Double_t nEntries = static_cast<Double_t>(hProj[i][j]->GetEntries());
+            if (nEntries > 0.) hProj[i][j]->Scale(weight/nEntries);
+          }
+        } else {
+          TH1* h = hKine->Projection(i+1,"eo");
+          Double_t nEntries = static_cast<Double_t>(h->GetEntries());
+          hProj[i][j]->Add(h, weight/nEntries);
+          delete h;
+        }
+      }
+    }
+    file->Close();
+  }
+  
+}
+
+//______________________________________________________________________________
+void SetKineRange(THnSparse& hKine)
+{
+  /// Sets the kinematics range for histogram projection
+  /// If the range exceeds the minimum (maximum) it includes the underflow (overflow)
+  /// in the integration (same behaviour as if the range is not set)
+  
+  for (Int_t i = 0; i < 4; i++) {
+    TAxis *a = hKine.GetAxis(i+1);
+    Int_t lowBin = a->FindBin(kineRange[i][0]);
+    Int_t upBin = a->FindBin(kineRange[i][1]);
+    a->SetRange(lowBin, upBin);
+  }
+  
+}
+
+//______________________________________________________________________________
+void SetCentRange(THnSparse& hKine, const Float_t centRange[2])
+{
+  /// Sets the centrality range for histogram projection
+  /// If the range exceeds the minimum (maximum) it includes the underflow (overflow)
+  /// in the integration (same behaviour as if the range is not set)
+  
+  TAxis *a = hKine.GetAxis(0);
+  Int_t lowBin = a->FindBin(centRange[0]);
+  Int_t upBin = a->FindBin(centRange[1]);
+  a->SetRange(lowBin, upBin);
   
 }
 

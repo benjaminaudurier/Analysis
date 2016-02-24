@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<alien>
-  <collection name="Stage_2">
-    <info command="[/alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/Data/results/]: find -z -x Stage_2 /alice/cern.ch/user/b/baudurie//Analysis/LHC15g/TrackingEfficiency/Data/results/000230457 Stage_1/*root_archive.zip" creator="admin" date="Tue Oct 20 13:56:05 CEST 2015" timestamp="1445342165" />
-  </collection>
-</alien>
-

@@ -219,7 +219,8 @@ void AliAnalysisTaskGenTunerJpsi::UserExec(Option_t *)
     Double_t pT = mctrack->Pt();
 
     // Cut on j/psi
-    if( pT > 8. || pT < 0. || y < -4. || y > -2.5 ) continue; 
+    // if( pT > 8. || pT < 0. || y < -4. || y > -2.5 ) continue; 
+    if( pT > fHptRef->GetXaxis()->GetXmax() || fHptRef->GetXaxis()->GetXmin() < 0. || fHyRef->GetXaxis()->GetXmin() < -4. || y > fHyRef->GetXaxis()->GetXmax() ) continue; 
     
     if (fWeight && fPtFuncOld && fPtFuncNew && fYFuncOld && fYFuncNew) 
     {
@@ -289,7 +290,8 @@ void AliAnalysisTaskGenTunerJpsi::UserExec(Option_t *)
       TLorentzVector Dimu = vec2+vec;
 
       // Cut on paire
-      if( Dimu.Pt() > 8. || Dimu.Pt()<0. || Dimu.Rapidity() < -4. || Dimu.Rapidity()>-2.5 ) continue; 
+      // if( Dimu.Pt() > 8. || Dimu.Pt()<0. || Dimu.Rapidity() < -4. || Dimu.Rapidity()>-2.5 ) continue;
+      if( Dimu.Pt() > fHptRef->GetXaxis()->GetXmax()  || Dimu.Pt() < fHptRef->GetXaxis()->GetXmin()  || Dimu.Rapidity() < fHyRef->GetXaxis()->GetXmin()  || Dimu.Rapidity() > fHyRef->GetXaxis()->GetXmax() ) continue; 
 
       if (fWeight && fPtFuncOld && fPtFuncNew && fYFuncOld && fYFuncNew) 
       {
@@ -310,7 +312,6 @@ void AliAnalysisTaskGenTunerJpsi::UserExec(Option_t *)
   } 
   //__________
 
-   
   // Post final data. It will be written to a file with option "RECREATE"
   PostData(1, fList);
 }
@@ -334,16 +335,16 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
   //__________get the fit ranges
   Double_t fitRangeMC[2][2];
   fitRangeMC[0][0] = GetFitLowEdge(*(h[0]));
-  fitRangeMC[0][1] = 50.;
+  fitRangeMC[0][1] = GetFitUpEdge(*(h[0]));
   fitRangeMC[1][0] = GetFitLowEdge(*(h[1]));
   fitRangeMC[1][1] = GetFitUpEdge(*(h[1]));
   Double_t fitRange[2][2];
-  fitRange[0][0] = (fPtCut > 0.) ? TMath::Max(fitRangeMC[0][0], fPtCut) : fitRangeMC[0][0];
-  fitRange[0][1] = 8.;
-  fitRange[1][0] = -4.; // not -4. because to the influence of the eta cut
-  fitRange[1][1] = -2.5;
+  fitRange[0][0] = fHptRef->GetXaxis()->GetXmin() /*(fPtCut > 0.) ? TMath::Max(fitRangeMC[0][0], fPtCut) : fitRangeMC[0][0]*/;
+  fitRange[0][1] = fHptRef->GetXaxis()->GetXmax() ;
+  fitRange[1][0] = fHyRef->GetXaxis()->GetXmin() ;
+  fitRange[1][1] = fHyRef->GetXaxis()->GetXmax() ;
   //__________
-  //
+
   //__________compute acc*eff corrections if it is simulated data
   TH1 *hAccEff[2] = {0x0,       0x0/*,      0x0*/};
   //                 AccEffPt   AccEffY   AccEffPhi
@@ -503,7 +504,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     {
       fPtFuncMC->SetLineColor(3);// Green
       fPtFuncMC->SetLineWidth(3);
-      h[0]->Fit(fPtFuncMC, "IWLR", "e0sames");// Gen. pt histo.
+      h[0]->Fit(fPtFuncMC, "IWLR+", "e0sames");// Gen. pt histo.
       leg->AddEntry(fPtFuncMC,"MC range MC","l");
     } 
     else h[0]->Draw("e0");
@@ -512,7 +513,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     if (fPtFunc) 
     {
       fPtFunc->SetLineColor(4); // Blue
-      h[0]->Fit(fPtFunc, "IWLR");
+      h[0]->Fit(fPtFunc, "IWLR+");
       leg->AddEntry(fPtFunc,"MC range Data","l");
     }
   }
@@ -523,7 +524,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     if (fPtFuncNew) 
     {
       fPtFuncNew->SetLineColor(2);// Red
-      hRef[0]->Fit(fPtFuncNew, "IWLR", "e0sames");
+      hRef[0]->Fit(fPtFuncNew, "IWLR+", "e0sames");
       leg->AddEntry(fPtFuncNew,"Data","l");
     } 
     else hRef[0]->Draw("e0sames");
@@ -541,7 +542,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     {
       fYFuncMC->SetLineColor(3);// Green
       fYFuncMC->SetLineWidth(3);
-      h[1]->Fit(fYFuncMC, "IWLR", "e0sames");//  Gen. y histo.
+      h[1]->Fit(fYFuncMC, "IWLR+", "e0sames");//  Gen. y histo.
       leg2->AddEntry(fYFuncMC,"MC fit function","l");
     } 
     else h[1]->Draw("");
@@ -550,7 +551,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     if (fYFunc) 
     {
       fYFunc->SetLineColor(4);// Blue
-      h[1]->Fit(fYFunc, "IWLR");
+      h[1]->Fit(fYFunc, "IWLR+");
       leg2->AddEntry(fYFunc,"Old Data fit function","l");
     }
   }
@@ -560,7 +561,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     if (fYFuncNew) 
     {
       fYFuncNew->SetLineColor(2); // Red
-      hRef[1]->Fit(fYFuncNew, "IWLR", "e0sames");
+      hRef[1]->Fit(fYFuncNew, "IWLR+", "e0sames");
       leg2->AddEntry(fYFuncNew,"New Data Fit function","l");
     } 
     else hRef[1]->Draw("e0sames");
@@ -630,7 +631,6 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     hRat[i]->Draw("e0");
     if (i == 0 && ptRat) 
     {
-      printf("ptRat = %p\n", ptRat);
       ptRat->DrawCopy("same");
       leg->AddEntry(ptRat,"MC-Data fit function","l");
       leg->AddEntry(hRat[i],"Data Dist. / MC Gen. ","leg"); 

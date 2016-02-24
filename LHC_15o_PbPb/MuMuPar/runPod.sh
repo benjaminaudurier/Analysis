@@ -5,6 +5,6 @@ vafreq $nWorkers
 vafwait $nWorkers
 export TASKDIR="$HOME/taskDir"
 cd $TASKDIR
-root -b -q 'runMuMu.C("full","saf","$DATASETDIR/datasetlight_saf_LHC15o_AOD.txt")'
+root -b -q 'runMuMu.C("full","saf","ds.fc.137.AliAOD.root")'
 vafctl stop
 exit

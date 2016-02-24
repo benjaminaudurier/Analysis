@@ -46,12 +46,10 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   
   // triggerInputsMap->Add(new TObjString("0VBA:1,")); 
 
-triggerInputsMap->Add(new TObjString("0MSL:17"));
-triggerInputsMap->Add(new TObjString("0MSH:18"));
-triggerInputsMap->Add(new TObjString("0MLL:19"));
-triggerInputsMap->Add(new TObjString("0MUL:20"));
-
-
+  triggerInputsMap->Add(new TObjString("0MSL:17"));
+  triggerInputsMap->Add(new TObjString("0MSH:18"));
+  triggerInputsMap->Add(new TObjString("0MLL:19"));
+  triggerInputsMap->Add(new TObjString("0MUL:20"));
   //===========================================================================
 
   //  Configure task
@@ -118,11 +116,11 @@ triggerInputsMap->Add(new TObjString("0MUL:20"));
       // Cuts on track level
       AliAnalysisMuMuCutElement* pairTrue = cr->AddTrackPairCut(*cr,"AlwaysTrue","const AliVParticle&,const AliVParticle&","");// Apply "AlwaysTrue" cut on AliVParticle derived from AliAnalysisMuMuMinv
       AliAnalysisMuMuCutElement* pairy = cr->AddTrackPairCut(*minvAnalysis,"IsRapidityInRange","const AliVParticle&,const AliVParticle&","");
-      AliAnalysisMuMuCutElement* ptRange = cr->AddTrackPairCut(*minvAnalysis,"IsPtInRange","const AliVParticle&,const AliVParticle&,Double_t&,Double_t&","0.,10.");
+      // AliAnalysisMuMuCutElement* ptRange = cr->AddTrackPairCut(*minvAnalysis,"IsPtInRange","const AliVParticle&,const AliVParticle&,Double_t&,Double_t&","0.,10.");
 
       cutElements.Add(pairTrue);
       cutElements.Add(pairy);
-      cutElements.Add(ptRange);
+      // cutElements.Add(ptRange);
       cutElements.Add(rabs);
       cutElements.Add(matchlow);
       cutElements.Add(eta);
@@ -144,11 +142,10 @@ triggerInputsMap->Add(new TObjString("0MUL:20"));
   AliAnalysisMuMuBinning* binning = task->Binning(); // Create and set the "binning manager"
   
   if (minvAnalysis)
-  {  
-
+  {
+    minvAnalysis->DefineMinvRange(2,8,0.025);
     // Integrated
     binning->AddBin("psi","integrated");
-
     // pt binning
     binning->AddBin("psi","pt", 0.0, 1.0,"BENJ");
     binning->AddBin("psi","pt", 1.0, 2.0,"BENJ");
@@ -156,8 +153,11 @@ triggerInputsMap->Add(new TObjString("0MUL:20"));
     binning->AddBin("psi","pt", 3.0, 4.0,"BENJ");
     binning->AddBin("psi","pt", 4.0, 5.0,"BENJ");
     binning->AddBin("psi","pt", 5.0, 6.0,"BENJ");
-    binning->AddBin("psi","pt", 6.0, 8.0,"BENJ");
-  
+    binning->AddBin("psi","pt", 6.0, 7.0,"BENJ");
+    binning->AddBin("psi","pt", 7.0, 8.0,"BENJ");
+    binning->AddBin("psi","pt", 8.0, 9.0,"BENJ");
+    binning->AddBin("psi","pt", 9.0, 10.0,"BENJ");
+    binning->AddBin("psi","pt", 0.3, 10.0,"BENJ");
     // y binning
     binning->AddBin("psi","y",-4,-3.75,"BENJ");
     binning->AddBin("psi","y",-3.75,-3.5,"BENJ");
@@ -165,9 +165,24 @@ triggerInputsMap->Add(new TObjString("0MUL:20"));
     binning->AddBin("psi","y",-3.25,-3,"BENJ");
     binning->AddBin("psi","y",-3,-2.75,"BENJ");
     binning->AddBin("psi","y",-2.75,-2.5,"BENJ");
-   
+    // phi binning
+    binning->AddBin("psi","phi",0,0.4,"BENJ");
+    binning->AddBin("psi","phi",0.4,0.8,"BENJ");
+    binning->AddBin("psi","phi",0.8,1.2,"BENJ");
+    binning->AddBin("psi","phi",1.2,1.6,"BENJ");
+    binning->AddBin("psi","phi",1.6,2.0,"BENJ");
+    binning->AddBin("psi","phi",2.0,2.4,"BENJ");
+    binning->AddBin("psi","phi",2.4,2.8,"BENJ");
+    binning->AddBin("psi","phi",2.8,3.2,"BENJ");
+    binning->AddBin("psi","phi",3.2,3.6,"BENJ");
+    binning->AddBin("psi","phi",3.6,4.0,"BENJ");
+    binning->AddBin("psi","phi",4.0,4.4,"BENJ");
+    binning->AddBin("psi","phi",4.4,4.8,"BENJ");
+    binning->AddBin("psi","phi",4.8,5.2,"BENJ");
+    binning->AddBin("psi","phi",5.2,5.6,"BENJ");
+    binning->AddBin("psi","phi",5.6,6.0,"BENJ");
+    binning->AddBin("psi","phi",6.0,6.28,"BENJ");
   }
-
   // v0 centrality binning
   binning->AddBin("centrality","V0M",0.,90.);
   binning->AddBin("centrality","V0M",0.,10.);

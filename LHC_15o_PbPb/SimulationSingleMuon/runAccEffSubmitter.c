@@ -4,7 +4,7 @@
 
 
 TString Trigger = "CMSL7-B-NOPF-MUFAST";
-TString remoteDir =Form("/alice/cern.ch/user/b/baudurie/Analysis/LHC15o/sim/singleMuon/%s",Trigger.Data());
+TString remoteDir =Form("/alice/cern.ch/user/b/baudurie/Analysis/LHC15o/sim/singleMuontuned/%s",Trigger.Data());
 
 void runAccEffSubmitter(const char* mode)
 {
@@ -12,30 +12,31 @@ void runAccEffSubmitter(const char* mode)
 	AliMuonAccEffSubmitter a("GenParamCustomSingle");
 	a.SetRemoteDir(remoteDir.Data());
 	a.ShouldOverwriteFiles(true);
+	a.SetMaxEventsPerChunk(10000);
 	// a.MakeNofEventsFixed(10);
-	a.MakeNofEventsPropToTriggerCount(Trigger.Data(),1);
+	a.MakeNofEventsPropToTriggerCount(Trigger.Data(),0.5);//factuer pour avoir 25 millions d'events
 	a.SetVar("VAR_GENLIB_PARNAME","\"pp 5.03\"");
 
 	a.SetVar("VAR_GENPARAMCUSTOMSINGLE_PTMIN","0.8");
 
-	// a.SetVar("VAR_GENPARAMCUSTOMSINGLE_PT_P0","0.675825");
-	// a.SetVar("VAR_GENPARAMCUSTOMSINGLE_PT_P1","0.297392");
-	// a.SetVar("VAR_GENPARAMCUSTOMSINGLE_PT_P2","0.853814");
-	// a.SetVar("VAR_GENPARAMCUSTOMSINGLE_PT_P3","5.20967");
+	a.SetVar("VAR_GENPARAMCUSTOMSINGLE_PT_P0","349.454");
+  	a.SetVar("VAR_GENPARAMCUSTOMSINGLE_PT_P1","0.965971");
+  	a.SetVar("VAR_GENPARAMCUSTOMSINGLE_PT_P2","0.83717");
+  	a.SetVar("VAR_GENPARAMCUSTOMSINGLE_PT_P3","7.82193");
 
-	// a.SetVar("VAR_GENPARAMCUSTOMSINGLE_Y_P0","1.17771");
-	// a.SetVar("VAR_GENPARAMCUSTOMSINGLE_Y_P1","-0.591384");
-	// a.SetVar("VAR_GENPARAMCUSTOMSINGLE_Y_P2","-0.418129");
-	// a.SetVar("VAR_GENPARAMCUSTOMSINGLE_Y_P3","-0.0554779");
 
-	a.SetRunList("$DATASETDIR/runList_LHC15o.txt");
-	// a.SetAliPhysicsVersion("VO_ALICE@AliPhysics::vAN-20151015-1");
-	// a.SetAliRootVersion("VO_ALICE@AliROOT::v5-07-01-3");
+	a.SetVar("VAR_GENPARAMCUSTOMSINGLE_Y_P0","1.77115");
+  	a.SetVar("VAR_GENPARAMCUSTOMSINGLE_Y_P1","-0.0966005");
+  	a.SetVar("VAR_GENPARAMCUSTOMSINGLE_Y_P2","0.00260707");
+
+	a.SetRunList("runList_LHC15o_AOD.txt");
+
 	a.SetCompactMode(0);
 	a.Print();
 	a.Run(mode);
 	a.Submit(false);
 }
 
-// Double_t newPtParam[4] = {0.675825, 0.297392, 0.853814, 5.20967};
-// Double_t newYParam[4] = {1.17771, -0.591384, -0.418129, -0.0554779};
+// Double_t newPtParam[6] = {349.454, 0.965971, 0.83717, 7.82193, -0.00325109, -1.79551};
+// Double_t newYParam[3] = {1.77115, -0.0966005, 0.00260707};
+

@@ -138,7 +138,7 @@ void runGenTuner(TString smode = "local", TString inputFileName = "AliAOD.Muons.
   TString extraTasks="AliAnalysisTaskGenTuner";
   TString extraPkgs="";
   TList pathList; pathList.SetOwner();
-  // pathList.Add(new TObjString("/Users/audurier/Documents/Analysis/LHC_15o_PbPb/AccEff_Muons"));
+  pathList.Add(new TObjString("$HOME/Documents/Analysis/LHC_15o_PbPb/AccEff_Muons"));
   TList fileList; fileList.SetOwner();
   fileList.Add(new TObjString("runGenTuner.C"));
   fileList.Add(new TObjString("AddTaskGenTuner.C"));
@@ -161,7 +161,7 @@ void runGenTuner(TString smode = "local", TString inputFileName = "AliAOD.Muons.
   // --- prepare the analysis environment ---
   Int_t mode = PrepareAnalysis(smode, inputFileName, extraLibs, extraIncs, extraTasks, extraPkgs, pathList, fileList, overwrite);
   if (isMC) {
-    CopyInputFileLocally(referenceDataFile.Data(), "ReferenceResults.root", overwrite);
+    // CopyInputFileLocally(referenceDataFile.Data(), "ReferenceResults.root", overwrite);
     fileList.Add(new TObjString("ReferenceResults.root"));
   }
 //  fileList.Add(new TObjString("runWeight.txt"));
@@ -230,10 +230,11 @@ TObject* CreateAnalysisTrain(Int_t iStep)
   mgr->SetInputEventHandler(aodH);
   
   // multiplicity/centrality selection
-  gROOT->LoadMacro("$ALICE_PHYSICS/OADB/COMMON/MULTIPLICITY/macros/AddTaskMultSelection.C");
-  AliMultSelectionTask *mult = AddTaskMultSelection(kFALSE);
-  // mult->SetAlternateOADBforEstimators ("LHC15o");
-  if (applyPhysicsSelection) mult->SelectCollisionCandidates(AliVEvent::kMUU7);
+  if (applyPhysicsSelection) {
+    gROOT->LoadMacro("$ALICE_PHYSICS/OADB/COMMON/MULTIPLICITY/macros/AddTaskMultSelection.C");
+    AliMultSelectionTask*mult = AddTaskMultSelection(kFALSE);
+  // mult->SetAlternateOADBforEstimators ("LHC15o"); // if running locally
+  } 
   
   // track selection
   AliMuonTrackCuts trackCuts("stdCuts", "stdCuts");
@@ -249,10 +250,13 @@ TObject* CreateAnalysisTrain(Int_t iStep)
     Error("CreateAnalysisTrain","AliAnalysisTaskGenTuner not created!");
     return 0x0;
   }
-//  if (applyPhysicsSelection) genTuner->SelectCollisionCandidates(AliVEvent::kMUU7);
-  if (applyPhysicsSelection) genTuner->SelectCollisionCandidates(AliVEvent::kMUS7);
-//  if (applyPhysicsSelection) genTuner->SelectCollisionCandidates(AliVEvent::kMUSH7);
-//  genTuner->SelectCentrality(0., 90.);
+  
+  if(applyPhysicsSelection) {
+    // genTuner->SelectCollisionCandidates(AliVEvent   ::kMUU7);
+    genTuner->SelectCollisionCandidates(AliVEvent::kMUS7);
+    genTuner->SelectCentrality(30., 90.);
+  }
+
   genTuner->SetMuonTrackCuts(trackCuts);
   genTuner->SetMuonPtCut(1.);
   genTuner->SetMuonGenPtCut(0.8);

@@ -41,9 +41,9 @@ Int_t maxMergeStages = 2;
 // tune0 LHC15n jpsi
 // TString oldPtFormula =   "[0]*x / TMath::Power( 1.+  0.363 *  (x/(1.04*TMath::Power(5020,0.101))) *(x/(1.04*TMath::Power(5020,0.101))),[0])";
 // Double_t oldPtParam[2] = {1.,3.9};
-TString oldPtFormula =   "[0]*x / TMath::Power(1 + [1]*x*x,[2])";
-Double_t oldPtParam[3] = {2.03612e+05, 6.17683e-02 , 3.48210e+00}; 
-Bool_t oldFixPtParam[3] = {kFALSE, kFALSE,kFALSE};
+TString oldPtFormula =   "[0]*x / TMath::Power([1] + TMath::Power(x,[2]),[3])";
+Double_t oldPtParam[4] = {0.32231,  0.95996 , 0.0665176,3.70602}; 
+Bool_t oldFixPtParam[4] = {kFALSE, kFALSE,kFALSE,kFALSE};
 TString newPtFormula = "[0]*x / TMath::Power([1] + [2]*x*x,[3])";
 Double_t newPtParam[4] = {2.03612e+05,1., 6.17683e-02 , 3.48210e+00};
 Bool_t newFixPtParam[4] = {kFALSE, kFALSE, kFALSE,kFALSE};

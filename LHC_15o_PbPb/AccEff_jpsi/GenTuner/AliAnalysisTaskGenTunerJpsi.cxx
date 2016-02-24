@@ -503,7 +503,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     {
       fPtFuncMC->SetLineColor(3);// Green
       fPtFuncMC->SetLineWidth(3);
-      h[0]->Fit(fPtFuncMC, "IWLR", "e0sames");// Gen. pt histo.
+      h[0]->Fit(fPtFuncMC, "IWLR+", "e0sames");// Gen. pt histo.
       leg->AddEntry(fPtFuncMC,"MC range MC","l");
     } 
     else h[0]->Draw("e0");
@@ -512,7 +512,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     if (fPtFunc) 
     {
       fPtFunc->SetLineColor(4); // Blue
-      h[0]->Fit(fPtFunc, "IWLR");
+      h[0]->Fit(fPtFunc, "IWLR+");
       leg->AddEntry(fPtFunc,"MC range Data","l");
     }
   }
@@ -523,7 +523,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     if (fPtFuncNew) 
     {
       fPtFuncNew->SetLineColor(2);// Red
-      hRef[0]->Fit(fPtFuncNew, "IWLR", "e0sames");
+      hRef[0]->Fit(fPtFuncNew, "IWLR+", "e0sames");
       leg->AddEntry(fPtFuncNew,"Data","l");
     } 
     else hRef[0]->Draw("e0sames");
@@ -541,7 +541,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     {
       fYFuncMC->SetLineColor(3);// Green
       fYFuncMC->SetLineWidth(3);
-      h[1]->Fit(fYFuncMC, "IWLR", "e0sames");//  Gen. y histo.
+      h[1]->Fit(fYFuncMC, "IWLR+", "e0sames");//  Gen. y histo.
       leg2->AddEntry(fYFuncMC,"MC fit function","l");
     } 
     else h[1]->Draw("");
@@ -550,7 +550,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     if (fYFunc) 
     {
       fYFunc->SetLineColor(4);// Blue
-      h[1]->Fit(fYFunc, "IWLR");
+      h[1]->Fit(fYFunc, "IWLR+");
       leg2->AddEntry(fYFunc,"Old Data fit function","l");
     }
   }
@@ -560,7 +560,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     if (fYFuncNew) 
     {
       fYFuncNew->SetLineColor(2); // Red
-      hRef[1]->Fit(fYFuncNew, "IWLR", "e0sames");
+      hRef[1]->Fit(fYFuncNew, "IWLR+", "e0sames");
       leg2->AddEntry(fYFuncNew,"New Data Fit function","l");
     } 
     else hRef[1]->Draw("e0sames");
@@ -616,7 +616,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
    //__________
   
   // prepare data/MC function ratios
-  TF1 *ptRat = (hRat[0] && fPtFunc && fPtFuncNew) ? new TF1("ptRat", this, &AliAnalysisTaskGenTunerJpsi::PtRat, fitRangeMC[0][0], hRat[0]->GetXaxis()->GetXmax(), 0, "AliAnalysisTaskGenTunerJpsi", "PtRat") : 0x0;
+  TF1 *ptRat = (hRat[0] && fPtFunc && fPtFuncNew) ? new TF1("ptRat", this, &AliAnalysisTaskGenTunerJpsi::PtRat, fitRangeMC[0][0], fitRangeMC[0][1], 0, "AliAnalysisTaskGenTunerJpsi", "PtRat") : 0x0;
   TF1 *yRat = (hRat[1] && fYFunc && fYFuncNew) ? new TF1("yRat", this, &AliAnalysisTaskGenTunerJpsi::YRat, fitRangeMC[1][0], fitRangeMC[1][1], 0, "AliAnalysisTaskGenTunerJpsi", "YRat") : 0x0;
   
   //__________plot ratios

@@ -17,7 +17,7 @@
 char           * sfile="AnalysisResults.root";
 char           * sasso="";
 char           * sasso2="";
-char           * beamYear="mumu.PbPb2015.config";
+char           * beamYear="mumu.pp2015.config";
 
 
 //_____________________________________________________________________________

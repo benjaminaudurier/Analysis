@@ -20,10 +20,10 @@ Int_t maxMergeFiles = 10;
 Int_t maxMergeStages = 2;
 
 // tune0 LHC15o jpsi
-TString oldPtFormula =   "[0] *x / TMath::Power( 1. + TMath::Power(x/[1],[2]), [3] )";
+TString oldPtFormula =   "[0] *x / TMath::Power( 1. + TMath::Power(x/[1],[2]), [3])";
 Double_t oldPtParam[4] = {1.13e9,3.404,3.822,1.962}; 
 Bool_t oldFixPtParam[4] = {kFALSE, kFALSE,kFALSE,kFALSE};
-TString newPtFormula = "[0] *x / TMath::Power( 1. + TMath::Power(x/[1],[2]), [3] )";
+TString newPtFormula = "[0] *x / TMath::Power( 1. + TMath::Power(x/[1],[2]), [3])";
 // Double_t newPtParam[4] = {1.13e9,3.404,3.822,1.962};
 Double_t newPtParam[4] = {0.603228, 5.57423, 1.5238, 7.38334};
 Bool_t newFixPtParam[4] = {kFALSE, kFALSE,kFALSE,kFALSE};
@@ -35,11 +35,11 @@ Double_t ptRange[2] = {0., 50.};
 TString oldYFormula = " [0] * ( [1] + [2]*x*x ) ";
 Double_t oldYParam[3] =  {1.,6.266e5,-3.007e4};
 Bool_t oldFixYParam[3] = {kFALSE, kFALSE,kFALSE};
-TString newYFormula = "[0] * ( [1] + [2]*x*x  + [3]*x*x*x*x)";
-Double_t newYParam[4] =  {1.,580000,-3.007e4,800.};
-Bool_t newFixYParam[4] = {kFALSE, kFALSE,kFALSE,kFALSE};
+TString newYFormula = "[0]*TMath::Exp( -0.5*( TMath::Power((x-[1])/[2],2) ))";
+Double_t newYParam[3] =  {1.,0.,1.};
+Bool_t newFixYParam[3] = {kFALSE,kFALSE,kFALSE};
 
-Double_t yRange[2] = {-4.2, -2.3};
+Double_t yRange[2] = {-4.2, 0.};
 
 
 Bool_t isMC = kTRUE;

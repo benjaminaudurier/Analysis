@@ -31,12 +31,12 @@ void CopyFromTrainResults(TString file,TString directory = "MuMuLowPt")
     else return;
 	
 	// oc points on the histogramme collection
-    oc = static_cast<AliMergeableCollection*>(f->FindObjectAny("OC")->Clone());
-    if (!oc) oc = static_cast<AliMergeableCollection*>(f->FindObjectAny("MC")->Clone());
+    oc = static_cast<AliMergeableCollection*>(d->FindObjectAny("OC")->Clone());
+    if (!oc) oc = static_cast<AliMergeableCollection*>(d->FindObjectAny("MC")->Clone());
     if (oc)printf("oc found !\n");
     else return;
         // cc point on mergeable collection
-    cc = static_cast<AliCounterCollection*>(f->FindObjectAny("CC")->Clone());
+    cc = static_cast<AliCounterCollection*>(d->FindObjectAny("CC")->Clone());
     if (cc)printf("cc found !\n");
     else return;
     

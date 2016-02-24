@@ -25,9 +25,9 @@ static Double_t V2Muon( const Double_t *pv, const Double_t */*dummy*/ );
 //-------------------------------------------------------------------------
 AliGenerator* GenParamCustomSingle()
 {
-  AliGenParam *singleMu = new AliGenParam(10,-1,PtMuon,YMuon,V2Muon,IpMuon);
+  AliGenParam *singleMu = new AliGenParam(5,-1,PtMuon,YMuon,V2Muon,IpMuon);
   singleMu->SetMomentumRange(0,1e6);
-  singleMu->SetPtRange(0.35,999.);
+  singleMu->SetPtRange(0.8,999.);
   singleMu->SetYRange(-4.2, -2.3);
   singleMu->SetPhiRange(0., 360.);
   singleMu->SetForceDecay(kNoDecay);
@@ -56,12 +56,16 @@ Double_t PtMuon( const Double_t *px, const Double_t */*dummy*/ )
   // muon pT
   
   Double_t x=*px;
-  Float_t p0,p1,p2,p3;
-  p0 = 0.675825; //4.05962;
-  p1 = 0.297392; //1;
-  p2 = 0.853814; //2.46187;
-  p3 = 5.20967; //2.08644;
-  return p0 / TMath::Power( p1 + TMath::Power(x,p2), p3 );
+  Float_t p0,p1,p2,p3,p4,p5;
+  p0 = 349.454; //4.05962;
+  p1 = 0.965971; //1;
+  p2 = 0.83717; //2.46187;
+  p3 = 7.82193; //2.08644;
+  p4 = -0.00325109;
+  p5 = -1.79551;
+
+
+  return p0 * (1. / TMath::Power(p1 + TMath::Power(x,p2), p3) + p4 * TMath::Exp(p5*x));
 }
 
 //-------------------------------------------------------------------------
@@ -72,11 +76,11 @@ Double_t YMuon( const Double_t *py, const Double_t */*dummy*/ )
   Double_t y = *py;
   //pol4 only valid in y= -4;-2.5
   Float_t p0,p1,p2,p3;
-  p0 = 1.17771; //0.729545;
-  p1 = -0.591384; //0.53837;
-  p2 = -0.418129; //0.141776;
-  p3 = -0.0554779; //0.0130173;
-  return p0 * (1. + p1*y + p2*y*y + p3*y*y*y);
+  p0 = 1.77115; //0.729545;
+  p1 = -0.0966005; //0.53837;
+  p2 = 0.00260707; //0.141776;
+  p3 = 0.0130173; //0.0130173;
+  return p0 * (1. + p1*y*y + p2*y*y*y*y );
 }
 
 //-------------------------------------------------------------------------

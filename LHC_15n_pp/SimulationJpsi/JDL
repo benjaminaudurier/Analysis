@@ -5,17 +5,17 @@ Packages = {
 Jobtag = "comment: AliMuonAccEffSubmitter RUN $1";
 split = "production:$2-$3";
 Price = 1;
-OutputDir = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/Jpsi/untuned/CMUL7-B-NOPF-MUFAST/$1/#alien_counter_03i#";
+OutputDir = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/Jpsi/tuned/CMUL7-B-NOPF-MUFAST/$1/#alien_counter_03i#";
 Executable = "/alice/bin/aliroot_new";
 InputFile = {
-	"LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/Jpsi/untuned/CMUL7-B-NOPF-MUFAST/GenParamCustom.C",
-	"LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/Jpsi/untuned/CMUL7-B-NOPF-MUFAST/CheckESD.C",
-	"LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/Jpsi/untuned/CMUL7-B-NOPF-MUFAST/CheckAOD.C",
-	"LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/Jpsi/untuned/CMUL7-B-NOPF-MUFAST/AODtrainsim.C",
-	"LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/Jpsi/untuned/CMUL7-B-NOPF-MUFAST/Config.C",
-	"LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/Jpsi/untuned/CMUL7-B-NOPF-MUFAST/rec.C",
-	"LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/Jpsi/untuned/CMUL7-B-NOPF-MUFAST/sim.C",
-	"LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/Jpsi/untuned/CMUL7-B-NOPF-MUFAST/simrun.sh"
+	"LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/Jpsi/tuned/CMUL7-B-NOPF-MUFAST/GenParamCustom.C",
+	"LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/Jpsi/tuned/CMUL7-B-NOPF-MUFAST/CheckESD.C",
+	"LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/Jpsi/tuned/CMUL7-B-NOPF-MUFAST/CheckAOD.C",
+	"LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/Jpsi/tuned/CMUL7-B-NOPF-MUFAST/AODtrainsim.C",
+	"LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/Jpsi/tuned/CMUL7-B-NOPF-MUFAST/Config.C",
+	"LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/Jpsi/tuned/CMUL7-B-NOPF-MUFAST/rec.C",
+	"LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/Jpsi/tuned/CMUL7-B-NOPF-MUFAST/sim.C",
+	"LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/Jpsi/tuned/CMUL7-B-NOPF-MUFAST/simrun.sh"
 };
 OutputArchive = {
 	"log_archive.zip:stderr,stdout,*.log@disk=1",

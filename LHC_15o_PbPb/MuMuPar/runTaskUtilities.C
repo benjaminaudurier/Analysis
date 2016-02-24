@@ -64,7 +64,7 @@ void PrintOptions()
   printf("  runMode: test full merge terminate\n");
   printf("  analysisMode: local grid saf saf2 vaf terminateonly\n");
   printf("  inputName: <runNumber> <fileWithRunList> <rootFileToAnalyse(absolute path)>\n");
-  printf("  inputOptions: Data/MC FULL/NOVTX/EMBED AOD/ESD <period> <pass> <dataPattern> <dataDir>\n");
+  printf("  inputOptions: Data/MC FULL/NOVTX/EMBED AOD/ESD SPLIT <period> <pass> <dataPattern> <dataDir>\n");
   printf("  softVersions: aliphysics=version,aliroot=version,root=version\n");
   printf("  analysisOptions: NOPHYSSEL NOCENTR OLDCENTR MIXED\n");
 }
@@ -280,6 +280,7 @@ TString GetGridQueryVal ( TString queryString, TString keyword )
     }
   }
   delete arr;
+  if ( found.IsNull() ) printf("Warning: cannot find %s in %s\n",keyword.Data(),queryString.Data());
   return found;
 }
 
@@ -287,6 +288,7 @@ TString GetGridQueryVal ( TString queryString, TString keyword )
 TString GetRunNumber ( TString queryString )
 {
   TString found = "";
+  queryString.ReplaceAll("*",""); // Add protection for datasets with a star inside
   for ( Int_t ndigits=9; ndigits>=6; ndigits-- ) {
     TString sre = "";
     for ( Int_t idigit=0;idigit<ndigits; idigit++ ) sre += "[0-9]";
@@ -312,6 +314,7 @@ TString GetDataDir ( TString queryString )
 {
   TString basePath = GetGridQueryVal(queryString,"BasePath");
   TString runNum = GetRunNumber(queryString);
+  if ( basePath.IsNull() ) return "";
   Int_t idx = basePath.Index(runNum);
   basePath.Remove(idx-1);
   return basePath;
@@ -323,6 +326,7 @@ TString GetDataPattern ( TString queryString )
   TString basePath = GetGridQueryVal(queryString,"BasePath");
   TString fileName = GetGridQueryVal(queryString,"FileName");
   TString runNum = GetRunNumber(queryString);
+  if ( basePath.IsNull() || fileName.IsNull() ) return "";
   Int_t idx = basePath.Index(runNum) + runNum.Length();
   basePath.Remove(0,idx+1);
   if ( ! basePath.EndsWith("/") ) basePath.Append("/");
@@ -705,17 +709,20 @@ Bool_t LoadLibsProof ( TString libraries, TString includePaths, TString aaf, TSt
   TString mainPackage = "";
   if ( proofServer == "localhost" ) mainPackage = "$ALICE_ROOT/ANALYSIS/macros/AliRootProofLite.par";
   else if ( IsPod(aaf) ) {
-    TString remotePar = "http://alibrary.web.cern.ch/alibrary/vaf/AliceVaf.par";
+    TString remotePar = ( aaf == "saf" ) ? "https://github.com/aphecetche/aphecetche.github.io/blob/master/saf/saf3/AliceVaf.par?raw=true" : "http://alibrary.web.cern.ch/alibrary/vaf/AliceVaf.par";
     mainPackage = gSystem->BaseName(remotePar.Data());
-    if ( aaf != "saf" || gSystem->AccessPathName(mainPackage) ) {
-      // In principle AliceVaf.par should be always taken from the webpage (constantly updated version)
-      // However, in SAF, one sometimes need to have custom AliceVaf.par
-      // Hence, if an AliceVaf.par is found in the local dir, it is used instead of the official one
+    mainPackage.Remove(mainPackage.Index("?"));
+//    if ( aaf != "saf" || gSystem->AccessPathName(mainPackage) ) {
       printf("Getting package %s\n",remotePar.Data());
       TFile::Cp(remotePar.Data(), mainPackage.Data());
       if ( gSystem->AccessPathName(mainPackage) ) printf("Error: cannot get %s from %s\n",mainPackage.Data(),remotePar.Data());
-    }
-    else printf("Using custom %s\n",mainPackage.Data());
+//    }
+//    else {
+//    // In principle AliceVaf.par should be always taken from the webpage (constantly updated version)
+//    // However, in SAF, one sometimes need to have custom AliceVaf.par
+//    // Hence, if an AliceVaf.par is found in the local dir, it is used instead of the official one
+//      printf("Using custom %s\n",mainPackage.Data());
+//    }
   }
   else {
     mainPackage = GetSoftVersion("aliphysics",softVersions);
@@ -765,21 +772,29 @@ TObject* CreateInputObject ( TString runMode, TString analysisMode, TString inpu
       }
       inFile.close();
     }
-    if (chain) chain->ls();
+    if (chain) chain->GetListOfFiles()->ls();
     return chain;
   }
   else if ( sMode == "proof") {
     TString outName = "";
-    if ( analysisMode == "prooflite" ) {
-      TFileCollection* coll = new TFileCollection();
-      coll->AddFromFile(inputName.Data());
-      outName = "test_collection";
-      gProof->RegisterDataSet(outName.Data(), coll, "OV");
+    TFileCollection* fc = 0x0;
+    if ( inputName.EndsWith(".root") ) {
+      // Assume this is a collection
+      if ( IsPodMachine(analysisMode) ) inputName = gSystem->BaseName(inputName.Data());
+      TFile* file = TFile::Open(inputName.Data());
+      fc = static_cast<TFileCollection*>(file->FindObjectAny("dataset"));
+      file->Close();
     }
-    else {
-      if ( analysisMode == "vaf" ) outName = gSystem->GetFromPipe(Form("cat %s",GetDatasetName().Data()));
-      else outName = GetDatasetName().Data();
+    else if ( analysisMode == "prooflite" || runMode == "test" ) {
+      fc = new TFileCollection("dataset");
+      fc->AddFromFile(inputName.Data());
+//      outName = "test_collection";
+//      gProof->RegisterDataSet(outName.Data(), coll, "OV");
     }
+    if ( fc ) return fc;
+
+    if ( analysisMode == "vaf" ) outName = gSystem->GetFromPipe(Form("cat %s",GetDatasetName().Data()));
+    else outName = GetDatasetName().Data();
 
     TObjString *output = new TObjString(outName);
     return output;
@@ -831,13 +846,16 @@ void WritePodExecutable ( TString analysisOptions )
   TString dsName = GetDatasetName();
   if ( splitPerRun ) {
     outFile << "fileList=$(find . -maxdepth 1 -type f ! -name " << dsName.Data() << " | xargs)" << endl;
-    outFile << "while read -r line || [[ -n \"$line\" ]]; do" << endl;
-    outFile << "  runNum=$(echo \"$line\" | grep -oE [0-9][0-9][0-9][1-9][0-9][0-9][0-9][0-9][0-9] | xargs)" << endl;
+    outFile << "while read line; do" << endl;
+    outFile << "  runNum=$(echo \"$line\" | grep -oE '[0-9][0-9][0-9][1-9][0-9][0-9][0-9][0-9][0-9]' | xargs)" << endl;
     outFile << "  if [ -z \"$runNum\" ]; then" << endl;
     outFile << "    runNum=$(echo \"$line\" | grep -oE [1-9][0-9][0-9][0-9][0-9][0-9] | xargs)" << endl;
     outFile << "  fi" << endl;
-    outFile << "  if [[ -z \"$runNum\" || -e \"$runNum\" ]]; then" << endl;
+    outFile << "  if [ -z \"$runNum\" ]; then" << endl;
     outFile << "    echo \"Cannot find run number in $line\"" << endl;
+    outFile << "    continue" << endl;
+    outFile << "   elif [ -e \"$runNum\" ]; then" << endl;
+    outFile << "    echo \"Run number already processed: skip\"" << endl;
     outFile << "    continue" << endl;
     outFile << "  fi" << endl;
     outFile << "  echo \"\"" << endl;
@@ -855,9 +873,9 @@ void WritePodExecutable ( TString analysisOptions )
   rootCmd.Append("'");
   outFile << rootCmd.Data() << endl;
   if ( splitPerRun ) {
-    outFile << "  cd $TASKDIR" << endl;
+    outFile << "cd $TASKDIR" << endl;
     outFile << "done < " << dsName.Data() << endl;
-    outFile << "outNames=$(find $PWD/*/ -type f -name \"*.root\" -exec basename {} + | sort -u | xargs)" << endl;
+    outFile << "outNames=$(find $PWD/*/ -type f -name \"*.root\" -exec basename {} \\; | sort -u | xargs)" << endl;
     outFile << "for ifile in $outNames; do" << endl;
     TString mergeList = "mergeList.txt";
     outFile << "  find $PWD/*/ -name \"$ifile\" > " << mergeList.Data() << endl;
@@ -895,7 +913,8 @@ void ConnectToPod ( TString aaf, TString softVersions, TString analysisOptions )
   TString remoteDir = GetProofInfo("proofserver",aaf);
   remoteDir += Form(":%s",GetPodOutDir().Data());
   TString baseExclude = "--exclude=\"*/\" --exclude=\"*.log\" --exclude=\"outputs_valid\" --exclude=\"*.xml\" --exclude=\"*.jdl\" --exclude=\"plugin_test_copy\" --exclude=\"*.so\" --exclude=\"*.d\"";
-  TString command = Form("%s --delete-excluded %s ./ %s/",copyCommand.Data(),baseExclude.Data(),remoteDir.Data());
+  TString syncOpt = analysisOptions.Contains("resume",TString::kIgnoreCase) ? "--delete" : "--delete-excluded";
+  TString command = Form("%s %s %s ./ %s/",copyCommand.Data(),syncOpt.Data(),baseExclude.Data(),remoteDir.Data());
   PerformAction(command,yesToAll);
 //  command = Form("%s %s %s %s",baseSync.Data(),baseExclude.Data(),localDir.Data(),remoteDir.Data());
 //  PerformAction(command,yesToAll);
@@ -1035,6 +1054,7 @@ TMap* SetupAnalysis ( TString runMode = "test", TString analysisMode = "grid",
     if ( ! CopyFilesLocally(libraries,inputName,analysisMode) ) return 0x0;
     if ( IsPod(analysisMode) ) {
       CopyAdditionalFilesLocally("$TASKDIR/runTaskUtilities.C $TASKDIR/BuildMuonEventCuts.C $TASKDIR/SetupMuonBasedTasks.C",kFALSE);
+      if ( inputName.EndsWith(".root") ) CopyAdditionalFilesLocally(inputName);
       WritePodExecutable(analysisOptions);
     }
     LoadLibsLocally(libraries,includePaths);
@@ -1221,8 +1241,9 @@ void StartAnalysis ( TString runMode, TString analysisMode, TString inputName, T
 
   TString mgrMode =( sMode == "terminateonly" ) ? "grid terminate" : sMode.Data();
 
-  if ( sMode == "proof") mgr->StartAnalysis(mgrMode.Data(), inputObj->GetName());
-  else mgr->StartAnalysis(mgrMode.Data(), static_cast<TChain*>(inputObj));
+  if ( ! inputObj || inputObj->IsA() == TChain::Class() ) mgr->StartAnalysis(mgrMode.Data(), static_cast<TChain*>(inputObj));
+  else if ( inputObj->IsA() == TFileCollection::Class() ) mgr->StartAnalysis(mgrMode.Data(), static_cast<TFileCollection*>(inputObj));
+  else mgr->StartAnalysis(mgrMode.Data(), inputObj->GetName());
 
   //mgr->ProfileTask("SingleMuonAnalysisTask"); // REMEMBER TO COMMENT (test memory)
 }

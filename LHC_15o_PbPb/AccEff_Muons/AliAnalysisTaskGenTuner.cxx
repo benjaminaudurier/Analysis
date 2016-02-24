@@ -733,10 +733,12 @@ void AliAnalysisTaskGenTuner::RunWeight(TString &fileNameOrigin, TString &fileNa
   THashList *nEvsOld = LoadRunWeights(fileNameOrigin);
   if (!nEvsOld) return;
   nEvsOld->Sort();
+  printf("Size of runlist for %s = %d \n", fileNameOrigin.Data(),nEvsOld->GetSize());
   
   THashList *nEvsNew = LoadRunWeights(fileNameNew);
   if (!nEvsNew) return;
   nEvsNew->Sort();
+  printf("Size of runlist for %s = %d\n", fileNameNew.Data(),nEvsNew->GetSize());
   
   if (nEvsOld->GetSize() != nEvsNew->GetSize()) AliFatal("the 2 files do not contain the same number of runs");
   

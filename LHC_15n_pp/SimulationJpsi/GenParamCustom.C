@@ -40,10 +40,10 @@ Double_t PtCustom( const Double_t *px, const Double_t */*dummy*/ )
   // pT distribution
   Double_t x=*px;
   Float_t p0,p1,p2,p3;
-  p0 = 0.32231; // 1.13e9;
-  p1 = 0.95996; // 18.05;
-  p2 = 0.0665176; // 2.05;
-  p3 = 3.70602; // 3.34;
+  p0 = 21770.6; // 1.13e9;
+  p1 = 15.2993; // 18.05;
+  p2 = 1.97656; // 2.05;
+  p3 = 4.01293; // 3.34;
   return p0 *x / TMath::Power( p1 + TMath::Power(x,p2), p3 );
 }
 
@@ -53,9 +53,9 @@ Double_t YCustom( const Double_t *py, const Double_t */*dummy*/ )
   // y distribution
   Double_t y = *py;
   Float_t p0,p1;
-  p0 = 0.998251; // 4.08e5;
-  p1 = -0.0308991; // 7.1e4;
-  return p0 * (1. + p1*y*y);
+  p0 = 1.19752; // 4.08e5;
+  p1 = -0.0412364; // 7.1e4;
+  return p0 + p1*y;
 }
 
 //-------------------------------------------------------------------------

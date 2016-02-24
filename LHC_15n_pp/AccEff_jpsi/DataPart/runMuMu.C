@@ -1,35 +1,32 @@
 ///
-/// Example macro to run the AliAnalysisTaskMuMu task
+/// Example macro to run the AliAnalysisTaskMuMu task with help of runTaskUtilities.C
 ///
 /// \author Benjamin Audurier
 ///
 
 
-// Sim :
-// Find;BasePath=/alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/;FileName=AliAOD.Muons.root
-// 
-// Data:
-// Find;BasePath=/alice/data/2013/LHC13d/000195760/ESDs/muon_pass2/AOD134;FileName=AliAOD.root
-
+//test data : Find;BasePath=/alice/data/2015/LHC15o/000244918/muon_calo_pass1/AOD/*;FileName=AliAOD.Muons.root;Mode=cache;
+//test MC : Find;FileName=AliAOD.Muons.root;BasePath=/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/Jpsi/tuned/CMUL7-B-NOPF-MUFAST/244340/*;
 
 //______________________________________________________________________________
 AliAnalysisTask* runMuMu(TString runMode, 
-                        TString analysisMode,
-                        TString inputName       = "Find;BasePath=/alice/data/2013/LHC13d/000195760/ESDs/muon_pass2/AOD134;FileName=AliAOD.root;mode=cache",
-                        TString inputOptions    = "",
-                        TString analysisOptions = "NOCENTR",
-                        TString softVersions    = "aliphysics=vAN-20151115-1",
-                        TString taskOptions     = "" )
+                TString analysisMode,
+                TString inputName       = "Find;FileName=AliAOD.Muons.root;BasePath=/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/Jpsi/tuned/CMUL7-B-NOPF-MUFAST/244340/*",
+                TString inputOptions    = "",
+                TString analysisOptions = "NOCENTR",
+                TString softVersions    = "",
+                TString taskOptions     = "" )
 {
     // path for macro usefull for saf3
-    gROOT->LoadMacro(gSystem->ExpandPathName("$TASKDIR/runTaskUtilities.C")); 
+    gROOT->LoadMacro(gSystem->ExpandPathName("$TASKDIR/runTaskUtilities.C"));
     
      
     // Macro to connect to proof. First argument useless for saf3
-    SetupAnalysis(runMode,analysisMode,inputName,inputOptions,softVersions,analysisOptions, "libPWGmuon.so",". $ALICE_ROOT/include $ALICE_PHYSICS/include");
+    SetupAnalysis(runMode,analysisMode,inputName,inputOptions,softVersions,analysisOptions, "libPWGPPMUONlite.so","$ALICE_ROOT/include $ALICE_PHYSICS/include");
     
     //Flag for MC
     Bool_t isMC = IsMC(inputOptions);
+    
     
     // Fill the trigger list with desired trigger combinations (See on ALICE log book for denomination)
     //==============================================================================
@@ -38,18 +35,20 @@ AliAnalysisTask* runMuMu(TString runMode,
     if (!isMC)
     {
         // pA trigger
-        // triggers->Add(new TObjString("CINT7-B-NOPF-ALLNOTRD"));//MB
+        // triggers->Add(new TObjString("CINT7-B-NOPF-MUFAST"));// MB
+        // triggers->Add(new TObjString("CINT7-B-NOPF-CENT"));// MB
         triggers->Add(new TObjString("CMUL7-B-NOPF-MUFAST"));// Dimuon
     }
-
     // Load centrality task
     //==============================================================================
-    // gROOT->LoadMacro("$ALICE_PHYSICS/OADB/COMMON/MULTIPLICITY/macros/AddTaskMultSelection.C");
-    // AddTaskMultSelection(kFALSE); // user 
+    gROOT->LoadMacro("$ALICE_PHYSICS/OADB/COMMON/MULTIPLICITY/macros/AddTaskMultSelection.C");
+    AliMultSelectionTask *mult = AddTaskMultSelection(kFALSE);
+    if(analysisMode.Contains("local")) mult->SetAlternateOADBforEstimators("LHC15n"); // if running locally
+
   
-    // Load task MuMu
+    // Load task
     //==============================================================================
-    TString outputname = Form("AnalysisResults.root"); // Create output name in case of no dataset selected
+  	TString outputname = AliAnalysisManager::GetAnalysisManager()->GetCommonFileName();
     gROOT->LoadMacro("AddTaskMuMu.C");
     AddTaskMuMu(outputname.Data(),triggers,"pp2015",isMC);
     cout <<"add task mumu done"<< endl;

@@ -29,8 +29,8 @@ char                   * beamYear="mumu.PbPb2015.config";
 TString striggerDimuon ="CMUL7-B-NOPF-MUFAST";
 TString striggerMB     ="CINT7-B-NOPF-MUFAST";
 TString seventType     ="PSALL";
-TString spairCut       ="pALLPAIRYPAIRPTIN0.0-10.0RABSMATCHLOWETAPDCA";
-TString scentrality    ="V0M_00.00_90.00";
+TString spairCut       ="pALLPAIRYPAIRPTIN0.0-8.0RABSMATCHLOWETAPDCA";
+TString scentrality    ="V0A";
 
 Double_t FNorm         =15.22;
 Double_t BR            =0.005;

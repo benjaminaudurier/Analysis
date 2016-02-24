@@ -58,12 +58,12 @@ void FitMacro(char* what ="pt",const char* printWhat = "rawcount", int debug =0)
     if(clean) analysis.CleanAllSpectra();    
 
     // //_____ Fit 
-    // while ( ( swhat = static_cast<TObjString*>(nextWhat()) ) )
-    // {
-    //     if(swhat->String().Contains("integrated")) analysis.Jpsi(swhat->String().Data(),"",kFALSE,kFALSE);
+    while ( ( swhat = static_cast<TObjString*>(nextWhat()) ) )
+    {
+        if(swhat->String().Contains("integrated")) analysis.Jpsi(swhat->String().Data(),"",kFALSE,kFALSE);
 
-    //     else analysis.Jpsi(swhat->String().Data(),"BENJ",kFALSE,kFALSE);
-    // }
+        else analysis.Jpsi(swhat->String().Data(),"BENJ",kFALSE,kFALSE);
+    }
 
     // analysis.PrintNofParticle("PSI","NofJPsi","YVSPT",kFALSE);
     // analysis.PrintNofParticle("PSI","NofJPsi","Y",kFALSE);
