@@ -194,36 +194,31 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
    
 
      // pt binning
-    binning->AddBin("psi","pt", 0.0, 1.0,"BENJ");
-    binning->AddBin("psi","pt", 1.0, 2.0,"BENJ");
-    binning->AddBin("psi","pt", 2.0, 3.0,"BENJ");
-    binning->AddBin("psi","pt", 3.0, 4.0,"BENJ");
-    binning->AddBin("psi","pt", 4.0, 5.0,"BENJ");
-    binning->AddBin("psi","pt", 5.0, 6.0,"BENJ");
-    binning->AddBin("psi","pt", 6.0, 8.0,"BENJ");
-    binning->AddBin("psi","pt", 7.0, 8.0,"BENJ");
-    // binning->AddBin("psi","pt", 8.0, 9.0,"BENJ");
+    // binning->AddBin("psi","pt", 0.0, 1.0,"BENJ");
+    // binning->AddBin("psi","pt", 1.0, 2.0,"BENJ");
+    // binning->AddBin("psi","pt", 2.0, 3.0,"BENJ");
+    // binning->AddBin("psi","pt", 3.0, 4.0,"BENJ");
+    // binning->AddBin("psi","pt", 4.0, 5.0,"BENJ");
+    // binning->AddBin("psi","pt", 5.0, 6.0,"BENJ");
+    // binning->AddBin("psi","pt", 6.0, 8.0,"BENJ");
+    // binning->AddBin("psi","pt", 7.0, 8.0,"BENJ");
+    // 
+    // 
+    binning->AddBin("psi","pt", 0.0, 2.0,"BENJ");
     // binning->AddBin("psi","pt", 9.0, 10.0,"BENJ");
     // binning->AddBin("psi","pt", 10.0, 11.0,"BENJ");
     // binning->AddBin("psi","pt", 11.0, 12.0,"BENJ");
-    // binning->AddBin("psi","pt", 12.0, 13.0,"BENJ");
-    // binning->AddBin("psi","pt", 13.0, 14.0,"BENJ");
-    // binning->AddBin("psi","pt", 14.0, 15.0,"BENJ");
-    // binning->AddBin("psi","pt", 15.0, 16.0,"BENJ");
-    // binning->AddBin("psi","pt", 16.0, 17.0,"BENJ");
-    // binning->AddBin("psi","pt", 17.0, 18.0,"BENJ");
-    // binning->AddBin("psi","pt", 18.0, 19.0,"BENJ");
-    // binning->AddBin("psi","pt", 19.0, 20.0,"BENJ");
+
   
     // y binning
-   // binning->AddBin("psi","y",-4,-3.75,"BENJ");
-   // binning->AddBin("psi","y",-3.75,-3.5,"BENJ");
-   // binning->AddBin("psi","y",-3.5,-3.25,"BENJ");
-   // binning->AddBin("psi","y",-3.25,-3,"BENJ");
-   // binning->AddBin("psi","y",-3,-2.75,"BENJ");
-   // binning->AddBin("psi","y",-2.75,-2.5,"BENJ");   
+   binning->AddBin("psi","y",-4,-3.75,"BENJ");
+   binning->AddBin("psi","y",-3.75,-3.5,"BENJ");
+   binning->AddBin("psi","y",-3.5,-3.25,"BENJ");
+   binning->AddBin("psi","y",-3.25,-3,"BENJ");
+   binning->AddBin("psi","y",-3,-2.75,"BENJ");
+   binning->AddBin("psi","y",-2.75,-2.5,"BENJ");   
     
-   binning->AddBin("psi","y",-4,-3.5,"BENJ");
+   // binning->AddBin("psi","y",-4,-3.5,"BENJ");
    // binning->AddBin("psi","y",-3.5,-3.,"BENJ");
    // binning->AddBin("psi","y",-3,-2.5,"BENJ");
     

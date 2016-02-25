@@ -43,10 +43,10 @@ Int_t maxMergeStages = 2;
 // Double_t oldPtParam[2] = {1.,3.9};
 TString oldPtFormula =   "[0]*x / TMath::Power([1] + TMath::Power(x,[2]),[3])";
 Double_t oldPtParam[4] = {0.32231,  0.95996 , 0.0665176,3.70602}; 
-Bool_t oldFixPtParam[4] = {kFALSE, kFALSE,kFALSE,kFALSE};
+Bool_t oldFixPtParam[4] = {kFALSE, kTRUE,kTRUE,kTRUE};
 TString newPtFormula = "[0]*x / TMath::Power([1] + [2]*x*x,[3])";
-Double_t newPtParam[4] = {2.03612e+05,1., 6.17683e-02 , 3.48210e+00};
-Bool_t newFixPtParam[4] = {kFALSE, kFALSE, kFALSE,kFALSE};
+Double_t newPtParam[4] = {21770.6,15.2993, 1.97656 , 4.01293};
+Bool_t newFixPtParam[4] = {kFALSE, kTRUE, kTRUE,kTRUE};
 
 
 
