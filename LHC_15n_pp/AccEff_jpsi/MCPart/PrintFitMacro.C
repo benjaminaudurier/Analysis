@@ -21,7 +21,7 @@
 #include <iostream> 
 
 //Some strings and constants
-char                   * sfile="AnalysisResults.root";
+char                   * sfile="AnalysisResults.JPSI.root";
 char                   * sasso="";
 char                   * sasso2="";
 char                   * beamYear="mumu.pp2015.config";

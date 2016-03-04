@@ -6,7 +6,8 @@
  *  Copyright 2011 SUBATECH. All rights reserved.
  *
  */
-
+#include <iostream>
+#include <vector> //Ne pas oublier !
 
 TString rootVersion = "v5-34-30";
 TString aliphysicsVersion = "vAN-20160116-1";
@@ -19,41 +20,16 @@ Int_t maxFilesPerJob = 100;
 Int_t maxMergeFiles = 10;
 Int_t maxMergeStages = 2;
 
-
-//______
-// J/Psi pT
-// pp
-// from the fit of RHIC, CDF & LHC data, see arXiv:1103.2394
-//
-// const Double_t kpt0 = 1.04*TMath::Power(5020,0.101);
-// const Double_t kxn  = 3.9;
-// //
-// Double_t pass1 = 1.+0.363*(x/kpt0)*(x/kpt0);
-// return x/TMath::Power(pass1,kxn);
-// 
-//______
-  // EXT PARAMETER                                   STEP         FIRST   
-  // NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
-  //  1  p0           2.03612e+05   5.17320e+02   3.72917e-03  -1.02663e-10
-  //  2  p1           6.17683e-02   6.43135e-04  -1.84907e-08  -1.15095e-03
-  //  3  p2           3.48210e+00   2.28397e-02   1.38246e-07  -8.55802e-04
-
 // tune0 LHC15n jpsi
-// TString oldPtFormula =   "[0]*x / TMath::Power( 1.+  0.363 *  (x/(1.04*TMath::Power(5020,0.101))) *(x/(1.04*TMath::Power(5020,0.101))),[0])";
-// Double_t oldPtParam[2] = {1.,3.9};
 TString oldPtFormula =   "[0]*x / TMath::Power([1] + TMath::Power(x,[2]),[3])";
-Double_t oldPtParam[4] = {0.32231,  0.95996 , 0.0665176,3.70602}; 
-Bool_t oldFixPtParam[4] = {kFALSE, kTRUE,kTRUE,kTRUE};
-TString newPtFormula = "[0]*x / TMath::Power([1] + [2]*x*x,[3])";
-Double_t newPtParam[4] = {21770.6,15.2993, 1.97656 , 4.01293};
-Bool_t newFixPtParam[4] = {kFALSE, kTRUE, kTRUE,kTRUE};
-
-
+Double_t oldPtParam[4] = {0.32231,0.95996,0.0665176,3.70602}; 
+Bool_t oldFixPtParam[4] = {kFALSE,kFALSE,kFALSE,kFALSE};
+TString newPtFormula = "[0]*x / TMath::Power(1. + TMath::Power(x/[1],[2]),[3])";
+Double_t newPtParam[4] = {0.32231,1.,1.,3.};
+Bool_t newFixPtParam[4] = {kFALSE,kFALSE,kFALSE,kFALSE};
 
 Double_t ptRange[2] = {0., 50.};
 
-// TString oldYFormula = " TMath::Exp(- ( (x/TMath::Log([3]/[0])) * (x/TMath::Log([3]/[0])) ) /[1]/[1]/[2])";
-// Double_t oldYParam[4] = {3.097, 0.4, 2,5020};
 // tune0 LHC15n jpsi
 TString oldYFormula = " [0] * ( 1 + [1]*x*x ) ";
 Double_t oldYParam[2] = {1.67011e+05, -3.22009e-02};
@@ -62,11 +38,23 @@ TString newYFormula = "[0] * ( 1 + [1]*x*x)";
 Double_t newYParam[2] =  {1.67011e+05, -3.22009e-02};
 Bool_t newFixYParam[2] = {kFALSE, kFALSE};
 
+// TString newYFormula = "[0]*TMath::Exp(-(1./2.)*TMath::Power(((x-[1])/[2]),2))";
+// Double_t newYParam[3] =  {1.6,0.,2.};
+// Bool_t newFixYParam[3] = {kFALSE, kFALSE,kFALSE};
+
 Double_t yRange[2] = {-4.2, -2.3};
 
 
 Bool_t isMC = kTRUE;
 Bool_t applyPhysicsSelection = kFALSE;
+
+//For pT projection
+Int_t firstybin=2; 
+Int_t lastybin=2;
+
+// For y Projection
+Int_t firstxbin=0;
+Int_t lastxbin=-1;
 
 
 void UpdateParametersAndRanges(Int_t iStep);
@@ -204,7 +192,7 @@ TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)
     Error("CreateAnalysisTrain","AliAnalysisTaskGenTunerJpsi not created!");
     return 0x0;
   }
-  if (applyPhysicsSelection) genTuner->SelectCollisionCandidates(AliVEvent::kMUU7);
+  // if (applyPhysicsSelection) genTuner->SelectCollisionCandidates(AliVEvent::kMUU7);
   // genTuner->SelectCentrality(0., 90.);
   genTuner->SetMuonTrackCuts(trackCuts);
 
@@ -217,82 +205,126 @@ TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)
   dataFile->GetObject("OC",oc);
   if (!oc) return;
 
-   // Get spectras
-  AliAnalysisMuMuSpectra * spectraPT = static_cast<AliAnalysisMuMuSpectra*>(oc->GetObject(Form("/%s/%s/%s/%s/PSI-PT",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data())));
-  if(!spectraPT)
-  {
-      cout << Form("Cannot find PT spectra in /%s/%s/%s/%s/PSI-PT",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data()) << endl;
+  // Get spectras
+  AliAnalysisMuMuSpectra * spectraYVSPT =0x0;
+  AliAnalysisMuMuSpectra * spectraPT =0x0;
+  AliAnalysisMuMuSpectra * spectraY =0x0;
+  Double_t* ptbin;
+  Double_t* ybin;
+  vector<double> ptBin;
+  vector<double> yBin;
+  Int_t ptnofbin; 
+  Int_t ynofbin; 
+
+  // Select spectra according to bin type
+  spectraYVSPT = static_cast<AliAnalysisMuMuSpectra*>(oc->GetObject(Form("/%s/%s/%s/%s/PSI-YVSPT",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data())));
+  if(!spectraYVSPT)cout << Form("Cannot find YVSPT spectra in /%s/%s/%s/%s/PSI-YVSPT",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data()) << endl;
+  
+  spectraPT = static_cast<AliAnalysisMuMuSpectra*>(oc->GetObject(Form("/%s/%s/%s/%s/PSI-PT",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data())));
+  if(!spectraPT)cout << Form("Cannot find PT spectra in /%s/%s/%s/%s/PSI-PT",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data()) << endl;
+  
+  spectraY = static_cast<AliAnalysisMuMuSpectra*>(oc->GetObject(Form("/%s/%s/%s/%s/PSI-Y",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data())));
+  if(!spectraY)cout << Form("Cannot find Y spectra in /%s/%s/%s/%s/PSI-Y",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data()) << endl;
+  
+  // Configure task for 1D bin
+  if(spectraPT && spectraY ){
+    ptbin    = spectraPT->Binning()->CreateBinArrayX();
+    ybin     = spectraY->Binning()->CreateBinArrayX();
+
+    ptnofbin = spectraPT->Binning()->GetNBinsX();
+    ynofbin  = spectraY->Binning()->GetNBinsY();
+
+  // Configure task for 2D bin  
+  } else if (spectraYVSPT) {
+    TH2D* hYVSPT = spectraYVSPT->Plot("NofJPsi",subResultName,kTRUE);// Get results as TH2D
+    if(!hYVSPT){
+      cout << "Cannot get hYVSPT" << endl;
       return;
-  }
-  AliAnalysisMuMuSpectra * spectraY = static_cast<AliAnalysisMuMuSpectra*>(oc->GetObject(Form("/%s/%s/%s/%s/PSI-Y",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data())));
-  if(!spectraY)
-  {
-      cout << Form("Cannot find Y spectra in /%s/%s/%s/%s/PSI-Y",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data()) << endl;
+    } 
+    TH1D* hpt = hYVSPT->ProjectionX("_px",firstybin,lastybin)->Clone();// pT results with projection along the y axis
+    TH1D* hy = hYVSPT->ProjectionY("_py",firstxbin,lastxbin)->Clone();// y results with projection along the pT axis
+    new TCanvas;
+    hpt->DrawCopy(); 
+    new TCanvas;
+    hy->DrawCopy();
+
+    if(lastxbin<0){ // Get bin w/o projection along the x axis
+      ptbin = spectraYVSPT->Binning()->CreateBinArrayX();
+      ptnofbin = spectraYVSPT->Binning()->GetNBinsX();
+    } else { // Get bin w/ projection along the x axis
+      ptBin.push_back(hYVSPT->GetXaxis()->GetBinLowEdge(lastxbin))
+      ptBin.push_back(hYVSPT->GetXaxis()->GetBinUpEdge(lastxbin));
+      ptnofbin = lastxbin -firstxbin;
+    } 
+
+     if(lastybin<0){// Get bin w/o projection along the y axis
+      ybin    = spectraYVSPT->Binning()->CreateBinArrayY();
+      ynofbin = spectraYVSPT->Binning()->GetNBinsY();
+    } else { // Get bin w/ projection along the y axis
+      yBin.push_back(hYVSPT->GetYaxis()->GetBinLowEdge(lastybin));
+      yBin.push_back(hYVSPT->GetYaxis()->GetBinUpEdge(lastybin));
+      ynofbin = lastybin -firstybin;
+    }
+    
+    // Set binning
+    if (ptbin) genTuner->SetPtBin(ptnofbin+1,ptbin);
+    if (ybin) genTuner->SetYBin(ynofbin+1,ybin);
+    if (ptBin.size()>0) genTuner->SetPtBin(ptnofbin+1,ptBin);
+    if (yBin.size()>0) genTuner->SetYBin(ynofbin+1,yBin);
+
+    if(hpt && hy && ptBin.size()!>0 && yBin.size()!>0){ //Case without projection
+      genTuner->SetPtRefHisto(hpt);
+      genTuner->SetYRefHisto(hy);
+    } 
+    else if ( hy && ptBin.size()>0 ) {
+      // Create and fill new histo proj histo
+      TH1D* hptproj = new TH1D(Form("%s_proj",hpt->GetName()),hpt->GetTitle(),ptnofbin,ptBin[0],ptBin[1]);
+      for (int i = 0; i < ptnofbin; ++i) hptproj->SetBinContent(firstxbin,hpt->GetBinContent(firstxbin+i));
+      new TCanvas;
+      hptproj->DrawCopy();
       return;
+      if(hptproj) genTuner->SetPtRefHisto(hptproj);
+      genTuner->SetYRefHisto(hy);
+      delete hptproj;
+    } 
+    else if ( hpt && yBin.size()>0 ) {
+      // Create and fill new histo proj histo
+      TH1D* hyproj = new TH1D(Form("%s_proj",hy->GetName()),hy->GetTitle(),ynofbin,yBin[0],yBin[1]);
+      for (int i = 0; i < ynofbin; ++i) hyproj->SetBinContent(firstybin,hy->GetBinContent(firstybin+i));
+      new TCanvas;
+      hyproj->DrawCopy();
+      return;
+      genTuner->SetPtRefHisto(hpt);
+      genTuner->SetYRefHisto(hyproj);
+      delete hyproj;
+
+    } else {
+      cout << "Cannot set reference histo !" << endl;
+      return;
+    }
+
+    dataFile->Close();
+  } 
+  else return;
+    
+  // get the new generator parameters from previous step if any and configure the tuner
+  if (isMC) {
+      
+  // update the parameters and the fitting ranges from the previous step if any
+  UpdateParametersAndRanges(iStep);
+  
+  // set the original function and parameters used in simulation
+  genTuner->SetOriginPtFunc(oldPtFormula.Data(), oldPtParam, oldFixPtParam, ptRange[0], ptRange[1]);
+  genTuner->SetOriginYFunc(oldYFormula.Data(), oldYParam, oldFixYParam, yRange[0], yRange[1]);
+  
+  // set the new function and initial parameters
+  genTuner->SetNewPtFunc(newPtFormula.Data(), newPtParam, newFixPtParam, ptRange[0], ptRange[1]);
+  genTuner->SetNewYFunc(newYFormula.Data(), newYParam, newFixYParam, yRange[0], yRange[1]);
+  
+  // enable the weighing
+  if (iStep > 0) genTuner->Weight(kTRUE);
   }
 
-  Double_t* ptbin= spectraPT->Binning()->CreateBinArrayX();
-  Double_t* ybin= spectraY->Binning()->CreateBinArrayX();
-
-  Int_t ptnofbin= spectraPT->Binning()->GetNBinsX();
-  Int_t ynofbin= spectraY->Binning()->GetNBinsX();
-
-  //___________Set ref.Spectra
-  // Pt spectra
-  TH1* hpt= spectraPT->Plot("NofJPsi",subResultName,kTRUE);// new
-  //Y spectra
-  TH1* hy= spectraY->Plot("NofJPsi",subResultName,kTRUE);// new
-  dataFile->Close();
-
-  // cout << "ptnofbin =" << ptnofbin << endl;
-
-  // for (int i = 0; i < ptnofbin+1; ++i)
-  // {
-  //   cout << "ptbin " << i << "=" << bin[i] << endl;
-  // }
-  
-  // cout << "ynofbin =" << ynofbin << endl;
-
-  // for (int i = 0; i < ynofbin+1; ++i)
-  // {
-  //   cout << "ybin " << i << "=" << bin[i] << endl;
-  // }
-  
-  
-  // return;
-  genTuner->SetPtBin(ptnofbin+1,ptbin);
-  genTuner->SetYBin(ynofbin+1,ybin);
-
-  if(hpt && hy){
-    genTuner->SetPtRefHisto(hpt);
-    genTuner->SetYRefHisto(hy);
-  } else {
-    cout << "Cannot set reference histo !" << endl;
-    return;
-  }
-  //==================================
-  //==================================
-    
-    // get the new generator parameters from previous step if any and configure the tuner
-    if (isMC) {
-    
-    // genTuner->SetDataFile("ReferenceResults.root");
-    
-    // update the parameters and the fitting ranges from the previous step if any
-    UpdateParametersAndRanges(iStep);
-    
-    // set the original function and parameters used in simulation
-    genTuner->SetOriginPtFunc(oldPtFormula.Data(), oldPtParam, oldFixPtParam, ptRange[0], ptRange[1]);
-    genTuner->SetOriginYFunc(oldYFormula.Data(), oldYParam, oldFixYParam, yRange[0], yRange[1]);
-    
-    // set the new function and initial parameters
-    genTuner->SetNewPtFunc(newPtFormula.Data(), newPtParam, newFixPtParam, ptRange[0], ptRange[1]);
-    genTuner->SetNewYFunc(newYFormula.Data(), newYParam, newFixYParam, yRange[0], yRange[1]);
-    
-    // enable the weighing
-    if (iStep > 0) genTuner->Weight(kTRUE);
-  }
-  
   return genTuner;
 }
 
@@ -318,8 +350,7 @@ void UpdateParametersAndRanges(Int_t iStep)
     exit(1);
   }
   
-  if ((fNewPtFunc->GetNpar() != (Int_t)(sizeof(newPtParam)/sizeof(Double_t))) ||
-      (fNewYFunc->GetNpar() != (Int_t)(sizeof(newYParam)/sizeof(Double_t)))) {
+  if ((fNewPtFunc->GetNpar() != (Int_t)(sizeof(newPtParam)/sizeof(Double_t))) || (fNewYFunc->GetNpar() != (Int_t)(sizeof(newYParam)/sizeof(Double_t)))) {
     printf("mismatch between the number of parameters in the previous step and in this macro\n");
     exit(1);
   }

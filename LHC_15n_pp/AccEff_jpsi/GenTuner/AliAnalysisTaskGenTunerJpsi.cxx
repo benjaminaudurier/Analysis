@@ -43,6 +43,8 @@
 #include "AliAnalysisMuMuSpectra.h"
 
 #include "AliAnalysisTaskGenTunerJpsi.h"
+#include <iostream>
+#include <vector> //Ne pas oublier !
 
 ClassImp(AliAnalysisTaskGenTunerJpsi)
 
@@ -803,7 +805,50 @@ void AliAnalysisTaskGenTunerJpsi::SetPtBin(Int_t nofbin,Double_t* bin)
 } 
 
 //________________________________________________________________________
+void AliAnalysisTaskGenTunerJpsi::SetPtBin(Int_t nofbin,vector<double> bin)
+{
+  fPtNofBin = nofbin ;
+
+  if(nofbin==0)
+  {
+
+    fPtBin = 0x0;
+    return;
+  } 
+
+  fPtBin = new Double_t[fPtNofBin];
+
+  for (int i = 0; i < fPtNofBin; ++i)
+  {
+    fPtBin[i]=bin[i];
+    // cout << "fPtBin " << i << "=" << fPtBin[i] << endl;
+  }
+  return;
+} 
+
+//________________________________________________________________________
 void AliAnalysisTaskGenTunerJpsi::SetYBin(Int_t nofbin,Double_t* bin)
+{
+  fYNofBin = nofbin;
+
+  if(nofbin==0)
+  {
+    fYBin = 0x0;
+    return;
+  } 
+
+  fYBin = new Double_t[fYNofBin];
+
+  for (int i = 0; i < fYNofBin; ++i)
+  {
+    fYBin[i]=bin[i];
+    // cout << "fYBin " << i << "=" << fYBin[i] << endl;
+  }
+  return;
+} 
+
+//________________________________________________________________________
+void AliAnalysisTaskGenTunerJpsi::SetYBin(Int_t nofbin,vector<double> bin)
 {
   fYNofBin = nofbin;
 

@@ -204,19 +204,19 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
     // binning->AddBin("psi","pt", 7.0, 8.0,"BENJ");
     // 
     // 
-    binning->AddBin("psi","pt", 0.0, 2.0,"BENJ");
+    // binning->AddBin("psi","pt", 0.0, 2.0,"BENJ");
     // binning->AddBin("psi","pt", 9.0, 10.0,"BENJ");
     // binning->AddBin("psi","pt", 10.0, 11.0,"BENJ");
     // binning->AddBin("psi","pt", 11.0, 12.0,"BENJ");
 
   
     // y binning
-   binning->AddBin("psi","y",-4,-3.75,"BENJ");
-   binning->AddBin("psi","y",-3.75,-3.5,"BENJ");
-   binning->AddBin("psi","y",-3.5,-3.25,"BENJ");
-   binning->AddBin("psi","y",-3.25,-3,"BENJ");
-   binning->AddBin("psi","y",-3,-2.75,"BENJ");
-   binning->AddBin("psi","y",-2.75,-2.5,"BENJ");   
+   // binning->AddBin("psi","y",-4,-3.75,"BENJ");
+   // binning->AddBin("psi","y",-3.75,-3.5,"BENJ");
+   // binning->AddBin("psi","y",-3.5,-3.25,"BENJ");
+   // binning->AddBin("psi","y",-3.25,-3,"BENJ");
+   // binning->AddBin("psi","y",-3,-2.75,"BENJ");
+   // binning->AddBin("psi","y",-2.75,-2.5,"BENJ");   
     
    // binning->AddBin("psi","y",-4,-3.5,"BENJ");
    // binning->AddBin("psi","y",-3.5,-3.,"BENJ");
@@ -234,17 +234,17 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
    // binning->AddBin("psi","phi",2.8,3.14,"BENJ");
    
    // yvspt bin
-  // for ( Int_t i = 0; i < 3; ++i ) {  
-  //   Double_t dy= 0.5;
-  //   Double_t y = -4+i*dy;
+  for ( Int_t i = 0; i < 3; ++i ) {  
+    Double_t dy= 0.5;
+    Double_t y = -4+i*dy;
 
-  //   for (int j = 0; j < 8; ++j) { 
-  //     Double_t dpt =1.;
-  //     Double_t pt = 0.+j*dpt;
-  //     binning->AddBin("psi","yvspt",pt, pt+dpt,y,y+dy,"BENJ");
-  //     // printf("Pt interval  =[%f,%f] y interval  =[%f,%f]\n",pt,pt+dpt,y,y+dy);
-  //   }
-  // }
+    for (int j = 0; j < 8; ++j) { 
+      Double_t dpt =1.;
+      Double_t pt = 0.+j*dpt;
+      binning->AddBin("psi","yvspt",pt, pt+dpt,y,y+dy,"BENJ");
+      // printf("Pt interval  =[%f,%f] y interval  =[%f,%f]\n",pt,pt+dpt,y,y+dy);
+    }
+  }
 
   }
 

@@ -151,7 +151,7 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   {  
 
     // Integrated
-    // binning->AddBin("psi","integrated");
+    binning->AddBin("psi","integrated");
 
    
 

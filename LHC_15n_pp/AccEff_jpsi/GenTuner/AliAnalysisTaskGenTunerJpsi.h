@@ -11,6 +11,8 @@
 #include <TObject.h>
 #include "AliAnalysisTaskSE.h"
 #include "AliMuonTrackCuts.h"
+#include <iostream>
+#include <vector> //Ne pas oublier !
 
 class TH1;
 class TF1;
@@ -49,9 +51,11 @@ public:
 
   // set pt binning
   void SetPtBin(Int_t nofbin,Double_t* bin); 
+  void SetPtBin(Int_t nofbin,vector<double> bin); 
 
   // set y binning
   void SetYBin(Int_t nofbin,Double_t* bin ); 
+  void SetYBin(Int_t nofbin,vector<double> bin ); 
   
   // create the original function with the parameters used in simulation to generate the pT distribution
   void SetOriginPtFunc(TString formula, const Double_t *param, const Bool_t *fixParam, Double_t xMin, Double_t xMax);

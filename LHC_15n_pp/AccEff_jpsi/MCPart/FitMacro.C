@@ -14,8 +14,8 @@
 #include <AliAnalysisMuMu.h>
 #include <TROOT.h>
 
-char           * sfile="AnalysisResults.root";
-char           * sasso="../MCPart/AnalysisResults.JPSI.root";
+char           * sfile="AnalysisResults.JPSI.root";
+char           * sasso="";
 char           * sasso2="";
 char           * beamYear="mumu.pp2015.config";
 
