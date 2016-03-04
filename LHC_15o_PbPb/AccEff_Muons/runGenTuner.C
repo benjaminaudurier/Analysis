@@ -9,105 +9,34 @@
 
 
 // generator parameters used in the simulation
-/*
-// tune0 LHC13de
-Double_t oldPtParam[6] = {371.909, 0.84614, 0.560486, 9.34831, 0.000474983, -0.853963};
-Bool_t oldFixPtParam[6] = {kFALSE, kFALSE, kFALSE, kFALSE, kFALSE, kFALSE};
-Double_t newPtParam[6] = {371.909, 0.84614, 0.560486, 9.34831, 0.000474983, -0.853963};
-Bool_t newFixPtParam[6] = {kFALSE, kFALSE, kFALSE, kFALSE, kFALSE, kFALSE};
-*//*
-// tune1 LHC13de
-Double_t oldPtParam[6] = {371.665, 0.845642, 0.56192, 9.34859, 0.000474519, -0.851091};
-Bool_t oldFixPtParam[6] = {kFALSE, kFALSE, kFALSE, kFALSE, kFALSE, kFALSE};
-Double_t newPtParam[6] = {371.665, 0.845642, 0.56192, 9.34859, 0.000474519, -0.851091};
-Bool_t newFixPtParam[6] = {kFALSE, kFALSE, kFALSE, kFALSE, kFALSE, kFALSE};
-*//*
-// tune0 LHC13f
-Double_t oldPtParam[6] = {522.811, 0.997725, 0.705636, 8.52259, 0., -1.};
-Bool_t oldFixPtParam[6] = {kFALSE, kFALSE, kFALSE, kFALSE, kTRUE, kTRUE};
-Double_t newPtParam[6] = {522.811, 0.997725, 0.705636, 8.52259, 0.0001, -1.};
-Bool_t newFixPtParam[6] = {kFALSE, kFALSE, kFALSE, kFALSE, kFALSE, kFALSE};
-*//*
-// tune1 LHC13f
-Double_t oldPtParam[6] = {455.614, 0.942071, 0.706755, 8.69856, 0.000168775, -0.925487};
-Bool_t oldFixPtParam[6] = {kFALSE, kFALSE, kFALSE, kFALSE, kFALSE, kFALSE};
-Double_t newPtParam[6] = {455.614, 0.942071, 0.706755, 8.69856, 0.000168775, -0.925487};
-Bool_t newFixPtParam[6] = {kFALSE, kFALSE, kFALSE, kFALSE, kFALSE, kFALSE};
-*//*
-// tune0 LHC15g
-TString oldPtFormula = "[0]/TMath::Power([1]+TMath::Power(x,[2]),[3])";
-Double_t oldPtParam[4] = {4.05962, 1.0, 2.46187, 2.08644};
-Bool_t oldFixPtParam[4] = {kFALSE, kFALSE, kFALSE, kFALSE};
-TString newPtFormula = "[0] * (1. / TMath::Power([1] + TMath::Power(x,[2]), [3]) + [4] * TMath::Exp([5]*x))";
-Double_t newPtParam[6] = {455.614, 0.942071, 0.706755, 8.69856, 0.000168775, -0.925487};
-Bool_t newFixPtParam[6] = {kFALSE, kFALSE, kFALSE, kFALSE, kFALSE, kFALSE};
-*/
-// tune1 LHC15n
+
+// tune0 LHC15o
 // TString oldPtFormula = "[0] * (1. / TMath::Power([1] + TMath::Power(x,[2]), [3]) + [4] * TMath::Exp([5]*x))";
 // Double_t oldPtParam[6] = {135.137, 0.555323, 0.578374, 10.1345, 0.000232233, -0.924726};
 // Bool_t oldFixPtParam[6] = {kFALSE, kFALSE, kFALSE, kFALSE, kFALSE, kFALSE};
-// TString newPtFormula = "[0] * (1. / TMath::Power([1] + TMath::Power(x,[2]), [3]) + [4] * TMath::Exp([5]*x))";
-// Double_t newPtParam[6] = {135.137, 0.555323, 0.578374, 10.1345, 0.000232233, -0.924726};
-// Bool_t newFixPtParam[6] = {kFALSE, kFALSE, kFALSE, kFALSE, kFALSE, kFALSE};
 
-// tune0 LHC15o
+// tune1 LHC15o
 TString oldPtFormula = "[0] * (1. / TMath::Power([1] + TMath::Power(x,[2]), [3]) + [4] * TMath::Exp([5]*x))";
-Double_t oldPtParam[6] = {135.137, 0.555323, 0.578374, 10.1345, 0.000232233, -0.924726};
+Double_t oldPtParam[6] = {349.454,0.965971,0.83717,7.82193,-0.00325109,-1.79551};
 Bool_t oldFixPtParam[6] = {kFALSE, kFALSE, kFALSE, kFALSE, kFALSE, kFALSE};
+
 TString newPtFormula = "[0] * (1. / TMath::Power([1] + TMath::Power(x,[2]), [3]) + [4] * TMath::Exp([5]*x))";
 Double_t newPtParam[6] = {135.137, 0.555323, 0.578374, 10.1345, 0.000232233, -0.924726};
 Bool_t newFixPtParam[6] = {kFALSE, kFALSE, kFALSE, kFALSE, kFALSE, kFALSE};
 
 Double_t ptRange[2] = {0.8, 999.};
 
-/*
-// tune0 LHC13de
-Double_t oldYParam[8] = {0.539134, 1, 0, 0.0499378, 0, -0.00450342, 0, 2};
-Bool_t oldFixYParam[8] = {kFALSE, kTRUE, kTRUE, kFALSE, kTRUE, kFALSE, kTRUE, kTRUE};
-Double_t newYParam[8] = {0.539134, 1, 0, 0.0499378, 0, -0.00450342, 0, 2};
-Bool_t newFixYParam[8] = {kFALSE, kTRUE, kTRUE, kFALSE, kTRUE, kFALSE, kTRUE, kTRUE};
-*//*
-// tune1 LHC13de
-Double_t oldYParam[8] = {0.777922, 1, 0, -0.0184202, 0, -0.00107081, 0, 2};
-Bool_t oldFixYParam[8] = {kFALSE, kTRUE, kTRUE, kFALSE, kTRUE, kFALSE, kTRUE, kTRUE};
-Double_t newYParam[8] = {0.777922, 1, 0, -0.0184202, 0, -0.00107081, 0, 2};
-Bool_t newFixYParam[8] = {kFALSE, kTRUE, kTRUE, kFALSE, kTRUE, kFALSE, kTRUE, kTRUE};
-*//*
-// tune0 LHC13f
-Double_t oldYParam[8] = {1.75646, 1., 8.70262e-05, -0.129939, -0.0190949, 0., 0., 2.};
-Bool_t oldFixYParam[8] = {kFALSE, kTRUE, kFALSE, kFALSE, kFALSE, kTRUE, kTRUE, kTRUE};
-Double_t newYParam[8] = {1.5712, 1., 0., -0.0893785, 0., 0.00228603, 0., 2.};
-Bool_t newFixYParam[8] = {kFALSE, kTRUE, kTRUE, kFALSE, kTRUE, kFALSE, kTRUE, kTRUE};
-//Double_t newYParam[8] = {1.8216, 0., 0., 0., 0., 0., 1., 2.0016};
-//Bool_t newFixYParam[8] = {kFALSE, kTRUE, kTRUE, kTRUE, kTRUE, kTRUE, kTRUE, kFALSE};
-*//*
-// tune1 LHC13f
-Double_t oldYParam[8] = {1.29511, 1., 0., -0.0767846, 0., 0.00176313, 0., 2.};
-Bool_t oldFixYParam[8] = {kFALSE, kTRUE, kTRUE, kFALSE, kTRUE, kFALSE, kTRUE, kTRUE};
-Double_t newYParam[8] = {1.29511, 1., 0., -0.0767846, 0., 0.00176313, 0., 2.};
-Bool_t newFixYParam[8] = {kFALSE, kTRUE, kTRUE, kFALSE, kTRUE, kFALSE, kTRUE, kTRUE};
-*//*
-// tune0 LHC15g
-TString oldYFormula = "[0]*(1.+[1]*x+[2]*x*x+[3]*x*x*x)";
-Double_t oldYParam[4] = {0.729545, 0.53837, 0.141776, 0.0130173};
-Bool_t oldFixYParam[4] = {kFALSE, kFALSE, kFALSE, kFALSE};
-//TString newYFormula = "[0] * ([1] * (1. + [2]*x + [3]*x*x + [4]*x*x*x + [5]*x*x*x*x) + [6]*TMath::Exp(-0.5*x*x/[7]/[7]))";
-TString newYFormula = "[0] * (1. + [1]*x*x + [2]*x*x*x*x)";
-Double_t newYParam[3] = {1.29511, -0.0767846, 0.00176313};
-Bool_t newFixYParam[3] = {kFALSE, kFALSE, kFALSE};
-*/
-// tune1 LHC15n
+
+// tune0 LHC15o
 // TString oldYFormula = "[0] * (1. + [1]*x*x + [2]*x*x*x*x)";
 // Double_t oldYParam[3] = {1.95551, -0.104761, 0.00311324};
 // Bool_t oldFixYParam[3] = {kFALSE, kFALSE, kFALSE};
-// TString newYFormula = "[0] * (1. + [1]*x*x + [2]*x*x*x*x)";
-// Double_t newYParam[3] = {1.95551, -0.104761, 0.00311324};
-// Bool_t newFixYParam[3] = {kFALSE, kFALSE, kFALSE};
 
-// tune0 LHC15o
+// tune1 LHC15o
 TString oldYFormula = "[0] * (1. + [1]*x*x + [2]*x*x*x*x)";
-Double_t oldYParam[3] = {1.95551, -0.104761, 0.00311324};
+Double_t oldYParam[3] = {1.77115,-0.0966005,0.00260707};
 Bool_t oldFixYParam[3] = {kFALSE, kFALSE, kFALSE};
+
 TString newYFormula = "[0] * (1. + [1]*x*x + [2]*x*x*x*x)";
 Double_t newYParam[3] = {1.95551, -0.104761, 0.00311324};
 Bool_t newFixYParam[3] = {kFALSE, kFALSE, kFALSE};
@@ -233,7 +162,7 @@ TObject* CreateAnalysisTrain(Int_t iStep)
   if (applyPhysicsSelection) {
     gROOT->LoadMacro("$ALICE_PHYSICS/OADB/COMMON/MULTIPLICITY/macros/AddTaskMultSelection.C");
     AliMultSelectionTask*mult = AddTaskMultSelection(kFALSE);
-  // mult->SetAlternateOADBforEstimators ("LHC15o"); // if running locally
+  mult->SetAlternateOADBforEstimators ("LHC15o"); // if running locally
   } 
   
   // track selection
@@ -254,7 +183,7 @@ TObject* CreateAnalysisTrain(Int_t iStep)
   if(applyPhysicsSelection) {
     // genTuner->SelectCollisionCandidates(AliVEvent   ::kMUU7);
     genTuner->SelectCollisionCandidates(AliVEvent::kMUS7);
-    genTuner->SelectCentrality(30., 90.);
+    genTuner->SelectCentrality(50., 90.);
   }
 
   genTuner->SetMuonTrackCuts(trackCuts);
