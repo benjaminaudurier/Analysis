@@ -122,7 +122,7 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
       // Cuts on track level
       AliAnalysisMuMuCutElement* pairTrue = cr->AddTrackPairCut(*cr,"AlwaysTrue","const AliVParticle&,const AliVParticle&","");// Apply "AlwaysTrue" cut on AliVParticle derived from AliAnalysisMuMuMinv
       AliAnalysisMuMuCutElement* pairy = cr->AddTrackPairCut(*minvAnalysis,"IsRapidityInRange","const AliVParticle&,const AliVParticle&","");
-      AliAnalysisMuMuCutElement* ptRange = cr->AddTrackPairCut(*minvAnalysis,"IsPtInRange","const AliVParticle&,const AliVParticle&,Double_t&,Double_t&","0.,8.");
+      AliAnalysisMuMuCutElement* ptRange = cr->AddTrackPairCut(*minvAnalysis,"IsPtInRange","const AliVParticle&,const AliVParticle&,Double_t&,Double_t&","0.,12.");
 
       cutElements.Add(pairTrue);
       cutElements.Add(pairy);
@@ -156,17 +156,17 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
    
 
      // pt binning
-    binning->AddBin("psi","pt", 0.0, 1.0,"BENJ");
-    binning->AddBin("psi","pt", 1.0, 2.0,"BENJ");
-    binning->AddBin("psi","pt", 2.0, 3.0,"BENJ");
-    binning->AddBin("psi","pt", 3.0, 4.0,"BENJ");
-    binning->AddBin("psi","pt", 4.0, 5.0,"BENJ");
-    binning->AddBin("psi","pt", 5.0, 6.0,"BENJ");
-    binning->AddBin("psi","pt", 6.0, 8.0,"BENJ");
+    // binning->AddBin("psi","pt", 0.0, 1.0,"BENJ");
+    // binning->AddBin("psi","pt", 1.0, 2.0,"BENJ");
+    // binning->AddBin("psi","pt", 2.0, 3.0,"BENJ");
+    // binning->AddBin("psi","pt", 3.0, 4.0,"BENJ");
+    // binning->AddBin("psi","pt", 4.0, 5.0,"BENJ");
+    // binning->AddBin("psi","pt", 5.0, 6.0,"BENJ");
+    // binning->AddBin("psi","pt", 6.0, 8.0,"BENJ");
     binning->AddBin("psi","pt", 7.0, 8.0,"BENJ");
-    // binning->AddBin("psi","pt", 8.0, 9.0,"BENJ");
-    // binning->AddBin("psi","pt", 9.0, 10.0,"BENJ");
-    // binning->AddBin("psi","pt", 10.0, 11.0,"BENJ");
+    binning->AddBin("psi","pt", 8.0, 9.0,"BENJ");
+    binning->AddBin("psi","pt", 9.0, 10.0,"BENJ");
+    binning->AddBin("psi","pt", 10.0, 12.0,"BENJ");
     // binning->AddBin("psi","pt", 11.0, 12.0,"BENJ");
     // binning->AddBin("psi","pt", 12.0, 13.0,"BENJ");
     // binning->AddBin("psi","pt", 13.0, 14.0,"BENJ");
