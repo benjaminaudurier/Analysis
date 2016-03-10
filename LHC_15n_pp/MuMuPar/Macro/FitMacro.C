@@ -7,52 +7,76 @@
 //
 
 // Macro to fit Minv Spectra and draw J/psi distribution vs pt and y
+#include <AliLog.h>
+#include <TObjArray.h>
+#include <TObjString.h>
+#include <AliAnalysisMuMu.h>
+#include <TROOT.h>
 
-TString striggerDimuon  ="CMUL7-B-NOPF-MUFAST";
-TString seventType      ="PSALL";
-TString spairCut        ="pALLPAIRYPAIRPTIN0.0-10.0RABSMATCHLOWETA";
-TString sbinType        ="PT,Y";
-TString scentrality     ="V0A";
-TString sResName        ="";
-Bool_t divideByBinWidth =kTRUE; 
-Double_t parPOWLAW[3] = {80.,1.,1.};
+char           * sfile="../AnalysisResults-0-8.root";
+char           * sasso="../../AccEff_jpsi/MCPart/AnalysisResults.JPSI.root";
+char           * sasso2="";
+char           * beamYear="mumu.pp2015.config";
+
+const char * MCRefResult = "PSICOUNT";
 
 
 //_____________________________________________________________________________
-void FitMacro(
-char           * what ="pt,y,integrated",
-char           * sfile="../AnalysisResults.root",
-char           * sasso="",
-char           * sasso2="",
-char           * beamYear="mumu.pp2015.config")
-{    
+void FitMacro( char* what ="pt",const char* printWhat = "", int debug =0 )
+{
+
+    AliLog::SetGlobalDebugLevel(debug);
+
+    Bool_t rawcount = kFALSE;
+    Bool_t clean = kFALSE;
+    Bool_t print = kFALSE;
+
+    TObjArray* sprint = TString(printWhat).Tokenize(",");
     
-    //General conf.
+    //Set bool
+    if(sprint->FindObject("rawcount")) rawcount =kTRUE;
+    if(sprint->FindObject("clean")) clean       =kTRUE;
+    if(sprint->FindObject("print")) print       =kTRUE;
+
+   //General conf.
     TObjArray* whatArray= TString(what).Tokenize(",");
     TIter nextWhat(whatArray);
     TObjString* swhat;
-
-    TObjArray* WHATArray= TString(sbinType).Tokenize(",");
-    TIter nextWHAT(WHATArray);
-    TObjString* sWHAT;
     
     // main object
     AliAnalysisMuMu analysis(sfile,sasso,sasso2,beamYear);
 
-    // // Clean   
-    // analysis.CleanAllSpectra();    
+    // Clean   
+    if(clean) analysis.CleanAllSpectra();  
 
     //_____ Fit 
     while ( ( swhat = static_cast<TObjString*>(nextWhat()) ) )
-    {
-        if(swhat->String().Contains("integrated")) analysis.Jpsi(swhat->String().Data(),"",kFALSE,kFALSE);
+    {   
 
-        else analysis.Jpsi(swhat->String().Data(),"BENJ",kFALSE,kFALSE);
+        if(swhat->String().Contains("integrated")) {
+            analysis.Jpsi(swhat->String().Data(),"",kFALSE,kFALSE);
+            analysis.ComputeYield("INTEGRATED","",MCRefResult);
+        } else if(swhat->String().Contains("pt")) {
+            analysis.Jpsi(swhat->String().Data(),"BENJ",kFALSE,kFALSE);
+            analysis.ComputeYield("PT","",MCRefResult);
+        } else if(swhat->String().Contains("y")) {
+            analysis.Jpsi(swhat->String().Data(),"BENJ",kFALSE,kFALSE);
+            analysis.ComputeYield("Y","",MCRefResult);
+        }        
     }
 
-    analysis.PrintNofParticle("PSI","NofJPsi","INTEGRATED",kFALSE);
+    // analysis.PrintNofParticle("PSI","NofJPsi","YVSPT",kFALSE);
     // analysis.PrintNofParticle("PSI","NofJPsi","Y",kFALSE);
-    // analysis.PrintNofParticle("PSI","NofJPsi","PT",kFALSE);    
+    if(print && what == "pt") analysis.PrintNofParticle("PSI","NofJPsi","PT",kFALSE);
+    if(print && what == "y") analysis.PrintNofParticle("PSI","NofJPsi","Y",kFALSE);
+    if(print && what == "integrated") analysis.PrintNofParticle("PSI","NofJPsi","INTEGRATED",kFALSE);
+    if(print && what == "yvspt") analysis.PrintNofParticle("PSI","NofJPsi","YVSPT",kFALSE);
+
+    if(rawcount){
+        analysis.ComputeDimuonRawCount(2.8,3.4); 
+        analysis.ComputeDimuonRawCount(2.1,2.8); 
+    }
+
 }
 
 
