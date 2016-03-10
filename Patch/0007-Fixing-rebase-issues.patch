@@ -1,0 +1,1281 @@
+From 754e76835d10aedd1c4fbd8f28fbbf58b68d0569 Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Wed, 27 Jan 2016 16:06:59 +0100
+Subject: [PATCH 7/7] Fixing rebase issues
+
+---
+ PWG/muondep/AliAnalysisMuMu.cxx | 1057 ++++++++++++++++++++-------------------
+ 1 file changed, 541 insertions(+), 516 deletions(-)
+
+diff --git a/PWG/muondep/AliAnalysisMuMu.cxx b/PWG/muondep/AliAnalysisMuMu.cxx
+index 983cdfc..fbf9857 100644
+--- a/PWG/muondep/AliAnalysisMuMu.cxx
++++ b/PWG/muondep/AliAnalysisMuMu.cxx
+@@ -77,7 +77,8 @@ ClassImp(AliAnalysisMuMu)
+ 
+ //_____________________________________________________________________________
+ AliAnalysisMuMu::AliAnalysisMuMu(const char* filename, AliAnalysisMuMuConfig& config) : TObject(),
+-fFilename(gSystem->ExpandPathName(filename)),
++fFilename(),
++fDirectory(""),
+ fCounterCollection(0x0),
+ fBinning(0x0),
+ fMergeableCollection(0x0),
+@@ -88,17 +89,21 @@ fAssociatedSimulation2(0x0),
+ fParticleName(""),
+ fConfig(new AliAnalysisMuMuConfig(config))
+ {
+-    GetCollections(fFilename,fMergeableCollection,fCounterCollection,fBinning,fRunNumbers);
++  GetFileNameAndDirectory(filename);
+ 
+-    if ( IsSimulation() )
+-        {
+-        SetParticleNameFromFileName(fFilename);
+-        }
++  GetCollections(fFilename,fDirectory,fMergeableCollection,fCounterCollection,fBinning,fRunNumbers);
++
++  if ( IsSimulation() )
++  {
++    SetParticleNameFromFileName(fFilename);
++  }
+ }
+ 
++
+ //_____________________________________________________________________________
+ AliAnalysisMuMu::AliAnalysisMuMu(const char* filename, const char* associatedSimFileName, const char* associatedSimFileName2, const char* configurationFile) : TObject(),
+ fFilename(filename),
++fDirectory(""),
+ fCounterCollection(0x0),
+ fBinning(0x0),
+ fMergeableCollection(0x0),
+@@ -109,56 +114,58 @@ fAssociatedSimulation2(0x0),
+ fParticleName(""),
+ fConfig(0x0)
+ {
+-    // ctor
+-    
+-    GetCollections(fFilename,fMergeableCollection,fCounterCollection,fBinning,fRunNumbers);
+-    
+-    if ( IsSimulation() )
+-        {
+-        SetParticleNameFromFileName(fFilename);
+-        }
+-    
+-    if ( fCounterCollection )
+-        {
+-        if ( strlen(associatedSimFileName) )
+-            {
+-            fAssociatedSimulation = new AliAnalysisMuMu(associatedSimFileName);
+-            }
++  // ctor
+ 
+-        if ( strlen(associatedSimFileName2) )
+-            {
+-            fAssociatedSimulation2 = new AliAnalysisMuMu(associatedSimFileName2);
+-            }
++  GetFileNameAndDirectory(filename);
+ 
+-        fConfig = new AliAnalysisMuMuConfig;
++  GetCollections(fFilename,fDirectory,fMergeableCollection,fCounterCollection,fBinning,fRunNumbers);
+ 
+-        fConfig->ReadFromFile(configurationFile);
+-        }
++  if ( IsSimulation() )
++  {
++    SetParticleNameFromFileName(fFilename);
++  }
++
++  if ( fCounterCollection )
++  {
++    if ( strlen(associatedSimFileName) )
++    {
++      fAssociatedSimulation = new AliAnalysisMuMu(associatedSimFileName);
++    }
++
++    if ( strlen(associatedSimFileName2) )
++    {
++      fAssociatedSimulation2 = new AliAnalysisMuMu(associatedSimFileName2);
++    }
++
++    fConfig = new AliAnalysisMuMuConfig;
++
++    fConfig->ReadFromFile(configurationFile);
++  }
+ }
+ 
+ //_____________________________________________________________________________
+ AliAnalysisMuMu::~AliAnalysisMuMu()
+ {
+-    // dtor
+-
+-    if ( fAssociatedSimulation )
+-        {
+-        fAssociatedSimulation->Update();
+-        }
+-    if ( fAssociatedSimulation2 )
+-        {
+-        fAssociatedSimulation2->Update();
+-        }
+-
+-    Update();
+-
+-    delete fCounterCollection;
+-    delete fBinning;
+-    delete fMergeableCollection;
+-    delete fCorrectionPerRun;
+-    delete fAssociatedSimulation;
+-    delete fAssociatedSimulation2;
+-    delete fConfig;
++  // dtor
++
++  if ( fAssociatedSimulation )
++  {
++    fAssociatedSimulation->Update();
++  }
++  if ( fAssociatedSimulation2 )
++  {
++    fAssociatedSimulation2->Update();
++  }
++
++  Update();
++
++  delete fCounterCollection;
++  delete fBinning;
++  delete fMergeableCollection;
++  delete fCorrectionPerRun;
++  delete fAssociatedSimulation;
++  delete fAssociatedSimulation2;
++  delete fConfig;
+ }
+ 
+ //_____________________________________________________________________________
+@@ -167,120 +174,119 @@ void AliAnalysisMuMu::BasicCounts(Bool_t detailTriggers,
+                                   ULong64_t* totalNmsl,
+                                   ULong64_t* totalNmul)
+ {
+-    // Report of some basic trigger counts (for MB,MUL and MSL)
+-    // both before and after physics selection.
+-    //
+-    // Amount all the triggers available in our counter collection,
+-    // we only consider the triggers that are defined in the configuration
+-    //
+-    // If detailTriggers is kTRUE, will show the detail, including Physics Selection fraction,
+-    // for each trigger found (as opposed to just showing info for MB,MSL and MUL triggers)
+-    
+-    if (!fMergeableCollection || !fCounterCollection) return;
+-    
+-    TObjArray* runs = fCounterCollection->GetKeyWords("run").Tokenize(",");
+-    TIter nextRun(runs);
++  // Report of some basic trigger counts (for MB,MUL and MSL)
++  // both before and after physics selection.
++  //
++  // Amount all the triggers available in our counter collection,
++  // we only consider the triggers that are defined in the configuration
++  //
++  // If detailTriggers is kTRUE, will show the detail, including Physics Selection fraction,
++  // for each trigger found (as opposed to just showing info for MB,MSL and MUL triggers)
+ 
+-    TObjArray* triggers = fCounterCollection->GetKeyWords("trigger").Tokenize(",");
+-    TIter nextTrigger(triggers);
++  if (!fMergeableCollection || !fCounterCollection) return;
+ 
+-    TObjArray* events = fCounterCollection->GetKeyWords("event").Tokenize(",");
++  TObjArray* runs = fCounterCollection->GetKeyWords("run").Tokenize(",");
++  TIter nextRun(runs);
+ 
+-    Bool_t doPS = (events->FindObject("PSALL") != 0x0);
++  TObjArray* triggers = fCounterCollection->GetKeyWords("trigger").Tokenize(",");
++  TIter nextTrigger(triggers);
+ 
+-    TObjString* srun;
+-    TObjString* strigger;
++  TObjArray* events = fCounterCollection->GetKeyWords("event").Tokenize(",");
+ 
+-    ULong64_t localNmb(0);
+-    ULong64_t localNmsl(0);
+-    ULong64_t localNmul(0);
++  Bool_t doPS = (events->FindObject("PSALL") != 0x0);
+ 
+-    if ( totalNmb) *totalNmb = 0;
+-    if ( totalNmsl) *totalNmsl = 0;
+-    if ( totalNmul ) *totalNmul = 0;
++  TObjString* srun;
++  TObjString* strigger;
+ 
+-    while ( ( srun = static_cast<TObjString*>(nextRun()) ) )
+-        {
+-        std::cout << Form("RUN %09d ",srun->String().Atoi());
++  ULong64_t localNmb(0);
++  ULong64_t localNmsl(0);
++  ULong64_t localNmul(0);
+ 
+-        TString details;
+-        ULong64_t nmb(0);
+-        ULong64_t nmsl(0);
+-        ULong64_t nmul(0);
++  if ( totalNmb) *totalNmb = 0;
++  if ( totalNmsl) *totalNmsl = 0;
++  if ( totalNmul ) *totalNmul = 0;
+ 
+-        nextTrigger.Reset();
++  while ( ( srun = static_cast<TObjString*>(nextRun()) ) )
++  {
++    std::cout << Form("RUN %09d ",srun->String().Atoi());
+ 
+-        Int_t nofPS(0);
++    TString details;
++    ULong64_t nmb(0);
++    ULong64_t nmsl(0);
++    ULong64_t nmul(0);
+ 
+-        while ( ( strigger = static_cast<TObjString*>(nextTrigger()) ) )
+-            {
++    nextTrigger.Reset();
+ 
+-            if ( !Config()->Has(Config()->MinbiasTriggerKey(),strigger->String().Data(),IsSimulation()) &&
+-                !Config()->Has(Config()->DimuonTriggerKey(),strigger->String().Data(),IsSimulation()) &&
+-                !Config()->Has(Config()->MuonTriggerKey(),strigger->String().Data(),IsSimulation()) ) continue;
++    Int_t nofPS(0);
+ 
+-            ULong64_t n = TMath::Nint(fCounterCollection->GetSum(Form("trigger:%s/event:%s/run:%d/centrality:all",
+-                                                                      strigger->String().Data(),"ALL",srun->String().Atoi())));
++    while ( ( strigger = static_cast<TObjString*>(nextTrigger()) ) )
++    {
+ 
+-            details += TString::Format("\n%50s %10lld",strigger->String().Data(),n);
++      if ( !Config()->Has(Config()->MinbiasTriggerKey(),strigger->String().Data(),IsSimulation()) &&
++           !Config()->Has(Config()->DimuonTriggerKey(),strigger->String().Data(),IsSimulation()) &&
++           !Config()->Has(Config()->MuonTriggerKey(),strigger->String().Data(),IsSimulation()) ) continue;
+ 
++      ULong64_t n = TMath::Nint(fCounterCollection->GetSum(Form("trigger:%s/event:%s/run:%d/centrality:all",
++                                                    strigger->String().Data(),"ALL",srun->String().Atoi())));
+ 
+-            if ( doPS )
+-                {
+-                ULong64_t nps = TMath::Nint(fCounterCollection->GetSum(Form("trigger:%s/event:%s/run:%d/centrality:all",
+-                                                                            strigger->String().Data(),"PSALL",srun->String().Atoi())));
++      details += TString::Format("\n%50s %10lld",strigger->String().Data(),n);
+ 
+-                details += TString::Format(" PS %5.1f %%",nps*100.0/n);
+ 
+-                if (nps)
+-                    {
+-                    ++nofPS;
+-                    }
++      if ( doPS )
++      {
++        ULong64_t nps = TMath::Nint(fCounterCollection->GetSum(Form("trigger:%s/event:%s/run:%d/centrality:all",
++                                                                    strigger->String().Data(),"PSALL",srun->String().Atoi())));
+ 
+-                }
++        details += TString::Format(" PS %5.1f %%",nps*100.0/n);
+ 
+-            if ( Config()->Has(Config()->MinbiasTriggerKey(),strigger->String(),IsSimulation() ) )
+-                {
+-                nmb += n;
+-                if ( totalNmb) (*totalNmb) += n;
+-                localNmb += n;
+-                }
+-            else if ( Config()->Has(Config()->MuonTriggerKey(),strigger->String(),IsSimulation()))
+-                {
+-                nmsl += n;
+-                if ( totalNmsl) (*totalNmsl) += n;
+-                localNmsl += n;
+-                }
+-            else if ( Config()->Has(Config()->DimuonTriggerKey(),strigger->String(),IsSimulation()) )
+-                {
+-                nmul += n;
+-                if ( totalNmul ) (*totalNmul) += n;
+-                localNmul += n;
+-                }
+-            }
++        if (nps)
++        {
++          ++nofPS;
++        }
+ 
+-        std::cout << Form("MB %10lld MSL %10lld MUL %10lld %s",
+-                          nmb,nmsl,nmul,(nofPS == 0 ? "(NO PS AVAIL)": ""));
++      }
+ 
++      if ( Config()->Has(Config()->MinbiasTriggerKey(),strigger->String(),IsSimulation() ) )
++      {
++        nmb += n;
++        if ( totalNmb) (*totalNmb) += n;
++        localNmb += n;
++      }
++      else if ( Config()->Has(Config()->MuonTriggerKey(),strigger->String(),IsSimulation()))
++      {
++        nmsl += n;
++        if ( totalNmsl) (*totalNmsl) += n;
++        localNmsl += n;
++      }
++      else if ( Config()->Has(Config()->DimuonTriggerKey(),strigger->String(),IsSimulation()) )
++      {
++        nmul += n;
++        if ( totalNmul ) (*totalNmul) += n;
++        localNmul += n;
++      }
++    }
+ 
+-        if ( detailTriggers )
+-            {
+-            std::cout << details.Data();
+-            }
+-        std::cout << std::endl;
+-        }
++    std::cout << Form("MB %10lld MSL %10lld MUL %10lld %s",
++                 nmb,nmsl,nmul,(nofPS == 0 ? "(NO PS AVAIL)": ""));
+ 
+-    if ( !totalNmul && !totalNmsl && !totalNmb )
+-        {
+-        std::cout << std::endl << Form("%13s MB %10lld MSL %10lld MUL %10lld ","TOTAL",
+-                                       localNmb,localNmsl,localNmul) << std::endl;
+-        }
+ 
+-    delete runs;
+-    delete triggers;
+-    delete events;
+-}
++    if ( detailTriggers )
++    {
++      std::cout << details.Data();
++    }
++    std::cout << std::endl;
++  }
+ 
++  if ( !totalNmul && !totalNmsl && !totalNmb )
++  {
++    std::cout << std::endl << Form("%13s MB %10lld MSL %10lld MUL %10lld ","TOTAL",
++                                   localNmb,localNmsl,localNmul) << std::endl;
++  }
++
++  delete runs;
++  delete triggers;
++  delete events;
++}
+ 
+ 
+ 
+@@ -305,155 +311,154 @@ void AliAnalysisMuMu::CleanFNorm()
+ 
+ //_____________________________________________________________________________
+ TObjArray* AliAnalysisMuMu::CompareJpsiPerCMUUWithBackground(const char* jpsiresults,
+-                                                             const char* backgroundresults)
++                                                                   const char* backgroundresults)
+ {
+-    TFile* fjpsi = FileOpen(jpsiresults);
+-    TFile* fbck = FileOpen(backgroundresults);
+-    
+-    if (!fjpsi || !fbck) return 0x0;
+-    
+-    TGraph* gjpsi = static_cast<TGraph*>(fjpsi->Get("jpsipercmuu"));
+-    
+-    std::vector<std::string> checks;
+-    
+-    checks.push_back("muminus-CMUU7-B-NOPF-ALLNOTRD");
+-    checks.push_back("muplus-CMUU7-B-NOPF-ALLNOTRD");
+-    checks.push_back("muminus-CMUSH7-B-NOPF-MUON");
+-    checks.push_back("muplus-CMUSH7-B-NOPF-MUON");
+-    
+-    if (!gjpsi) return 0x0;
+-    
+-    TObjArray* a = new TObjArray;
+-    a->SetOwner(kTRUE);
++  TFile* fjpsi = FileOpen(jpsiresults);
++  TFile* fbck = FileOpen(backgroundresults);
+ 
+-    for ( std::vector<std::string>::size_type j = 0; j < checks.size(); ++j )
+-        {
++  if (!fjpsi || !fbck) return 0x0;
+ 
+-        TGraph* gback = static_cast<TGraph*>(fbck->Get(checks[j].c_str()));
++  TGraph* gjpsi = static_cast<TGraph*>(fjpsi->Get("jpsipercmuu"));
+ 
+-        if (!gback) continue;
++  std::vector<std::string> checks;
+ 
+-        if ( gjpsi->GetN() != gback->GetN() )
+-            {
+-            AliErrorClass("graphs have different number of points !");
+-            continue;
+-            }
++  checks.push_back("muminus-CMUU7-B-NOPF-ALLNOTRD");
++  checks.push_back("muplus-CMUU7-B-NOPF-ALLNOTRD");
++  checks.push_back("muminus-CMUSH7-B-NOPF-MUON");
++  checks.push_back("muplus-CMUSH7-B-NOPF-MUON");
+ 
+-        TGraphErrors* g = new TGraphErrors(gjpsi->GetN());
++  if (!gjpsi) return 0x0;
+ 
+-        for ( int i = 0; i < gjpsi->GetN(); ++i )
+-            {
+-            double r1,r2,y1,y2;
++  TObjArray* a = new TObjArray;
++  a->SetOwner(kTRUE);
+ 
+-            gjpsi->GetPoint(i,r1,y1);
+-            gback->GetPoint(i,r2,y2);
++  for ( std::vector<std::string>::size_type j = 0; j < checks.size(); ++j )
++  {
+ 
+-            if ( r1 != r2 )
+-                {
+-                AliWarningClass(Form("run[%d]=%d vs %d",i,(int)r1,(int)r2));
+-                continue;
+-                }
++    TGraph* gback = static_cast<TGraph*>(fbck->Get(checks[j].c_str()));
+ 
+-            g->SetPoint(i,y2,y1);
+-            //    g->SetPointError(i,gjpsi->GetErrorY(i),gback->GetErrorY(i));
+-            }
++    if (!gback) continue;
+ 
+-        g->SetMarkerStyle(25+j);
+-        g->SetMarkerSize(1.2);
+-        if (j==0)
+-            {
+-            g->Draw("ap");
+-            }
+-        else
+-            {
+-            g->Draw("p");
+-            }
+-        g->SetLineColor(j+1);
+-        g->SetMarkerColor(j+1);
+-        g->SetName(checks[j].c_str());
+-        a->AddLast(g);
+-        }
++    if ( gjpsi->GetN() != gback->GetN() )
++    {
++      AliErrorClass("graphs have different number of points !");
++      continue;
++    }
+ 
+-    return a;
++    TGraphErrors* g = new TGraphErrors(gjpsi->GetN());
++
++    for ( int i = 0; i < gjpsi->GetN(); ++i )
++    {
++      double r1,r2,y1,y2;
++
++      gjpsi->GetPoint(i,r1,y1);
++      gback->GetPoint(i,r2,y2);
++
++      if ( r1 != r2 )
++      {
++        AliWarningClass(Form("run[%d]=%d vs %d",i,(int)r1,(int)r2));
++        continue;
++      }
++
++      g->SetPoint(i,y2,y1);
++      //    g->SetPointError(i,gjpsi->GetErrorY(i),gback->GetErrorY(i));
++    }
++
++    g->SetMarkerStyle(25+j);
++    g->SetMarkerSize(1.2);
++    if (j==0)
++    {
++      g->Draw("ap");
++    }
++    else
++    {
++      g->Draw("p");
++    }
++    g->SetLineColor(j+1);
++    g->SetMarkerColor(j+1);
++    g->SetName(checks[j].c_str());
++    a->AddLast(g);
++  }
++
++  return a;
+ }
+ 
+ //_____________________________________________________________________________
+ TGraph* AliAnalysisMuMu::CompareJpsiPerCMUUWithSimu(const char* realjpsiresults,
+                                                     const char* simjpsiresults)
+ {
+-    TFile* freal = FileOpen(realjpsiresults);
+-    TFile* fsim = FileOpen(simjpsiresults);
+-    
+-    if (!freal || !fsim) return 0x0;
+-    
+-    TGraph* greal = static_cast<TGraph*>(freal->Get("jpsipercmuu"));
+-    TGraph* gsim = static_cast<TGraph*>(fsim->Get("jpsipercmuu"));
++  TFile* freal = FileOpen(realjpsiresults);
++  TFile* fsim = FileOpen(simjpsiresults);
+ 
+-    TObjArray* a = new TObjArray;
+-    a->SetOwner(kTRUE);
++  if (!freal || !fsim) return 0x0;
+ 
+-    if ( greal->GetN() != gsim->GetN() )
+-        {
+-        AliErrorClass("graphs have different number of points !");
+-        return 0x0;
+-        }
++  TGraph* greal = static_cast<TGraph*>(freal->Get("jpsipercmuu"));
++  TGraph* gsim = static_cast<TGraph*>(fsim->Get("jpsipercmuu"));
+ 
+-    TGraphErrors* g = new TGraphErrors(greal->GetN());
+-    TGraphErrors* gratio = new TGraphErrors(greal->GetN());
++  TObjArray* a = new TObjArray;
++  a->SetOwner(kTRUE);
+ 
+-    for ( int i = 0; i < greal->GetN(); ++i )
+-        {
+-        double r1,r2,y1,y2;
++  if ( greal->GetN() != gsim->GetN() )
++  {
++    AliErrorClass("graphs have different number of points !");
++    return 0x0;
++  }
+ 
+-        greal->GetPoint(i,r1,y1);
+-        gsim->GetPoint(i,r2,y2);
++  TGraphErrors* g = new TGraphErrors(greal->GetN());
++  TGraphErrors* gratio = new TGraphErrors(greal->GetN());
+ 
+-        if ( r1 != r2 )
+-            {
+-            AliWarningClass(Form("run[%d]=%d vs %d",i,(int)r1,(int)r2));
+-            continue;
+-            }
++  for ( int i = 0; i < greal->GetN(); ++i )
++  {
++    double r1,r2,y1,y2;
+ 
+-        double ratio(0.0);
++    greal->GetPoint(i,r1,y1);
++    gsim->GetPoint(i,r2,y2);
+ 
+-        if ( TMath::Abs(y1)<1E-6 || TMath::Abs(y2)<1E-6)
+-            {
+-            g->SetPoint(i,0,0);
+-            g->SetPointError(i,0,0);
+-            }
+-        else
+-            {
+-                g->SetPoint(i,y2,y1);
+-                g->SetPointError(i,greal->GetErrorY(i),gsim ->GetErrorY(i));
+-                ratio = y2/y1;
+-            }
+-        gratio->SetPoint(i,r1,ratio);
+-        }
++    if ( r1 != r2 )
++    {
++      AliWarningClass(Form("run[%d]=%d vs %d",i,(int)r1,(int)r2));
++      continue;
++    }
+ 
+-    g->SetMarkerStyle(25);
+-    g->SetMarkerSize(1.2);
++    double ratio(0.0);
+ 
+-    new TCanvas;
++    if ( TMath::Abs(y1)<1E-6 || TMath::Abs(y2)<1E-6)
++    {
++      g->SetPoint(i,0,0);
++      g->SetPointError(i,0,0);
++    }
++    else
++    {
++      g->SetPoint(i,y2,y1);
++      g->SetPointError(i,greal->GetErrorY(i),gsim ->GetErrorY(i));
++      ratio = y2/y1;
++    }
++    gratio->SetPoint(i,r1,ratio);
++  }
+ 
+-    g->Draw("ap");
++  g->SetMarkerStyle(25);
++  g->SetMarkerSize(1.2);
+ 
+-    g->SetLineColor(1);
+-    g->SetMarkerColor(1);
+-    g->SetName("jpsipercmuurealvssim");
++  new TCanvas;
+ 
+-    new TCanvas;
++  g->Draw("ap");
+ 
+-    greal->Draw("alp");
+-    gsim->SetLineColor(4);
++  g->SetLineColor(1);
++  g->SetMarkerColor(1);
++  g->SetName("jpsipercmuurealvssim");
+ 
+-    gsim->Draw("lp");
++  new TCanvas;
+ 
+-    new TCanvas;
+-    gratio->Draw("alp");
++  greal->Draw("alp");
++  gsim->SetLineColor(4);
+ 
+-    return g;
+-}
++  gsim->Draw("lp");
+ 
++  new TCanvas;
++  gratio->Draw("alp");
++
++  return g;
++}
+ 
+ //_____________________________________________________________________________
+ void AliAnalysisMuMu::DrawFitResults(const char* particle,
+@@ -595,152 +600,153 @@ void AliAnalysisMuMu::DrawMinv(const char* type,
+                                const char* subresultname,
+                                const char* flavour) const
+ {
+-    /// Draw minv spectra for binning of given type
+-    
+-    if (!OC() || !BIN()) return;
+-    
+-    TObjArray* bins = BIN()->CreateBinObjArray(particle,type,flavour);
+-    if (!bins)
+-        {
+-        AliError(Form("Could not get %s bins",type));
+-        return;
+-        }
+-    
+-    Double_t xmin(-1);
+-    Double_t xmax(-1);
++  /// Draw minv spectra for binning of given type
+ 
+-    TString sparticle(particle);
+-    if ( sparticle=="PSI" )
+-        {
+-        xmin = 2;
+-        xmax = 6;
+-        }
++  if (!OC() || !BIN()) return;
+ 
+-    Int_t nx(1);
+-    Int_t ny(1);
++  TObjArray* bins = BIN()->CreateBinObjArray(particle,type,flavour);
++  if (!bins)
++  {
++    AliError(Form("Could not get %s bins",type));
++    return;
++  }
+ 
+-    Int_t n = bins->GetEntries();
++  Double_t xmin(-1);
++  Double_t xmax(-1);
+ 
+-    if ( n == 2 )
+-        {
+-        nx = 2;
+-        }
+-    else if ( n > 2 )
+-        {
+-        ny = TMath::Nint(TMath::Sqrt(n));
+-        nx = n/ny;
+-        }
++  TString sparticle(particle);
++  if ( sparticle=="PSI" )
++  {
++    xmin = 2;
++    xmax = 6;
++  }
+ 
+-    TString stype(type);
+-    stype.ToUpper();
++  Int_t nx(1);
++  Int_t ny(1);
+ 
+-    TString spectraName(Form("/%s/%s/%s/%s/%s-%s",eventType,trigger,centrality,pairCut,particle,stype.Data()));
++  Int_t n = bins->GetEntries();
+ 
+-    if ( strlen(flavour))
+-        {
+-        spectraName += "-";
+-        spectraName += flavour;
+-        }
++  if ( n == 2 )
++  {
++    nx = 2;
++  }
++  else if ( n > 2 )
++  {
++    ny = TMath::Nint(TMath::Sqrt(n));
++    nx = n/ny;
++  }
+ 
+-    AliAnalysisMuMuSpectra* spectra = static_cast<AliAnalysisMuMuSpectra*>(OC()->GetObject(spectraName.Data()));
++  TString stype(type);
++  stype.ToUpper();
+ 
+-    AliDebug(1,Form("spectraName=%s spectra=%p",spectraName.Data(),spectra));
++  TString spectraName(Form("/%s/%s/%s/%s/%s-%s",eventType,trigger,centrality,pairCut,particle,stype.Data()));
+ 
+-    TObjArray* spectraBins(0x0);
+-    if ( spectra )
+-        {
+-        spectraBins = spectra->BinContentArray();
+-        }
++  if ( strlen(flavour))
++  {
++    spectraName += "-";
++    spectraName += flavour;
++  }
+ 
+-    TCanvas* c = new TCanvas;
+-    c->Divide(nx,ny);
+-    c->Draw();
+-    gStyle->SetOptFit(1112);
++  AliAnalysisMuMuSpectra* spectra = static_cast<AliAnalysisMuMuSpectra*>(OC()->GetObject(spectraName.Data()));
+ 
+-    c->Connect("ProcessedEvent(Int_t,Int_t,Int_t,TObject*)", "AliAnalysisMuMu",
+-               (void*)this, "ExecuteCanvasEvent(Int_t,Int_t,Int_t,TObject*)");
++  AliDebug(1,Form("spectraName=%s spectra=%p",spectraName.Data(),spectra));
+ 
++  TObjArray* spectraBins(0x0);
++  if ( spectra )
++  {
++    spectraBins = spectra->BinContentArray();
++  }
+ 
+-    TIter next(bins);
+-    AliAnalysisMuMuBinning::Range* r;
+-    Int_t ci(0);
++  TCanvas* c = new TCanvas;
++  c->Divide(nx,ny);
++  c->Draw();
++  gStyle->SetOptFit(1112);
+ 
+-    while ( ( r = static_cast<AliAnalysisMuMuBinning::Range*>(next())) )
+-        {
+-        TString name(Form("/%s/%s/%s/%s/MinvUS%s",eventType,trigger,centrality,pairCut,r->AsString().Data()));
++  c->Connect("ProcessedEvent(Int_t,Int_t,Int_t,TObject*)", "AliAnalysisMuMu",
++              (void*)this, "ExecuteCanvasEvent(Int_t,Int_t,Int_t,TObject*)");
+ 
+-        AliDebug(1,name.Data());
+ 
+-        AliAnalysisMuMuJpsiResult* spectraBin(0x0);
++  TIter next(bins);
++  AliAnalysisMuMuBinning::Range* r;
++  Int_t ci(0);
+ 
+-        if ( spectraBins )
+-            {
+-            AliAnalysisMuMuResult* sr = static_cast<AliAnalysisMuMuResult*>(spectraBins->At(ci));
++  while ( ( r = static_cast<AliAnalysisMuMuBinning::Range*>(next())) )
++  {
++    TString name(Form("/%s/%s/%s/%s/MinvUS+%s",eventType,trigger,centrality,pairCut,r->AsString().Data()));
+ 
+-            spectraBin = static_cast<AliAnalysisMuMuJpsiResult*>(sr->SubResult(subresultname));
++    AliDebug(1,name.Data());
+ 
+-            AliDebug(1,Form("spectraBin(%s)=%p",subresultname,spectraBin));
+-            }
++    AliAnalysisMuMuJpsiResult* spectraBin(0x0);
+ 
+-        TH1* h = OC()->Histo(name.Data());
++    if ( spectraBins )
++    {
++      AliAnalysisMuMuResult* sr = static_cast<AliAnalysisMuMuResult*>(spectraBins->At(ci));
+ 
+-        if ( spectraBin )
+-            {
+-            h = spectraBin->Histo();
+-            }
++      spectraBin = static_cast<AliAnalysisMuMuJpsiResult*>(sr->SubResult(subresultname));
+ 
+-        if (h)
+-            {
+-            ++ci;
+-            c->cd(ci);
+-            gPad->SetLogy();
+-            if (xmin>0)
+-                {
+-                h->GetXaxis()->SetRangeUser(xmin,xmax);
+-                }
+-            h->Draw("histes");
++      AliDebug(1,Form("spectraBin(%s)=%p",subresultname,spectraBin));
++    }
+ 
+-            TObject* f1 = h->GetListOfFunctions()->FindObject("fitTotal");
+-            if (f1)
+-                {
+-                f1->Draw("same");
+-                }
++    TH1* h = OC()->Histo(name.Data());
+ 
+-            gPad->Modified();
+-            gPad->Update();
++    if ( spectraBin )
++    {
++      h = spectraBin->Histo();
++    }
+ 
+-            TObject* stats = h->FindObject("stats");
+-            if (stats)
+-                {
+-                stats->Draw("same");
+-                }
+-            }
+-        }
++    if (h)
++    {
++      ++ci;
++      c->cd(ci);
++      gPad->SetLogy();
++      if (xmin>0)
++      {
++        h->GetXaxis()->SetRangeUser(xmin,xmax);
++      }
++      h->Draw("histes");
++
++      TObject* f1 = h->GetListOfFunctions()->FindObject("fitTotal");
++      if (f1)
++      {
++        f1->Draw("same");
++      }
++
++      gPad->Modified();
++      gPad->Update();
++
++      TObject* stats = h->FindObject("stats");
++      if (stats)
++      {
++        stats->Draw("same");
++      }
++    }
++  }
+ 
+-    delete bins;
++  delete bins;
+ }
+ 
+ //_____________________________________________________________________________
+ void AliAnalysisMuMu::DrawMinv(const char* type, const char* particle, const char* flavour, const char* subresultname) const
+ {
+-    /// Draw minv spectra for binning of given type
++  /// Draw minv spectra for binning of given type
+ 
+-    //  AliWarning("Reimplement me!");
++//  AliWarning("Reimplement me!");
+ 
+-    if (!fConfig)
+-        {
+-        AliError("No configuration available yet. Don't know what to draw");
+-        return;
+-        }
+-    const AliAnalysisMuMuConfig& c = *(Config());
++  if (!fConfig)
++  {
++    AliError("No configuration available yet. Don't know what to draw");
++    return;
++  }
+ 
+-    DrawMinv(type,particle,
+-             c.First(c.DimuonTriggerKey(),IsSimulation()),
+-             c.First(c.EventSelectionKey(),IsSimulation()),
+-             c.First(c.PairSelectionKey(),IsSimulation()),
+-             c.First(c.CentralitySelectionKey(),IsSimulation()),
+-             subresultname,
+-             flavour);
++  const AliAnalysisMuMuConfig& c = *(Config());
++
++  DrawMinv(type,particle,
++           c.First(c.DimuonTriggerKey(),IsSimulation()),
++           c.First(c.EventSelectionKey(),IsSimulation()),
++           c.First(c.PairSelectionKey(),IsSimulation()),
++           c.First(c.CentralitySelectionKey(),IsSimulation()),
++           subresultname,
++           flavour);
+ }
+ 
+ //___________________________________________________________________
+@@ -1091,141 +1097,140 @@ void AliAnalysisMuMu::RAAasGraphic(const char* particle,
+ 
+ }
+ 
+-
+ //_____________________________________________________________________________
+ TString
+ AliAnalysisMuMu::ExpandPathName(const char* file)
+ {
+-    // An expand method that lives alien URL as they are
+-    TString sfile;
+-
+-    if ( !sfile.BeginsWith("alien://") )
+-        {
+-        return gSystem->ExpandPathName(file);
+-        }
+-    else
+-        {
+-        if (!gGrid) TGrid::Connect("alien://");
+-        if (!gGrid) return "";
+-        }
+-
+-    return file;
++  // An expand method that lives alien URL as they are
++  TString sfile;
++
++  if ( !sfile.BeginsWith("alien://") )
++  {
++    return gSystem->ExpandPathName(file);
++  }
++  else
++  {
++    if (!gGrid) TGrid::Connect("alien://");
++    if (!gGrid) return "";
++  }
++
++  return file;
+ }
+ 
+ //_____________________________________________________________________________
+ void AliAnalysisMuMu::TwikiOutputFnorm(const char* series) const
+ {
+-    // make a twiki-compatible output of the Fnorm factor(s)
+-    TObjArray* what = TString(series).Tokenize(",");
+-    TObjString* s;
+-    TObjArray graphs;
+-    TIter next(what);
++  // make a twiki-compatible output of the Fnorm factor(s)
++  TObjArray* what = TString(series).Tokenize(",");
++  TObjString* s;
++  TObjArray graphs;
++  TIter next(what);
++
++  std::cout << "| *Run* |";
++  while ( ( s = static_cast<TObjString*>(next())) )
++  {
++    TGraph* g = static_cast<TGraph*>(OC()->GetObject(Form("/FNORM/GRAPHS/%s",s->String().Data())));
++    if (!g)
++    {
++      AliError(Form("Could not find graph for %s",s->String().Data()));
++      continue;
++    }
++    std::cout << " *" << s->String().Data();
++    if ( s->String().BeginsWith("RelDif") ) std::cout << " %";
++    std::cout << "*|";
++    graphs.Add(g);
++  }
+ 
+-    std::cout << "| *Run* |";
+-    while ( ( s = static_cast<TObjString*>(next())) )
+-        {
+-        TGraph* g = static_cast<TGraph*>(OC()->GetObject(Form("/FNORM/GRAPHS/%s",s->String().Data())));
+-        if (!g)
+-            {
+-            AliError(Form("Could not find graph for %s",s->String().Data()));
+-            continue;
+-            }
+-        std::cout << " *" << s->String().Data();
+-        if ( s->String().BeginsWith("RelDif") ) std::cout << " %";
+-        std::cout << "*|";
+-        graphs.Add(g);
+-        }
+-    
+-    std::cout << std::endl;
+-    
+-    TGraphErrors* g0 = static_cast<TGraphErrors*>(graphs.First());
+-    if (!g0) return;
+-    
+-    for ( Int_t i = 0; i < g0->GetN(); ++i )
+-        {
+-        TString msg;
++  std::cout << std::endl;
+ 
+-        msg.Form("|%6d|",TMath::Nint(g0->GetX()[i]));
++  TGraphErrors* g0 = static_cast<TGraphErrors*>(graphs.First());
++  if (!g0) return;
+ 
+-        for ( Int_t j = 0; j < graphs.GetEntries(); ++j )
+-            {
+-            TGraphErrors* g = static_cast<TGraphErrors*>(graphs.At(j));
++  for ( Int_t i = 0; i < g0->GetN(); ++i )
++  {
++    TString msg;
+ 
+-            msg += TString::Format(" %6.2f +- %6.2f |",g->GetY()[i],g->GetEY()[i]);
+-            }
++    msg.Form("|%6d|",TMath::Nint(g0->GetX()[i]));
+ 
+-        std::cout << msg.Data() << std::endl;
+-        }
+-    
+-    next.Reset();
++    for ( Int_t j = 0; j < graphs.GetEntries(); ++j )
++    {
++      TGraphErrors* g = static_cast<TGraphErrors*>(graphs.At(j));
+ 
+-    std::cout << "|*Weigthed mean (*)*|";
+-    
+-    AliAnalysisMuMuResult* r = static_cast<AliAnalysisMuMuResult*>(OC()->GetObject("/FNORM/RESULTS/Fnorm"));
++      msg += TString::Format(" %6.2f +- %6.2f |",g->GetY()[i],g->GetEY()[i]);
++    }
+ 
+-    if (!r)
+-        {
+-        AliError("Could not find Fnorm result !");
+-        return;
+-        }
+-    
+-    
+-    while ( ( s = static_cast<TObjString*>(next())) )
+-        {
+-        TString var("Fnorm");
+-        TString unit;
++    std::cout << msg.Data() << std::endl;
++  }
+ 
+-        if ( s->String().BeginsWith("Fnorm") )
+-            {
+-            r = static_cast<AliAnalysisMuMuResult*>(OC()->GetObject("/FNORM/RESULTS/Fnorm"));
+-            }
+-        else if ( s->String().BeginsWith("RelDif") )
+-            {
+-            r = static_cast<AliAnalysisMuMuResult*>(OC()->GetObject("/FNORM/RESULTS/RelDif"));
+-            unit = "%";
+-            }
++  next.Reset();
+ 
+-        r->Exclude("*");
+-        r->Include(s->String().Data());
++  std::cout << "|*Weigthed mean (*)*|";
+ 
+-        std::cout << Form(" * %5.2f +- %5.2f %s * |",
+-                          r->GetValue(var.Data()),
+-                          r->GetErrorStat(var.Data()),
+-                          unit.Data());
+-        }
++  AliAnalysisMuMuResult* r = static_cast<AliAnalysisMuMuResult*>(OC()->GetObject("/FNORM/RESULTS/Fnorm"));
+ 
+-    next.Reset();
++  if (!r)
++  {
++    AliError("Could not find Fnorm result !");
++    return;
++  }
+ 
+-    std::cout << std::endl;
+ 
+-    std::cout << "|*RMS*|";
++  while ( ( s = static_cast<TObjString*>(next())) )
++  {
++    TString var("Fnorm");
++    TString unit;
+ 
+-    while ( ( s = static_cast<TObjString*>(next())) )
+-        {
+-        TString var("Fnorm");
++    if ( s->String().BeginsWith("Fnorm") )
++    {
++      r = static_cast<AliAnalysisMuMuResult*>(OC()->GetObject("/FNORM/RESULTS/Fnorm"));
++    }
++    else if ( s->String().BeginsWith("RelDif") )
++    {
++      r = static_cast<AliAnalysisMuMuResult*>(OC()->GetObject("/FNORM/RESULTS/RelDif"));
++      unit = "%";
++    }
+ 
+-        if ( s->String().BeginsWith("Fnorm") )
+-            {
+-            r = static_cast<AliAnalysisMuMuResult*>(OC()->GetObject("/FNORM/RESULTS/Fnorm"));
+-            }
+-        else if ( s->String().BeginsWith("RelDif") )
+-            {
+-            r = static_cast<AliAnalysisMuMuResult*>(OC()->GetObject("/FNORM/RESULTS/RelDif"));
+-            }
++    r->Exclude("*");
++    r->Include(s->String().Data());
+ 
+-        r->Exclude("*");
+-        r->Include(s->String().Data());
++    std::cout << Form(" * %5.2f +- %5.2f %s * |",
++                      r->GetValue(var.Data()),
++                      r->GetErrorStat(var.Data()),
++                      unit.Data());
++  }
+ 
+-        Double_t d = 100.0*r->GetRMS(var.Data())/r->GetValue(var.Data());
++  next.Reset();
+ 
+-        std::cout << Form(" * %5.2f (%5.2f %%) * |",
+-                          r->GetRMS(var.Data()),d);
+-        }
++  std::cout << std::endl;
+ 
+-    std::cout << std::endl;
+-    std::cout << "(*) weight is the number of CMUL7-B-NOPF-MUON triggers (physics-selected and pile-up corrected) in each run" << std::endl;
++  std::cout << "|*RMS*|";
++
++  while ( ( s = static_cast<TObjString*>(next())) )
++  {
++    TString var("Fnorm");
++
++    if ( s->String().BeginsWith("Fnorm") )
++    {
++      r = static_cast<AliAnalysisMuMuResult*>(OC()->GetObject("/FNORM/RESULTS/Fnorm"));
++    }
++    else if ( s->String().BeginsWith("RelDif") )
++    {
++      r = static_cast<AliAnalysisMuMuResult*>(OC()->GetObject("/FNORM/RESULTS/RelDif"));
++    }
++
++    r->Exclude("*");
++    r->Include(s->String().Data());
++
++    Double_t d = 100.0*r->GetRMS(var.Data())/r->GetValue(var.Data());
+ 
+-    delete what;
++    std::cout << Form(" * %5.2f (%5.2f %%) * |",
++                      r->GetRMS(var.Data()),d);
++  }
++
++  std::cout << std::endl;
++  std::cout << "(*) weight is the number of CMUL7-B-NOPF-MUON triggers (physics-selected and pile-up corrected) in each run" << std::endl;
++
++  delete what;
+ }
+ 
+ //_____________________________________________________________________________
+@@ -2838,68 +2843,88 @@ UInt_t AliAnalysisMuMu::GetSum(AliCounterCollection& cc, const char* triggerList
+ //_____________________________________________________________________________
+ Bool_t
+ AliAnalysisMuMu::GetCollections(const char* rootfile,
++                                const char* subdir,
+                                 AliMergeableCollection*& oc,
+                                 AliCounterCollection*& cc,
+                                 AliAnalysisMuMuBinning*& bin,
+                                 std::set<int>& runnumbers)
+ {
+-    oc = 0x0;
+-    cc = 0x0;
+-    bin = 0x0;
+-    //Get the rootfile
+-    TFile* f = static_cast<TFile*>(gROOT->GetListOfFiles()->FindObject(rootfile));
+-    if (!f)
+-        {
+-        f = TFile::Open(rootfile);
+-        }
+-
+-    if ( !f || f->IsZombie() )
+-        {
+-        return kFALSE;
+-        }
+-    // oc points on the histogramme collection
+-    f->GetObject("OC",oc);
+-    if (!oc)
+-        {
+-        f->GetObject("MC",oc);
+-        }
+-    // cc point on mergeable collection
+-    f->GetObject("CC",cc);
+-    // Iterator on bin type
+-    TIter next(f->GetListOfKeys());
+-    TKey* key;
+-    // bin points on each bin type
+-    while ( ( key = static_cast<TKey*>(next())) && !bin )
+-        {
+-        if ( strcmp(key->GetClassName(),"AliAnalysisMuMuBinning")==0 )
+-            {
+-            bin = dynamic_cast<AliAnalysisMuMuBinning*>(key->ReadObj());
+-            }
+-        }
++  /// Get access to the mergeable collection, counter collection and binning
++  /// within file rootfile.
++  /// rootfile is a filename, with an optional directory (with the syntax
++  /// (filename.root:directory)
++  /// where the collections are to be found.
++
++  oc = 0x0;
++  cc = 0x0;
++  bin = 0x0;
++
++
++  TFile* f = static_cast<TFile*>(gROOT->GetListOfFiles()->FindObject(rootfile));
++  if (!f)
++  {
++    f = TFile::Open(rootfile);
++  }
++
++  if ( !f || f->IsZombie() )
++  {
++    return kFALSE;
++  }
++
++  TString dir = subdir;
++
++  if (dir.Length())
++  {
++    dir.Remove(TString::kBoth,'/');
++    dir += "/";
++  }
++
++  f->GetObject(Form("%sOC",dir.Data()),oc);
++  if (!oc)
++  {
++    f->GetObject(Form("%sMC",dir.Data()),oc);
++  }
++  f->GetObject(Form("%sCC",dir.Data()),cc);
++
++  TIter next(f->GetListOfKeys());
++  TKey* key;
++
++  while ( ( key = static_cast<TKey*>(next())) && !bin )
++  {
++    if ( strcmp(key->GetClassName(),"AliAnalysisMuMuBinning")==0 )
++    {
++      bin = dynamic_cast<AliAnalysisMuMuBinning*>(key->ReadObj());
++    }
++  }
+ 
+-    if (!oc || !cc)
+-        {
+-        AliErrorClass("Old file. Please upgrade it!");
++  if ( (!oc || !cc) && fDirectory.Length()==0 )
++  {
++    // one more try, searching in subdirectories as well
++    GetCollectionsFromAnySubdir(*f,oc,cc,bin);
++  }
+ 
+-        return kFALSE;
+-        }
++  if (!oc || !cc)
++  {
++    AliError("Could not get OC, CC and BIN. Is that an old file ? Try to upgrade it or check it's the right file...");
++    return kFALSE;
++  }
+ 
+-    // get run list
+-    TObjArray* runs = cc->GetKeyWords("run").Tokenize(",");
+-    runs->Sort();
+-    TIter nextRun(runs);
+-    TObjString* srun;
++  // get run list
++  TObjArray* runs = cc->GetKeyWords("run").Tokenize(",");
++  runs->Sort();
++  TIter nextRun(runs);
++  TObjString* srun;
+ 
+-    runnumbers.clear();
++  runnumbers.clear();
+ 
+-    while ( ( srun = static_cast<TObjString*>(nextRun()) ) )
+-        {
+-        runnumbers.insert(srun->String().Atoi());
+-        }
++  while ( ( srun = static_cast<TObjString*>(nextRun()) ) )
++  {
++    runnumbers.insert(srun->String().Atoi());
++  }
+ 
+-    delete runs;
++  delete runs;
+ 
+-    return kTRUE;
++  return kTRUE;
+ }
+ 
+ //_____________________________________________________________________________
+-- 
+2.5.4 (Apple Git-61)
+

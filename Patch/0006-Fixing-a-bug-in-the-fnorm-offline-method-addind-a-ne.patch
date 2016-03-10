@@ -1,0 +1,320 @@
+From 06820bf042f83bde30f92835bcab878fc8bc09d5 Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Wed, 27 Jan 2016 08:30:37 +0100
+Subject: [PATCH 6/7] Fixing a bug in the fnorm offline method + addind a new
+ method in AliAnalysisMuMu
+
+---
+ PWG/muondep/AliAnalysisMuMu.cxx      | 33 +++++++------
+ PWG/muondep/AliAnalysisMuMuFnorm.cxx | 93 +++++++++++++++++++++++++-----------
+ PWG/muondep/AliAnalysisMuMuFnorm.h   |  3 ++
+ 3 files changed, 85 insertions(+), 44 deletions(-)
+
+diff --git a/PWG/muondep/AliAnalysisMuMu.cxx b/PWG/muondep/AliAnalysisMuMu.cxx
+index fac28c7..983cdfc 100644
+--- a/PWG/muondep/AliAnalysisMuMu.cxx
++++ b/PWG/muondep/AliAnalysisMuMu.cxx
+@@ -1567,6 +1567,10 @@ AliAnalysisMuMu::FitParticle(const char* particle,
+                     }
+ 
+                 added += ( r->AddFit(sFitType.Data()) == kTRUE );// Here we call the fit functions
++                // printf("Signal over background : %f\n",r->GetValue("SignalOverBkg3s"));
++                Double_t z = r->GetValue("SignalOverBkg3s");
++                Double_t zerr = r->GetErrorStat("SignalOverBkg3s");
++                r->PrintValue("SignalOverBkg3s","",z,zerr);
+                 }
+ 
+             std::cout << "-------------------------------------" << std::endl;
+@@ -4450,32 +4454,26 @@ void AliAnalysisMuMu::ComputeFnormWeightedMeanGraphs(AliAnalysisMuMuFnorm::ETrig
+         cout <<      " ================================================================ " << endl;
+     }
+ 
+-    // Create array
+-    // TObjArray* pattArray        = TString(patternOrList).Tokenize(",");
+-    // TObjArray* graphNameArray     = TString(graphName).Tokenize(",");
+-    // TIter nextWhat(pattArray);
+-    // TIter nextgraphName(graphNameArray);
+-    // TObjString* spatt;
+-    // TObjString* sgraphName;
+-
+     //Delete precedent Fnorm
+     OC()->Prune("/FNORM/WeightedMeanGraphs");
+ 
+     AliAnalysisMuMuFnorm computer(*(CC()),*(Config()),refTrigger,Config()->OCDBPath(),Config()->CompactGraphs());
+ 
+-    computer.WeightedMeanGraphs(patternOrList,graphName,OC());
++    TString spattern(patternOrList);
++    TObjArray* slist(0x0);
++    slist = spattern.Tokenize(":");
++
++    TIter next(slist);
++    TObjString* str(0x0);
+ 
+-    // while ( ( spatt = static_cast<TObjString*>(nextWhat()) ) ){
+ 
+-    //     AliDebug(1,Form("patternOrList %s",spatt->String().Data()));
+-    //     nextgraphName.Reset();
+ 
+-    //     while ( ( sgraphName = static_cast<TObjString*>(nextgraphName()) ) ){
++    while ( ( str = static_cast<TObjString*>(next()) ) )
++    {
++        cout<<"toto"<< endl;
++        computer.WeightedMeanGraphs(str->String().Data(),graphName,OC());
++    }
+ 
+-    //         AliDebug(1,Form("graphName %s",sgraphName->String().Data()));
+-    //         computer.WeightedMeanGraphs(spatt->String().Data(),sgraphName->String().Data(),OC());
+-    //     }
+-    // }
+ 
+     AliMergeableCollection* fnorm = computer.DetachMC();
+     //Set the new ownership
+@@ -4570,6 +4568,7 @@ void AliAnalysisMuMu::ComputeIntFnormFromCounters(AliAnalysisMuMuFnorm::ETrigger
+     OC()->Attach(fnorm,"/FNORM/Offline/");
+     //Update
+     Update();
++
+ }
+ 
+ //_____________________________________________________________________________
+diff --git a/PWG/muondep/AliAnalysisMuMuFnorm.cxx b/PWG/muondep/AliAnalysisMuMuFnorm.cxx
+index d9f1b5a..b7dc8a0 100644
+--- a/PWG/muondep/AliAnalysisMuMuFnorm.cxx
++++ b/PWG/muondep/AliAnalysisMuMuFnorm.cxx
+@@ -41,6 +41,7 @@
+ #include "TCanvas.h"
+ #include "TGraphErrors.h"
+ #include "TH1F.h"
++#include "TH1.h"
+ #include "TList.h"
+ #include "TMap.h"
+ #include "TMath.h"
+@@ -392,7 +393,6 @@ void AliAnalysisMuMuFnorm::ComputeFnormOffline(Int_t nstep, Bool_t pileUpCorrect
+     }
+   }
+   
+-    
+   CreateAndAddGraph(name,title,vx,vxerr,vy,vyerr);
+ }
+ 
+@@ -716,7 +716,7 @@ void AliAnalysisMuMuFnorm::ComputeEventSelectionGraph(ETriggerType tt, Int_t eve
+   
+   const std::set<int>& runs = RunNumbers();
+   
+-  AliAnalysisTriggerScalers ts(runs,OCDBPath().Data());
++  // AliAnalysisTriggerScalers ts(runs,OCDBPath().Data()); // à quoi ça sert ??
+   
+   for ( std::set<int>::const_iterator it = runs.begin(); it != runs.end(); ++it )
+   {
+@@ -1084,18 +1084,16 @@ TGraphErrors* AliAnalysisMuMuFnorm::CreateAndAddGraph(const TString& name,
+                                                       const std::vector<double>& vy,
+                                                       const std::vector<double>& vyerr) const
+ {
+-  /// Creates a graph and adds it to our mergeable collection
++  /// Creates a graph and an histo and adds it to our mergeable collection
+   
+   TGraphErrors* g = new TGraphErrors(vx.size(),&vx[0],&vy[0],&vxerr[0],&vyerr[0]);
+   g->SetName(name.Data());
+   g->SetTitle(title.Data());
+-  
+   if  (fIsCompactGraphs)
+   {
+     AliAnalysisMuMuGraphUtil::Compact(*g);
+   }
+ 
+-  g->GetXaxis()->SetNoExponent();
+ //  g->GetXaxis()->SetTitle("Run number");
+ 
+   TPaveText* text = new TPaveText(0.70,0.70,0.89,0.89,"NDC");
+@@ -1104,8 +1102,12 @@ TGraphErrors* AliAnalysisMuMuFnorm::CreateAndAddGraph(const TString& name,
+   text->AddText(Form("Mean %e",g->GetMean(2)));
+   text->AddText(Form("RMS  %e",g->GetRMS(2)));
+   g->GetListOfFunctions()->Add(text);
++
++
+   
+   MC()->Adopt("/GRAPHS/",g);
++  TH1* h = GetGraphAsHisto(name);
++  MC()->Adopt("/GRAPHS/",h);
+   return g;
+ }
+ 
+@@ -1220,6 +1222,58 @@ TGraphErrors* AliAnalysisMuMuFnorm::GetGraph(const char* name) const
+ }
+ 
+ //_____________________________________________________________________________
++TH1* AliAnalysisMuMuFnorm::GetGraphAsHisto(const char* name) const
++{
++  // shortcut method to give access to one graph and return it as an histo
++
++  TObject* o = MC()->GetObject(Form("/GRAPHS/%s",name));
++
++  if (!o) return 0x0;
++  if ( o->IsA() != TGraphErrors::Class() )
++  {
++    AliError(Form("Object %s is not of the expected type",o->GetName()));
++    return 0x0;
++  }
++
++  const std::set<int>& runs = RunNumbers();
++
++  TGraphErrors *g = static_cast<TGraphErrors*>(o->Clone());
++  TH1F * h =new TH1F(Form("%s_AsHisto",g->GetName()),Form("%s_AsHisto",g->GetName()),1,0.,1.);
++
++  Double_t y = 0.;
++  Double_t dy = 0.;
++
++  //Fill
++  for ( std::set<int>::const_iterator it = runs.begin(); it != runs.end(); ++it )
++  {
++    Int_t runNumber = *it;
++
++    GetValueAndErrorFromGraph(g,runNumber,y,dy);
++    if(y==0.)
++    {
++      printf("Error : no values for run %d\n",runNumber );
++      continue;
++    }
++
++    Int_t bin = h->Fill(TString::Format("%d",runNumber).Data(),y);
++    h->SetBinError(bin,dy);
++  }
++
++  // Set range
++  int j=0;
++  for (int i = 1; i < h->GetEntries()+1; i++)
++  {
++    if(TString(h->GetXaxis()->GetBinLabel(i)).IsNull()) continue;
++    j++;
++  }
++  if(j == runs.size()) h->GetXaxis()->SetRange(1,j);
++
++  delete g;
++  return h;
++
++}
++
++//_____________________________________________________________________________
+ void AliAnalysisMuMuFnorm::GetPurity(const char* triggerClassName, Int_t runNumber,
+                                      Double_t& value, Double_t& error, Int_t eventSelectionCorrected) const
+ {
+@@ -1779,8 +1833,7 @@ AliAnalysisMuMuFnorm::WeightedMeanGraphs(const char* patternOrList, const char*
+     printf("Cannot add list\n");
+     return;
+   }
+-  objectList->Print();
+-  
++
+   TIter next(objectList);
+   TObjString* str(0x0);
+   TObjArray selected;
+@@ -1789,8 +1842,8 @@ AliAnalysisMuMuFnorm::WeightedMeanGraphs(const char* patternOrList, const char*
+   printf("Selecting graphs ...\n");
+   while ( ( str = static_cast<TObjString*>(next()) ) )
+   {
+-    TGraphErrors* g = static_cast<TGraphErrors*>(objectList->FindObject(str->String()));
+-
++    TGraphErrors* g = static_cast<TGraphErrors*>(mc->GetObject(Form("/FNORM/Offline/GRAPHS/%s",str->String().Data())));
++    if (!g) g = static_cast<TGraphErrors*>(mc->GetObject(Form("/FNORM/Scaler/GRAPHS/%s",str->String().Data())));
+     if (!g) continue;
+ 
+     TString name(g->GetName());
+@@ -1809,8 +1862,6 @@ AliAnalysisMuMuFnorm::WeightedMeanGraphs(const char* patternOrList, const char*
+   delete objectList;
+   
+   if (selected.GetLast()<0) return;
+-
+-  selected.Print();
+   
+   std::vector<double> vx;
+   std::vector<double> vy;
+@@ -1819,8 +1870,6 @@ AliAnalysisMuMuFnorm::WeightedMeanGraphs(const char* patternOrList, const char*
+   
+   Int_t npts = static_cast<TGraphErrors*>(selected.First())->GetN();
+   if(npts==0 || npts==1) return;
+-
+-  printf("npts = %d \n", npts);
+   
+   printf("Computing mean ...\n");
+ 
+@@ -1829,37 +1878,27 @@ AliAnalysisMuMuFnorm::WeightedMeanGraphs(const char* patternOrList, const char*
+     Double_t x(0.0),xref(0.0),xerr(0.0);
+     Double_t sum(0.0);
+     Double_t sume2(0.0);
+-    
+-    printf("Loop on graphs ...\n");
++
++    // Loop on graphs
+     for ( Int_t igraph = 0; igraph <= selected.GetLast(); ++igraph )
+     {
+       TGraphErrors* g = static_cast<TGraphErrors*>(selected.At(igraph));
+-      printf("g = %p\n", g);
+-      g->Print();
+-      
++
+       if ( g->GetN() != npts )
+       {
+         AliError(Form("Graph %s does not have the expected %d points",g->GetName(),npts));
+         continue;
+       }
+       Double_t runNumber;
+-      new TCanvas;
+-      g->DrawClone("");
+ 
+       if ( fIsCompactGraphs )
+       {
+-        printf("toto\n");
+-        cout << g->GetXaxis()->GetBinLabel(ipoint+1)<< endl;
+         runNumber = TString(g->GetXaxis()->GetBinLabel(ipoint+1)).Atoi()*1.0;
+-
+-        printf("runNumber %f\n", runNumber);
+       }
+       else
+       {
+         runNumber = g->GetX()[ipoint];
+-        printf("runNumber 2 %f\n", runNumber);
+       }
+-      printf("totoo !\n");
+       if ( igraph == 0 )
+       {
+         xref = g->GetX()[ipoint];
+@@ -1874,7 +1913,6 @@ AliAnalysisMuMuFnorm::WeightedMeanGraphs(const char* patternOrList, const char*
+           return;
+         }
+       }
+-      printf("totooo !\n");
+       
+       Double_t e2 = g->GetEY()[ipoint]*g->GetEY()[ipoint];
+       
+@@ -1909,6 +1947,7 @@ AliAnalysisMuMuFnorm::WeightedMeanGraphs(const char* patternOrList, const char*
+   
+   printf("Creating graph ...\n");
+   CreateAndAddGraph(name,title,vx,vxerr,vy,vyerr);
++
+ }
+ 
+ 
+diff --git a/PWG/muondep/AliAnalysisMuMuFnorm.h b/PWG/muondep/AliAnalysisMuMuFnorm.h
+index 444b6ca..06f262e 100644
+--- a/PWG/muondep/AliAnalysisMuMuFnorm.h
++++ b/PWG/muondep/AliAnalysisMuMuFnorm.h
+@@ -18,6 +18,7 @@
+ class TObjArray;
+ class TGraphErrors;
+ class TGraph;
++class TH1;
+ class AliAnalysisMuMuResult;
+ class AliCounterCollection;
+ class AliMergeableCollection;
+@@ -77,6 +78,8 @@ public:
+   //  void GetFnorm(Int_t runNumber, const char* eventSelection, Double_t& value, Double_t& error) const; // Not implemented
+   
+   TGraphErrors* GetGraph(const char* name) const;
++
++  TH1* GetGraphAsHisto(const char* name) const;
+   
+   void GetPurity(const char* triggerClassName, Int_t runNumber, Double_t& value, Double_t& error, Int_t eventSelectionCorrected) const;
+ 
+-- 
+2.5.4 (Apple Git-61)
+

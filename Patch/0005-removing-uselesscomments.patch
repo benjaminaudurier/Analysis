@@ -1,0 +1,48 @@
+From 6d7ffb9608fd881e2b0abf4a282124ee4aee7569 Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Mon, 18 Jan 2016 13:17:30 +0100
+Subject: [PATCH 5/7] removing uselesscomments
+
+---
+ PWG/muondep/AliAnalysisMuMu.cxx | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/PWG/muondep/AliAnalysisMuMu.cxx b/PWG/muondep/AliAnalysisMuMu.cxx
+index 2edea87..fac28c7 100644
+--- a/PWG/muondep/AliAnalysisMuMu.cxx
++++ b/PWG/muondep/AliAnalysisMuMu.cxx
+@@ -965,10 +965,9 @@ void AliAnalysisMuMu::RAAasGraphic(const char* particle,
+                                 // Select subcanvas
+                                 c1->cd(n);
+                                 //legend
+-                                TLegend * leg = new TLegend(0.2,0.7,0.90,0.9);
++                                TLegend * leg = new TLegend(0.2,0.8,0.90,0.9);
+                                 leg->SetTextSize(0.04);
+-                                leg->SetHeader(Form("ALICE, Pb-Pb #sqrt{s_{NN}}=2.76 TeV, L_{int}=70 #mub^{-1}, %s",scentrality->String().Data()));
+-                                leg->AddEntry(graph,"Inclusive J/#psi","pe");
++                                leg->SetHeader(Form("ALICE, Pb-Pb #sqrt{s_{NN}}=5.02 TeV, L_{int}=222 #mub^{-1}, %s",scentrality->String().Data()));
+                                 //Draw it
+                                 graph = static_cast<TGraphErrors*>(list->At(0)->Clone());
+                                 graphErr = static_cast<TGraphErrors*>(list->At(1)->Clone());
+@@ -976,6 +975,7 @@ void AliAnalysisMuMu::RAAasGraphic(const char* particle,
+                                     printf("Did not find graph in the list");
+                                     return;
+                                 }
++                                leg->AddEntry(graph,"Inclusive J/#psi","pe");
+                                 graph->GetYaxis()->SetRangeUser(0,1.41);
+                                 graphErr->SetFillColorAlpha(4,0.);
+                                 graph->Draw("ap");
+@@ -1026,8 +1026,8 @@ void AliAnalysisMuMu::RAAasGraphic(const char* particle,
+                                                      spairCut->String().Data(),
+                                                      sparticle->String().Data(),
+                                                      sbinType->String().Data()));
+-                            TLegend * leg = new TLegend(0.2,0.7,0.90,0.9);
+-                            leg->SetHeader("ALICE, Pb-Pb #sqrt{s_{NN}}=5.02 TeV, L_{int}=74 #mub^{-1}, PT/Y integrated");
++                            TLegend * leg = new TLegend(0.2,0.8,0.90,0.9);
++                            leg->SetHeader("ALICE, Pb-Pb #sqrt{s_{NN}}=5.02 TeV, L_{int}=222 #mub^{-1}, PT/Y integrated");
+                             leg->SetTextSize(0.03);
+                             leg->AddEntry(graphCent,"Inclusive J/#psi","pe");
+                             graphCent->Draw("ap");
+-- 
+2.5.4 (Apple Git-61)
+

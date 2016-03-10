@@ -1,0 +1,74 @@
+From 3f7d40e1a88096c7cff4ed5015996e1818c476ef Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Wed, 13 Jan 2016 16:20:02 +0100
+Subject: [PATCH 3/7] Fixing (minor) bug
+
+---
+ PWG/muondep/AliAnalysisMuMu.cxx                   | 14 +++++++-------
+ PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx |  4 +++-
+ 2 files changed, 10 insertions(+), 8 deletions(-)
+
+diff --git a/PWG/muondep/AliAnalysisMuMu.cxx b/PWG/muondep/AliAnalysisMuMu.cxx
+index 93c05cb..2edea87 100644
+--- a/PWG/muondep/AliAnalysisMuMu.cxx
++++ b/PWG/muondep/AliAnalysisMuMu.cxx
+@@ -4086,11 +4086,11 @@ void AliAnalysisMuMu::PrintDistribution(const char* binType, const char* what, c
+     return;
+ }
+ 
+-void AliAnalysisMuMu::ComputeDimuonRawCount(const Double_t rlow, const Double_t rhight, const char* binType, const char* binRangeExluded, const char* flavour, Bool_t corrected)
++void AliAnalysisMuMu::ComputeDimuonRawCount(const Double_t rlow, const Double_t rhigh, const char* binType, const char* binRangeExluded, const char* flavour, Bool_t corrected)
+ {
+     /// Compute the raw count of dimuon pair
+     /// Parameters:
+-    ///   - rlow,rhight  : intervall in bin for the raw count
++    ///   - rlow,rhigh  : intervall in bin for the raw count
+     ///   -binType       : integrated,pt,y ...see your AddTaskMuMu
+     ///   -flavour       : Default is BENJ
+     ///   -corrected     : For nomenclature
+@@ -4200,8 +4200,8 @@ void AliAnalysisMuMu::ComputeDimuonRawCount(const Double_t rlow, const Double_t
+                         const Double_t * binArrayX = binning->CreateBinArrayX();
+                         Int_t nBinX = binning->GetNBinsX();
+ 
+-                        TH1* hraw = new TH1D(Form("hRawCountVS%s",sbinType->String().Data()),Form("raw count of dimuon pairs for %s",id.Data()),nBinX,binArrayX);
+-                        hraw->GetYaxis()->SetTitle(Form("raw count of dimuon pairs in [%0.2f;%0.2f] GeV/c",rlow,rhight));
++                        TH1* hraw = new TH1D(Form("hRawCountVS%s_%f-%f",sbinType->String().Data(),rlow,rhigh),Form("raw count of dimuon pairs for %s",id.Data()),nBinX,binArrayX);
++                        hraw->GetYaxis()->SetTitle(Form("raw count of dimuon pairs in [%0.2f;%0.2f] GeV/c",rlow,rhigh));
+                         hraw->GetXaxis()->SetTitle(sbinType->String().Data());
+ 
+                         // Loop on each range in bin
+@@ -4228,13 +4228,13 @@ void AliAnalysisMuMu::ComputeDimuonRawCount(const Double_t rlow, const Double_t
+ 
+                             // Get X
+                             Double_t xmin = sbin->Xmin();
+-                            Double_t xmax = sbin->Xmax();q
++                            Double_t xmax = sbin->Xmax();
+                             Double_t x = xmin + (xmax-xmin)/2;
+-                            AliDebug(1,Form("x = %f \n", x))q;
++                            AliDebug(1,Form("x = %f \n", x));
+ 
+                             //find bin
+                             Int_t binLow   = h->FindBin(rlow);
+-                            Int_t binHight = h->FindBin(rhight);
++                            Int_t binHight = h->FindBin(rhigh);
+ 
+                             if(binLow==0 || binHight ==0)continue;
+                             // Fill
+diff --git a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx
+index 94f81f1..09a218b 100644
+--- a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx
++++ b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx
+@@ -773,7 +773,9 @@ Bool_t AliAnalysisMuMuSpectraCapsulePbPb::ReadFromFile(TString sbin, float value
+         // Select the good interval. Since interval is written in <binAsString>, just need them to match
+         TString intervalLow  = TString::Format("%.2f",static_cast<TObjString*>(lineArray->At(0))->String().Atof());
+         TString intervalHigh = TString::Format("%.2f",static_cast<TObjString*>(lineArray->At(1))->String().Atof());
+-        if(sbin.Contains(Form("%s_%s",intervalLow.Data(),intervalHigh.Data()))){
++        printf("intervalLow = %s\n",intervalLow.Data() );
++        printf("intervalHigh = %s\n",intervalHigh.Data() );
++        if(sbin.Contains(Form("%s",intervalLow.Data())) && sbin.Contains(Form("%s",intervalHigh.Data()))){
+             AliDebug(1,Form(" -- line selected -- "));
+             ok = kTRUE;
+             break;
+-- 
+2.5.4 (Apple Git-61)
+

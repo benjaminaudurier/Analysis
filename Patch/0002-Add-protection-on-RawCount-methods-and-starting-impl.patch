@@ -1,0 +1,784 @@
+From eb4ff105021ce86bd8c08d500b5f1f6ec651789e Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Tue, 12 Jan 2016 11:15:58 +0100
+Subject: [PATCH 2/7] Add protection on RawCount methods and starting
+ implementing sys. errors on Raa methods
+
+---
+ PWG/muondep/AliAnalysisMuMu.cxx                   |  70 ++++--
+ PWG/muondep/AliAnalysisMuMu.h                     |   1 +
+ PWG/muondep/AliAnalysisMuMuSpectraCapsule.cxx     | 127 ++++------
+ PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx | 267 ++++++----------------
+ PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.h   |   2 +-
+ 5 files changed, 165 insertions(+), 302 deletions(-)
+
+diff --git a/PWG/muondep/AliAnalysisMuMu.cxx b/PWG/muondep/AliAnalysisMuMu.cxx
+index f45f773..93c05cb 100644
+--- a/PWG/muondep/AliAnalysisMuMu.cxx
++++ b/PWG/muondep/AliAnalysisMuMu.cxx
+@@ -66,7 +66,6 @@
+ #include <cassert>
+ #include <map>
+ #include <set>
+-#include <string>
+ #include <vector>
+ #include "TLatex.h"
+ 
+@@ -857,7 +856,10 @@ void AliAnalysisMuMu::RAAasGraphic(const char* particle,
+ 
+     // Pointers
+     TGraphErrors* graph=0x0;
++    TGraphErrors* graphErr=0x0;
+     TGraphErrors* graphCent=0x0;
++    TGraphErrors* graphCentErr=0x0;
++    TList* list=0x0;
+     AliAnalysisMuMuSpectra spectra=0x0;
+ 
+     //Loop on particle type
+@@ -915,6 +917,9 @@ void AliAnalysisMuMu::RAAasGraphic(const char* particle,
+                             graphCent = new TGraphErrors(centralityArray->GetEntries());
+                             graphCent->SetMinimum(0.);
+                             graphCent->SetMaximum(1.2);
++                            graphCentErr = new TGraphErrors(centralityArray->GetEntries());
++                            graphCentErr->SetMinimum(0.);
++                            graphCentErr->SetMaximum(1.2);
+                             }
+                         gStyle->SetOptStat(0);
+ 
+@@ -925,8 +930,7 @@ void AliAnalysisMuMu::RAAasGraphic(const char* particle,
+                         nextCentrality.Reset();
+                         // Loop on each centrality (not the ones in MuMuConfig but the ones set)
+                         //==============================================================================
+-                        while ( ( scentrality = static_cast<TObjString*>(nextCentrality()) ) )
+-                            {
++                        while ( ( scentrality = static_cast<TObjString*>(nextCentrality()) ) ) {
+                             AliDebug(1,Form("---CENTRALITY %s",scentrality->String().Data()));
+ 
+                             //________Get spectra
+@@ -951,14 +955,13 @@ void AliAnalysisMuMu::RAAasGraphic(const char* particle,
+                             // capsule->PrintConst();
+ 
+                             // Get Graph with RAA results
+-                            graph = capsule->RAAasGraphic(NofMUL);
++                            list = capsule->RAAasGraphic(NofMUL);
+ 
+-                            if(!graph) continue;
+-                            AliDebug(1,Form("Graphic = %p",graph));
++                            if(!list) continue;
++                            AliDebug(1,Form("list = %p",list));
+ 
+                             // Draw Graph according to bin type
+-                            if (!sbinType->String().Contains("INTEGRATED")) // PT/Y/single centrality
+-                                {
++                            if (!sbinType->String().Contains("INTEGRATED")){ // PT/Y/single centrality
+                                 // Select subcanvas
+                                 c1->cd(n);
+                                 //legend
+@@ -967,42 +970,57 @@ void AliAnalysisMuMu::RAAasGraphic(const char* particle,
+                                 leg->SetHeader(Form("ALICE, Pb-Pb #sqrt{s_{NN}}=2.76 TeV, L_{int}=70 #mub^{-1}, %s",scentrality->String().Data()));
+                                 leg->AddEntry(graph,"Inclusive J/#psi","pe");
+                                 //Draw it
++                                graph = static_cast<TGraphErrors*>(list->At(0)->Clone());
++                                graphErr = static_cast<TGraphErrors*>(list->At(1)->Clone());
++                                if (!graph || ! graphErr) {
++                                    printf("Did not find graph in the list");
++                                    return;
++                                }
+                                 graph->GetYaxis()->SetRangeUser(0,1.41);
++                                graphErr->SetFillColorAlpha(4,0.);
+                                 graph->Draw("ap");
++                                graphErr->Draw("same5");
+                                 leg->Draw();
+                                 }
+-                            else
+-                                {
++                            else {
+                                 //Check point
+-                                if(!sbinType->String().Contains("INTEGRATED"))
+-                                    {
++                                if(!sbinType->String().Contains("INTEGRATED")) {
+                                     cout << "Cannot plot INTEGRATED  ! Check it please :) " << endl;
+                                     delete c1;
+                                     return;
+                                     }
+                                 Double_t x=0;
+                                 Double_t y=0;
++                                graph = static_cast<TGraphErrors*>(list->At(0)->Clone());
++                                graphErr = static_cast<TGraphErrors*>(list->At(1)->Clone());
++                                if (!graph || ! graphErr) {
++                                    printf("Did not find graph in the list");
++                                    return;
++                                }
+                                 // Get point for each centrality
+                                 Double_t dx = graph->GetErrorX(0);
+                                 Double_t dy = graph->GetErrorY(0);
++                                Double_t dysys = graphErr->GetErrorY(0);
+                                 graph->GetPoint(0,x,y);
+                                 // Set them to a new graphic
+                                 graphCent->SetPoint(n-1,x,y);
+                                 graphCent->SetPointError(n-1,dx,dy);
+                                 graphCent->SetTitle(graph->GetTitle());
++                                graphCentErr->SetPoint(n-1,x,y);
++                                graphCentErr->SetPointError(n-1,2.5,dysys);
+                                 }
+                             n++;
+                             delete capsule;
+                             }
+                         cout << "" << endl;
+-                        if (sbinType->String().Contains("INTEGRATED"))
+-                            {
+-
++                        if (sbinType->String().Contains("INTEGRATED")) {
++                            //Print
+                             graphCent->GetXaxis()->SetTitle("<N_{part}>");
+                             graphCent->GetYaxis()->SetTitle("R_{AA}");
+                             graphCent->GetYaxis()->SetRangeUser(0,1.41);
+                             graphCent->SetMarkerColor(4);
+                             graphCent->SetMarkerStyle(21);
++                            graphCentErr->SetFillColorAlpha(4,0.);
+                             graphCent->SetTitle(Form("%s/%s/%s/%s/%s",seventType->String().Data(),
+                                                      strigger->String().Data(),
+                                                      spairCut->String().Data(),
+@@ -1013,6 +1031,7 @@ void AliAnalysisMuMu::RAAasGraphic(const char* particle,
+                             leg->SetTextSize(0.03);
+                             leg->AddEntry(graphCent,"Inclusive J/#psi","pe");
+                             graphCent->Draw("ap");
++                            graphCentErr->Draw("same5");
+                             leg->Draw();
+                             }
+                         //________ Update resultes in Mergeable collection
+@@ -1059,7 +1078,7 @@ void AliAnalysisMuMu::RAAasGraphic(const char* particle,
+                 }
+             }
+         }
+-
++    delete list;
+     delete eventTypeArray ;
+     delete triggerArray ;
+     delete fitfunctionArray ;
+@@ -4067,7 +4086,7 @@ void AliAnalysisMuMu::PrintDistribution(const char* binType, const char* what, c
+     return;
+ }
+ 
+-void AliAnalysisMuMu::ComputeDimuonRawCount(const Double_t rlow, const Double_t rhight, const char* binType, const char* flavour, Bool_t corrected)
++void AliAnalysisMuMu::ComputeDimuonRawCount(const Double_t rlow, const Double_t rhight, const char* binType, const char* binRangeExluded, const char* flavour, Bool_t corrected)
+ {
+     /// Compute the raw count of dimuon pair
+     /// Parameters:
+@@ -4095,6 +4114,7 @@ void AliAnalysisMuMu::ComputeDimuonRawCount(const Double_t rlow, const Double_t
+     TObjArray* pairCutArray     = Config()->GetListElements(Config()->PairSelectionKey(),IsSimulation());
+     TObjArray* centralityArray  = Config()->GetListElements(Config()->CentralitySelectionKey(),IsSimulation());
+     TObjArray* binTypeArray     = TString(binType).Tokenize(",");
++    TObjArray* binRangeExcludedArray     = TString(binRangeExluded).Tokenize(",");
+     TObjArray* bins;
+ 
+     // Iterator for loops
+@@ -4184,13 +4204,16 @@ void AliAnalysisMuMu::ComputeDimuonRawCount(const Double_t rlow, const Double_t
+                         hraw->GetYaxis()->SetTitle(Form("raw count of dimuon pairs in [%0.2f;%0.2f] GeV/c",rlow,rhight));
+                         hraw->GetXaxis()->SetTitle(sbinType->String().Data());
+ 
+-                        //Bin counter
+-                        int j = 0;
+                         // Loop on each range in bin
+                         //==============================================================================
+                         while ( ( sbin = static_cast<AliAnalysisMuMuBinning::Range*>(next())) )
+                         {
+                             AliDebug(1,Form("-----Bin range %s",sbin->AsString().Data()));
++
++                            if(binRangeExcludedArray->FindObject(sbin->AsString().Data())) {
++                               AliDebug(1,Form("-----Bin range is excluded"));
++                               continue;
++                            }
+                             // Create ID for the fit which will be used to name results
+                             TString id(Form("/%s/%s/%s/%s",seventType->String().Data(),striggerDimuon->String().Data(),scentrality->String().Data(),spairCut->String().Data()));
+                             TString hname = corrected ? Form("MinvUS+%s_AccEffCorr",sbin->AsString().Data()) : Form("MinvUS+%s",sbin->AsString().Data());
+@@ -4205,9 +4228,9 @@ void AliAnalysisMuMu::ComputeDimuonRawCount(const Double_t rlow, const Double_t
+ 
+                             // Get X
+                             Double_t xmin = sbin->Xmin();
+-                            Double_t xmax = sbin->Xmax();
++                            Double_t xmax = sbin->Xmax();q
+                             Double_t x = xmin + (xmax-xmin)/2;
+-                            printf("x = %f \n", x);
++                            AliDebug(1,Form("x = %f \n", x))q;
+ 
+                             //find bin
+                             Int_t binLow   = h->FindBin(rlow);
+@@ -4219,11 +4242,10 @@ void AliAnalysisMuMu::ComputeDimuonRawCount(const Double_t rlow, const Double_t
+                             for (Int_t i = binLow; i < binHight; ++i)
+                             {
+                                 rawCount = rawCount + h->GetBinContent(i);
+-                                printf("rawCount for %s in bin [%d]= %f \n",h->GetTitle(),i,rawCount);
++                                AliDebug(1,Form("rawCount for %s in bin [%d]= %f \n",h->GetTitle(),i,rawCount));
+                             }
+-                            if(rawCount!=0.)hraw->Fill(x,rawCount);
++                            if(rawCount!=0. )hraw->Fill(x,rawCount);
+ 
+-                            // j++;
+                         }
+                         TH1* o = OC()->Histo(id.Data(),hraw->GetName());
+ 
+diff --git a/PWG/muondep/AliAnalysisMuMu.h b/PWG/muondep/AliAnalysisMuMu.h
+index a95b1f9..1f1a00b 100644
+--- a/PWG/muondep/AliAnalysisMuMu.h
++++ b/PWG/muondep/AliAnalysisMuMu.h
+@@ -85,6 +85,7 @@ public:
+                             const Double_t rlow   = 2.8,
+                             const Double_t rhight = 3.4,
+                             const char            * binType="pt",
++                            const char            * binRangeExluded="PT_BENJ_00.00_00.30,PT_BENJ_01.00_08.00,PT_BENJ_00.30_01.00",
+                             const char            * flavour="BENJ",
+                             Bool_t corrected      =kFALSE );
+ 
+diff --git a/PWG/muondep/AliAnalysisMuMuSpectraCapsule.cxx b/PWG/muondep/AliAnalysisMuMuSpectraCapsule.cxx
+index aaf86a1..7aebd5d 100644
+--- a/PWG/muondep/AliAnalysisMuMuSpectraCapsule.cxx
++++ b/PWG/muondep/AliAnalysisMuMuSpectraCapsule.cxx
+@@ -34,6 +34,8 @@ ClassImp(AliAnalysisMuMuSpectraCapsule)
+ #include "AliAnalysisMuMuBinning.h"
+ #include "TObjArray.h"
+ #include "TString.h"
++#include <fstream>
++#include <string>
+ 
+ using std::cout;
+ using std::endl;
+@@ -61,93 +63,56 @@ Bool_t AliAnalysisMuMuSpectraCapsule::SetConstantFromExternFile(const char* file
+    *
+    */
+ 
+-  // Arrays to store quantities from externFile
+-  char centrality;
+-  float interval[2];
+-  float valueArray[10];
+-  //    <NPART> d<NPART> TAA  dTAA  sys.AP  Traj  Trigg  Pair AccEff dAccEff
+-  FILE*  infile;
+-
+-  // Reset on fConstant
+-  for (int i = 0; i < 10; ++i)
+-  {
+-   constantArray[i]=0.;
+-  }
+-
+-  AliDebug(1,Form("Reading from file %s",file));
+-
+-  // PT and Y case
+-  infile = fopen(file,"rb");
+-  // Open file
+-  if (infile != NULL)
+-  {
+-
+-    AliDebug(1, " ==== opening file ==== ");
+-    // Loop until end of file is reached
+-    while(!feof(infile))
+-    {
+-      // Reminder :
+-      // Centrality intervalLow_intervalHigh <NPART> <dNPART> TAA  dTAA  sys.AP  Traj  Trigg  Pair AccEff dAccEff
+-      // Store value in array
+-      fscanf(infile,"%s %f_%f %f %f %f %f %f %f %f %f %f %f ",
+-                 &centrality,&interval[0],&interval[1],
+-                 &valueArray[0],&valueArray[1],&valueArray[2],
+-                 &valueArray[3],&valueArray[4],&valueArray[5],
+-                 &valueArray[6],&valueArray[7],&valueArray[8],&valueArray[9]);
+-      if(centrality == 'F') continue; // Don't read first line if begin by F=False
+-
+-      // Check Point
+-        AliDebug(1,Form(" -- Selected line :"));
+-        AliDebug(1,Form(" -- Centrality  <NPART> d<NPART>TAA  dTAA  sys.AP  Traj  Trigg  Pair  AccEff dAccEff"));
+-        AliDebug(1,Form(" --  %s %.2f_%.2f  %f  %f  %f  %f  %f  %f  %f  %f %f %f",
+-        &centrality,interval[0],interval[1],
+-        valueArray[0],valueArray[1],valueArray[2],
+-        valueArray[3],valueArray[4],valueArray[5],
+-        valueArray[6],valueArray[7],valueArray[8],valueArray[9]));
+-
+-      // Make intervalArray a string
+-      TString intervalLow  = TString::Format("%.2f",interval[0]);// Problem here : if interval[0] = 0.00 and not 00.00 in case of all interval containing 00.00. See second conditions
+-      TString intervalHigh = TString::Format("%.2f",interval[1]);
+-
+-      // Select the good interval. Since interval is written in <binAsString>, just need them to match
+-      if(spectraName->Contains(Form("%c0M",centrality)) && spectraName->Contains(Form("_%s_%s",intervalLow.Data(),intervalHigh.Data())))
+-      {
+-
+-
+-        for (int i = 0; i < 10; ++i)
+-        {
+-         constantArray[i]=valueArray[i];
++    // Reset on fConstant
++    for (int i = 0; i < 10; ++i) constantArray[i]=0.;
++    Bool_t ok= kFALSE;
++    AliDebug(1,Form("Reading from file %s",file));
++
++    //________Open file
++    ifstream infile(file,std::ios::in);
++    TString line;
++    TObjArray* lineArray;
++
++    if (infile){
++        AliDebug(1, " ==== opening file ==== ");
++        // Loop until end of file is reached
++        while(infile.eof()!=kTRUE){
++
++            //read the line
++            line.ReadLine(infile,kFALSE);
++            if (line.BeginsWith("#"))continue;
++            AliDebug(1,Form(" Read line : %s",line.Data()));
++
++            // Put the line in a TObjArray
++            lineArray = line.Tokenize(" ");
++
++
++            // Select the good interval. Since interval is written in <binAsString>, just need them to match
++            TString centrality   =  static_cast<TObjString*>(lineArray->At(0))->String().Data();
++            TString intervalLow  =  TString::Format("%.2f",static_cast<TObjString*>(lineArray->At(1))->String().Atof());
++            TString intervalHigh =  TString::Format("%.2f",static_cast<TObjString*>(lineArray->At(2))->String().Atof());
++
++            // Select the good interval. Since interval is written in <binAsString>, just need them to match
++            if(spectraName->Contains(Form("%s",centrality.Data()))&&spectraName->Contains(Form("%s_%s",intervalLow.Data(),intervalHigh.Data()))){
++                AliDebug(1,Form(" -- line selected -- "));
++                ok = kTRUE;
++                break;
++            }
++            else continue;
+         }
+-        fclose(infile);
+-        AliDebug(1, " ==== Closing file ==== ");
+-        return kTRUE;
+-      }
+-      else if (spectraName->Contains(Form("%c0M",centrality))&& spectraName->Contains(Form("00.00_%s",intervalHigh.Data())))
+-      {
++        infile.close();
++        AliDebug(1, " ==== closing file ==== ");
+ 
+-        for (int i = 0; i < 10; ++i)
+-        {
+-         constantArray[i]=valueArray[i];
++        // Store the value
++        for (int i =0 ; i<10 ; i++) {
++            constantArray[i]= static_cast<TObjString*>(lineArray->At(i+3))->String().Atof();
+         }
+-        fclose(infile);
+-        AliDebug(1, " ==== Closing file ==== ");
+-        return kTRUE;
+-      }
+-      else
+-      {
+-        AliDebug(1,Form("Not the good interval, so continue ...."));
+-        continue;
+-      }
++        return ok;
+     }
+-    fclose(infile);
+-    AliDebug(1, " ==== Closing file ==== ");
+-  }
+-  else
+-  {
+-    return kFALSE;
+-  }
++    else return ok;
+ }
+ 
++
+ //_____________________________________________________________________________
+ void AliAnalysisMuMuSpectraCapsule::PrintNofWhat(const char* what) const
+ {
+diff --git a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx
+index cc1c945..94f81f1 100644
+--- a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx
++++ b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx
+@@ -46,7 +46,7 @@ ClassImp(AliAnalysisMuMuSpectraCapsulePbPb)
+ #include "AliAnalysisMuMuResult.h"
+ #include "AliAnalysisMuMuJpsiResult.h"
+ #include "AliAnalysisMuMuSpectraCapsulePbPb.h"
+-#include <iostream>
++#include <fstream>
+ #include <string>
+ 
+ using std::cout;
+@@ -449,7 +449,7 @@ void AliAnalysisMuMuSpectraCapsulePbPb::DrawResults( const char* printDirectoryP
+ 
+ 
+ //_____________________________________________________________________________
+-TGraphErrors * AliAnalysisMuMuSpectraCapsulePbPb::RAAasGraphic(Double_t MUL) const
++TList * AliAnalysisMuMuSpectraCapsulePbPb::RAAasGraphic(Double_t MUL) const
+ {
+   /**
+    *
+@@ -569,19 +569,19 @@ TGraphErrors * AliAnalysisMuMuSpectraCapsulePbPb::RAAasGraphic(Double_t MUL) con
+     {
+       //Output messages
+       cout << Form("") << endl;
+-      cout << Form("  |    %s    |   %.0f  %.0f  %.0f  |  %.3f  %.3f  %.3f  |  %.0f   %.0f  |"  ,binAsString.Data(),num[0],num[1],num[2],num[4],num[5],num[7],fConstArray[0],fConstArray[1]) << endl;
++      cout << Form("  |    %s    |   %.0f  %.0f  %.0f  |  %.3f  %.3f  %.3f  |  %.1f   %.1f  |"  ,binAsString.Data(),num[0],num[1],num[2],num[4],num[5],num[7],fConstArray[0],fConstArray[1]) << endl;
+ 
+       // Add results to TGraphs
+       graph->SetPoint(nofResult,fConstArray[0],num[4]);
+       graph->SetPointError(nofResult,fConstArray[1],num[5]);
+-      graph_sysUncorr->SetPoint(nofResult,0,num[4]);
++      graph_sysUncorr->SetPoint(nofResult,fConstArray[0],num[4]);
+       graph_sysUncorr->SetPointError(nofResult,0.2,num[7]);
+     }
+     else if (fSpectraName.Contains("-PT"))
+     {
+       num[4]=num[4]/(r->WidthX());
+       cout << Form("") << endl;
+-      cout << Form("  | %s |   %.0f  %.0f  %.0f  |  %.3f  %.3f  %.3f  |  %.0f   %.0f  |"  ,binAsString.Data(),num[0],num[1],num[2],num[4],num[5],num[7],fConstArray[0],fConstArray[1]) << endl;
++      cout << Form("  | %s |   %.0f  %.0f  %.0f  |  %.3f  %.3f  %.3f  |  %.1f   %.1f  |"  ,binAsString.Data(),num[0],num[1],num[2],num[4],num[5],num[7],fConstArray[0],fConstArray[1]) << endl;
+       //Fill graph
+       Double_t binCenter = (binArray[nofResult+1]-binArray[nofResult])/2 + binArray[nofResult] ;
+       graph->SetPoint(nofResult,binCenter,num[4]);
+@@ -593,7 +593,7 @@ TGraphErrors * AliAnalysisMuMuSpectraCapsulePbPb::RAAasGraphic(Double_t MUL) con
+         {
+         num[4]=num[4]/(r->WidthX());
+         cout << Form("") << endl;
+-        cout << Form("  | %s |   %.0f  %.0f  %.0f  |  %.3f  %.3f  %.3f  |  %.0f   %.0f  |"  ,binAsString.Data(),num[0],num[1],num[2],num[4],num[5],num[7],fConstArray[0],fConstArray[1]) << endl;
++        cout << Form("  | %s |   %.0f  %.0f  %.0f  |  %.3f  %.3f  %.3f  |  %.1f   %.1f  |"  ,binAsString.Data(),num[0],num[1],num[2],num[4],num[5],num[7],fConstArray[0],fConstArray[1]) << endl;
+         //Fill graph
+         Double_t binCenter = -((binArray[nofResult+1]-binArray[nofResult])/2 + binArray[nofResult]) ;
+         graph->SetPoint(nofResult,binCenter,num[4]);
+@@ -617,17 +617,16 @@ TGraphErrors * AliAnalysisMuMuSpectraCapsulePbPb::RAAasGraphic(Double_t MUL) con
+ 
+   //Add and merge all Graph
+   TList* l = new TList();
++  l->SetOwner(kTRUE);
++  l->Add(graph);
+   l->Add(graph_sysUncorr);
+-  if(0.>graph->Merge(l)) return 0x0;
+-
+-
+ 
+   // delete graph;
+   // delete graph_sysUncorr;
+   delete bins;
+   delete binArray;
+ 
+- return graph ;
++  return l ;
+ }
+ 
+ 
+@@ -645,162 +644,56 @@ void AliAnalysisMuMuSpectraCapsulePbPb::ComputeRAA(TString sbin, Double_t numArr
+   //________PT and Y case
+   if (fSpectraName.Contains("-PT") || fSpectraName.Contains("-Y"))
+   {
+-    char status;
+-
+-    //  //________Arrays to store quantities from externFile
+-    // float intervalArray[2];
+-    // // intervalLow , intervalHight
+-    // //      0      ,      1
++    // read exterfile and get the correct value
+     float valueArray[10];
+-    //    sigmapp   dsigmapp   dsigmappCorr   dsigmappUncorr  AccEff   dAccEff  sysMC   TrajEffError  TriggerError   PairError
+-    //________ﬁ
+-
+-    if(!ReadFromFile(sbin,&valueArray[0])) return;
+-    // //________Open file
+-    // FILE*  infile;
+-    // infile = fopen(fExternFile.Data(),"rb") ;
+-
+-    // if (infile != NULL)
+-    // {
+-    //   AliDebug(1, " ==== opening file ==== ");
+-    //   // Loop until end of file is reached
+-    //   while(!feof(infile))
+-    //   {
+-    //     // Reminder :
+-    //     // intervalLow  intervalHight  sigma_pp  dsigma_pp  dsigma_pp_Correl  dsigma_pp_Uncorrel  AccEff  dAccEff sysMC TrajEffError  TriggerError   PairError;
+-    //     // Store value in array
+-    //     fscanf(infile,"%s %f_%f %f %f %f %f %f %f %f %f %f %f",&status,&intervalArray[0],&intervalArray[1],
+-    //                                                &valueArray[0],&valueArray[1],&valueArray[2],&valueArray[3],&valueArray[4],
+-    //                                                &valueArray[5],&valueArray[6],&valueArray[7],&valueArray[8],&valueArray[9]);
+-    //     if(status == 'F') continue; // F = false, T =true
+-    //     // Make intervalArray a string
+-    //     TString intervalLow  = TString::Format("%.2f",intervalArray[0]);
+-    //     TString intervalHigh = TString::Format("%.2f",intervalArray[1]);
+-
+-    //     // Select the good interval. Since interval is written in <binAsString>, just need them to match
+-    //     if(sbin.Contains(Form("%s",intervalLow.Data())) && sbin.Contains(Form("%s",intervalHigh.Data())))
+-    //     {
+-    //       // Check Point
+-    //       AliDebug(1,Form(" -- Selected line :"));
+-    //       AliDebug(1,Form(" -- intervalLow  intervalHight  sigma_pp  dsigma_pp  dsigma_pp_Correl  dsigma_pp_Uncorrel  AccEff  dAccEff  sysMC TrajEffError  TriggerError   PairErrorﬁ"));
+-    //       AliDebug(1,Form(" --  %.2f  %.2f  %f  %f  %f  %f  %f  %f  %f  %f  %f  %f ",
+-    //       intervalArray[0],intervalArray[1],valueArray[0],valueArray[1],valueArray[2],valueArray[3],valueArray[4],valueArray[5],valueArray[6],valueArray[7],valueArray[8],valueArray[9]));
++    //  valueArray[0], valueArray[1], valueArray[2], valueArray[3],  valueArray[4], valueArray[5], valueArray[6], valueArray[7], valueArray[8], valueArray[9]
++    //  sigmapp         dsigmapp      dsigmappCorr   dsigmappUncorr  AccEff         dAccEff        sysMC          TrajEffError    TriggerError  PairError
++
++    if(ReadFromFile(sbin,&valueArray[0])==kFALSE) return;
++    AliDebug(1, " Values correctly read from extern file");
+ 
+     //Normalization according to centrality bin
+-    if (fSpectraName.Contains("V0M_00.00_90.00"))
+-    {
+-      numArray[3] = fConstArray[2]*BR*MUL*Fnorm*(valueArray[0]/1000.)*(valueArray[4]);
+-    }
+-    else
+-    {
+-      numArray[3] = (1./9.)*fConstArray[2]*BR*MUL*Fnorm*(valueArray[0]/1000.)*(valueArray[4]);
+-    }
++    if (fSpectraName.Contains("V0M_00.00_90.00")) numArray[3] = fConstArray[2]*BR*MUL*Fnorm*(valueArray[0]/1000.)*(valueArray[4]);
++    else numArray[3] = (1./9.)*fConstArray[2]*BR*MUL*Fnorm*(valueArray[0]/1000.)*(valueArray[4]);
+ 
++    //Compute RAA
+     numArray[4] = numArray[0]/numArray[3];
+ 
+-    //     }
+-    //     else
+-    //     {
+-    //       AliDebug(1,Form("Not the good interval, so continue ...."));
+-    //       continue;
+-    //     }
+-    //   }
+-    //   fclose(infile);
+-    //   AliDebug(1, " ==== Closing file ==== ");
+-    // }
+-    // else
+-    // {
+-    //   cout << Form("Cannot open configuration file %s ",fExternFile.Data()) << endl;
+-    //   return;
+-    // }
+-    // //________
+-
+-    if (fSpectraName.Contains("-PT") )
+-    {
++    if (fSpectraName.Contains("-PT") ){
+       // Normalization factor due to how PP cross-section are calculated
+-      numArray[4] = numArray[4];
+-
++//      numArray[4] = numArray[4];
+       //Corr
+       numArray[6] = numArray[4] * AliAnalysisMuMuResult::ErrorABCDE(1.,TrajPT,1.,TriggPT,Fnorm,FnormSyst,fConstArray[2],fConstArray[3],valueArray[0],valueArray[2]);
+-                                  // TMath::Sqrt(TrajPT                       *TrajPT                       + // Traj. reconstruction Eff.
+-                                  //             TriggPT                      *TriggPT                      + // Trigg Eff.
+-                                  //             FnormSyst/Fnorm              *FnormSyst/Fnorm              + // Fnorm Syst
+-                                  //             fConstArray[3]/fConstArray[2]*fConstArray[3]/fConstArray[2]+ // TAA syst.
+-                                  //             valueArray[2]/valueArray[0]  *valueArray[2]/valueArray[0]);  // dsigma_pp_Corr/sigma_pp
+-
+-
+     }
+-    else if (fSpectraName.Contains("-Y"))
+-    {
++    else if (fSpectraName.Contains("-Y")){
+       //Corr
+       numArray[6] = numArray[4] * AliAnalysisMuMuResult::ErrorABCDE(1.,TrajY,1.,TriggY,Fnorm,FnormSyst,fConstArray[2],fConstArray[3],valueArray[0],valueArray[2]);
+-                                  // TMath::Sqrt(TrajY                        *TrajY                         + // Traj. reconstruction Eff.
+-                                  //             TriggY                       *TriggY                        + // Trigg Eff.
+-                                  //             FnormSyst/Fnorm              *FnormSyst/Fnorm               + // Fnorm Syst
+-                                  //             fConstArray[3]/fConstArray[2]*fConstArray[3]/fConstArray[2] + // TAA syst.
+-                                  //             valueArray[2]/valueArray[0]  *valueArray[2]/valueArray[0]);   // dsigma_pp_Corr/sigma_pp
+-
+     }
+-    else
+-    {
++    else {
+       AliError("Unowned bin type... I Told you !");
+       return;
+     }
+-
+-    //Stat
++    //Stat error
+     numArray[5] = numArray[4] * AliAnalysisMuMuResult::ErrorAB(numArray[0],numArray[1],valueArray[0],valueArray[1]);
+-
+-                                    // TMath::Sqrt(numArray[1]/numArray[0]    *numArray[1]/numArray[0]     + // Jpsi extraction
+-                                    //         valueArray[1]/valueArray[0]*valueArray[1]/valueArray[0] ); // dsigma_pp/sigma_pp
+-
+-    //UnCorr
++    //UnCorr error
+     numArray[7] = numArray[4] * AliAnalysisMuMuResult::ErrorABCD(1.,valueArray[6],numArray[0],numArray[2],1.,valueArray[7],1.,valueArray[8])
+                               * AliAnalysisMuMuResult::ErrorAB(1.,valueArray[9],valueArray[0],valueArray[3]);
+-
+-
+-                                // TMath::Sqrt(valueArray[6]             *valueArray[6]                   + // MC param.
+-                                //             numArray[2]/numArray[0]   *numArray[2]/numArray[0]         + // Signal extraction
+-                                //             valueArray[7]             *valueArray[7]                   + // Traj. Eff.
+-                                //             valueArray[8]             *valueArray[8]                   + // Trigg. Eff.
+-                                //             valueArray[9]             *valueArray[9]                   + // Pair. Eff.
+-                                //             valueArray[3]/valueArray[0]*valueArray[3]/valueArray[0]);     // dsigma_pp_Uncorr/sigma_pp
+   }
+-
+-  //________Compute R_AA in case of integrated spectra in PT and Y
+-  else if(fSpectraName.Contains("-INTEGRATED"))
+-  {
+-    //Get quantities
++  //________Integrated case
++  else if(fSpectraName.Contains("-INTEGRATED")){
+     //Normalization according to centrality bin
+     if (!fSpectraName.Contains("V0M_00.00_90.00")) numArray[3] = (1./9.)*BR*fConstArray[2]*Fnorm*MUL*(sigmaPP/1000)*(fConstArray[8]);
+     else                                           numArray[3] = BR*fConstArray[2]*Fnorm*MUL*(sigmaPP/1000)*(fConstArray[8]);
+     numArray[4] = numArray[0]/numArray[3];
+-
+     //Stat error
+-    numArray[5] = numArray[4] * AliAnalysisMuMuResult::ErrorAB(numArray[0],numArray[1],sigmaPP,dsigmaPP);
+-
+-                                // TMath::Sqrt((numArray[1]/numArray[0])*(numArray[1]/numArray[0]) + // Jpsi extraction
+-                                //                      dsigmaPP/sigmaPP*dsigmaPP/sigmaPP          ); // dsigma_pp/sigma_pp
++    numArray[5] = numArray[4] * AliAnalysisMuMuResult::ErrorAB(numArray[0],numArray[1],sigmaPP,dsigmaPP);// signal + sigmaPP
+     //Corr error
+-    numArray[6] = numArray[4] * AliAnalysisMuMuResult::ErrorABC(1.,MCParamError,1.,fConstArray[4],1.,fConstArray[5])
+-                              * AliAnalysisMuMuResult::ErrorABC(1.,fConstArray[6],sigmaPP,dsigmaPPCorr,Fnorm,FnormSyst);
+-
+-    // TMath::Sqrt(MCParamError        *MCParamError         + // MCParamError
+-    //                                         fConstArray[4]      *fConstArray[4]       + // Traj. reconstruction Eff.
+-    //                                         fConstArray[5]      *fConstArray[5]       + // Trig. Eff.
+-    //                                         fConstArray[6]      *fConstArray[6]       + // Pair Reconst. Eff.
+-    //                                         dsigmaPPCorr/sigmaPP*dsigmaPPCorr/sigmaPP + // dsigma_pp_Corr/sigma_pp
+-    //                                         FnormSyst/Fnorm     *FnormSyst/Fnorm);      // Fnorm Syst
+-
++    numArray[6] = numArray[4] * AliAnalysisMuMuResult::ErrorAB(1.,MCParamError,1.,fConstArray[5])// MC + sys.AP + Traj. err
++                              * AliAnalysisMuMuResult::ErrorABC(1.,fConstArray[6],sigmaPP,dsigmaPPCorr,Fnorm,FnormSyst);// Trigg. err + sigmaCorr + Fnorm
+     //Uncorr error
+-    numArray[7] = numArray[4] * AliAnalysisMuMuResult::ErrorAB(numArray[0],numArray[2],fConstArray[0],fConstArray[1]);
+-
+-
+-    // TMath::Sqrt(numArray[2]/numArray[0]      *numArray[2]/numArray[0]      + // Signal extraction
+-    //                                         fConstArray[1]/fConstArray[0]*fConstArray[1]/fConstArray[0]);// TAA syst.
+-    //
++    numArray[7] = numArray[4] * AliAnalysisMuMuResult::ErrorABC(numArray[0],numArray[2],fConstArray[2],fConstArray[3], 100.,fConstArray[4]);// signal + TAA + AP
+   }
+-  else
+-  {
++  else {
+     AliError("Unowned bin type... I Told you !");
+     return;
+   }
+@@ -823,16 +716,13 @@ void AliAnalysisMuMuSpectraCapsulePbPb::Print(Option_t* opt) const
+ //_____________________________________________________________________________
+ void AliAnalysisMuMuSpectraCapsulePbPb::PrintConst() const
+ {
+-  /**
+-   *
+-   * Print member constants
+-   *
+-   */
++    ///
++    /// Print member constants on the terminal
++    ///
+ 
+   //Check point
+   if(!GetSpectra()) return ;
+-  else
+-  {
++  else{
+     cout <<      " ================================================================ " << endl;
+     cout << Form(" Constants for Spectra %s",fSpectraName.Data()) << endl;
+     cout <<      " ================================================================ " << endl;
+@@ -852,67 +742,52 @@ void AliAnalysisMuMuSpectraCapsulePbPb::PrintConst() const
+ //_____________________________________________________________________________
+ Bool_t AliAnalysisMuMuSpectraCapsulePbPb::ReadFromFile(TString sbin, float valueArray[]) const
+ {
+-  /**
+-   *
+-   * Read extern file and gives associated values
+-   *
+-   */
++    ///
++    /// Read extern file lines and store associated values. Exemple of line :
++    /// #intervalLow    intervalHight   sigmapp dsigmapp    dsigmappCorr    dsigmappUncorr  AccEff dAccEff  sysMC TrajEffError  TriggerError    PairError
++    /// 00              01              0.6413  0.02611     0.000           0.000           0.1435 0.0009   0.000 0.000         0.04            0.00
++    ///
++    /// All white space must be single whitespace, i.e " " and not "<tab>"
+ 
+-    char status;
+-    float intervalArray[2];
++    Bool_t ok =kFALSE;
+ 
+     //________Open file
+-    FILE*  infile;
+-    infile = fopen(fExternFile.Data(),"rb") ;
++    ifstream infile(fExternFile.Data(),std::ios::in);
++    TString line;
++    TObjArray* lineArray;
+ 
+-    if (infile != NULL)
++    if (infile)
+     {
+       AliDebug(1, " ==== opening file ==== ");
+       // Loop until end of file is reached
+-      while(!feof(infile))
+-      {
+-        // Reminder :
+-        // intervalLow  intervalHight  sigma_pp  dsigma_pp  dsigma_pp_Correl  dsigma_pp_Uncorrel  AccEff  dAccEff sysMC TrajEffError  TriggerError   PairError;
+-        // Store value in array
+-        fscanf(infile,"%s %f_%f %f %f %f %f %f %f %f %f %f %f",&status,&intervalArray[0],&intervalArray[1],
+-                                                   &valueArray[0],&valueArray[1],&valueArray[2],&valueArray[3],&valueArray[4],
+-                                                   &valueArray[5],&valueArray[6],&valueArray[7],&valueArray[8],&valueArray[9]);
+-        if(status == 'F') continue; // F = false, T =true
+-        // Make intervalArray a string
+-        TString intervalLow  = TString::Format("%.2f",intervalArray[0]);
+-        TString intervalHigh = TString::Format("%.2f",intervalArray[1]);
++      while(infile.eof()!=kTRUE){
+ 
+-        // Select the good interval. Since interval is written in <binAsString>, just need them to match
+-        if(sbin.Contains(Form("%s",intervalLow.Data())) && sbin.Contains(Form("%s",intervalHigh.Data())))
+-        {
+-          // Check Point
+-          AliDebug(1,Form(" -- Selected line :"));
+-          AliDebug(1,Form(" -- intervalLow  intervalHight  sigma_pp  dsigma_pp  dsigma_pp_Correl  dsigma_pp_Uncorrel  AccEff  dAccEff  sysMC TrajEffError  TriggerError   PairErrorﬁ"));
+-          AliDebug(1,Form(" --  %.2f  %.2f  %f  %f  %f  %f  %f  %f  %f  %f  %f  %f ",
+-          intervalArray[0],intervalArray[1],valueArray[0],valueArray[1],valueArray[2],valueArray[3],valueArray[4],valueArray[5],valueArray[6],valueArray[7],valueArray[8],valueArray[9]));
+-
+-          // //Normalization according to centrality bin
+-          // if (fSpectraName.Contains("V0M_00.00_90.00"))
+-          // {
+-          //   numArray[3] = fConstArray[2]*BR*MUL*Fnorm*(valueArray[0]/1000.)*(valueArray[4]);
+-          // }
+-          // else
+-          // {
+-          //   numArray[3] = (1./9.)*fConstArray[2]*BR*MUL*Fnorm*(valueArray[0]/1000.)*(valueArray[4]);
+-          // }
+-
+-          // numArray[4] = numArray[0]/numArray[3];
++        //read the line
++        line.ReadLine(infile,kFALSE);
++        if (line.BeginsWith("#"))continue;
++        AliDebug(1,Form(" Read line : %s",line.Data()));
+ 
++        // Put the line in a TObjArray
++        lineArray = line.Tokenize(" ");
++
++        // Select the good interval. Since interval is written in <binAsString>, just need them to match
++        TString intervalLow  = TString::Format("%.2f",static_cast<TObjString*>(lineArray->At(0))->String().Atof());
++        TString intervalHigh = TString::Format("%.2f",static_cast<TObjString*>(lineArray->At(1))->String().Atof());
++        if(sbin.Contains(Form("%s_%s",intervalLow.Data(),intervalHigh.Data()))){
++            AliDebug(1,Form(" -- line selected -- "));
++            ok = kTRUE;
++            break;
+         }
+-        else
+-        {
+-          AliDebug(1,Form("Not the good interval, so continue ...."));
+-          return kFALSE;
+-        }
++        else continue;
+       }
+-      fclose(infile);
+-      AliDebug(1, " ==== Closing file ==== ");
+-      return kTRUE;
++      infile.close();
++      AliDebug(1, " ==== closing file ==== ");
++
++      // Store the value
++        for (int i =0 ; i<10 ; i++) {
++            valueArray[i]= static_cast<TObjString*>(lineArray->At(i+2))->String().Atof();
++        }
++        return ok;
+     }
+-    else return kFALSE;
++    else return ok;
+ }
+diff --git a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.h b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.h
+index fc52517..0106d44 100644
+--- a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.h
++++ b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.h
+@@ -47,7 +47,7 @@ public:
+   // Print constants used
+   void PrintConst() const;
+   // Compute quantities linked to RAA
+-  TGraphErrors* RAAasGraphic(Double_t MUL) const;
++  TList* RAAasGraphic(Double_t MUL) const;
+ 
+ 
+   // Return some data member. Double "const" on purpose to avoid leverage on data members
+-- 
+2.5.4 (Apple Git-61)
+

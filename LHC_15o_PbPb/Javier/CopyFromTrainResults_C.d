@@ -1,0 +1,51 @@
+
+# DO NOT DELETE
+
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/TString.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/Riosfwd.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/RConfig.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/RVersion.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/TMathBase.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/Rtypes.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/DllImport.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/Rtypeinfo.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/snprintf.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/strlcpy.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/TGenericClassInfo.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/TSchemaHelper.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/TFile.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/TDirectoryFile.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/TDirectory.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/TNamed.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/TObject.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/TStorage.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/TVersionCheck.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/TBuffer.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/TList.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/TSeqCollection.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/TCollection.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/TIterator.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/TDatime.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/TUUID.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/TMap.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/THashTable.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/TUrl.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/TROOT.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/aliroot/master/inst/include/AliMergeableCollection.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/TFolder.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/aliroot/master/inst/include/AliCounterCollection.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/aliphysics/mumu/inst/include/AliAnalysisMuMuBinning.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/TMath.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/TError.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/TKey.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/aliroot/master/inst/include/AliLog.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/TClass.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/TDictionary.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/Property.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/ESTLType.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/TObjArray.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/TObjString.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/ThreadLocalStorage.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/RConfigure.h
+./CopyFromTrainResults_C.so: /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/include/cintdictversion.h /Users/audurier/alicesw/root/alice_v5-34-30/inst/include/include/RVersion.h
+CopyFromTrainResults_C__ROOTBUILDVERSION= 5.34/30

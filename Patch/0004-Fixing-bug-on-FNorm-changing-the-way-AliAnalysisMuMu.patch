@@ -1,0 +1,131 @@
+From 5458350e74a5ebdc510aa8d41c873a69a06d6538 Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Fri, 15 Jan 2016 15:38:07 +0100
+Subject: [PATCH 4/7] Fixing bug on FNorm + changing the way
+ AliAnalysisMuMuSpectraCapsule read exterfiles
+
+---
+ PWG/muondep/AliAnalysisMuMuFnorm.cxx              |  2 ++
+ PWG/muondep/AliAnalysisMuMuSpectraCapsule.cxx     |  6 +++-
+ PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx | 38 ++++++++++++++---------
+ 3 files changed, 30 insertions(+), 16 deletions(-)
+
+diff --git a/PWG/muondep/AliAnalysisMuMuFnorm.cxx b/PWG/muondep/AliAnalysisMuMuFnorm.cxx
+index 88cf752..d9f1b5a 100644
+--- a/PWG/muondep/AliAnalysisMuMuFnorm.cxx
++++ b/PWG/muondep/AliAnalysisMuMuFnorm.cxx
+@@ -1386,6 +1386,8 @@ Double_t AliAnalysisMuMuFnorm::GetSum(const char* triggerClassName,
+   {
+     condition += "/event:ALL";
+   }
++
++  condition += Form("/centrality:%s",fConfig.First(fConfig.CentralitySelectionKey(),kFALSE).Data());
+   
+   Double_t n = fCounterCollection.GetSum(condition.Data());
+ 
+diff --git a/PWG/muondep/AliAnalysisMuMuSpectraCapsule.cxx b/PWG/muondep/AliAnalysisMuMuSpectraCapsule.cxx
+index 7aebd5d..b2452fe 100644
+--- a/PWG/muondep/AliAnalysisMuMuSpectraCapsule.cxx
++++ b/PWG/muondep/AliAnalysisMuMuSpectraCapsule.cxx
+@@ -91,9 +91,13 @@ Bool_t AliAnalysisMuMuSpectraCapsule::SetConstantFromExternFile(const char* file
+             TString centrality   =  static_cast<TObjString*>(lineArray->At(0))->String().Data();
+             TString intervalLow  =  TString::Format("%.2f",static_cast<TObjString*>(lineArray->At(1))->String().Atof());
+             TString intervalHigh =  TString::Format("%.2f",static_cast<TObjString*>(lineArray->At(2))->String().Atof());
++             AliDebug(1,Form(" --__--__-- interval low = %s",intervalLow.Data()));
++              AliDebug(1,Form(" --__--__-- interval high = %s",intervalHigh.Data()));
++            if (intervalLow.EqualTo("0.00")) intervalLow ="00.00";
+ 
+             // Select the good interval. Since interval is written in <binAsString>, just need them to match
+-            if(spectraName->Contains(Form("%s",centrality.Data()))&&spectraName->Contains(Form("%s_%s",intervalLow.Data(),intervalHigh.Data()))){
++            if(spectraName->Contains(Form("%s",centrality.Data()))&& spectraName->Contains(Form("%s_%s",intervalLow.Data(),intervalHigh.Data())) && spectraName->Contains(Form("%s_%s",centrality.Data(),intervalLow.Data()))){
++                AliDebug(1,Form(" spectraName = %s",spectraName->Data()));
+                 AliDebug(1,Form(" -- line selected -- "));
+                 ok = kTRUE;
+                 break;
+diff --git a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx
+index 09a218b..2d26620 100644
+--- a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx
++++ b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx
+@@ -59,9 +59,9 @@ namespace
+   const Double_t BR             = 5.93/100; // Branching ratio
+   //Normalization factor
+   //FIXME : Fnorm store in TH1, make in general
+-  const Double_t Fnorm          = 15.18;    // Normalization
+-  const Double_t FnormStat      = 0.03;     // Normalization
+-  const Double_t FnormSyst      = 0.97;     // Normalization
++  const Double_t Fnorm          = 11.827;    // Normalization
++  const Double_t FnormStat      = 0.011;     // Normalization
++  const Double_t FnormSyst      = 0.00;     // Normalization
+   //pp Cross-section integrated in pt,y
+   const Double_t sigmaPP        = 5.457857;    // for fully integrated case
+   const Double_t dsigmaPP       = 9.950825e-02;    // idem
+@@ -70,17 +70,17 @@ namespace
+   // Global MC sys. err. for centrality integrated in pt and Y
+   const Double_t MCParamError   = 3/100;
+   // Corr. error for centrality
+-  const Double_t TrajCENT       = 11/100;
+-  const Double_t TriggCENT      = 2/100;
+-  const Double_t PairCENT       = 1/100;
++  const Double_t TrajCENT       = 11./100.;
++  const Double_t TriggCENT      = 2./100.;
++  const Double_t PairCENT       = 1./100.;
+   // Corr. error for pt case
+-  const Double_t TrajPT         = 1/100;
+-  const Double_t TriggPT        = 1/100;
+-  const Double_t PairPt         = 1/100;
++  const Double_t TrajPT         = 1./100.;
++  const Double_t TriggPT        = 1./100.;
++  const Double_t PairPt         = 1./100.;
+   // Corr. error for y case
+-  const Double_t TrajY          = 1/100;
+-  const Double_t TriggY         = 1/100;
+-  const Double_t PairY          = 1/100;
++  const Double_t TrajY          = 1./100.;
++  const Double_t TriggY         = 1./100.;
++  const Double_t PairY          = 1./100.;
+ }
+ 
+ 
+@@ -561,6 +561,8 @@ TList * AliAnalysisMuMuSpectraCapsulePbPb::RAAasGraphic(Double_t MUL) const
+     num[1] = result->GetErrorStat("NofJPsi");
+     num[2] = result->GetRMS("NofJPsi");
+ 
++    printf("MUL = %f\n",MUL );
++
+     //Main methods
+     ComputeRAA(binAsString,&num[0],MUL);
+ 
+@@ -656,12 +658,20 @@ void AliAnalysisMuMuSpectraCapsulePbPb::ComputeRAA(TString sbin, Double_t numArr
+     if (fSpectraName.Contains("V0M_00.00_90.00")) numArray[3] = fConstArray[2]*BR*MUL*Fnorm*(valueArray[0]/1000.)*(valueArray[4]);
+     else numArray[3] = (1./9.)*fConstArray[2]*BR*MUL*Fnorm*(valueArray[0]/1000.)*(valueArray[4]);
+ 
++    AliDebug(1,Form("BR          = %f\n", BR));
++    AliDebug(1,Form("Fnorm       = %f\n", Fnorm));
++    AliDebug(1,Form("sigma pp    = %f ub \n", valueArray[0]));
++    AliDebug(1,Form("AccEff      = %f\n", valueArray[4]));
++    AliDebug(1,Form("TAA         = %f\n", fConstArray[2]));
++    AliDebug(1,Form("MUL         = %f\n", MUL));
++    AliDebug(1,Form("denominator = %f\n", numArray[3]));
++
+     //Compute RAA
+     numArray[4] = numArray[0]/numArray[3];
+ 
+     if (fSpectraName.Contains("-PT") ){
+       // Normalization factor due to how PP cross-section are calculated
+-//      numArray[4] = numArray[4];
++     numArray[4] = numArray[4];
+       //Corr
+       numArray[6] = numArray[4] * AliAnalysisMuMuResult::ErrorABCDE(1.,TrajPT,1.,TriggPT,Fnorm,FnormSyst,fConstArray[2],fConstArray[3],valueArray[0],valueArray[2]);
+     }
+@@ -773,8 +783,6 @@ Bool_t AliAnalysisMuMuSpectraCapsulePbPb::ReadFromFile(TString sbin, float value
+         // Select the good interval. Since interval is written in <binAsString>, just need them to match
+         TString intervalLow  = TString::Format("%.2f",static_cast<TObjString*>(lineArray->At(0))->String().Atof());
+         TString intervalHigh = TString::Format("%.2f",static_cast<TObjString*>(lineArray->At(1))->String().Atof());
+-        printf("intervalLow = %s\n",intervalLow.Data() );
+-        printf("intervalHigh = %s\n",intervalHigh.Data() );
+         if(sbin.Contains(Form("%s",intervalLow.Data())) && sbin.Contains(Form("%s",intervalHigh.Data()))){
+             AliDebug(1,Form(" -- line selected -- "));
+             ok = kTRUE;
+-- 
+2.5.4 (Apple Git-61)
+
