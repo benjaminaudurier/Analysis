@@ -1,7 +1,7 @@
 Packages = 
    {
-    "VO_ALICE@AliPhysics::vAN-20160209-1",
-    "VO_ALICE@AliRoot::v5-07-20-4",
+    "VO_ALICE@AliPhysics::vAN-20160314-1",
+    "VO_ALICE@AliRoot::v5-08-02-1",
     "VO_ALICE@GEANT3::v2-0-19",
     "VO_ALICE@APISCONFIG::V1.1x"
    }; 
@@ -10,29 +10,26 @@ Jobtag =
       "comment: single mu realistic (LHC15n)"
    }; 
 split = "production:1-$2"; 
-OutputDir = "/alice/cern.ch/user/p/ppillot/Sim/LHC15n/muTune2VtxDCA2mu/results/$1/#alien_counter_03i#";
+OutputDir = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/Jpsi/tune3/CMUL7-B-NOPF-MUFAST/results/$1/#alien_counter_03i#";
 Price = 1; 
 Executable = "aliroot_new"; 
 InputFile = 
    {
-      "LF:/alice/cern.ch/user/p/ppillot/Sim/LHC15n/muTune2VtxDCA2mu/CheckESD.C",
-      "LF:/alice/cern.ch/user/p/ppillot/Sim/LHC15n/muTune2VtxDCA2mu/CheckAOD.C",
-      "LF:/alice/cern.ch/user/p/ppillot/Sim/LHC15n/muTune2VtxDCA2mu/MuonGenerator.C",
-      "LF:/alice/cern.ch/user/p/ppillot/Sim/LHC15n/muTune2VtxDCA2mu/Config.C",
-      "LF:/alice/cern.ch/user/p/ppillot/Sim/LHC15n/muTune2VtxDCA2mu/rec.C",
-      "LF:/alice/cern.ch/user/p/ppillot/Sim/LHC15n/muTune2VtxDCA2mu/sim.C",
-      "LF:/alice/cern.ch/user/p/ppillot/Sim/LHC15n/muTune2VtxDCA2mu/simrun.C",
-      "LF:/alice/cern.ch/user/p/ppillot/Sim/LHC15n/muTune2VtxDCA2mu/tag.C",
-      "LF:/alice/cern.ch/user/p/ppillot/Sim/LHC15n/muTune2VtxDCA2mu/AODtrainCustom.C",
-      "LF:/alice/cern.ch/user/p/ppillot/Sim/LHC15n/muTune2VtxDCA2mu/AddTaskMuonPhysics.C",
-      "LF:/alice/cern.ch/user/p/ppillot/Sim/LHC15n/muTune2VtxDCA2mu/AliAnalysisTaskMuonPhysics.cxx",
-      "LF:/alice/cern.ch/user/p/ppillot/Sim/LHC15n/muTune2VtxDCA2mu/AliAnalysisTaskMuonPhysics.h"
+      "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/Jpsi/tune3/CMUL7-B-NOPF-MUFAST/CheckESD.C",
+      "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/Jpsi/tune3/CMUL7-B-NOPF-MUFAST/CheckAOD.C",
+      "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/Jpsi/tune3/CMUL7-B-NOPF-MUFAST/GenParamCustomRadiativeDecay.C",
+      "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/Jpsi/tune3/CMUL7-B-NOPF-MUFAST/Config.C",
+      "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/Jpsi/tune3/CMUL7-B-NOPF-MUFAST/rec.C",
+      "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/Jpsi/tune3/CMUL7-B-NOPF-MUFAST/sim.C",
+      "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/Jpsi/tune3/CMUL7-B-NOPF-MUFAST/simrun.C",
+      "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/Jpsi/tune3/CMUL7-B-NOPF-MUFAST/tag.C",
+      "LF:/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/Jpsi/tune3/CMUL7-B-NOPF-MUFAST/AODtrainCustom.C"
    };
-User = "ppillot"; 
+User = "baudurie"; 
 OutputArchive = 
    {
       "log_archive:stderr,stdout,sim.log,rec.log,aod.log,check.log,tag.log@disk=1",
-      "root_archive.zip:galice.root,Kinematics*.root,TrackRefs*.root,AliESDs.root,AliAOD.root,AliAOD.Muons.root,Merged.QA.Data.root,Run*.root,AnalysisResults.root@disk=3"
+      "root_archive.zip:galice.root,Kinematics*.root,TrackRefs*.root,AliESDs.root,AliAOD.root,AliAOD.Muons.root,Merged.QA.Data.root,Run*.root@disk=3"
    }; 
 splitarguments = "simrun.C --run $1 --chunk #alien_counter# --event $3 --process kMuon --energy 5000";
 TTL = "72000";
@@ -46,4 +43,4 @@ JDLVariables =
       "Packages",
       "OutputDir"
    }; 
-Validationcommand = "/alice/cern.ch/user/p/ppillot/Sim/LHC15n/muTune2VtxDCA2mu/validation.sh"
+Validationcommand = "/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/sim/Jpsi/tune3/CMUL7-B-NOPF-MUFAST/validation.sh"

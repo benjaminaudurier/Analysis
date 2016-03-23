@@ -17,7 +17,7 @@ void copyFiles(TString targetDir)
     return;
   }
   
-  TString localDir = "$WORK/Macros/Sim";
+  TString localDir = "$WORKDIR/Simulation";
   TString cp = "cp ";
   
   if (targetDir.BeginsWith("alien://")) { // grid copy
@@ -56,13 +56,13 @@ void copyFiles(TString targetDir)
                      cp.Data(), localDir.Data(), targetDir.Data()));
   gSystem->Exec(Form("%s%s/CheckAOD.C %s/CheckAOD.C",
                      cp.Data(), localDir.Data(), targetDir.Data()));
-  gSystem->Exec(Form("%s%s/Tuned/Config.C %s/Config.C",
+  gSystem->Exec(Form("%s%s/Config.C %s/Config.C",
                      cp.Data(), localDir.Data(), targetDir.Data()));
-  gSystem->Exec(Form("%s%s/Tuned/MuonGenerator.C %s/MuonGenerator.C",
+  gSystem->Exec(Form("%s%s/tune3_LHC15n_Jpsi/GenParamCustomRadiativeDecay.C %s/GenParamCustomRadiativeDecay.C",
                      cp.Data(), localDir.Data(), targetDir.Data()));
-  gSystem->Exec(Form("%s%s/Tuned/run.jdl %s/run.jdl",
+  gSystem->Exec(Form("%s%s/run.jdl %s/run.jdl",
                      cp.Data(), localDir.Data(), targetDir.Data()));
-  gSystem->Exec(Form("%s%s/Tuned/simrun.C %s/simrun.C",
+  gSystem->Exec(Form("%s%s/simrun.C %s/simrun.C",
                      cp.Data(), localDir.Data(), targetDir.Data()));
   //gSystem->Exec(Form("%s%s/AODtrain.C %s/AODtrain.C",
   //                   cp.Data(), localDir.Data(), targetDir.Data()));

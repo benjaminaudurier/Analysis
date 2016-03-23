@@ -35,10 +35,22 @@
 #include "AliMUONv1.h"
 #include "AliT0v1.h"
 #include "AliVZEROv7.h"
-#endif 
+#include "AliGenBox.h"
+#include "AliGenFixed.h"
+#include "AliGenHijing.h"
+#include "AliGenMUONCocktail.h"
+#include "EVGEN/AliGenMUONlib.h"
+#include "EVGEN/AliGenParam.h"
+#include "AliGenScan.h"
+#include "AliMagF.h"
+#include "EVGEN/AliGenCocktail.h"
+#include "EVGEN/AliGenFunction.h"
+#include "EVGEN/AliDecayerPolarized.h"
+#include "AliGenEvtGen.h"
+#endif
 
 
-enum PDC06Proc_t 
+enum PDC06Proc_t
 {
   kMuon, kRunMax
 };
@@ -51,7 +63,7 @@ const char * pprRunName[] = {
 void ProcessEnvironmentVars();
 
 // Generator, beam energy
-static PDC06Proc_t   proc     = kMuon;
+static PDC06Proc_t   proc     = kMuon; // working for J/Psi too
 static Float_t       energy   = 2760; // energy in CMS
 //========================//
 // Set Random Number seed //
@@ -65,12 +77,27 @@ void Config()
   ProcessEnvironmentVars();
 
   gRandom->SetSeed(seed);
-  cerr<<"Config.C: Seed for random number generation= "<<seed<<endl; 
+  cerr<<"Config.C: Seed for random number generation= "<<seed<<endl;
 
   // Libraries required by geant321
 #if defined(__CINT__)
   gSystem->AddIncludePath("-I$ALICE_ROOT/include -I$ALICE_PHYSICS/include");
   gSystem->Load("libgeant321");
+
+  gSystem->Load("libEG");
+  gSystem->Load("libEGPythia6");   // TGenerator interface
+  gSystem->Load("libpythia6");     // Pythia 6.2
+  gSystem->Load("liblhapdf");      // Parton density functions
+
+
+  // load libraries to use Evtgen
+  gSystem->Setenv("PYTHIA8DATA", gSystem->ExpandPathName("$ALICE_ROOT/PYTHIA8/pythia8210/xmldoc"));
+  gSystem->Load("libHepMC" );
+  gSystem->Load("libTauola");
+  gSystem->Load("libPhotos");
+  gSystem->Load("libEvtGen");
+  gSystem->Load("libTEvtGen");
+  gSystem->Load("libEvtGenExternal");
 #endif
 
   new TGeant3TGeo("C++ Interface to Geant3");
@@ -78,7 +105,6 @@ void Config()
   //=======================================================================
   //  Create the output file
 
-   
   AliRunLoader* rl=0x0;
 
   cout<<"Config.C: Creating Run Loader ..."<<endl;
@@ -95,7 +121,7 @@ void Config()
   gAlice->SetRunLoader(rl);
   // gAlice->SetGeometryFromFile("geometry.root");
   // gAlice->SetGeometryFromCDB();
-  
+
   //
   //=======================================================================
   // ************* STEERING parameters FOR ALICE SIMULATION **************
@@ -126,12 +152,12 @@ void Config()
     gMC->SetCut("CUTNEU", cut);
     gMC->SetCut("CUTHAD", cut);
     gMC->SetCut("CUTMUO", cut);
-    gMC->SetCut("BCUTE",  cut); 
-    gMC->SetCut("BCUTM",  cut); 
-    gMC->SetCut("DCUTE",  cut); 
-    gMC->SetCut("DCUTM",  cut); 
+    gMC->SetCut("BCUTE",  cut);
+    gMC->SetCut("BCUTM",  cut);
+    gMC->SetCut("DCUTE",  cut);
+    gMC->SetCut("DCUTM",  cut);
     gMC->SetCut("PPCUTM", cut);
-    gMC->SetCut("TOFMAX", tofmax); 
+    gMC->SetCut("TOFMAX", tofmax);
 
   //======================//
   // Set External decayer //
@@ -145,33 +171,33 @@ void Config()
   // Generator Configuration //
   //=========================//
   AliGenerator* gener = 0x0;
-  
+
   if (proc == kMuon) {
     gSystem->AddIncludePath("-I$ALICE_ROOT/include");
     gSystem->AddIncludePath("-I$ALICE_ROOT/EVGEN");
-    gROOT->LoadMacro("MuonGenerator.C+");
-    gener = MuonGenerator();
-  }  
-  
+    gROOT->LoadMacro("GenParamCustomRadiativeDecay.C+");
+    gener = GenParamCustomRadiativeDecay();
+  }
+
   if (!gener) {
     cout<<"Generator is not set !"<<endl;
     return;
   }
-  
+
   // Size of the interaction diamond
-  
+
   // Longitudinal
 //  Float_t sigmaz  = 5.4 / TMath::Sqrt(2.); // [cm]
   Float_t sigmaz  = 5.3; // [cm] // vertex dispersion from SPD
-  
+
   // Transverse
   Float_t betast  = 3.5;                      // beta* [m]
   Float_t eps     = 3.75e-6;                   // emittance [m]
   Float_t gamma   = energy / 2.0 / 0.938272;  // relativistic gamma [1]
   Float_t sigmaxy = TMath::Sqrt(eps * betast / gamma) / TMath::Sqrt(2.) * 100.;  // [cm]
-  
+
   printf("\n \n Diamond size x-y: %10.3e z: %10.3e\n \n", sigmaxy, sigmaz);
-  
+
 //  gener->SetOrigin(0.076, 0.335, 0.29); //vertex position from SPD
   gener->SetOrigin(0.426, -0.115, 0.29); //vertex position from DCA
   gener->SetSigma(sigmaxy, sigmaxy, sigmaz);      // Sigma in (X,Y,Z) (cm) on IP position
@@ -181,16 +207,16 @@ void Config()
   gener->SetSigma(0., 0., 0.); //Sigma in (X,Y,Z) (cm) on IP position
   */
   gener->Init();
-  
+
   rl->CdGAFile();
-  
-  
+
+
   //=========================//
   //     magnetic field      //
   //=========================//
 //  TGeoGlobalMagField::Instance()->SetField(new AliMagF("Maps","Maps", -1., -1, AliMagF::k5kG));
-  
-  
+
+
   //=========================//
   //        material         //
   //=========================//
@@ -260,18 +286,18 @@ void Config()
 
         AliPIPE *PIPE = new AliPIPEv3("PIPE", "Beam Pipe");
     }
- 
+
     if (iITS)
     {
         //=================== ITS parameters ============================
 
-        AliITS *ITS  = new AliITSv11("ITS","ITS v11");    
+        AliITS *ITS  = new AliITSv11("ITS","ITS v11");
     }
 
     if (iZDC)
     {
         //=================== ZDC parameters ============================
-	
+
         AliZDC *ZDC = new AliZDCv4("ZDC", "normal ZDC");
         //Collimators aperture
         ZDC->SetVCollSideCAperture(0.85);
