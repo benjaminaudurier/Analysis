@@ -8,13 +8,13 @@
 #include <Riostream.h>
 #include <TLegend.h>
 #include <AliAnalysisMuMu.h>
-		
+
 std::set<int> RunNumbers(AliAnalysisMuMu* a);
 // void ComputeCentEffFactor(AliAnalysisMuMu* a);
 // void ComputeFnormScalersForC0V0M(AliAnalysisMuMu* a);
 Double_t* ComputeSumOfMB(AliAnalysisMuMu* a1, TGraphErrors* h1  );
 
-void FnormOutPut(const char * filename ="../AnalysisResults.root" ,
+void FnormOutPut(const char * filename ="../AnalysisResults_MuMuWithTOtrigger_CINT7MUFAST.root" ,
 	const char * filename2 ="../TrainRootFile/AnalysisResults_27_20160120-2124.root:MuMuCount")
 {
 	// Offline
@@ -48,48 +48,51 @@ void FnormOutPut(const char * filename ="../AnalysisResults.root" ,
 	}
 
 	// FnormScalersPUPS = static_cast<TH1*>(ana.OC()->GetObject("/FNORM/Scaler/GRAPHS/FnormScalersPUPS_AsHisto")->Clone());
-	
+
 	// TFile  foutput("FnormScalersOutput.root","NEW");
 	// FnormOffline1PUPS->Write();
 	// FnormOffline2PUPS->Write();
 	// FnormScalersPUPS->Write();
 	// return;
-	
+
 	Double_t* F1 = ComputeSumOfMB(&ana,FnormOffline1PUPS);
 	Double_t* F2 = ComputeSumOfMB(&ana,FnormOffline2PUPS);
 	Double_t* F3 = ComputeSumOfMB(&ana,FnormScalersPUPS);
 
 	//Compute Mean FNorm
-	Double_t FMean = (F1[0]/F1[1] + F2[0]/F2[1] + F3[0]/F3[1]) / ( 1./F1[1] + 1./F2[1] + 1./F3[1]) ;
-	Double_t FMeanError = TMath::Sqrt(        1./ (   1./F1[1]+1./F2[1]+1./F3[1] )   ) ;
-	Double_t MUL = ana.CC()->GetSum(Form("trigger:CMUL7-B-NOPF-MUFAST/centrality:V0A"));
+	Double_t MeanMB = (F1[0]/F1[1] + F2[0]/F2[1] + F3[0]/F3[1]) / ( 1./F1[1] + 1./F2[1] + 1./F3[1]) ;
+	Double_t MeanMBError = TMath::Sqrt(        1./ (   1./F1[1]+1./F2[1]+1./F3[1] )   ) ;
+	Double_t MUL = ana.CC()->GetSum(Form("trigger:CMUL7-B-NOPF-MUFAST/centrality:PP"));
 	printf("MUL = %.0f\n", MUL);
-	printf("Mean MBeq = %.0f +/- %.0f ( %f percent ) \n",FMean , FMeanError,100.* FMeanError/FMean );
+	printf("Mean MBeq = %.0f +/- %.0f ( %f percent ) \n",MeanMB , MeanMBError,100.* MeanMBError/MeanMB );
 
 // 	// ______Projection histograms
-// 	// New Histo to plot purposes
-// 	TGraphErrors* h1 =new TGraphErrors(Form("%s",FnormOffline1PUPS->GetName()),Form("%s",FnormOffline1PUPS->GetTitle()),30,10.,15.);
-// 	TGraphErrors* h2 =new TGraphErrors(Form("%s",FnormOffline2PUPS->GetName()),Form("%s",FnormOffline2PUPS->GetTitle()),30,10.,15.);
-// 	TGraphErrors* h3 =new TGraphErrors(Form("%s",FnormScalersPUPS->GetName()),Form("%s",FnormScalersPUPS->GetTitle()),30,10.,15.);
-// 	TGraphErrors* h4 =new TGraphErrors(Form("%s",FnormScalersPUPS->GetName()),Form("%s",FnormScalersPUPS->GetTitle()),30,10.,15.);// Total histo
-		
+// // 	// New Histo to plot purposes
+// 	TGraphErrors* h1 =new TGraphErrors(FnormOffline1PUPS->GetEntries());
+// 	TGraphErrors* h2 =new TGraphErrors(FnormOffline1PUPS->GetEntries());
+// 	TGraphErrors* h3 =new TGraphErrors(FnormOffline1PUPS->GetEntries());
+// 	TGraphErrors* h4 =new TGraphErrors(FnormOffline1PUPS->GetEntries());// Total histo
+
 // 	//Fill with Fnorm run by run divided by squared of the error
 // 	for ( Int_t ipoint = 0; ipoint < FnormOffline1PUPS->GetEntries(); ++ipoint ){
 // 		Double_t y  = FnormOffline1PUPS->GetY(ipoint+1);
-// 		Double_t e2 = (FnormOffline1PUPS->GetErrorY(ipoint+1)* FnormOffline1PUPS->GetErrorY(ipoint+1));		
-// 		h1->Fill(y,1./e2);			
+// 		Double_t e2 = (FnormOffline1PUPS->GetErrorY(ipoint+1)* FnormOffline1PUPS->GetErrorY(ipoint+1));
+// 		h1->Fill(y,1./e2);
+
+// 		Double_t y
+// 		Double_t e2
 // 	}
 
 // 	for ( Int_t ipoint = 0; ipoint < FnormOffline2PUPS->GetEntries(); ++ipoint ){
 // 		Double_t y  = FnormOffline2PUPS->GetY(ipoint+1);
-// 		Double_t e2 = (FnormOffline2PUPS->GetErrorY(ipoint+1)* FnormOffline2PUPS->GetErrorY(ipoint+1));		
-// 		h2->Fill(y,1./e2);			
+// 		Double_t e2 = (FnormOffline2PUPS->GetErrorY(ipoint+1)* FnormOffline2PUPS->GetErrorY(ipoint+1));
+// 		h2->Fill(y,1./e2);
 // 	}
 
 // 	for ( Int_t ipoint = 0; ipoint < 137; ++ipoint ){
 // 		Double_t y  = FnormScalersPUPS->GetY(ipoint+1);
-// 		Double_t e2 = (FnormScalersPUPS->GetErrorY(ipoint+1)* FnormScalersPUPS->GetErrorY(ipoint+1));		
-// 		h3->Fill(y,1./e2);			
+// 		Double_t e2 = (FnormScalersPUPS->GetErrorY(ipoint+1)* FnormScalersPUPS->GetErrorY(ipoint+1));
+// 		h3->Fill(y,1./e2);
 // 	}
 
 // 	for ( Int_t ipoint = 0; ipoint < 137; ++ipoint ){
@@ -101,9 +104,9 @@ void FnormOutPut(const char * filename ="../AnalysisResults.root" ,
 
 // 		Double_t y3  = FnormOffline1PUPS->GetY(ipoint+1);
 // 		Double_t e4 = (FnormOffline1PUPS->GetErrorY(ipoint+1)* FnormOffline1PUPS->GetErrorY(ipoint+1));
-// 		h4->Fill(y,1./e2);			
-// 		h4->Fill(y2,1./e3);			
-// 		h4->Fill(y3,1./e4);			
+// 		h4->Fill(y,1./e2);
+// 		h4->Fill(y2,1./e3);
+// 		h4->Fill(y3,1./e4);
 // 	}
 // 	//Scale
 // 	h1->Scale(1./h1->Integral());
@@ -111,111 +114,111 @@ void FnormOutPut(const char * filename ="../AnalysisResults.root" ,
 // 	h3->Scale(1./h3->Integral());
 // 	h4->Scale(1./h4->Integral());
 
-// 	//______________Plot
-// 	h1->SetLineColor(2);
-// 	h2->SetLineColor(3);
-// 	h3->SetLineColor(4);
-// 	h4->SetLineColor(1);
+	// //______________Plot
+	// h1->SetLineColor(2);
+	// h2->SetLineColor(3);
+	// h3->SetLineColor(4);
+	// h4->SetLineColor(1);
 
-// 	h1->SetLineStyle(9);
-// 	h2->SetLineStyle(9);
-// 	h3->SetLineStyle(9);
-// 	h4->SetLineStyle(1);
-	
-// 	h4->SetLineWidth(2);
-// 	h1->SetLineWidth(1.2);
-// 	h2->SetLineWidth(1.2);
-// 	h3->SetLineWidth(1.2);
-	
+	// h1->SetLineStyle(9);
+	// h2->SetLineStyle(9);
+	// h3->SetLineStyle(9);
+	// h4->SetLineStyle(1);
 
-// 	new TCanvas;
-// 	TLegend * leg = new TLegend(0.52,0.4,0.89,0.68);
-// 	leg->SetHeader("Distribution of FNorm for different methods");
-// 	leg->AddEntry(h1,"FNormOffline1","le");
-// 	leg->AddEntry((TObject*)0,Form("mean = %.3f ; RMS = %.3f",h1->GetMean(),h1->GetRMS()),"");
-// 	leg->AddEntry(h2,"FNormOffline2","le");
-// 	leg->AddEntry((TObject*)0,Form("mean = %.3f ; RMS = %.3f",h2->GetMean(),h2->GetRMS()),"");
-// 	leg->AddEntry(h3,"Scalers method corrected","le");
-// 	leg->AddEntry((TObject*)0,Form("mean = %.3f ; RMS = %.3f",h3->GetMean(),h3->GetRMS()),"");
-// 	leg->AddEntry(h4,"Sum","le");
-// 	leg->AddEntry((TObject*)0,Form("mean = %.3f; RMS =  %.3f",h4->GetMean(),h4->GetRMS()),"");
-	
-
-// 	h4->DrawCopy("");
-// 	h1->DrawCopy("same");
-// 	h2->DrawCopy("same");
-// 	h3->DrawCopy("same");
-// 	leg->Draw();
-	
+	// h4->SetLineWidth(2);
+	// h1->SetLineWidth(1.2);
+	// h2->SetLineWidth(1.2);
+	// h3->SetLineWidth(1.2);
 
 
-// 	TCanvas* c3 = new TCanvas();
-// 	c3->Divide(1,2,0,0);
+	// new TCanvas;
+	// TLegend * leg = new TLegend(0.52,0.4,0.89,0.68);
+	// leg->SetHeader("Distribution of FNorm for different methods");
+	// leg->AddEntry(h1,"FNormOffline1","le");
+	// leg->AddEntry((TObject*)0,Form("mean = %.3f ; RMS = %.3f",h1->GetMean(),h1->GetRMS()),"");
+	// leg->AddEntry(h2,"FNormOffline2","le");
+	// leg->AddEntry((TObject*)0,Form("mean = %.3f ; RMS = %.3f",h2->GetMean(),h2->GetRMS()),"");
+	// leg->AddEntry(h3,"Scalers method corrected","le");
+	// leg->AddEntry((TObject*)0,Form("mean = %.3f ; RMS = %.3f",h3->GetMean(),h3->GetRMS()),"");
+	// leg->AddEntry(h4,"Sum","le");
+	// leg->AddEntry((TObject*)0,Form("mean = %.3f; RMS =  %.3f",h4->GetMean(),h4->GetRMS()),"");
 
-// 	c3->cd(1);	
-// 	FnormOffline1PUPS->SetMarkerColor(2);
-// 	FnormOffline1PUPS->SetMarkerSize(0.55);
-// 	FnormOffline1PUPS->SetMarkerStyle(8);
-// 	FnormOffline2PUPS->SetMarkerColor(3);
-// 	FnormOffline2PUPS->SetMarkerSize(0.55);
-// 	FnormOffline2PUPS->SetMarkerStyle(8);
-// 	FnormScalersPUPS->SetMarkerColor(4);
-// 	FnormScalersPUPS->SetMarkerSize(0.55);
-// 	FnormScalersPUPS->SetMarkerStyle(8);
-// 	FnormOffline1PUPS->SetTitle("FNorm");
-// 	FnormOffline1PUPS->GetYaxis()->SetRangeUser(8,15);
-// 	FnormOffline1PUPS->DrawCopy();
-// 	FnormOffline2PUPS->DrawCopy("same");
-// 	FnormScalersPUPS->DrawCopy("same");
-// 	TLegend * leg3 = new TLegend(0.4,0.2,0.90,0.4);
-// 	leg3->SetHeader("FNorm");
-// 	leg3->AddEntry(FnormOffline1PUPS,"FNormOffline1 = CINT7/CINT7&0MUL","pe");
-// 	leg3->AddEntry(FnormOffline2PUPS,"FNormOffline2 = CMSL/CMSL&0MUL x CINT7/CINT7&0MSL","pe");
-// 	leg3->AddEntry(FnormScalersPUPS,"Scaler Fnorm with purity and pile-up correction","pe");
-// 	leg3->Draw("same");
-	
-// 	c3->cd(2);
-// 	FnormOffline1PUPS->SetTitle("Ratio");
-// 	TH1* FnormOffline1PUPSclone = static_cast<TH1*>(FnormOffline1PUPS->Clone());
-// 	TLegend * leg4 = new TLegend(0.4,0.2,0.90,0.4);
-// 	leg4->SetHeader("FNorm");
-// 	leg4->AddEntry(FnormOffline1PUPS,"FNormOffline1/FNormOffline2","pe");
-// 	leg4->AddEntry(FnormOffline1PUPSclone,"FNormOffline1/Scaler","pe");
-// 	leg4->AddEntry(FnormOffline2PUPS,"FNormOffline2/Scaler","pe");
-// 	FnormOffline1PUPS->Divide(FnormOffline2PUPS);
-// 	FnormOffline1PUPS->GetYaxis()->SetRangeUser(0,1.5);
-// 	FnormOffline1PUPS->DrawCopy();
-// 	FnormOffline1PUPSclone->Divide(FnormScalersPUPS);
-// 	FnormOffline1PUPSclone->SetMarkerColor(4);
-// 	FnormOffline1PUPSclone->SetMarkerSize(0.55);
-// 	FnormOffline1PUPSclone->SetMarkerStyle(8);
-// 	FnormOffline1PUPSclone->DrawCopy("same");
-// 	FnormOffline2PUPS->Divide(FnormScalersPUPS);
-// 	FnormOffline2PUPS->DrawCopy("same");
-// 	leg4->Draw("same");
+
+	// h4->DrawCopy("");
+	// h1->DrawCopy("same");
+	// h2->DrawCopy("same");
+	// h3->DrawCopy("same");
+	// leg->Draw();
+
+
+
+	TCanvas* c3 = new TCanvas();
+	// c3->Divide(1,1,0,0);
+
+	// c3->cd(1);
+	FnormOffline1PUPS->SetMarkerColor(2);
+	FnormOffline1PUPS->SetMarkerSize(0.9);
+	FnormOffline1PUPS->SetMarkerStyle(8);
+	FnormOffline2PUPS->SetMarkerColor(3);
+	FnormOffline2PUPS->SetMarkerSize(0.9);
+	FnormOffline2PUPS->SetMarkerStyle(8);
+	FnormScalersPUPS->SetMarkerColor(4);
+	FnormScalersPUPS->SetMarkerSize(0.9);
+	FnormScalersPUPS->SetMarkerStyle(8);
+	FnormOffline1PUPS->SetTitle("FNorm");
+	// FnormOffline1PUPS->GetYaxis()->SetRangeUser(8,15);
+	FnormOffline1PUPS->DrawClone("AP");
+	FnormOffline2PUPS->DrawClone("Psame");
+	FnormScalersPUPS->DrawClone("Psame");
+	TLegend * leg3 = new TLegend(0.4,0.2,0.90,0.4);
+	leg3->SetHeader("FNorm");
+	leg3->AddEntry(FnormOffline1PUPS,"FNormOffline1 = CINT7/CINT7&0MUL","pe");
+	leg3->AddEntry(FnormOffline2PUPS,"FNormOffline2 = CMSL/CMSL&0MUL x CINT7/CINT7&0MSL","pe");
+	leg3->AddEntry(FnormScalersPUPS,"Scaler Fnorm with purity and pile-up correction","pe");
+	leg3->DrawClone("same");
+
+	// c3->cd(2);
+	// FnormOffline1PUPS->SetTitle("Ratio");
+	// TH1* FnormOffline1PUPSclone = static_cast<TH1*>(FnormOffline1PUPS->Clone());
+	// TLegend * leg4 = new TLegend(0.4,0.2,0.90,0.4);
+	// leg4->SetHeader("FNorm");
+	// leg4->AddEntry(FnormOffline1PUPS,"FNormOffline1/FNormOffline2","pe");
+	// leg4->AddEntry(FnormOffline1PUPSclone,"FNormOffline1/Scaler","pe");
+	// leg4->AddEntry(FnormOffline2PUPS,"FNormOffline2/Scaler","pe");
+	// FnormOffline1PUPS->Divide(FnormOffline2PUPS);
+	// FnormOffline1PUPS->GetYaxis()->SetRangeUser(0,1.5);
+	// FnormOffline1PUPS->DrawCopy();
+	// FnormOffline1PUPSclone->Divide(FnormScalersPUPS);
+	// FnormOffline1PUPSclone->SetMarkerColor(4);
+	// FnormOffline1PUPSclone->SetMarkerSize(0.55);
+	// FnormOffline1PUPSclone->SetMarkerStyle(8);
+	// FnormOffline1PUPSclone->DrawCopy("same");
+	// FnormOffline2PUPS->Divide(FnormScalersPUPS);
+	// FnormOffline2PUPS->DrawCopy("same");
+	// leg4->Draw("same");
 
 // 	return;
 }
 
 //______________________________________________
-std::set<int> RunNumbers(AliAnalysisMuMu* a) 
+std::set<int> RunNumbers(AliAnalysisMuMu* a)
 {
   // Extract the run numbers from our counter collection
-  
+
   std::set<int> runset;
-  
+
   TString sruns = a->CC()->GetKeyWords("run");
   TObjArray* runs = sruns.Tokenize(",");
-  
+
   TIter next(runs);
   TObjString* s;
-  
+
   while ( ( s = static_cast<TObjString*>(next())) )
   {
     runset.insert(s->String().Atoi());
   }
   delete runs;
-  
+
   return runset;
 }
 
@@ -253,7 +256,7 @@ std::set<int> RunNumbers(AliAnalysisMuMu* a)
 
 //   	TH1* o1 = a->OC()->Histo("/FNORM/Scaler/GRAPHS",CentEff->GetName());
 //   	TH1* o2 = a->OC()->Histo("/FNORM/Scaler/GRAPHS",CentEffFact->GetName());
-    
+
 //     if (o1)
 //     {
 //         printf(Form("Replacing /FNORM/Scaler/GRAPHS/%s",CentEff->GetName()));
@@ -277,7 +280,7 @@ std::set<int> RunNumbers(AliAnalysisMuMu* a)
 // //______________________________________________
 // void ComputeFnormScalersForC0V0M(AliAnalysisMuMu* a)
 // {
-	
+
 // 	//Compute Centrality correction for C0V0M
 // 	ComputeCentEffFactor(a);
 
@@ -291,7 +294,7 @@ std::set<int> RunNumbers(AliAnalysisMuMu* a)
 // 	FnormScalersPUPS->SetTitle("Computed using OCDB scalers assuming PU = 1 ");
 
 // 	TH1* o1 = a->OC()->Histo("/FNORM/Scaler/GRAPHS",FnormScalersPUPS->GetName());
-    
+
 //     if (o1)
 //     {
 //         printf(Form("Replacing /FNORM/Scaler/GRAPHS/%s",FnormScalersPUPS->GetName()));
@@ -312,20 +315,20 @@ Double_t* ComputeSumOfMB(AliAnalysisMuMu* a1, TGraphErrors* h1 )
 
 	int i= 1;
 	for ( std::set<int>::const_iterator it = runs.begin(); it != runs.end(); ++it )
-	{	
+	{
 		Double_t FNorm;
 		Double_t FNormerr;
 		Double_t x;
 		Double_t errx;
 
 		Int_t runNumber = *it;
-		Double_t nMUL = a1->CC()->GetSum(Form("run:%d/trigger:CMUL7-B-NOPF-MUFAST/centrality:V0A",runNumber));
-		
+		Double_t nMUL = a1->CC()->GetSum(Form("run:%d/trigger:CMUL7-B-NOPF-MUFAST/centrality:PP",runNumber));
+
 		h1->GetPoint(i,x,FNorm);
 
 		errx     = h1->GetErrorX(i);
 		FNormerr = h1->GetErrorY(i);
-		
+
 		// printf("FNorm for run %d = %f\n",runNumber, FNorm );
 		// printf("FNormerr for run %d = %f\n",runNumber, FNormerr );
 		sum = sum + FNorm*nMUL;
@@ -339,26 +342,3 @@ Double_t* ComputeSumOfMB(AliAnalysisMuMu* a1, TGraphErrors* h1 )
 	F[1] =sumerr2;
 	return F;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

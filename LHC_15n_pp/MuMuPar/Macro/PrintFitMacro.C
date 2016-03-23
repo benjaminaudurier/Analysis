@@ -1,6 +1,6 @@
 //
 //  PrintFitMacro.c
-//  
+//
 //
 //  Created by Benjamin Audurier on 09/06/15.
 //
@@ -24,10 +24,11 @@
 #include <TCanvas.h>
 #include <TH1.h>
 #include <TROOT.h>
-#include <iostream> 
+#include <iostream>
 
 //Some strings and constants
-char                   * sfile="../AnalysisResults-0-8.root";
+char                   * sfile="../AnalysisResults_saf_0-12.root";
+// char                   * sasso="";
 char                   * sasso="../../AccEff_jpsi/MCPart/AnalysisResults.JPSI.root";
 char                   * sasso2="";
 char                   * beamYear="mumu.pp2015.config";
@@ -35,16 +36,17 @@ char                   * beamYear="mumu.pp2015.config";
 TString striggerDimuon ="CMUL7-B-NOPF-MUFAST";
 TString striggerMB     ="CINT7-B-NOPF-MUFAST";
 TString seventType     ="PSALL";
-TString spairCut       ="pALLPAIRYPAIRPTIN0.0-8.0RABSMATCHLOWETAPDCA";
-TString scentrality    ="V0A";
+TString spairCut       ="pALLPAIRYPAIRPTIN0.0-12.0RABSMATCHLOWETAPDCA";
+TString scentrality    ="PP";
 
-// TString param          =  "";
+// TString param          =  "c,c',sJPsi,mJPsi,NofJPsi,SignalOverBkg3s,FitChi2PerNDF";
 TString param          =  "sJPsi,mJPsi,NofJPsi,SignalOverBkg3s,FitChi2PerNDF";
 
-// TString subresults     =  "CB2POL1POL2_2.4_4.5_SP1.2,CB2POL1POL2_2.0_5.0_SP1.2";
-TString subresults     =  "CB2VWG_2.0_5.0_SP1.2,CB2VWG_2.4_4.5_SP1.2,NA60NEWVWG_2.0_5.0_SP1.2,NA60NEWVWG_2.4_4.5_SP1.2,CB2POL1POL2_2.4_4.5_SP1.2,CB2POL1POL2_2.0_5.0_SP1.2";
-                        // ,NA60NEWVWG_2.0_5.0_SP1.2,NA60NEWVWG_2.4_4.5_SP1.2 
-                        // "CB2VWG_2.4_4.5_SP1.2,CB2VWG_2.0_5.0_SP1.2,CB2POL1POL2_2.4_4.5_SP1.2,CB2POL1POL2_2.0_5.0_SP1.2"
+TString subresults     =  "CB2POL2POL3_1.6_5.0_SP1.2,CB2POL2POL3_1.8_4.7_SP1.2";
+// TString subresults     =  "CB2POL1POL2_2.2_4.5_SP1.2,CB2POL1POL2_2.0_5.0_SP1.2";
+// TString subresults     =  "CB2VWG_1.6_5.0_SP1.2,CB2VWG_1.8_4.7_SP1.2";
+// TString subresults     = "CB2VWG_1.6_5.0_SP1.2,CB2VWG_1.8_4.7_SP1.2,CB2POL1POL2_1.8_4.7_SP1.2,CB2POL1POL2_1.6_5.0_SP1.2,CB2POL1POL2_1.8_4.7_SP1.2,NA60NEWVWG_1.6_5.0_SP1.2,NA60NEWVWG_1.8_4.7_SP1.2";
+
 Double_t lumi                    =111.39; //nb^-1
 Double_t lumiTriggerCrossSection = 21.0;
 Double_t BR                      =0.0596;
@@ -54,34 +56,33 @@ void PrintCrossSection(AliAnalysisMuMuSpectra *spec,AliAnalysisMuMu &an,char*wha
 
 //_____________________________________________________________________________
 void PrintFitMacro(char         * what ="PT",const char * printWhat = "distribution",int debug =0)
-{    
+{
 
     AliLog::SetGlobalDebugLevel(debug);
-    
+
     Bool_t PrintDistribution = kFALSE;
-    Bool_t Raa               = kFALSE; 
+    Bool_t Raa               = kFALSE;
     Bool_t print             = kFALSE;
     Bool_t yield             = kFALSE;
 
     TObjArray* sprint = TString(printWhat).Tokenize(",");
     TObjArray* sparam = TString(param).Tokenize(",");
-    
+
     //Set bool
     if(sprint->FindObject("raa")) Raa                        =kTRUE;
     if(sprint->FindObject("distribution")) PrintDistribution =kTRUE;
     if(sprint->FindObject("save")) print                     =kTRUE;
     if(sprint->FindObject("yield")) yield                    =kTRUE;
 
-
     //General conf.
     TObjArray* whatArray= TString(what).Tokenize(",");
     TIter nextWhat(whatArray);
     TObjString* swhat;
-    
+
     // main object
     AliAnalysisMuMu analysis(sfile,sasso,sasso2,beamYear);
 
-    //_____ Draw 
+    //_____ Draw
     while ( ( swhat = static_cast<TObjString*>(nextWhat()) ) )
     {
         analysis.DrawFitResults("PSI",swhat->String().Data(),"histo",print);
@@ -89,7 +90,7 @@ void PrintFitMacro(char         * what ="PT",const char * printWhat = "distribut
         TIter nextParam(sparam);
         TObjString* sParam;
          if(swhat->String().Contains("PT") || swhat->String().Contains("Y")) while ((sParam=static_cast<TObjString*>(nextParam()))) analysis.PrintFitParam("PSI",sParam->String().Data(),swhat->String().Data(),subresults.Data(),"",kFALSE);
-        
+
         if (Raa) {
             if(swhat->String().Contains("INTEGRATED")) analysis.RAAasGraphic("PSI",swhat->String().Data(),"externFile_PT.txt","externFile_CENT.txt",scentrality.Data(),kFALSE);
             else if(swhat->String().Contains("Y")) analysis.RAAasGraphic("PSI","Y","externFile_Y.txt","externFile_CENT.txt",scentrality.Data(),kFALSE);
@@ -100,19 +101,17 @@ void PrintFitMacro(char         * what ="PT",const char * printWhat = "distribut
         PrintDist(swhat,kTRUE,analysis);
     }
 
-    return ;    
-} 
+    return ;
+}
 
 //___________________________________________
 void PrintDist(TObjString* swhat,Bool_t yield,AliAnalysisMuMu &ana)
 {
-    
-
     TObjArray* whatCent= TString(scentrality.Data()).Tokenize(",");
     TIter nextCent(whatCent);
     TObjString* scent;
 
-    while ( ( scent = static_cast<TObjString*>(nextCent()) ) ) 
+    while ( ( scent = static_cast<TObjString*>(nextCent()) ) )
     {
         //________Get spectra
         TString spectraPath= Form("/%s/%s/%s/%s/%s-%s",seventType.Data(),striggerDimuon.Data(),scent->String().Data(),spairCut.Data(),"PSI",swhat->String().Data());
@@ -127,8 +126,8 @@ void PrintDist(TObjString* swhat,Bool_t yield,AliAnalysisMuMu &ana)
         {
            new TCanvas;
            spectra->Plot("NofJPsi","",kTRUE)->DrawCopy("");
-           if (yield) PrintCrossSection(spectra,ana,Form("%s",swhat->String().Data()));  
-        }  
+           if (yield) PrintCrossSection(spectra,ana,Form("%s",swhat->String().Data()));
+        }
         else if(swhat->String().Contains("INTEGRATED"))
         {
 
@@ -142,19 +141,17 @@ void PrintDist(TObjString* swhat,Bool_t yield,AliAnalysisMuMu &ana)
            Double_t sigmastat = sigma*jpsistat/jpsi;
            Double_t sigmasys2 = jpsisys/jpsi*jpsisys/jpsi  +0.01*0.01 +    0.01*0.01 +    0.02*0.02 +    0.02*0.02;
            //                                                   Tracking    Matching       Trigger        tails
-           //                                                   
-            
+           //
 
             printf("integrated cross section = %f +/- %f +/- %f #mubarn\n",sigma,sigmastat,sigma*TMath::Sqrt(sigmasys2) );
             return;
-
-        }     
+        }
     }
 }
 
 //___________________________________________
 void PrintCrossSection(AliAnalysisMuMuSpectra *spec,AliAnalysisMuMu &an,char* what)
-{   
+{
         // Double_t AccEff[7] =  {0.236,0.228,0.229,0.245,0.284,0.329,0.388134};
         // Double_t AccEff[6] ={0.100832,0.274249,0.365494,0.368718,0.270976,0.080066};
 
@@ -175,6 +172,7 @@ void PrintCrossSection(AliAnalysisMuMuSpectra *spec,AliAnalysisMuMu &an,char* wh
         int j= 1;
         while ( ( bin = static_cast<AliAnalysisMuMuBinning::Range*>(nextBin()) ) )
         {
+            // if(bin->AsString().Contains("PT_BENJ_10.00_12.00")) continue;
 
             r = static_cast<AliAnalysisMuMuResult*>(spec->GetResultForBin(bin->AsString()));
             if(j==1 && bin->AsString().Contains("PT"))sbin ="PT";
@@ -193,7 +191,7 @@ void PrintCrossSection(AliAnalysisMuMuSpectra *spec,AliAnalysisMuMu &an,char* wh
             printf(" cross section for bin %s = %f +/- %f +/- %f \n",bin->AsString().Data(), sigma, sigmaerror , sigma*TMath::Sqrt(error2));
 
             gCrossSection->SetPoint(j,x,sigma);
-            gCrossSection->SetPointError(j,bin->WidthX()/2,sigmaerror); 
+            gCrossSection->SetPointError(j,bin->WidthX()/2,sigmaerror);
 
             gSys->SetPoint(j,x,sigma);
             gSys->SetPointError(j,bin->WidthX()/2,sigma*TMath::Sqrt(error2));
@@ -210,7 +208,7 @@ void PrintCrossSection(AliAnalysisMuMuSpectra *spec,AliAnalysisMuMu &an,char* wh
 
         if(sbin.Contains("Y")){
             fit= new TF1("fit","[0] * TMath::Exp(-0.5*TMath::Power((x-[1])/[2],2.))", -10, 2.5);
-            fit->SetParameters(2.8,0.00,2.9271); 
+            fit->SetParameters(2.8,0.00,2.9271);
             fit->FixParameter(1,0.00);
         }
         new TCanvas;
@@ -223,11 +221,11 @@ void PrintCrossSection(AliAnalysisMuMuSpectra *spec,AliAnalysisMuMu &an,char* wh
         if(sbin.Contains("Y")) gSys->GetYaxis()->SetTitle(Form("d^{2}#sigma/dY(#muB)"));
         gSys->GetXaxis()->SetTitle(Form("%s",what));
         gSys->SetMarkerSize(1.7);
-        
+
         TLegend * leg = new TLegend(0.4,0.7,0.70,0.9);
         leg->SetHeader(Form("ALICE, p-p #sqrt{s_{NN}}=5.02 TeV, L_{int}=111.31 #mub^{-1})",what));
-        if(sbin.Contains("PT")) leg->AddEntry(gCrossSection,"Inclusive J/#psi cross-section 2.5 < y < 4","pe"); 
-        if(sbin.Contains("Y")) leg->AddEntry(gCrossSection,"Inclusive J/#psi cross-section 0 < pT < 8","pe");               
+        if(sbin.Contains("PT")) leg->AddEntry(gCrossSection,"Inclusive J/#psi cross-section 2.5 < y < 4","pe");
+        if(sbin.Contains("Y")) leg->AddEntry(gCrossSection,"Inclusive J/#psi cross-section 0 < pT < 8","pe");
         leg->AddEntry(gSys,"systematic uncertainty ","f");
         leg->SetTextSize(0.03);
 
@@ -236,8 +234,7 @@ void PrintCrossSection(AliAnalysisMuMuSpectra *spec,AliAnalysisMuMu &an,char* wh
         if(fit) Fitpoint = gCrossSection->Fit("fit","SR");
         if(sbin.Contains("PT") && static_cast<int>(Fitpoint)==0) printf("cross section = %f +/- %f \n",fit->Integral(0.,8.),fit->IntegralError(0.,8.));
         if(sbin.Contains("Y")  && static_cast<int>(Fitpoint)==0)  printf("cross section = %f +/- %f \n",fit->Integral(-4.,-2.5),fit->IntegralError(-4.,-2.5));
-        
+
         gCrossSection->DrawClone("Psame");
         leg->DrawClone("same");
 }
-

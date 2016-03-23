@@ -7,59 +7,84 @@
 
 // Sim :
 // Find;BasePath=/alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/;FileName=AliAOD.Muons.root
-// 
+//
 // Data:
 // Find;BasePath=/alice/data/2013/LHC13d/000195760/ESDs/muon_pass2/AOD134;FileName=AliAOD.root
-Bool_t runOnTFileCollection =kTRUE;
+
 
 //______________________________________________________________________________
-AliAnalysisTask* runMuMu(TString runMode, 
+AliAnalysisTask* runMuMu(TString runMode,
                         TString analysisMode,
-                        TString inputName       = "ds.61.muononly_pbpb2015.root",
+                        TString inputName       = "Find;BasePath=/alice/data/2015/LHC15o/000244918/muon_calo_pass1/AOD/;FileName=AliAOD.Muons.root;",
                         TString inputOptions    = "",
                         TString analysisOptions = "",
-                        TString softVersions    = "aliphysics=v5-07-14-01-1",
+                        TString softVersions    = "",
                         TString taskOptions     = "" )
 {
-    // path for macro usefull for saf3
-    gROOT->LoadMacro(gSystem->ExpandPathName("$TASKDIR/runTaskUtilities.C")); 
-    
-     
+    gROOT->LoadMacro(gSystem->ExpandPathName("$TASKDIR/runTaskUtilities.C"));
+
     // Macro to connect to proof. First argument useless for saf3
-    SetupAnalysis(runMode,analysisMode,inputName,inputOptions,softVersions,analysisOptions, "libPWGmuon.so",". $ALICE_ROOT/include $ALICE_PHYSICS/include");
-    
+    SetupAnalysis(runMode,analysisMode,inputName,inputOptions,softVersions,analysisOptions, "PWGmuon.par /Users/audurier/Documents/Analysis/LHC_15n_pp/MuMuPar/AddTaskMuMu.C",". $ALICE_ROOT/include $ALICE_PHYSICS/include");
+
+    TString outputdirGrid = "Analysis/LHC15n/MuMuWithTOtrigger2/";
+
+    if(analysisMode.Contains("grid")) AliAnalysisManager::GetAnalysisManager()->GetGridHandler()->SetGridWorkingDir(outputdirGrid.Data());
+
     //Flag for MC
     Bool_t isMC = IsMC(inputOptions);
-    
-    // Fill the trigger list with desired trigger combinations (See on ALICE log book for denomination)
-    //==============================================================================
+
+    TString Triggers = "CMUL7-B-NOPF-MUFAST";
+    // TString Triggers = "CINT7-B-NOPF-MUFAST,CINT7-B-NOPF-MUFAST&0MSL,CINT7-B-NOPF-MUFAST&0MUL,CMUL7-B-NOPF-MUFAST,CMSL7-B-NOPF-MUFAST,CMSL7-B-NOPF-MUFAST&0MUL";
+    TString inputs = "0MSL:17,0MSH:18,0MLL:19,0MUL:20,0V0M:3";
+
     TList* triggers = new TList; // Create pointer for trigger list
     triggers->SetOwner(kTRUE); // Give rights to trigger liser
     if (!isMC)
     {
-        // pp trigger
-        triggers->Add(new TObjString("CINT7-B-NOPF-MUFAST"));//MB
-        triggers->Add(new TObjString("(CINT7-B-NOPF-MUFAST&0MUL)"));//MB
-        triggers->Add(new TObjString("CMUL7-B-NOPF-MUFAST"));// Dimuon
+        // pA trigger
+        triggers->Add(new TObjString("CINT7-B-NOPF-ALLNOTRD"));//MB
+        triggers->Add(new TObjString("CMUL7-B-NOPF-MUFAST"));
+        triggers->Add(new TObjString("CMSL7-B-NOPF-MUFAST"));
+        triggers->Add(new TObjString("CMSL7-B-NOPF-MUFAST&0MUL"));
+
+        triggers->Add(new TObjString("CINT7-B-NOPF-CENTNOTRD"));
+        triggers->Add(new TObjString("CINT7-B-NOPF-CENTNOTRD&0MSL"));
+        triggers->Add(new TObjString("CINT7-B-NOPF-CENTNOTRD&0MUL"));
+
+        triggers->Add(new TObjString("CINT7-B-NOPF-MUFAST"));
+        triggers->Add(new TObjString("CINT7-B-NOPF-MUFAST&0MSL"));
+        triggers->Add(new TObjString("CINT7-B-NOPF-MUFAST&0MUL"));
+
+        triggers->Add(new TObjString("C0TVX-B-NOPF-CENTNOTRD"));
+        triggers->Add(new TObjString("C0TVX-B-NOPF-CENTNOTRD&0MSL"));
+        triggers->Add(new TObjString("C0TVX-B-NOPF-CENTNOTRD&0MUL"));
     }
+
+    // // Load baseline
+    // //==============================================================================
+    // gROOT->LoadMacro("$ALICE_ROOT/ANALYSIS/macros/train/AddTaskBaseLine.C");
+    // AddTaskBaseLine();
 
     // Load centrality task
     //==============================================================================
-    gROOT->LoadMacro("$ALICE_PHYSICS/OADB/COMMON/MULTIPLICITY/macros/AddTaskMultSelection.C");
-    AddTaskMultSelection(kFALSE); // user
-  
-    // Load task
-    //==============================================================================
-    TString outputname = AliAnalysisManager::GetAnalysisManager()->GetCommonFileName(); // Create output name in case of no dataset selected
-    gROOT->LoadMacro("AddTaskMuMu.C");
-    AddTaskMuMu(outputname.Data(),triggers,"PbPb2015",isMC,runOnTFileCollection);
+    if(analysisOptions.Contains("NOPHYSSEL")&& analysisMode.Contains("local") )
+    {
+        gROOT->LoadMacro("$ALICE_PHYSICS/OADB/COMMON/MULTIPLICITY/macros/AddTaskMultSelection.C");
+        AliMultSelectionTask * task = AddTaskMultSelection(kFALSE); // user
+        task->SetAlternateOADBforEstimators ("LHC15n");
+    }
+
+    // gROOT->LoadMacro("$ALICE_PHYSICS/PWG/muon/AddTaskMuMuMinvBA.C");
+    // AddTaskMuMuMinvBA("MuMuBA",Triggers.Data(),inputs.Data(),"PbPb2015",isMC);
+
+    // gROOT->LoadMacro("AddTaskMuMu.C");
+    TString output = Form("%s",AliAnalysisManager::GetCommonFileName());
+    AddTaskMuMu(output.Data(),triggers,"pp2015",isMC);
     cout <<"add task mumu done"<< endl;
 
     // Start analysis
     //==============================================================================
-  
-    StartAnalysis(runMode,analysisMode,inputName,inputOptions);     
-   
-    delete triggers;
-}
+    StartAnalysis(runMode,analysisMode,inputName,inputOptions);
 
+    // delete triggers;
+}
