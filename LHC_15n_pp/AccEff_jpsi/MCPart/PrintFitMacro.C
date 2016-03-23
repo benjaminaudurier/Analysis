@@ -1,6 +1,6 @@
 //
 //  PrintFitMacro.c
-//  
+//
 //
 //  Created by Benjamin Audurier on 09/06/15.
 //
@@ -18,7 +18,7 @@
 #include <TCanvas.h>
 #include <TH1.h>
 #include <TROOT.h>
-#include <iostream> 
+#include <iostream>
 
 //Some strings and constants
 char                   * sfile="AnalysisResults.JPSI.root";
@@ -29,11 +29,12 @@ char                   * beamYear="mumu.pp2015.config";
 TString striggerDimuon ="CMUL7-B-NOPF-MUFAST";
 TString striggerMB     ="CINT7-B-NOPF-MUFAST";
 TString seventType     ="PSALL";
-TString spairCut       ="pALLPAIRYPAIRPTIN0.0-8.0RABSMATCHLOWETAPDCA";
-TString scentrality    ="V0A";
+TString spairCut       ="pALLPAIRYPAIRPTIN0.0-12.0RABSMATCHLOWETAPDCA";
+TString scentrality    ="PP";
 
 TString param          =  "sJPsi,mJPsi,NofJPsi,FitChi2PerNDF";
 
+// TString subresults     ="";
 TString subresults     ="PSICB2,PSINA60NEW";
 
 Double_t FNorm         =15.22;
@@ -44,12 +45,12 @@ void PrintYield(AliAnalysisMuMuSpectra *spec,AliAnalysisMuMu &an,TObjString* cen
 
 //_____________________________________________________________________________
 void PrintFitMacro(char         * what ="PT",const char * printWhat = "distribution",int debug =0)
-{    
+{
 
     AliLog::SetGlobalDebugLevel(debug);
-    
+
     Bool_t PrintDistribution = kFALSE;
-    Bool_t Raa               = kFALSE; 
+    Bool_t Raa               = kFALSE;
     Bool_t print             = kFALSE;
     Bool_t yield             = kFALSE;
 
@@ -57,7 +58,7 @@ void PrintFitMacro(char         * what ="PT",const char * printWhat = "distribut
     TObjArray* sprint = TString(printWhat).Tokenize(",");
     TObjArray* sparam = TString(param).Tokenize(",");
 
-    
+
     //Set bool
     if(sprint->FindObject("raa")) Raa                        =kTRUE;
     if(sprint->FindObject("distribution")) PrintDistribution =kTRUE;
@@ -69,20 +70,20 @@ void PrintFitMacro(char         * what ="PT",const char * printWhat = "distribut
     TObjArray* whatArray= TString(what).Tokenize(",");
     TIter nextWhat(whatArray);
     TObjString* swhat;
-    
+
     // main object
     AliAnalysisMuMu analysis(sfile,sasso,sasso2,beamYear);
 
-    //_____ Draw 
+    //_____ Draw
     while ( ( swhat = static_cast<TObjString*>(nextWhat()) ) )
     {
         analysis.DrawFitResults("PSI",swhat->String().Data(),"histo",print);
         analysis.PrintNofParticle("PSI","NofJPsi",swhat->String(),kFALSE);
         TIter nextParam(sparam);
         TObjString* sParam;
-        while ((sParam=static_cast<TObjString*>(nextParam()))) analysis.PrintFitParam("PSI",sParam->String().Data(),swhat->String().Data(),subresults.Data(),"",kFALSE);
-        
-        
+        if(swhat->String().Contains("PT") || swhat->String().Contains("Y")) while ((sParam=static_cast<TObjString*>(nextParam()))) analysis.PrintFitParam("PSI",sParam->String().Data(),swhat->String().Data(),subresults.Data(),"",kFALSE);
+
+
         if (Raa) {
             if(swhat->String().Contains("INTEGRATED")) analysis.RAAasGraphic("PSI",swhat->String().Data(),"externFile_PT.txt","externFile_CENT.txt",scentrality.Data(),kFALSE);
             else if(swhat->String().Contains("Y")) analysis.RAAasGraphic("PSI","Y","externFile_Y.txt","externFile_CENT.txt",scentrality.Data(),kFALSE);
@@ -93,19 +94,19 @@ void PrintFitMacro(char         * what ="PT",const char * printWhat = "distribut
         if (PrintDistribution) PrintDist(swhat,yield,analysis);
     }
 
-    return ;    
-} 
+    return ;
+}
 
 //___________________________________________
 void PrintDist(TObjString* swhat,Bool_t yield,AliAnalysisMuMu &ana)
 {
-    
+
 
     TObjArray* whatCent= TString(scentrality.Data()).Tokenize(",");
     TIter nextCent(whatCent);
     TObjString* scent;
 
-    while ( ( scent = static_cast<TObjString*>(nextCent()) ) ) 
+    while ( ( scent = static_cast<TObjString*>(nextCent()) ) )
     {
         //________Get spectra
         TString spectraPath= Form("/%s/%s/%s/%s/%s-%s",seventType.Data(),striggerDimuon.Data(),scent->String().Data(),spairCut.Data(),"PSI",swhat->String().Data());
@@ -120,10 +121,10 @@ void PrintDist(TObjString* swhat,Bool_t yield,AliAnalysisMuMu &ana)
         new TCanvas;
         spectra->Plot("NofJPsi","",kTRUE)->DrawCopy("");
 
-        if (yield) PrintYield(spectra,ana,scent); 
+        if (yield) PrintYield(spectra,ana,scent);
     }
 
-    
+
 
 }
 
@@ -140,4 +141,3 @@ void PrintYield(AliAnalysisMuMuSpectra *spec,AliAnalysisMuMu &an,TObjString* cen
     new TCanvas;
     hyield->DrawCopy("e0");
 }
-

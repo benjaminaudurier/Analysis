@@ -332,6 +332,8 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     h[i] = static_cast<TH1*>(fList->UncheckedAt(hIndex[i])->Clone());
     h[i]->SetDirectory(0);
     h[i]->Scale(1,"width");// Normalize
+    new TCanvas,
+    h[i]->DrawCopy();
   }
 
   //__________get the fit ranges
@@ -400,6 +402,8 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     hRef[i]->Scale(norm);
     hRef[i+2]->Scale(norm);
     normalized = kTRUE; 
+    fList->Add(hRef[i]->Clone());
+    fList->Add(hRef[i+2]->Clone());
   }
   //_________
 
@@ -412,7 +416,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     hRat[i]->SetTitle("data / MC");
     hRat[i]->Divide(h[i]);
     if(!hRat[i]) cout << Form("Cannot divide histo %d",i) << endl;
-    ;
+    fList->Add(hRat[i]->Clone());
   }
   //__________
 
@@ -506,7 +510,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     {
       fPtFuncMC->SetLineColor(3);// Green
       fPtFuncMC->SetLineWidth(3);
-      h[0]->Fit(fPtFuncMC, "IWLR+", "e0sames");// Gen. pt histo.
+      h[0]->Fit(fPtFuncMC, "IWLR", "e0sames");// Gen. pt histo.
       leg->AddEntry(fPtFuncMC,"MC range MC","l");
     } 
     else h[0]->Draw("e0");
@@ -515,7 +519,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     if (fPtFunc) 
     {
       fPtFunc->SetLineColor(4); // Blue
-      h[0]->Fit(fPtFunc, "IWLR+");
+      h[0]->Fit(fPtFunc, "IWLR");
       leg->AddEntry(fPtFunc,"MC range Data","l");
     }
   }
@@ -526,7 +530,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     if (fPtFuncNew) 
     {
       fPtFuncNew->SetLineColor(2);// Red
-      hRef[0]->Fit(fPtFuncNew, "IWLR+", "e0sames");
+      hRef[0]->Fit(fPtFuncNew, "IWLR", "e0sames");
       leg->AddEntry(fPtFuncNew,"Data","l");
     } 
     else hRef[0]->Draw("e0sames");
@@ -544,7 +548,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     {
       fYFuncMC->SetLineColor(3);// Green
       fYFuncMC->SetLineWidth(3);
-      h[1]->Fit(fYFuncMC, "IWLR+", "e0sames");//  Gen. y histo.
+      h[1]->Fit(fYFuncMC, "IWLR", "e0sames");//  Gen. y histo.
       leg2->AddEntry(fYFuncMC,"MC fit function","l");
     } 
     else h[1]->Draw("");
@@ -553,7 +557,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     if (fYFunc) 
     {
       fYFunc->SetLineColor(4);// Blue
-      h[1]->Fit(fYFunc, "IWLR+");
+      h[1]->Fit(fYFunc, "IWLR");
       leg2->AddEntry(fYFunc,"Old Data fit function","l");
     }
   }
@@ -563,7 +567,7 @@ void AliAnalysisTaskGenTunerJpsi::Terminate(Option_t *)
     if (fYFuncNew) 
     {
       fYFuncNew->SetLineColor(2); // Red
-      hRef[1]->Fit(fYFuncNew, "IWLR+", "e0sames");
+      hRef[1]->Fit(fYFuncNew, "IWLR", "e0sames");
       leg2->AddEntry(fYFuncNew,"New Data Fit function","l");
     } 
     else hRef[1]->Draw("e0sames");
@@ -805,28 +809,28 @@ void AliAnalysisTaskGenTunerJpsi::SetPtBin(Int_t nofbin,Double_t* bin)
 } 
 
 //________________________________________________________________________
-void AliAnalysisTaskGenTunerJpsi::SetPtBin(Int_t nofbin,vector<double> bin)
-{
-  fPtNofBin = nofbin ;
-
-  if(nofbin==0)
-  {
-
-    fPtBin = 0x0;
-    return;
-  } 
-
-  fPtBin = new Double_t[fPtNofBin];
-
-  for (int i = 0; i < fPtNofBin; ++i)
-  {
-    fPtBin[i]=bin[i];
-    // cout << "fPtBin " << i << "=" << fPtBin[i] << endl;
-  }
-  return;
-} 
-
-//________________________________________________________________________
+//void AliAnalysisTaskGenTunerJpsi::SetPtBin(Int_t nofbin,vector<double> bin)
+//{
+//  fPtNofBin = nofbin ;
+//
+//  if(nofbin==0)
+//  {
+//
+//    fPtBin = 0x0;
+//    return;
+//  } 
+//
+//  fPtBin = new Double_t[fPtNofBin];
+//
+//  for (int i = 0; i < fPtNofBin; ++i)
+//  {
+//    fPtBin[i]=bin[i];
+//    // cout << "fPtBin " << i << "=" << fPtBin[i] << endl;
+//  }
+//  return;
+//} 
+//
+////________________________________________________________________________
 void AliAnalysisTaskGenTunerJpsi::SetYBin(Int_t nofbin,Double_t* bin)
 {
   fYNofBin = nofbin;
@@ -848,27 +852,29 @@ void AliAnalysisTaskGenTunerJpsi::SetYBin(Int_t nofbin,Double_t* bin)
 } 
 
 //________________________________________________________________________
-void AliAnalysisTaskGenTunerJpsi::SetYBin(Int_t nofbin,vector<double> bin)
-{
-  fYNofBin = nofbin;
-
-  if(nofbin==0)
-  {
-    fYBin = 0x0;
-    return;
-  } 
-
-  fYBin = new Double_t[fYNofBin];
-
-  for (int i = 0; i < fYNofBin; ++i)
-  {
-    fYBin[i]=bin[i];
-    // cout << "fYBin " << i << "=" << fYBin[i] << endl;
-  }
-  return;
-} 
-
-//________________________________________________________________________
+//void AliAnalysisTaskGenTunerJpsi::SetYBin(Int_t nofbin,vector<double> bin)
+//{
+//  fYNofBin = nofbin;
+//
+//  // cout << "fYNofBin =" << fYNofBin << endl;
+//  if(nofbin==0) {
+//    fYBin = 0x0;
+//    return;
+//  } 
+//
+//  fYBin = new Double_t[fYNofBin];
+//  int j = bin.size();
+//
+//  for (int i = 0; i < j ; ++i) {
+//    fYBin[i]=bin[i];
+//    // cout << "fYBin " << i << "=" << fYBin[i] << endl;
+//  }
+//  fYNofBin = fYNofBin+1;
+//  // cout << "fYNofBin =" << fYNofBin << endl;
+//  return;
+//} 
+//
+////________________________________________________________________________
 TH1* AliAnalysisTaskGenTunerJpsi::ComputeAccEff(TH1 &hGen, TH1 &hRec, const Char_t *name, const Char_t *title)
 {
   /// Compute acc*eff and binomial errors by hand, i.e. not using TGraphAsymmErrors

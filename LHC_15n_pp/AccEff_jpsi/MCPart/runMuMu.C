@@ -7,28 +7,28 @@
 
 // Sim :
 // Find;BasePath=/alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/;FileName=AliAOD.Muons.root
-// 
+//
 // Data:
 // Find;BasePath=/alice/data/2013/LHC13d/000195760/ESDs/muon_pass2/AOD134;FileName=AliAOD.root
 
 
 //______________________________________________________________________________
-AliAnalysisTask* runMuMu(TString runMode, 
+AliAnalysisTask* runMuMu(TString runMode,
                         TString analysisMode,
                         TString inputName       = "Find;BasePath=/alice/data/2015/LHC15o/000244918/muon_calo_pass1/AOD/;FileName=AliAOD.Muons.root;",
                         TString inputOptions    = "MC",
-                        TString analysisOptions = "NOCENTR",
+                        TString analysisOptions = "NOPHYSSEL",
                         TString softVersions    = "",
                         TString taskOptions     = "" )
 {
-    gROOT->LoadMacro(gSystem->ExpandPathName("$TASKDIR/runTaskUtilities.C"));     
-     
-    // Macro to connect to proof. First argument useless for saf3
-    SetupAnalysis(runMode,analysisMode,inputName,inputOptions,softVersions,analysisOptions, "libPWGmuon.so",". $ALICE_ROOT/include $ALICE_PHYSICS/include");
-    
-    // TString outputdir = "Analysis/LHC15o/MuMuPar/";
+    gROOT->LoadMacro(gSystem->ExpandPathName("$TASKDIR/runTaskUtilities.C"));
 
-    // if(analysisMode.Contains("grid")) AliAnalysisManager::GetAnalysisManager()->GetGridHandler()->SetGridWorkingDir(outputdir.Data());
+    // Macro to connect to proof. First argument useless for saf3
+    SetupAnalysis(runMode,analysisMode,inputName,inputOptions,softVersions,analysisOptions, "libPWGmuon.so /Users/audurier/Documents/Analysis/LHC_15n_pp/MuMuPar/AddTaskMuMu.C",". $ALICE_ROOT/include $ALICE_PHYSICS/include");
+
+    TString outputdir = "Analysis/LHC15n/MuMu/";
+
+    if(analysisMode.Contains("grid")) AliAnalysisManager::GetAnalysisManager()->GetGridHandler()->SetGridWorkingDir(outputdir.Data());
 
     //Flag for MC
     Bool_t isMC = IsMC(inputOptions);
@@ -43,35 +43,39 @@ AliAnalysisTask* runMuMu(TString runMode,
     {
         // pA trigger
         // triggers->Add(new TObjString("CINT7-B-NOPF-ALLNOTRD"));//MB
-        triggers->Add(new TObjString("CMUL7-B-NOPF-MUFAST"));// Dimuon
+        triggers->Add(new TObjString("CMUL7-B-NOPF-MUFAST"));
+        triggers->Add(new TObjString("CINT7-B-NOPF-CENT"));
+        triggers->Add(new TObjString("CINT7-B-NOPF-CENT&0MSL"));
+        triggers->Add(new TObjString("CINT7-B-NOPF-CENT&0MUL"));
+        triggers->Add(new TObjString("CMSL7-B-NOPF-MUFAST"));
+        triggers->Add(new TObjString("CMSL7-B-NOPF-MUFAST&0MUL"));
     }
 
     // // Load baseline
     // //==============================================================================
     // gROOT->LoadMacro("$ALICE_ROOT/ANALYSIS/macros/train/AddTaskBaseLine.C");
     // AddTaskBaseLine();
-    
+
     // Load centrality task
     //==============================================================================
-    if(analysisOptions.Contains("NOCENTR")&& runMode.Contains("local") )
+    if(analysisOptions.Contains("NOCENTR")&& analysisMode.Contains("local") )
     {
         gROOT->LoadMacro("$ALICE_PHYSICS/OADB/COMMON/MULTIPLICITY/macros/AddTaskMultSelection.C");
         AliMultSelectionTask * task = AddTaskMultSelection(kFALSE); // user
         task -> SetAlternateOADBforEstimators ("LHC15n");
     }
-    
+
     // gROOT->LoadMacro("$ALICE_PHYSICS/PWG/muon/AddTaskMuMuMinvBA.C");
     // AddTaskMuMuMinvBA("MuMuBA",Triggers.Data(),inputs.Data(),"PbPb2015",isMC);
 
-    gROOT->LoadMacro("AddTaskMuMu.C");
+    // gROOT->LoadMacro("AddTaskMuMu.C");
     TString output = Form("%s",AliAnalysisManager::GetCommonFileName());
     AddTaskMuMu(output.Data(),triggers,"pp2015",isMC);
     cout <<"add task mumu done"<< endl;
 
     // Start analysis
     //==============================================================================
-    StartAnalysis(runMode,analysisMode,inputName,inputOptions);     
-   
+    StartAnalysis(runMode,analysisMode,inputName,inputOptions);
+
     // delete triggers;
 }
-

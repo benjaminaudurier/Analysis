@@ -1,6 +1,6 @@
 //
 //  Fit.c
-//  
+//
 //
 //  Created by Benjamin Audurier on 03/12/14.
 //
@@ -14,7 +14,7 @@
 #include <AliAnalysisMuMu.h>
 #include <TROOT.h>
 
-char           * sfile="AnalysisResults.root";
+char           * sfile="tmpDir/AnalysisResults.root";
 char           * sasso="../MCPart/AnalysisResults.JPSI.root";
 char           * sasso2="";
 char           * beamYear="mumu.pp2015.config";
@@ -31,7 +31,7 @@ void FitMacro( char* what ="pt",const char* printWhat = "", int debug =0 )
     Bool_t print = kFALSE;
 
     TObjArray* sprint = TString(printWhat).Tokenize(",");
-    
+
     //Set bool
     if(sprint->FindObject("rawcount")) rawcount =kTRUE;
     if(sprint->FindObject("clean")) clean       =kTRUE;
@@ -41,14 +41,14 @@ void FitMacro( char* what ="pt",const char* printWhat = "", int debug =0 )
     TObjArray* whatArray= TString(what).Tokenize(",");
     TIter nextWhat(whatArray);
     TObjString* swhat;
-    
+
     // main object
     AliAnalysisMuMu analysis(sfile,sasso,sasso2,beamYear);
 
-    // Clean   
-    if(clean) analysis.CleanAllSpectra();    
+    // Clean
+    if(clean) analysis.CleanAllSpectra();
 
-    //_____ Fit 
+    //_____ Fit
     while ( ( swhat = static_cast<TObjString*>(nextWhat()) ) )
     {
         if(swhat->String().Contains("integrated")) analysis.Jpsi(swhat->String().Data(),"",kFALSE,kFALSE);
@@ -64,21 +64,8 @@ void FitMacro( char* what ="pt",const char* printWhat = "", int debug =0 )
     if(print && what == "yvspt") analysis.PrintNofParticle("PSI","NofJPsi","YVSPT",kFALSE);
 
     if(rawcount){
-        analysis.ComputeDimuonRawCount(2.8,3.4); 
-        analysis.ComputeDimuonRawCount(2.1,2.8); 
+        analysis.ComputeDimuonRawCount(2.8,3.4);
+        analysis.ComputeDimuonRawCount(2.1,2.8);
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

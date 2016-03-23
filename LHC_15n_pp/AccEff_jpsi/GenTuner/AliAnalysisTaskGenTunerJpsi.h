@@ -44,18 +44,18 @@ public:
   void Weight(Bool_t flag) {fWeight = flag;}
   
   // set the pt ref. histo to reweight MC
-  void SetPtRefHisto(TH1* hptRef) {if(hptRef) fHptRef = static_cast<TH1*>(hptRef->Clone());}
+  void SetPtRefHisto(TH1* hptRef) { fHptRef =  (TH1F*)hptRef->Clone();}
 
   // set the Y ref. histo to reweight MC
-  void SetYRefHisto(TH1* hyRef) {if(hyRef) fHyRef = static_cast<TH1*>(hyRef->Clone());}
+  void SetYRefHisto(TH1* hyRef) { fHyRef =  (TH1F*)hyRef->Clone();}
 
   // set pt binning
   void SetPtBin(Int_t nofbin,Double_t* bin); 
-  void SetPtBin(Int_t nofbin,vector<double> bin); 
+//  void SetPtBin(Int_t nofbin,vector<double> bin); 
 
   // set y binning
   void SetYBin(Int_t nofbin,Double_t* bin ); 
-  void SetYBin(Int_t nofbin,vector<double> bin ); 
+//  void SetYBin(Int_t nofbin,vector<double> bin ); 
   
   // create the original function with the parameters used in simulation to generate the pT distribution
   void SetOriginPtFunc(TString formula, const Double_t *param, const Bool_t *fixParam, Double_t xMin, Double_t xMax);

@@ -29,8 +29,12 @@ char                   * beamYear="mumu.pp2015.config";
 TString striggerDimuon ="CMUL7-B-NOPF-MUFAST";
 TString striggerMB     ="CINT7-B-NOPF-MUFAST";
 TString seventType     ="PSALL";
-TString spairCut       ="pALLPAIRYPAIRPTIN0.0-10.0RABSMATCHLOWETAPDCA";
-TString scentrality    ="V0M_00.00_90.00";
+TString spairCut       ="pALLPAIRYPAIRPTIN0.0-8.0RABSMATCHLOWETAPDCA";
+TString scentrality    ="PP";
+
+TString param          =  "sJPsi,mJPsi,NofJPsi,FitChi2PerNDF";
+
+TString subresults     ="PSICB2,PSINA60NEW";
 
 Double_t FNorm         =15.22;
 Double_t BR            =0.005;
@@ -49,7 +53,10 @@ void PrintFitMacro(char         * what ="PT",const char * printWhat = "distribut
     Bool_t print             = kFALSE;
     Bool_t yield             = kFALSE;
 
+
     TObjArray* sprint = TString(printWhat).Tokenize(",");
+    TObjArray* sparam = TString(param).Tokenize(",");
+
     
     //Set bool
     if(sprint->FindObject("raa")) Raa                        =kTRUE;
@@ -71,6 +78,10 @@ void PrintFitMacro(char         * what ="PT",const char * printWhat = "distribut
     {
         analysis.DrawFitResults("PSI",swhat->String().Data(),"histo",print);
         analysis.PrintNofParticle("PSI","NofJPsi",swhat->String(),kFALSE);
+        TIter nextParam(sparam);
+        TObjString* sParam;
+        while ((sParam=static_cast<TObjString*>(nextParam()))) analysis.PrintFitParam("PSI",sParam->String().Data(),swhat->String().Data(),subresults.Data(),"",kFALSE);
+        
         
         if (Raa) {
             if(swhat->String().Contains("INTEGRATED")) analysis.RAAasGraphic("PSI",swhat->String().Data(),"externFile_PT.txt","externFile_CENT.txt",scentrality.Data(),kFALSE);
