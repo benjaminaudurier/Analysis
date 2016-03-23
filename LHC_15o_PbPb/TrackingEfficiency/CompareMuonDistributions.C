@@ -19,13 +19,13 @@
 #include <TLegend.h>
 
 // kinematics range for histogram projection (pT, y, phi, charge)
-const Float_t kineRange[4][2] = {{1., 999.}, {-3.9, -2.51}, {-999., 999.}, {-999., 999.}};
+const Float_t kineRange[4][2] = {{1., 999.}, {-999., 999.}, {-999., 999.}, {-999., 999.}};
 
 // centrality range for each input file
-const Float_t centRange[2][2] = {{30., 90.}, {60., 90.}};
+const Float_t centRange[2][2] = {{30., 90.}, {-999., 999.}};
 
 // in case the ouput containers of the efficiency task have an extension in their name (like in the train)
-TString extension[2] = {"_1","_1"};
+TString extension[2] = {"_1",""};
 
 const Int_t nHist = 3;
 TString sRes[nHist] = {"fHistPt", "fHistY", "fHistPhi"};
@@ -59,8 +59,8 @@ void CompareMuonDistributions(TString dir1, TString dir2, TString fileNameWeight
     TParameter<Double_t> *weight = 0x0;
     while ((weight = static_cast<TParameter<Double_t>*>(next()))) {
       TString sfile[2];
-      sfile[0] = Form("%s/alice/cern.ch/user/b/baudurie/Analysis/LHC15n/TrackingEfficiency/MonteCarlo/singleMuon/tuned/WiththnSparse/results/%s/AnalysisResults.root", dir1.Data(), weight->GetName());
-      sfile[1] = Form("%s/alice/cern.ch/user/p/ppillot/Sim/LHC15n/muTune2/results/%s/AnalysisResults.root", dir2.Data(), weight->GetName());
+      sfile[0] = Form("%s/alice/data/2015/LHC15o/000%s/muon_calo_pass1/PWGDQ/DQ_Dimuons_PbPb_ESD/3_20160112-2134/AnalysisResults.root", dir1.Data(), weight->GetName());
+      sfile[1] = Form("%s/alice/cern.ch/user/b/baudurie/Analysis/LHC15o/TrackingEfficiency/MonteCarlo/singleMuon/tuned/WiththnSparse/results/%s/AnalysisResults.root", dir2.Data(), weight->GetName());
       AddHisto(sfile, hRes, weight->GetVal());
       AddHistoProj(sfile, hProj, weight->GetVal());
     }
@@ -82,6 +82,7 @@ void CompareMuonDistributions(TString dir1, TString dir2, TString fileNameWeight
     hProj[i][2]->Divide(hProj[i][0]);
   }
   
+  TFile *f=new TFile("CompareMuonDistributions.root","RECREATE");
   // display results at the reconstruction level
   TLegend *lRes = new TLegend(0.5,0.55,0.85,0.75);
   TCanvas *cRec = new TCanvas("cRec", "cRec", 1200, 800);
@@ -93,6 +94,7 @@ void CompareMuonDistributions(TString dir1, TString dir2, TString fileNameWeight
       if (i == 0) lRes->AddEntry(hRes[i][j],Form("dir%d",j+1),"l");
       hRes[i][j]->SetLineColor(2*j+2);
       hRes[i][j]->Draw((j == 0) ? "" : "sames");
+      hRes[i][j]->Write();
     }
     if (i == 0) lRes->Draw("same");
     cRec->cd(i+nHist+1);
@@ -100,6 +102,7 @@ void CompareMuonDistributions(TString dir1, TString dir2, TString fileNameWeight
       hRes[i][2]->Draw();
       hRes[i][2]->SetMinimum(0.5);
       hRes[i][2]->SetMaximum(1.5);
+      hRes[i][2]->Write();
     }
   }
   TCanvas *cRecProj = new TCanvas("cRecProj", "cRecProj", 1600, 800);
@@ -110,15 +113,17 @@ void CompareMuonDistributions(TString dir1, TString dir2, TString fileNameWeight
     for (Int_t j = 0; j < 2 && hProj[i][j]; j++) {
       hProj[i][j]->SetLineColor(2*j+2);
       hProj[i][j]->Draw((j == 0) ? "" : "sames");
+      hProj[i][j]->Write();
     }
     cRecProj->cd(i+5);
     if (hProj[i][2]) {
       hProj[i][2]->Draw();
       hProj[i][2]->SetMinimum(0.5);
       hProj[i][2]->SetMaximum(1.5);
+      hProj[i][2]->Write();
     }
   }
-  
+  f->Close();
 }
 
 //______________________________________________________________________________

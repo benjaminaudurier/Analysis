@@ -523,16 +523,16 @@ void ComparisonDataMC(TString fileNameData = "Data/efficiency_new.root", TString
     return;
   }
   
-//  TObjArray *listDEEffVSrunData = static_cast<TObjArray*>(fileData->FindObjectAny("DEEffVSrun"));
-//  if (!listDEEffVSrunData) {
-//    printf("list of DE efficiencies vs run from data not found\n");
-//    return;
-//  }
-//  TObjArray *listDEEffVSrunSim = static_cast<TObjArray*>(fileSim->FindObjectAny("DEEffVSrun"));
-//  if (!listDEEffVSrunSim) {
-//    printf("list of DE efficiencies vs run from sim not found\n");
-//    return;
-//  }
+ // TObjArray *listDEEffVSrunData = static_cast<TObjArray*>(fileData->FindObjectAny("DEEffVSrun"));
+ // if (!listDEEffVSrunData) {
+ //   printf("list of DE efficiencies vs run from data not found\n");
+ //   return;
+ // }
+ // TObjArray *listDEEffVSrunSim = static_cast<TObjArray*>(fileSim->FindObjectAny("DEEffVSrun"));
+ // if (!listDEEffVSrunSim) {
+ //   printf("list of DE efficiencies vs run from sim not found\n");
+ //   return;
+ // }
   
   // Graph for global efficiency vs run
   TGraphAsymmErrors* gData ;//= static_cast<TGraphAsymmErrors*>(listChEffVSrunData->At(0));

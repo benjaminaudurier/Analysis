@@ -47,9 +47,9 @@
 //const Char_t *effErrMode = "cp"; // Clopper-Pearson
 const Char_t *effErrMode = "b(1,1)mode"; // Bayesian with uniform prior
 
-Double_t centMin = -999.;
-Double_t centMax = 999.;
-Double_t ptMin = 0.;
+Double_t centMin = 30.;
+Double_t centMax = 90.;
+Double_t ptMin = 1.;
 Double_t ptMax = -1.;
 Int_t charge = 0; // 0 selects + and -, -1 and +1 selects - or + muons respectively
 
@@ -283,8 +283,8 @@ void PlotIntegratedMuonEfficiencyVsX(TString var, TString runList, TString fileN
     printf("run %d: ", run);
     
     // compute efficiency vs var
-    TString dataFile = Form("runs/%d/%s", run, fileNameData.Data());
-    TString outFile = Form("runs/%d/%s", run, fileNameSave.Data());
+    TString dataFile = Form("alice/data/2015/LHC15o/000%d/muon_calo_pass1/PWGDQ/DQ_Dimuons_PbPb_ESD/3_20160112-2134/%s", run, fileNameData.Data());
+    TString outFile = Form("alice/data/2015/LHC15o/000%d/muon_calo_pass1/PWGDQ/DQ_Dimuons_PbPb_ESD/3_20160112-2134/%s", run, fileNameSave.Data());
     PlotMuonEfficiencyVsX(var, dataFile, outFile, kTRUE, print, kFALSE);
     
     // get run weight
@@ -703,8 +703,8 @@ void PlotMuonEfficiencyVsRun(TString runList, TString fileNameData, TString file
     printf("run %d: ", run);
     
     // compute efficiencies for this run
-    TString dataFile = Form("runs/%d/%s", run, fileNameData.Data());
-    TString outFile = Form("runs/%d/%s", run, fileNameSave.Data());
+    TString dataFile = Form("alice/data/2015/LHC15o/000%d/muon_calo_pass1/PWGDQ/DQ_Dimuons_PbPb_ESD/3_20160112-2134/%s", run, fileNameData.Data());
+    TString outFile = Form("alice/data/2015/LHC15o/000%d/muon_calo_pass1/PWGDQ/DQ_Dimuons_PbPb_ESD/3_20160112-2134/%s", run, fileNameSave.Data());
     PlotMuonEfficiency(dataFile, outFile, kTRUE, print, kFALSE);
     
     TFile *file = new TFile(outFile.Data(), "read");
@@ -1061,8 +1061,8 @@ void PlotMuonEfficiencyPerDEVsRun(TString runList, TString fileNameData, TString
     printf("run %d: ", run);
     
     // compute efficiencies for this run
-    TString dataFile = Form("runs/%d/%s", run, fileNameData.Data());
-    TString outFile = Form("runs/%d/%s", run, fileNameSave.Data());
+    TString dataFile = Form("alice/data/2015/LHC15o/000%d/muon_calo_pass1/PWGDQ/DQ_Dimuons_PbPb_ESD/3_20160112-2134/%s", run, fileNameData.Data());
+    TString outFile = Form("alice/data/2015/LHC15o/000%d/muon_calo_pass1/PWGDQ/DQ_Dimuons_PbPb_ESD/3_20160112-2134/%s", run, fileNameSave.Data());
     PlotMuonEfficiencyPerDE(dataFile, outFile, kTRUE);
     
     TFile *file = new TFile(outFile.Data(), "read");

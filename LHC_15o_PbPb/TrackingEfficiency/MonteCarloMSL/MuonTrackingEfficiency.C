@@ -1,5 +1,5 @@
 /**
- * 
+ *
  * \file MuonTrackingEfficiency.C
  * \author Philippe Pillot, Antoine Lardeux, Lizardo Valencia Palomo, Javier Martin Blanco
  * \brief Compute trk efficiency at DE, chamber, station and spectro levels vs various variables from the output of the efficiency task
@@ -52,7 +52,7 @@ const Char_t *effErrMode = "b(1,1)mode"; // Bayesian with uniform prior
 
 Double_t centMin = -999.;
 Double_t centMax = 999.;
-Double_t ptMin = 0.;
+Double_t ptMin = 1.;
 Double_t ptMax = -1.;
 Int_t charge = 0; // 0 selects + and -, -1 and +1 selects - or + muons respectively
 
@@ -103,7 +103,7 @@ void MuonTrackingEfficiency(TString runList = "runList.txt",
                             TString fileNameWeights = "",
                             TString fileNameData ="AnalysisResults.root",
                             TString fileNameSave = "efficiency_new.root",
-                            TString pathForRunResults = "alice/cern.ch/user/b/baudurie/Analysis/LHC15g/TrackingEfficiency/MonteCarlo/singleMuon/results")
+                            TString pathForRunResults = "alice/cern.ch/user/b/baudurie/Analysis/LHC15o/TrackingEfficiency/MonteCarlo/singleMuon/tuned/WiththnSparse/results")
 {
   /// main function to compute, print and plot efficiencies
   
@@ -115,7 +115,7 @@ void MuonTrackingEfficiency(TString runList = "runList.txt",
   
 
   
-  // PlotMuonEfficiencyVsX("centrality", fileNameData, fileNameSave, kFALSE, kFALSE, kTRUE);
+  PlotMuonEfficiencyVsX("centrality", fileNameData, fileNameSave, kFALSE, kFALSE, kTRUE);
   PlotMuonEfficiencyVsX("pt", fileNameData, fileNameSave, kFALSE, kFALSE, kTRUE);
   PlotMuonEfficiencyVsX("y", fileNameData, fileNameSave, kFALSE, kFALSE, kTRUE);
   PlotMuonEfficiencyVsX("phi", fileNameData, fileNameSave, kFALSE, kFALSE, kTRUE);
@@ -127,8 +127,8 @@ void MuonTrackingEfficiency(TString runList = "runList.txt",
   PlotIntegratedMuonEfficiencyVsX("phi", runList, fileNameWeights, fileNameData, fileNameSave, kFALSE, kTRUE,path);
   PlotIntegratedMuonEfficiencyVsX("charge", runList, fileNameWeights, fileNameData, fileNameSave, kFALSE, kTRUE,path);
   
-  // PlotMuonEfficiencyVsXY("pt", "centrality", fileNameData, fileNameSave, kTRUE);
-  // PlotMuonEfficiencyVsXY("y", "centrality", fileNameData, fileNameSave, kTRUE);
+  PlotMuonEfficiencyVsXY("pt", "centrality", fileNameData, fileNameSave, kTRUE);
+  PlotMuonEfficiencyVsXY("y", "centrality", fileNameData, fileNameSave, kTRUE);
   PlotMuonEfficiencyVsXY("pt", "y", fileNameData, fileNameSave, kTRUE);
   PlotMuonEfficiencyVsXY("phi", "y", fileNameData, fileNameSave, kTRUE, kTRUE);
   
@@ -450,9 +450,9 @@ void PlotMuonEfficiencyVsXY(TString xVar, TString yVar, TString fileNameData, TS
   Int_t nxBins = TT->GetAxis(xDim)->GetNbins();
   Int_t nyBins = TT->GetAxis(yDim)->GetNbins();
   TH2F *effVsXY = new TH2F(Form("trackingEffVs%s-%s",xVar.Data(),yVar.Data()),
-         Form("Measured tracking efficiency versus %s and %s",xVar.Data(),yVar.Data()),
-         nxBins, TT->GetAxis(xDim)->GetBinLowEdge(1), TT->GetAxis(xDim)->GetBinUpEdge(nxBins),
-         nyBins, TT->GetAxis(yDim)->GetBinLowEdge(1), TT->GetAxis(yDim)->GetBinUpEdge(nyBins));
+			   Form("Measured tracking efficiency versus %s and %s",xVar.Data(),yVar.Data()),
+			   nxBins, TT->GetAxis(xDim)->GetBinLowEdge(1), TT->GetAxis(xDim)->GetBinUpEdge(nxBins),
+			   nyBins, TT->GetAxis(yDim)->GetBinLowEdge(1), TT->GetAxis(yDim)->GetBinUpEdge(nyBins));
   effVsXY->SetDirectory(0);
   
   // set the centrality and pT range for integration
@@ -490,8 +490,8 @@ void PlotMuonEfficiencyVsXY(TString xVar, TString yVar, TString fileNameData, TS
       } else {
         
         // fill histo with 0 ± 1
-  effVsXY->Fill(TT->GetAxis(xDim)->GetBinCenter(ix),TT->GetAxis(yDim)->GetBinCenter(iy),0.);
-  effVsXY->SetBinError(ix,iy,1.);
+	effVsXY->Fill(TT->GetAxis(xDim)->GetBinCenter(ix),TT->GetAxis(yDim)->GetBinCenter(iy),0.);
+	effVsXY->SetBinError(ix,iy,1.);
         
       }
       
@@ -1697,9 +1697,9 @@ void ComputeTrackingEfficiency(Double_t stEff[6], Double_t stEffErr[6][2], Doubl
       
       spectroEffErr[i] = 0.;
       for (Int_t j = 1; j < 32; j++) {
-  Double_t sigmaAdd = 1.;
-  for (Int_t iSt = 0; iSt < 5; iSt++) sigmaAdd *= de[iSt][TESTBIT(j,iSt)];
-  spectroEffErr[i] += sigmaAdd;
+	Double_t sigmaAdd = 1.;
+	for (Int_t iSt = 0; iSt < 5; iSt++) sigmaAdd *= de[iSt][TESTBIT(j,iSt)];
+	spectroEffErr[i] += sigmaAdd;
       }
       spectroEffErr[i] = TMath::Sqrt(spectroEffErr[i]);
       
@@ -1715,9 +1715,9 @@ void ComputeTrackingEfficiency(Double_t stEff[6], Double_t stEffErr[6][2], Doubl
       
       spectroEffErr[i] = 0.;
       for (Int_t j = 1; j < 16; j++) {
-  Double_t sigmaAdd = de[5][TESTBIT(j,3)];
-  for (Int_t iSt = 0; iSt < 3; iSt++) sigmaAdd *= de[iSt][TESTBIT(j,iSt)];
-  spectroEffErr[i] += sigmaAdd;
+	Double_t sigmaAdd = de[5][TESTBIT(j,3)];
+	for (Int_t iSt = 0; iSt < 3; iSt++) sigmaAdd *= de[iSt][TESTBIT(j,iSt)];
+	spectroEffErr[i] += sigmaAdd;
       }
       spectroEffErr[i] = TMath::Sqrt(spectroEffErr[i]);
       
@@ -2106,7 +2106,6 @@ void SetRunLabel(TObjArray& array, Int_t irun, const TList& runs)
     SetRunLabel(*static_cast<TGraphAsymmErrors*>(array.UncheckedAt(i)), irun, runs);
   
 }
-
 
 
 
