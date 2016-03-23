@@ -135,7 +135,7 @@ void AddAnalysisTasks(Int_t merge){
     gROOT->LoadMacro("$ALICE_PHYSICS/PWG/muondep/AddTaskMuonRefit.C");
     AliAnalysisTaskMuonRefit* refit = AddTaskMuonRefit(-1., -1., kTRUE, -1., -1.);
     refit->SetDefaultStorage("raw://");
-    refit->SetAlignStorage("alien://folder=/alice/simulation/2008/v4-15-Release/Residual");
+    refit->SetAlignStorage("raw://");
     refit->RemoveMonoCathodClusters(kTRUE, kFALSE);
   }
 
@@ -143,7 +143,7 @@ void AddAnalysisTasks(Int_t merge){
     gROOT->LoadMacro("$ALICE_PHYSICS/PWG/muondep/AddTaskESDMCLabelAddition.C");
     AliAnalysisTaskESDMCLabelAddition *esdmclabel = AddTaskESDMCLabelAddition();
     esdmclabel->SetDefaultStorage("raw://");
-    esdmclabel->SetAlignStorage("alien://folder=/alice/simulation/2008/v4-15-Release/Residual");
+    esdmclabel->SetAlignStorage("raw://");
     esdmclabel->DecayAsFake(kTRUE);
   }
 
@@ -152,7 +152,7 @@ void AddAnalysisTasks(Int_t merge){
     AliAnalysisTaskMuonPerformance* muonPerformance = AddTaskMuonPerformance();
     if (usePhysicsSelection) muonPerformance->SelectCollisionCandidates(AliVEvent::kAny);
     muonPerformance->SetDefaultStorage("raw://");
-    muonPerformance->SetAlignStorage("alien://folder=/alice/simulation/2008/v4-15-Release/Residual");
+    muonPerformance->SetAlignStorage("raw://");
     muonPerformance->UseMCKinematics(kTRUE);
     muonPerformance->SetMCTrigLevelFromMatchTrk(kTRUE);
   }
@@ -162,7 +162,7 @@ void AddAnalysisTasks(Int_t merge){
     AliAnalysisTaskMuonTrackingEff* muonEfficiency = AddTaskMUONTrackingEfficiency(kTRUE, kTRUE);
     if (usePhysicsSelection) muonEfficiency->SelectCollisionCandidates(AliVEvent::kAny);
     muonEfficiency->SetDefaultStorage("raw://");
-    muonEfficiency->SetAlignStorage("alien://folder=/alice/simulation/2008/v4-15-Release/Residual");
+    muonEfficiency->SetAlignStorage("raw://");
     muonEfficiency->UseMCLabel(kTRUE);
   }
 

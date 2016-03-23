@@ -138,9 +138,9 @@ void Config()
 
   //AliGenerator* gener = CreateGenerator();
 
-  std::cout << "GenParamCustom settings " << std::endl;
-  gROOT->LoadMacro("GenParamCustom.C+");
-  AliGenerator* gener = GenParamCustom();
+  std::cout << "GenParamCustomRadiativeDecay settings " << std::endl;
+  gROOT->LoadMacro("GenParamCustomRadiativeDecay.C+");
+  AliGenerator* gener = GenParamCustomRadiativeDecay();
   
   TString slibs = gSystem->GetLibraries();
   TObjArray* olibs = slibs.Tokenize(" ");
