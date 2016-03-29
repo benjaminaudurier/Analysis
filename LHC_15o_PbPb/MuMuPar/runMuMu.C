@@ -16,55 +16,50 @@
 AliAnalysisTask* runMuMu(TString runMode, 
                         TString analysisMode,
                         TString inputName       = "Find;BasePath=/alice/data/2015/LHC15o/000244918/muon_calo_pass1/AOD/;FileName=AliAOD.Muons.root;",
-                        TString inputOptions    = "COLLEC",
-                        TString analysisOptions = "NOCENTR",
+                        TString inputOptions    = "",
+                        TString analysisOptions = "",
                         TString softVersions    = "",
                         TString taskOptions     = "" )
 {
     gROOT->LoadMacro(gSystem->ExpandPathName("$TASKDIR/runTaskUtilities.C"));     
      
     // Macro to connect to proof. First argument useless for saf3
-    SetupAnalysis(runMode,analysisMode,inputName,inputOptions,softVersions,analysisOptions, "libPWGmuon.so",". $ALICE_ROOT/include $ALICE_PHYSICS/include");
+    SetupAnalysis(runMode,analysisMode,inputName,inputOptions,softVersions,analysisOptions, "PWGmuon.par /Users/audurier/Documents/Analysis/LHC_15n_pp/MuMuPar/AddTaskMuMu.C",". $ALICE_ROOT/include $ALICE_PHYSICS/include");
     
-    TString outputdir = "Analysis/LHC15o/MuMuPar/";
+    // TString outputdir = "Analysis/LHC15o/MuMuPar/";
 
-    if(analysisMode.Contains("grid")) AliAnalysisManager::GetAnalysisManager()->GetGridHandler()->SetGridWorkingDir(outputdir.Data());
+    // if(analysisMode.Contains("grid")) AliAnalysisManager::GetAnalysisManager()->GetGridHandler()->SetGridWorkingDir(outputdir.Data());
 
     //Flag for MC
     Bool_t isMC = IsMC(inputOptions);
 
-    TString Triggers = "CINT7-B-NOPF-MUFAST,CINT7-B-NOPF-MUFAST&0MSL,CINT7-B-NOPF-MUFAST&0MUL,CMUL7-B-NOPF-MUFAST,CMSL7-B-NOPF-MUFAST,CMSL7-B-NOPF-MUFAST&0MUL";
-    TString inputs = "0MSL:17,0MSH:18,0MLL:19,0MUL:20,0V0M:3";
+    // TString Triggers = "CMUL7-B-NOPF-MUFAST";
+    // TString Triggers = "CINT7-B-NOPF-MUFAST,CINT7-B-NOPF-MUFAST&0MSL,CINT7-B-NOPF-MUFAST&0MUL,CMUL7-B-NOPF-MUFAST,CMSL7-B-NOPF-MUFAST,CMSL7-B-NOPF-MUFAST&0MUL";
+    // TString inputs = "0MSL:17,0MSH:18,0MLL:19,0MUL:20,0V0M:3";
 
     TList* triggers = new TList; // Create pointer for trigger list
     triggers->SetOwner(kTRUE); // Give rights to trigger liser
     if (!isMC)
     {
-        // pA trigger
+        // PbPb trigger
         // triggers->Add(new TObjString("CINT7-B-NOPF-ALLNOTRD"));//MB
-        triggers->Add(new TObjString("CMUL7-B-NOPF-MUON"));// Dimuon
+        triggers->Add(new TObjString("CMUL7-B-NOPF-MUFAST"));// Dimuon
     }
-
-    // // Load baseline
-    // //==============================================================================
-    // gROOT->LoadMacro("$ALICE_ROOT/ANALYSIS/macros/train/AddTaskBaseLine.C");
-    // AddTaskBaseLine();
     
     // Load centrality task
-    // //==============================================================================
-    if(analysisOptions.Contains("NOCENTR")&& runMode.Contains("local") )
+    //==============================================================================
+    if(analysisOptions.Contains("")&& runMode.Contains("local") )
     {
         gROOT->LoadMacro("$ALICE_PHYSICS/OADB/COMMON/MULTIPLICITY/macros/AddTaskMultSelection.C");
         AliMultSelectionTask * task = AddTaskMultSelection(kFALSE); // user
-        // task -> SetAlternateOADBforEstimators ("LHC15o");
+        task -> SetAlternateOADBforEstimators ("LHC15o");
     }
     
-    gROOT->LoadMacro("$ALICE_PHYSICS/PWG/muon/AddTaskMuMuMinvBA.C");
-    AddTaskMuMuMinvBA("MuMuBA",Triggers.Data(),inputs.Data(),"PbPb2015",isMC);
+    // gROOT->LoadMacro("$ALICE_PHYSICS/PWG/muon/AddTaskMuMuMinvBA.C");
+    // AddTaskMuMuMinvBA("MuMuBA",Triggers.Data(),inputs.Data(),"PbPb2015",isMC);
 
-    // gROOT->LoadMacro("AddTaskMuMu.C");
-    // TString output = Form("%s",AliAnalysisManager::GetCommonFileName());
-    // AddTaskMuMu(output.Data(),triggers,"PbPb2015",isMC);
+    TString output = Form("%s",AliAnalysisManager::GetCommonFileName());
+    AddTaskMuMu(output.Data(),triggers,"PbPb2015",isMC);
     cout <<"add task mumu done"<< endl;
 
     // Start analysis
