@@ -14,11 +14,12 @@
 #include <AliAnalysisMuMu.h>
 #include <TROOT.h>
 
-char           * sfile="../TrainRootFile/AnalysisResults_25_20160118-2330.root:MuMuBA";
+char           * sfile="../AnalysisResults.root";
 char           * sasso="";
 char           * sasso2="";
 char           * beamYear="mumu.PbPb2015.config";
 
+const char * MCRefResult = "PSICB2";
 
 //_____________________________________________________________________________
 void FitMacro( char* what ="pt",const char* printWhat = "", int debug =0 )
@@ -46,19 +47,26 @@ void FitMacro( char* what ="pt",const char* printWhat = "", int debug =0 )
     AliAnalysisMuMu analysis(sfile,sasso,sasso2,beamYear);
 
     // Clean   
-    if(clean) analysis.CleanAllSpectra();    
+    if(clean) analysis.CleanAllSpectra();  
 
     //_____ Fit 
     while ( ( swhat = static_cast<TObjString*>(nextWhat()) ) )
-    {
-        if(swhat->String().Contains("integrated")) analysis.Jpsi(swhat->String().Data(),"",kFALSE,kFALSE);
+    {   
 
-        else analysis.Jpsi(swhat->String().Data(),"BENJ",kFALSE,kFALSE);
+        if(swhat->String().Contains("integrated")) {
+            analysis.Jpsi(swhat->String().Data(),"",kFALSE,kFALSE);
+            analysis.ComputeYield("INTEGRATED","",MCRefResult);
+        } else if(swhat->String().Contains("pt")) {
+            analysis.Jpsi(swhat->String().Data(),"BENJ",kFALSE,kFALSE);
+            analysis.ComputeYield("PT","",MCRefResult);
+        } else if(swhat->String().Contains("y")) {
+            analysis.Jpsi(swhat->String().Data(),"BENJ",kFALSE,kFALSE);
+            analysis.ComputeYield("Y","",MCRefResult);
+        }        
     }
 
     // analysis.PrintNofParticle("PSI","NofJPsi","YVSPT",kFALSE);
-    analysis.PrintNofParticle("PSI","NofJPsi","PT",kFALSE);
-    analysis.PrintNofParticle("PSI","NofJPsi","INTEGRATED",kFALSE);
+    // analysis.PrintNofParticle("PSI","NofJPsi","Y",kFALSE);
     if(print && what == "pt") analysis.PrintNofParticle("PSI","NofJPsi","PT",kFALSE);
     if(print && what == "y") analysis.PrintNofParticle("PSI","NofJPsi","Y",kFALSE);
     if(print && what == "integrated") analysis.PrintNofParticle("PSI","NofJPsi","INTEGRATED",kFALSE);
@@ -70,7 +78,6 @@ void FitMacro( char* what ="pt",const char* printWhat = "", int debug =0 )
     }
 
 }
-
 
 
 

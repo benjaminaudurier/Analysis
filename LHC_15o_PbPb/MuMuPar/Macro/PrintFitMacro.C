@@ -21,7 +21,7 @@
 #include <iostream> 
 
 //Some strings and constants
-char                   * sfile="New_AnalysisResults_27_20160120-2124.root";
+char                   * sfile="../TrainRootFile/AnalysisResults_25_20160118-2330.root:MuMuBA";
 char                   * sasso="";
 char                   * sasso2="";
 char                   * beamYear="mumu.PbPb2015.config";

@@ -26,7 +26,6 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   //===========================================================================
   if (simulations && triggerClassesToConsider )
   {
-     
       triggerClassesToConsider->Add(new TObjString("ANY"));
       triggerClassesToConsider->Add(new TObjString("CMSNGL"));
       triggerClassesToConsider->Add(new TObjString("MUHigh"));
@@ -74,12 +73,16 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   if (!simulations)
   {
     ps = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedMUL","const AliInputEventHandler&","");
+    ps1 = cr->AddEventCut(*eventCutter,"IsPhysicsSelected","const AliInputEventHandler&","");
+    ps2 = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedINT7","const AliInputEventHandler&","");
   }
 
   // Apply default cut
   cr->AddCutCombination(triggerSelection);
   cr->AddCutCombination(eventTrue);
   cr->AddCutCombination(ps,triggerSelection);
+  cr->AddCutCombination(ps1,triggerSelection);
+  cr->AddCutCombination(ps2,triggerSelection);
 
   task->SetBeamYear(beamYear);
 
@@ -160,11 +163,11 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
     binning->AddBin("psi","pt", 3.0, 4.0,"BENJ");
     binning->AddBin("psi","pt", 4.0, 5.0,"BENJ");
     binning->AddBin("psi","pt", 5.0, 6.0,"BENJ");
-    binning->AddBin("psi","pt", 6.0, 8.0,"BENJ");
-    // binning->AddBin("psi","pt", 7.0, 8.0,"BENJ");
-    // binning->AddBin("psi","pt", 8.0, 9.0,"BENJ");
-    // binning->AddBin("psi","pt", 9.0, 10.0,"BENJ");
-    // binning->AddBin("psi","pt", 10.0, 12.0,"BENJ");
+    binning->AddBin("psi","pt", 6.0, 7.0,"BENJ");
+    binning->AddBin("psi","pt", 7.0, 8.0,"BENJ");
+    binning->AddBin("psi","pt", 8.0, 9.0,"BENJ");
+    binning->AddBin("psi","pt", 9.0, 10.0,"BENJ");
+    binning->AddBin("psi","pt", 10.0, 12.0,"BENJ");
     // binning->AddBin("psi","pt", 11.0, 12.0,"BENJ");
     // binning->AddBin("psi","pt", 12.0, 13.0,"BENJ");
     // binning->AddBin("psi","pt", 13.0, 14.0,"BENJ");
@@ -188,22 +191,22 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
    // binning->AddBin("psi","y",-3,-2.5,"BENJ");
     
       // phi binning
-    binning->AddBin("psi","phi",0,0.4,"BENJ");
-    binning->AddBin("psi","phi",0.4,0.8,"BENJ");
-    binning->AddBin("psi","phi",0.8,1.2,"BENJ");
-    binning->AddBin("psi","phi",1.2,1.6,"BENJ");
-    binning->AddBin("psi","phi",1.6,2.0,"BENJ");
-    binning->AddBin("psi","phi",2.0,2.4,"BENJ");
-    binning->AddBin("psi","phi",2.4,2.8,"BENJ");
-    binning->AddBin("psi","phi",2.8,3.2,"BENJ");
-    binning->AddBin("psi","phi",3.2,3.6,"BENJ");
-    binning->AddBin("psi","phi",3.6,4.0,"BENJ");
-    binning->AddBin("psi","phi",4.0,4.4,"BENJ");
-    binning->AddBin("psi","phi",4.4,4.8,"BENJ");
-    binning->AddBin("psi","phi",4.8,5.2,"BENJ");
-    binning->AddBin("psi","phi",5.2,5.6,"BENJ");
-    binning->AddBin("psi","phi",5.6,6.0,"BENJ");
-    binning->AddBin("psi","phi",6.0,6.28,"BENJ");
+    // binning->AddBin("psi","phi",0,0.4,"BENJ");
+    // binning->AddBin("psi","phi",0.4,0.8,"BENJ");
+    // binning->AddBin("psi","phi",0.8,1.2,"BENJ");
+    // binning->AddBin("psi","phi",1.2,1.6,"BENJ");
+    // binning->AddBin("psi","phi",1.6,2.0,"BENJ");
+    // binning->AddBin("psi","phi",2.0,2.4,"BENJ");
+    // binning->AddBin("psi","phi",2.4,2.8,"BENJ");
+    // binning->AddBin("psi","phi",2.8,3.2,"BENJ");
+    // binning->AddBin("psi","phi",3.2,3.6,"BENJ");
+    // binning->AddBin("psi","phi",3.6,4.0,"BENJ");
+    // binning->AddBin("psi","phi",4.0,4.4,"BENJ");
+    // binning->AddBin("psi","phi",4.4,4.8,"BENJ");
+    // binning->AddBin("psi","phi",4.8,5.2,"BENJ");
+    // binning->AddBin("psi","phi",5.2,5.6,"BENJ");
+    // binning->AddBin("psi","phi",5.6,6.0,"BENJ");
+    // binning->AddBin("psi","phi",6.0,6.28,"BENJ");
   }
   // v0 centrality binning
   binning->AddBin("centrality","V0M",0.,90.);

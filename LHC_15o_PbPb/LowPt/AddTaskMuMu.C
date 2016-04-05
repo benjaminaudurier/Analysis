@@ -30,21 +30,6 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   //===========================================================================
   if (simulations && triggerClassesToConsider )
   {
-      // possible entries for LHC15n :
-      // ANY,
-      // CMSNGL:Lpt,
-      // MUHigh:Hpt,
-      // CMULLO:Lpt2,
-      // CMULHI:Hpt2,
-      // CMLKLO:Lpt2,
-      // CMLKHI:Hpt2,
-      // MULow:Lpt,
-      // MUHigh:Hpt,
-      // MULU:Lpt2,
-      // MULL:Lpt2,
-      // MUHU:Hpt2,
-      // MUHL:Hpt2
-      
       // triggerClassesToConsider->Add(new TObjString("ANY"));
       // triggerClassesToConsider->Add(new TObjString("CMSNGL"));
       // triggerClassesToConsider->Add(new TObjString("MUHigh"));
@@ -87,7 +72,7 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   
   if (!simulations)
   {
-    ps = cr->AddEventCut(*eventCutter,"IsPhysicsSelected","const AliInputEventHandler&","");
+    ps = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedMUL","const AliInputEventHandler&","");
   }  
   // Apply default cut
   cr->AddCutCombination(triggerSelection);
@@ -130,7 +115,7 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
       // Cuts on track level
       AliAnalysisMuMuCutElement* pairTrue = cr->AddTrackPairCut(*cr,"AlwaysTrue","const AliVParticle&, const AliVParticle&","");// Apply "AlwaysTrue" cut on AliVParticle derived from AliAnalysisMuMuMinv
       AliAnalysisMuMuCutElement* pairy = cr->AddTrackPairCut(*minvAnalysis,"IsRapidityInRange","const AliVParticle&,const AliVParticle&","");
-      AliAnalysisMuMuCutElement* ptRange = cr->AddTrackPairCut(*minvAnalysis,"IsPtInRange","const AliVParticle&,const AliVParticle&,Double_t&,Double_t&","0.,18.");
+      AliAnalysisMuMuCutElement* ptRange = cr->AddTrackPairCut(*minvAnalysis,"IsPtInRange","const AliVParticle&,const AliVParticle&,Double_t&,Double_t&","0.,8.");
       
       cutElements.Add(pairTrue);
       cutElements.Add(pairy);
@@ -156,9 +141,10 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   
   if (minvAnalysis)
   {
-    minvAnalysis->DefineMinvRange(2,8,0.025);
     // Integrated
     binning->AddBin("psi","integrated");
+
+
     // pt binning for low pt exces
     binning->AddBin("psi","pt", 0.0, 0.1,"BENJ");
     binning->AddBin("psi","pt", 0.1, 0.2,"BENJ");
@@ -173,11 +159,11 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
     binning->AddBin("psi","pt", 1.0, 1.1,"BENJ");
     binning->AddBin("psi","pt", 1.1, 1.2,"BENJ");
     binning->AddBin("psi","pt", 1.2, 1.3,"BENJ");
-    binning->AddBin("psi","pt", 1.3, 1.4,"BENJ");
-    binning->AddBin("psi","pt", 1.4, 1.5,"BENJ");
-    binning->AddBin("psi","pt", 1.5, 1.6,"BENJ");
-    binning->AddBin("psi","pt", 1.6, 1.7,"BENJ");
-    binning->AddBin("psi","pt", 1.7, 1.8,"BENJ");
+    // binning->AddBin("psi","pt", 1.3, 1.4,"BENJ");
+    // binning->AddBin("psi","pt", 1.4, 1.5,"BENJ");
+    // binning->AddBin("psi","pt", 1.5, 1.6,"BENJ");
+    // binning->AddBin("psi","pt", 1.6, 1.7,"BENJ");
+    // binning->AddBin("psi","pt", 1.7, 1.8,"BENJ");
     binning->AddBin("psi","pt", 0.0, 0.3,"BENJ");
     binning->AddBin("psi","pt", 0.3, 1.0,"BENJ");
     binning->AddBin("psi","pt", 1.0, 8.0,"BENJ");

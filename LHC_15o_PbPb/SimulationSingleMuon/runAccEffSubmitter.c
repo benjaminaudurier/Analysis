@@ -30,6 +30,8 @@ void runAccEffSubmitter(const char* mode)
   	a.SetVar("VAR_GENPARAMCUSTOMSINGLE_Y_P2","0.00260707");
 
 	a.SetRunList("runList_LHC15o_AOD.txt");
+	a.SetAliPhysicsVersion("vAN-20160301-1");
+	//a.SetAliRootVersion("v5-08-01-1");
 
 	a.SetCompactMode(0);
 	a.Print();
