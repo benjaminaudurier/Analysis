@@ -15,7 +15,7 @@
 //______________________________________________________________________________
 AliAnalysisTask* runMuMu(TString runMode,
                         TString analysisMode,
-                        TString inputName       = "Find;BasePath=/alice/data/2015/LHC15o/000244918/muon_calo_pass1/AOD/;FileName=AliAOD.Muons.root;",
+                        TString inputName       = "Find;BasePath=/alice/data/2015/LHC15n/000244340/muon_calo_pass1/AOD/*;FileName=AliAOD.Muons.root;Mode=cache;",
                         TString inputOptions    = "",
                         TString analysisOptions = "",
                         TString softVersions    = "",
@@ -26,24 +26,23 @@ AliAnalysisTask* runMuMu(TString runMode,
     // Macro to connect to proof. First argument useless for saf3
     SetupAnalysis(runMode,analysisMode,inputName,inputOptions,softVersions,analysisOptions, "PWGmuon.par /Users/audurier/Documents/Analysis/LHC_15n_pp/MuMuPar/AddTaskMuMu.C",". $ALICE_ROOT/include $ALICE_PHYSICS/include");
 
-    TString outputdirGrid = "Analysis/LHC15n/MuMuWithTOtrigger2/";
-
+    TString outputdirGrid = "Analysis/LHC15n/MuMu/T0Custom/";
     if(analysisMode.Contains("grid")) AliAnalysisManager::GetAnalysisManager()->GetGridHandler()->SetGridWorkingDir(outputdirGrid.Data());
 
     //Flag for MC
     Bool_t isMC = IsMC(inputOptions);
 
-    TString Triggers = "CMUL7-B-NOPF-MUFAST";
-    // TString Triggers = "CINT7-B-NOPF-MUFAST,CINT7-B-NOPF-MUFAST&0MSL,CINT7-B-NOPF-MUFAST&0MUL,CMUL7-B-NOPF-MUFAST,CMSL7-B-NOPF-MUFAST,CMSL7-B-NOPF-MUFAST&0MUL";
-    TString inputs = "0MSL:17,0MSH:18,0MLL:19,0MUL:20,0V0M:3";
-
     TList* triggers = new TList; // Create pointer for trigger list
     triggers->SetOwner(kTRUE); // Give rights to trigger liser
     if (!isMC)
     {
-        // pA trigger
-        triggers->Add(new TObjString("CINT7-B-NOPF-ALLNOTRD"));//MB
+        // pp trigger
         triggers->Add(new TObjString("CMUL7-B-NOPF-MUFAST"));
+        
+        triggers->Add(new TObjString("CINT7-B-NOPF-MUFAST&0TVX"));
+        triggers->Add(new TObjString("CINT7-B-NOPF-MUFAST&0TVX&0MSL"));
+        triggers->Add(new TObjString("CINT7-B-NOPF-MUFAST&0TVX&0MUL"));
+
         triggers->Add(new TObjString("CMSL7-B-NOPF-MUFAST"));
         triggers->Add(new TObjString("CMSL7-B-NOPF-MUFAST&0MUL"));
 
@@ -51,13 +50,7 @@ AliAnalysisTask* runMuMu(TString runMode,
         triggers->Add(new TObjString("CINT7-B-NOPF-CENTNOTRD&0MSL"));
         triggers->Add(new TObjString("CINT7-B-NOPF-CENTNOTRD&0MUL"));
 
-        triggers->Add(new TObjString("CINT7-B-NOPF-MUFAST"));
-        triggers->Add(new TObjString("CINT7-B-NOPF-MUFAST&0MSL"));
-        triggers->Add(new TObjString("CINT7-B-NOPF-MUFAST&0MUL"));
-
         triggers->Add(new TObjString("C0TVX-B-NOPF-CENTNOTRD"));
-        triggers->Add(new TObjString("C0TVX-B-NOPF-CENTNOTRD&0MSL"));
-        triggers->Add(new TObjString("C0TVX-B-NOPF-CENTNOTRD&0MUL"));
     }
 
     // // Load baseline
@@ -67,17 +60,13 @@ AliAnalysisTask* runMuMu(TString runMode,
 
     // Load centrality task
     //==============================================================================
-    if(analysisOptions.Contains("NOPHYSSEL")&& analysisMode.Contains("local") )
+    if(!analysisOptions.Contains("CENT")&& analysisMode.Contains("local") )
     {
         gROOT->LoadMacro("$ALICE_PHYSICS/OADB/COMMON/MULTIPLICITY/macros/AddTaskMultSelection.C");
         AliMultSelectionTask * task = AddTaskMultSelection(kFALSE); // user
         task->SetAlternateOADBforEstimators ("LHC15n");
     }
 
-    // gROOT->LoadMacro("$ALICE_PHYSICS/PWG/muon/AddTaskMuMuMinvBA.C");
-    // AddTaskMuMuMinvBA("MuMuBA",Triggers.Data(),inputs.Data(),"PbPb2015",isMC);
-
-    // gROOT->LoadMacro("AddTaskMuMu.C");
     TString output = Form("%s",AliAnalysisManager::GetCommonFileName());
     AddTaskMuMu(output.Data(),triggers,"pp2015",isMC);
     cout <<"add task mumu done"<< endl;
@@ -86,5 +75,5 @@ AliAnalysisTask* runMuMu(TString runMode,
     //==============================================================================
     StartAnalysis(runMode,analysisMode,inputName,inputOptions);
 
-    // delete triggers;
+    delete triggers;
 }

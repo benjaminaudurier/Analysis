@@ -12,7 +12,7 @@
 
 //_____________________________________________________________________________
 void FNormMacro(
-const char* filename="../AnalysisResults_grid.root",
+const char* filename="../AnalysisResults_grid_CINT7-B-NOPF-MUFAST.root",
 const char* associatedSimFileName="",
 const char* associatedSimFileName2="",
 const char* beamYear="mumu.pp2015.config",const int DebugLevel = 0)
@@ -45,7 +45,8 @@ const char* beamYear="mumu.pp2015.config",const int DebugLevel = 0)
 //_____________________________________________________________________________
 void PrintCounters(AliAnalysisMuMu &ana)
 {
-    ana.CC()->Print("centrality/event/trigger/run");
+    ana.CC()->Print("centrality/event/trigger");
+    ana.CC()->Print("run/event/trigger");
     // ana.CC()->Print("run/trigger","trigger:C0TVX-B-NOPF-CENTNOTRD");
     // ana.CC()->Print("run/trigger","trigger:CINT7-B-NOPF-CENTNOTRD");
     // Int_t NofMUL = TMath::Nint(ana.CC()->GetSum(Form("trigger:CMUL7-B-NOPF-MUFAST/event:PSALL/centrality:V0M_00.00_90.00")));

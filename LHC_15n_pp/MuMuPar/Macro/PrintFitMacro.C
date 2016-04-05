@@ -40,12 +40,10 @@ TString spairCut       ="pALLPAIRYPAIRPTIN0.0-12.0RABSMATCHLOWETAPDCA";
 TString scentrality    ="PP";
 
 // TString param          =  "c,c',sJPsi,mJPsi,NofJPsi,SignalOverBkg3s,FitChi2PerNDF";
-TString param          =  "sJPsi,mJPsi,NofJPsi,SignalOverBkg3s,FitChi2PerNDF";
+TString param          =  "sJPsi,mJPsi,NofJPsi,SignalOverBkg3s,FitChi2PerNDF,Significance3s";
 
-// TString subresults     =  "CB2POL1POL2_1.6_5.0_SP1.2,CB2POL1POL2_1.8_4.7_SP1.2";
-// TString subresults     =  "CB2POL1POL2_2.2_4.5_SP1.2,CB2POL1POL2_2.0_5.0_SP1.2";
-// TString subresults     =  "CB2VWG_1.6_5.0_SP1.2,CB2VWG_1.8_4.7_SP1.2";
-TString subresults     = "CB2VWG_1.7_4.7_SP1.2,CB2VWG_1.8_4.5_SP1.2,CB2POL1POL2_1.7_4.7_SP1.2,CB2POL1POL2_1.8_4.5_SP1.2,NA60NEWVWG_1.7_4.7_SP1.2,NA60NEWVWG_1.8_4.5_SP1.2,NA60NEWPOL1POL2_1.7_4.7_SP1.2,NA60NEWPOL1POL2_1.8_4.5_SP1.2";
+
+
 
 
 void PrintDist(TObjString* swhat,Bool_t yield,AliAnalysisMuMu &ana);
@@ -54,6 +52,17 @@ void PrintDist(TObjString* swhat,Bool_t yield,AliAnalysisMuMu &ana);
 //_____________________________________________________________________________
 void PrintFitMacro(char         * what ="PT",const char * printWhat = "distribution",int debug =0)
 {
+
+    TString subresults = "";
+    // TString subresults = "CB2VWG_1.7_4.8_SP1.2,CB2VWG_2.0_4.5_SP1.2";
+    // subresults         += "CB2POL1POL2_1.7_4.8_SP1.2,CB2POL1POL2_2.0_4.5_SP1.2";
+    // subresults         += "CB2VWG2_1.7_4.8_SP1.2,CB2VWG2_2.0_4.5_SP1.2";
+    subresults         += "CB2POL2POL3_1.7_4.8_SP1.2,CB2POL2POL3_2.0_4.5_SP1.2";
+    // subresults         += ",NA60NEWVWG_2.0_5.0_SP1.2,NA60NEWVWG_2.4_4.8_SP1.2";
+    // subresults         += "NA60NEWVWG2_2.0_5.0_SP1.2,NA60NEWVWG2_2.4_4.8_SP1.2";
+    // subresults         += ",NA60NEWPOL1POL2_2.0_5.0_SP1.2,NA60NEWPOL1POL2_2.4_4.8_SP1.2";
+    // subresults         += ",NA60NEWPOL2POL3_2.0_5.0_SP1.2,NA60NEWPOL2POL3_2.4_4.8_SP1.2";
+
 
     AliLog::SetGlobalDebugLevel(debug);
 
@@ -97,7 +106,6 @@ void PrintFitMacro(char         * what ="PT",const char * printWhat = "distribut
 
         PrintDist(swhat,kTRUE,analysis);
     }
-
     return ;
 }
 

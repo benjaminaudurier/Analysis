@@ -13,8 +13,7 @@
 #include <AliAnalysisMuMu.h>
 #include <TROOT.h>
 
-char           * sfile="../AnalysisResults_saf_0-12.root";
-// char           * sasso="";
+char           * sfile="../AnalysisResults_grid.root";
 char           * sasso="../../AccEff_jpsi/MCPart/AnalysisResults.JPSI.root";
 char           * sasso2="";
 char           * beamYear="mumu.pp2015.config";
@@ -29,8 +28,8 @@ void FitMacro( char* what ="pt",const char* printWhat = "", int debug =0 )
     AliLog::SetGlobalDebugLevel(debug);
 
     Bool_t rawcount = kFALSE;
-    Bool_t clean = kFALSE;
-    Bool_t print = kFALSE;
+    Bool_t clean    = kFALSE;
+    Bool_t print    = kFALSE;
 
     TObjArray* sprint = TString(printWhat).Tokenize(",");
 
@@ -51,9 +50,7 @@ void FitMacro( char* what ="pt",const char* printWhat = "", int debug =0 )
     if(clean) analysis.CleanAllSpectra();
 
     //_____ Fit
-    while ( ( swhat = static_cast<TObjString*>(nextWhat()) ) )
-    {
-
+    while ( ( swhat = static_cast<TObjString*>(nextWhat()) ) ) {
         if(swhat->String().Contains("integrated")) {
             analysis.Jpsi(swhat->String().Data(),"",kFALSE,kFALSE);
             analysis.ComputeYield("INTEGRATED","",MCRefResult);
@@ -66,8 +63,6 @@ void FitMacro( char* what ="pt",const char* printWhat = "", int debug =0 )
         }
     }
 
-    // analysis.PrintNofParticle("PSI","NofJPsi","YVSPT",kFALSE);
-    // analysis.PrintNofParticle("PSI","NofJPsi","Y",kFALSE);
     if(print && what == "pt") analysis.PrintNofParticle("PSI","NofJPsi","PT",kFALSE);
     if(print && what == "y") analysis.PrintNofParticle("PSI","NofJPsi","Y",kFALSE);
     if(print && what == "integrated") analysis.PrintNofParticle("PSI","NofJPsi","INTEGRATED",kFALSE);
