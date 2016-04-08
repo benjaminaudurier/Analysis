@@ -7,7 +7,7 @@ printenv
 cd $HOME/alicesw/aliphysics/$2/build
 
 if [ $# -eq 3 ]; then
-  cd $3  
+  cd $3
 fi
 
 /usr/bin/make -j$MJ install 2>&1

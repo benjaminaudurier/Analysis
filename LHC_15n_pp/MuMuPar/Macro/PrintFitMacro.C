@@ -57,11 +57,11 @@ void PrintFitMacro(char         * what ="PT",const char * printWhat = "distribut
     // TString subresults = "CB2VWG_1.7_4.8_SP1.2,CB2VWG_2.0_4.5_SP1.2";
     // subresults         += "CB2POL1POL2_1.7_4.8_SP1.2,CB2POL1POL2_2.0_4.5_SP1.2";
     // subresults         += "CB2VWG2_1.7_4.8_SP1.2,CB2VWG2_2.0_4.5_SP1.2";
-    subresults         += "CB2POL2POL3_1.7_4.8_SP1.2,CB2POL2POL3_2.0_4.5_SP1.2";
-    // subresults         += ",NA60NEWVWG_2.0_5.0_SP1.2,NA60NEWVWG_2.4_4.8_SP1.2";
-    // subresults         += "NA60NEWVWG2_2.0_5.0_SP1.2,NA60NEWVWG2_2.4_4.8_SP1.2";
-    // subresults         += ",NA60NEWPOL1POL2_2.0_5.0_SP1.2,NA60NEWPOL1POL2_2.4_4.8_SP1.2";
-    // subresults         += ",NA60NEWPOL2POL3_2.0_5.0_SP1.2,NA60NEWPOL2POL3_2.4_4.8_SP1.2";
+    // subresults         += "CB2POL2POL3_1.7_4.8_SP1.2,CB2POL2POL3_2.0_4.5_SP1.2";
+    // subresults         += "NA60NEWVWG_1.7_4.8_SP1.2,NA60NEWVWG_2.0_4.5_SP1.2";
+    // subresults         += "NA60NEWVWG2_1.7_4.8_SP1.2,NA60NEWVWG2_2.0_4.5_SP1.2";
+    subresults         += "NA60NEWPOL1POL2_1.7_4.8_SP1.2,NA60NEWPOL1POL2_2.0_4.5_SP1.2";
+    // subresults         += ",NA60NEWPOL2POL3_1.7_4.8_SP1.2,NA60NEWPOL2POL3_2.0_4.5_SP1.2";
 
 
     AliLog::SetGlobalDebugLevel(debug);
