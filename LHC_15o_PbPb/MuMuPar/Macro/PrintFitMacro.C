@@ -21,7 +21,8 @@
 #include <iostream> 
 
 //Some strings and constants
-char                   * sfile="../tmpDir/AnalysisResults.root";
+char                   * sfile="../Data/tmpDir/AnalysisResults.root";
+// char                   * sfile="../Simulation/AnalysisResults.JPSI.root";
 char                   * sasso="";
 char                   * sasso2="";
 char                   * beamYear="mumu.PbPb2015.config";
@@ -31,6 +32,9 @@ TString striggerMB     ="CINT7-B-NOPF-MUFAST";
 TString seventType     ="PSALL";
 TString spairCut       ="pALLPAIRYPAIRPTIN0.0-10.0RABSMATCHLOWETAPDCA";
 TString scentrality    ="V0M_00.00_90.00";
+
+TString param          =  "sJPsi,mJPsi,NofJPsi,SignalOverBkg3s,FitChi2PerNDF,Significance3s";
+
 
 Double_t FNorm         =15.22;
 Double_t BR            =0.005;
@@ -42,6 +46,8 @@ void PrintYield(AliAnalysisMuMuSpectra *spec,AliAnalysisMuMu &an,TObjString* cen
 void PrintFitMacro(char         * what ="PT",const char * printWhat = "distribution",int debug =0)
 {    
 
+    TString subresults = "PSINA60NEW,PSICB2";
+
     AliLog::SetGlobalDebugLevel(debug);
     
     Bool_t PrintDistribution = kFALSE;
@@ -50,6 +56,7 @@ void PrintFitMacro(char         * what ="PT",const char * printWhat = "distribut
     Bool_t yield             = kFALSE;
 
     TObjArray* sprint = TString(printWhat).Tokenize(",");
+    TObjArray* sparam = TString(param).Tokenize(",");
     
     //Set bool
     if(sprint->FindObject("raa")) Raa                        =kTRUE;
@@ -62,6 +69,8 @@ void PrintFitMacro(char         * what ="PT",const char * printWhat = "distribut
     TObjArray* whatArray= TString(what).Tokenize(",");
     TIter nextWhat(whatArray);
     TObjString* swhat;
+
+
     
     // main object
     AliAnalysisMuMu analysis(sfile,sasso,sasso2,beamYear);
@@ -71,7 +80,10 @@ void PrintFitMacro(char         * what ="PT",const char * printWhat = "distribut
     {
         analysis.DrawFitResults("PSI",swhat->String().Data(),"histo",print);
         analysis.PrintNofParticle("PSI","NofJPsi",swhat->String(),kFALSE);
-        
+        TIter nextParam(sparam);
+        TObjString* sParam;
+        // /*if(swhat->String().Contains("PT") || swhat->String().Contains("Y")) */while ((sParam=static_cast<TObjString*>(nextParam()))) analysis.PrintFitParam("PSI",sParam->String().Data(),swhat->String().Data(),subresults.Data(),"",kFALSE);
+
         if (Raa) {
             if(swhat->String().Contains("INTEGRATED")) analysis.RAAasGraphic("PSI",swhat->String().Data(),"externFile_PT.txt","externFile_CENT.txt",scentrality.Data(),kFALSE);
             else if(swhat->String().Contains("Y")) analysis.RAAasGraphic("PSI","Y","externFile_Y.txt","externFile_CENT.txt",scentrality.Data(),kFALSE);
@@ -81,7 +93,6 @@ void PrintFitMacro(char         * what ="PT",const char * printWhat = "distribut
 
         if (PrintDistribution) PrintDist(swhat,yield,analysis);
     }
-
     return ;    
 } 
 

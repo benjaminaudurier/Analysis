@@ -14,7 +14,9 @@
 #include <AliAnalysisMuMu.h>
 #include <TROOT.h>
 
-char           * sfile="../tmpDir/AnalysisResults.root";
+char           * sfile="../Data/tmpDir/AnalysisResults.root";
+// char           * sfile="../Simulation/AnalysisResults.JPSI.root";
+// char           * sasso="../Simulation/AnalysisResults.root";
 char           * sasso="";
 char           * sasso2="";
 char           * beamYear="mumu.PbPb2015.config";
@@ -55,13 +57,13 @@ void FitMacro( char* what ="pt",const char* printWhat = "", int debug =0 )
 
         if(swhat->String().Contains("integrated")) {
             analysis.Jpsi(swhat->String().Data(),"",kFALSE,kFALSE);
-            // analysis.ComputeYield("INTEGRATED","",MCRefResult);
+            analysis.ComputeYield("INTEGRATED","",MCRefResult);
         } else if(swhat->String().Contains("pt")) {
             analysis.Jpsi(swhat->String().Data(),"BENJ",kFALSE,kFALSE);
-            // analysis.ComputeYield("PT","",MCRefResult);
+            analysis.ComputeYield("PT","",MCRefResult);
         } else if(swhat->String().Contains("y")) {
             analysis.Jpsi(swhat->String().Data(),"BENJ",kFALSE,kFALSE);
-            // analysis.ComputeYield("Y","",MCRefResult);
+            analysis.ComputeYield("Y","",MCRefResult);
         }        
     }
 
