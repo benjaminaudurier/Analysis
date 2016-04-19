@@ -12,7 +12,7 @@
 
 //_____________________________________________________________________________
 void FNormMacro(
-const char* filename="../AnalysisResults_grid_CINT7-B-NOPF-MUFAST0TVX.root",
+const char* filename   ="../AnalysisResults_grid_CINT7-B-NOPF-MUFAST_MUPBS.root",
 const char* associatedSimFileName="",
 const char* associatedSimFileName2="",
 const char* beamYear="mumu.pp2015.config",const int DebugLevel = 0)
@@ -28,7 +28,7 @@ const char* beamYear="mumu.pp2015.config",const int DebugLevel = 0)
 
   // analysis.ComputeNumberOfEvent(); // kTRUE = PileUpCOrrected
   analysis.ComputeIntFnormFromCounters(AliAnalysisMuMuFnorm::kMUL,kTRUE); // kTRUE = PileUpCOrrected
-  // analysis.ComputeFnormScalers(AliAnalysisMuMuFnorm::kMUL,kTRUE);// kTRUE = PileUpCOrrected
+  analysis.ComputeFnormScalers(AliAnalysisMuMuFnorm::kMUL,kTRUE);// kTRUE = PileUpCOrrected
 
   //_____ Mean
   // const char* patternOrList= "FnormOffline2PUPS,FnormOffline1PUPS,FnormScalers1PUPS";
