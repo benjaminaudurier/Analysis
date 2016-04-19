@@ -24,7 +24,7 @@ AliAnalysisTask* runMuMu(TString runMode,
     gROOT->LoadMacro(gSystem->ExpandPathName("$TASKDIR/runTaskUtilities.C"));
 
     // Macro to connect to proof. First argument useless for saf3
-    SetupAnalysis(runMode,analysisMode,inputName,inputOptions,softVersions,analysisOptions, "libPWGmuon.so /Users/audurier/Documents/Analysis/LHC_15n_pp/MuMuPar/AddTaskMuMu.C",". $ALICE_ROOT/include $ALICE_PHYSICS/include");
+    SetupAnalysis(runMode,analysisMode,inputName,inputOptions,softVersions,analysisOptions, "libPWGmuon.so /Users/audurier/Documents/Analysis/LHC_15n_pp/AccEff_jpsi/MCPart", ". $ALICE_ROOT/include $ALICE_PHYSICS/include");
 
     TString outputdir = "Analysis/LHC15n/MuMu/";
 

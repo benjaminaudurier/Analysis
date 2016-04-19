@@ -9,8 +9,8 @@
 #include <iostream>
 #include <vector>
 
-TString rootVersion = "v5-34-30";
-TString aliphysicsVersion = "vAN-20160116-1";
+TString rootVersion = "v5-34-30-alice-22";
+TString aliphysicsVersion = "vAN-20160414-1";
 TString dataDir = "";
 TString dataPattern = "";
 TString runFormat = "%09d";
@@ -19,6 +19,9 @@ Int_t ttl = 30000;
 Int_t maxFilesPerJob = 100;
 Int_t maxMergeFiles = 10;
 Int_t maxMergeStages = 2;
+
+
+Bool_t splitDataset =kFALSE;
 
 // tune0 LHC15n jpsi
 // TString oldPtFormula =   "[0]*x / TMath::Power([1] + TMath::Power(x,[2]),[3])";
@@ -33,12 +36,12 @@ Int_t maxMergeStages = 2;
 // tune2 LHC15n jpsi
 TString oldPtFormula =   "[0]*x / TMath::Power([1] + TMath::Power(x,[2]),[3])";
 Double_t oldPtParam[4] =   {4654.3, 12.8133, 1.9647, 3.66641};
-Bool_t oldFixPtParam[4] = {kFALSE,kFALSE,kFALSE,kFALSE};
+Bool_t oldFixPtParam[4] = {kTRUE,kTRUE,kTRUE,kTRUE};
 
 
 TString newPtFormula = "[0]*x / TMath::Power([1] + TMath::Power(x,[2]),[3])";
 Double_t newPtParam[4] = {4654.3, 12.8133, 1.9647, 3.66641};
-Bool_t newFixPtParam[4] = {kFALSE,kFALSE,kFALSE,kFALSE};
+Bool_t newFixPtParam[4] = {kTRUE,kTRUE,kTRUE,kTRUE};
 
 Double_t ptRange[2] = {0., 50.};
 
@@ -70,10 +73,10 @@ Double_t yRange[2] = {-4., -2.5};
 Bool_t isMC = kTRUE;
 Bool_t applyPhysicsSelection = kFALSE;
 
-//For pT projection
+//For Y projection
 Int_t firstybin=lastybin=-1; // Projection bin in rapidity. No projection if =-1
-// For y Projection
-Int_t firstxbin=lastxbin=-1;
+// For pT Projection
+Int_t firstxbin=lastxbin=1;
 
 
 void UpdateParametersAndRanges(Int_t iStep);
@@ -93,7 +96,7 @@ void runGenTuner(TString smode = "local", TString inputFileName = "AliAOD.root",
 {
   /// Tune single muon kinematics distribution
 
-  gROOT->LoadMacro("$HOME/Documents/Analysis/Macro/Philippe/runTaskFacilities.C");
+  gROOT->LoadMacro("$HOME/Documents/PhilippeGitHub/Facilities/runTaskFacilities.C");
 
   // --- Check runing mode ---
   Int_t mode = GetMode(smode, inputFileName);
@@ -117,9 +120,9 @@ void runGenTuner(TString smode = "local", TString inputFileName = "AliAOD.root",
   // --- saf3 case ---
   if (mode == kSAF3Connect) {
     // run on SAF3
-    if (!RunAnalysisOnSAF3(fileList, aliphysicsVersion, inputFileName)) return;
+    if (!RunAnalysisOnSAF3(fileList, aliphysicsVersion, inputFileName, splitDataset)) return;
     // draw the results locally
-    outFile = TFile::Open(Form("Results_step%d.root", iStep),"READ");
+    outFile = TFile::Open(Form("Results_step%d.root",iStep),"READ");
     if (outFile && outFile->IsOpen()) {
       outFile->FindObjectAny("cRes")->Draw();
       outFile->FindObjectAny("cRat")->Draw();
@@ -130,7 +133,7 @@ void runGenTuner(TString smode = "local", TString inputFileName = "AliAOD.root",
   }
 
   // --- prepare environment ---
-  TString extraLibs="PWGmuon";
+  TString extraLibs="";
   TString extraIncs="include";
   TString extraTasks="AliAnalysisTaskGenTunerJpsi";
   TString extraPkgs="";
@@ -172,7 +175,7 @@ void runGenTuner(TString smode = "local", TString inputFileName = "AliAOD.root",
   }
 
   // save results of current step if running in a loop
-  if (iStep > -1) gSystem->Exec(Form("cp -f AnalysisResults.root Results_step%d.root", iStep));
+  if (iStep >= 0) gSystem->Exec(Form("cp -f %s Results_step%d.root", outFileName.Data(),iStep));
 }
 
 //______________________________________________________________________________
@@ -224,19 +227,19 @@ TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)
   if (!oc) return;
 
   // Get spectras
-  // AliAnalysisMuMuSpectra * spectraYVSPT =0x0;
+  AliAnalysisMuMuSpectra * spectraYVSPT =0x0;
   AliAnalysisMuMuSpectra * spectraPT =0x0;
   AliAnalysisMuMuSpectra * spectraY =0x0;
   Double_t* ptbin;
   Double_t* ybin;
-  // vector<double> ptBin;
-  // vector<double> yBin;
+  vector<double> ptBin;
+  vector<double> yBin;
   Int_t ptnofbin;
   Int_t ynofbin;
 
   // // Select spectra according to bin type
-  // spectraYVSPT = static_cast<AliAnalysisMuMuSpectra*>(oc->GetObject(Form("/%s/%s/%s/%s/PSI-YVSPT",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data())));
-  // if(!spectraYVSPT)cout << Form("Cannot find YVSPT spectra in /%s/%s/%s/%s/PSI-YVSPT",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data()) << endl;
+  spectraYVSPT = static_cast<AliAnalysisMuMuSpectra*>(oc->GetObject(Form("/%s/%s/%s/%s/PSI-YVSPT",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data())));
+  if(!spectraYVSPT)cout << Form("Cannot find YVSPT spectra in /%s/%s/%s/%s/PSI-YVSPT",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data()) << endl;
   spectraPT = static_cast<AliAnalysisMuMuSpectra*>(oc->GetObject(Form("/%s/%s/%s/%s/PSI-PT",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data())));
   if(!spectraPT)cout << Form("Cannot find PT spectra in /%s/%s/%s/%s/PSI-PT",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data()) << endl;
   spectraY = static_cast<AliAnalysisMuMuSpectra*>(oc->GetObject(Form("/%s/%s/%s/%s/PSI-Y",seventType.Data(),striggerDimuon.Data(),scentrality.Data(),spairCut.Data())));
@@ -279,18 +282,23 @@ TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)
     TH1* hpt = (TH1*)hYVSPT->ProjectionX("_px",firstybin,lastybin);// pT results with projection along the y axis
     TH1* hy  = (TH1*)hYVSPT->ProjectionY("_py",firstxbin,lastxbin);// y results with projection along the pT axis
 
+    // new TCanvas;
+    // hpt->DrawCopy();
+    // new TCanvas;
+    // hy->DrawCopy();
+    // return;
+
     if(lastxbin<0){ // Get bin w/o projection along the x axis
       ptbin = spectraYVSPT->Binning()->CreateBinArrayX();
       ptnofbin = spectraYVSPT->Binning()->GetNBinsX();
-    }
-    else { // Get bin w/ projection along the x axis
-      if(firstptbin < 1 ){printf("firstptbin is null \n"); return;};
-      if(firstptbin >hpt->GetXaxis()->GetNbins()){printf("bin does not exist \n"); return;};
+    } else { // Get bin w/ projection along the x axis
+      if(lastxbin < 1 ){printf("lastxbin is null \n"); return;};
+      if(lastxbin >hpt->GetXaxis()->GetNbins()){printf("bin does not exist \n"); return;};
 
       ptnofbin = lastxbin -firstxbin;
       if( ptnofbin>hpt->GetXaxis()->GetNbins()) ptnofbin = hpt->GetXaxis()->GetNbins() -1;
 
-      ptBin.push_back(hYVSPT->GetXaxis()->GetBinLowEdge(firstxbin))
+      ptBin.push_back(hYVSPT->GetXaxis()->GetBinLowEdge(firstxbin));
       ptBin.push_back(hYVSPT->GetXaxis()->GetBinUpEdge(firstxbin));
     }
 
@@ -375,7 +383,7 @@ void UpdateParametersAndRanges(Int_t iStep)
 {
   /// update the parameters and the fitting ranges from the previous step
 
-  if (iStep <= 0) return;
+  if (iStep < 1) return;
 
   TString inFileName = Form("Results_step%d.root",iStep-1);
   inFile = TFile::Open(inFileName.Data(),"READ");
