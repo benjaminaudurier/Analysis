@@ -295,7 +295,7 @@ void LoadAlirootOnProof(TString& aaf, TString rootVersion, TString aliphysicsVer
   // compile additional tasks on workers
   TObjArray* tasks = extraTasks.Tokenize(":");
   for (Int_t i = 0; i < tasks->GetEntriesFast(); i++)
-    gProof->Load(Form("%s.cxx+g",static_cast<TObjString*>(tasks->UncheckedAt(i))->GetName()), notOnClient);
+    gProof->Load(Form("%s.cxx++g",static_cast<TObjString*>(tasks->UncheckedAt(i))->GetName()), notOnClient);
   delete tasks;
   
 }
