@@ -85,7 +85,7 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
 
   task->SetBeamYear(beamYear);
 
-  AliAnalysisMuMuGlobal* globalAnalysis = 0x0 /*new AliAnalysisMuMuGlobal*/; // Basic histograms analysis;
+  AliAnalysisMuMuGlobal* globalAnalysis = new AliAnalysisMuMuGlobal; // Basic histograms analysis;
   AliAnalysisMuMuSingle* singleAnalysis = new AliAnalysisMuMuSingle;// Analysis dealing with single muon
   AliAnalysisMuMuMinv  * minvAnalysis = new AliAnalysisMuMuMinv;// Analysis creating invariant mass spectrum
     
@@ -153,6 +153,29 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
     binning->AddBin("psi","integrated");
      // pt binning
     binning->AddBin("psi","pt", 1.0, 8.0,"BENJ");
+
+
+      // pt binning
+    binning->AddBin("psi","pt", 0.0, 1.0,"BENJ");
+    binning->AddBin("psi","pt", 1.0, 2.0,"BENJ");
+    binning->AddBin("psi","pt", 2.0, 3.0,"BENJ");
+    binning->AddBin("psi","pt", 3.0, 4.0,"BENJ");
+    binning->AddBin("psi","pt", 4.0, 5.0,"BENJ");
+    binning->AddBin("psi","pt", 5.0, 6.0,"BENJ");
+    binning->AddBin("psi","pt", 6.0, 7.0,"BENJ");
+    binning->AddBin("psi","pt", 7.0, 8.0,"BENJ");
+    binning->AddBin("psi","pt", 8.0, 9.0,"BENJ");
+    binning->AddBin("psi","pt", 9.0, 10.0,"BENJ");
+    binning->AddBin("psi","pt", 10.0, 12.0,"BENJ");
+  
+    // y binning
+    binning->AddBin("psi","y",-4,-3.75,"BENJ");
+    binning->AddBin("psi","y",-3.75,-3.5,"BENJ");
+    binning->AddBin("psi","y",-3.5,-3.25,"BENJ");
+    binning->AddBin("psi","y",-3.25,-3,"BENJ");
+    binning->AddBin("psi","y",-3,-2.75,"BENJ");
+    binning->AddBin("psi","y",-2.75,-2.5,"BENJ"); 
+    
   }
   // v0 centrality binning
   binning->AddBin("centrality","V0M",0.,90.);

@@ -35,12 +35,7 @@ TString scentrality    ="V0M_00.00_90.00";
 
 TString param          =  "sJPsi,mJPsi,NofJPsi,SignalOverBkg3s,FitChi2PerNDF,Significance3s";
 
-
-Double_t FNorm         =15.22;
-Double_t BR            =0.005;
-
-void PrintDist(TObjString* swhat,Bool_t yield,AliAnalysisMuMu &ana);
-void PrintYield(AliAnalysisMuMuSpectra *spec,AliAnalysisMuMu &an,TObjString* cent);
+void PrintDist(TObjString* swhat,AliAnalysisMuMu &ana);
 
 //_____________________________________________________________________________
 void PrintFitMacro(char         * what ="PT",const char * printWhat = "distribution",int debug =0)
@@ -53,7 +48,6 @@ void PrintFitMacro(char         * what ="PT",const char * printWhat = "distribut
     Bool_t PrintDistribution = kFALSE;
     Bool_t Raa               = kFALSE; 
     Bool_t print             = kFALSE;
-    Bool_t yield             = kFALSE;
 
     TObjArray* sprint = TString(printWhat).Tokenize(",");
     TObjArray* sparam = TString(param).Tokenize(",");
@@ -62,7 +56,6 @@ void PrintFitMacro(char         * what ="PT",const char * printWhat = "distribut
     if(sprint->FindObject("raa")) Raa                        =kTRUE;
     if(sprint->FindObject("distribution")) PrintDistribution =kTRUE;
     if(sprint->FindObject("save")) print                     =kTRUE;
-    if(sprint->FindObject("yield")) yield                    =kTRUE;
 
 
     //General conf.
@@ -91,13 +84,13 @@ void PrintFitMacro(char         * what ="PT",const char * printWhat = "distribut
             else continue;
         }
 
-        if (PrintDistribution) PrintDist(swhat,yield,analysis);
+        if (PrintDistribution) PrintDist(swhat,analysis);
     }
     return ;    
 } 
 
 //___________________________________________
-void PrintDist(TObjString* swhat,Bool_t yield,AliAnalysisMuMu &ana)
+void PrintDist(TObjString* swhat,AliAnalysisMuMu &ana)
 {
     
 
@@ -119,25 +112,7 @@ void PrintDist(TObjString* swhat,Bool_t yield,AliAnalysisMuMu &ana)
         }
         new TCanvas;
         spectra->Plot("NofJPsi","",kTRUE)->DrawCopy("");
-
-        if (yield) PrintYield(spectra,ana,scent); 
     }
-
-    
-
 }
 
-//___________________________________________
-void PrintYield(AliAnalysisMuMuSpectra *spec,AliAnalysisMuMu &an,TObjString* cent)
-{
-    TH1* hyield = static_cast<TH1*>(spec->Plot("NofJPsi","",kTRUE)->Clone());
-    Double_t MUL = an.CC()->GetSum(Form("trigger:%s/centrality:%s/event:%s",striggerDimuon.Data(),cent->String().Data(),seventType.Data()));
-    // printf("Number of MUL = %0.f\n", MUL);
-    hyield->Scale(1/(MUL*FNorm*BR));
-
-    hyield->SetTitle(Form("J/psi Yield with MUL = %0.f and FNorm = %0.2f ",MUL,FNorm));
-    hyield->GetYaxis()->SetTitle(Form("Yield w/o AccxEff corr."));
-    new TCanvas;
-    hyield->DrawCopy("e0");
-}
 

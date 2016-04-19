@@ -24,7 +24,7 @@ AliAnalysisTask* runMuMu(TString runMode,
     gROOT->LoadMacro(gSystem->ExpandPathName("$TASKDIR/runTaskUtilities.C"));     
      
     // Macro to connect to proof. First argument useless for saf3
-    SetupAnalysis(runMode,analysisMode,inputName,inputOptions,softVersions,analysisOptions, "PWGmuon.par /Users/audurier/Documents/Analysis/LHC_15o_PbPb/MuMuPar/Data/AddTaskMuMu.C",". $ALICE_ROOT/include $ALICE_PHYSICS/include");
+    SetupAnalysis(runMode,analysisMode,inputName,inputOptions,softVersions,analysisOptions, "PWGmuon.par /Users/audurier/Documents/Analysis/LHC_15o_PbPb/MuMuPar/Data_0-0.3/AddTaskMuMu.C",". $ALICE_ROOT/include $ALICE_PHYSICS/include");
     
     TString outputdir = "Analysis/LHC15o/MuMuPar/";
     if(analysisMode.Contains("grid")) AliAnalysisManager::GetAnalysisManager()->GetGridHandler()->SetGridWorkingDir(outputdir.Data());
@@ -41,15 +41,7 @@ AliAnalysisTask* runMuMu(TString runMode,
         triggers->Add(new TObjString("CMUL7-B-NOPF-MUFAST"));// Dimuon
     }
     
-    // Load centrality task
-    //==============================================================================
-    // if(analysisOptions.Contains("NOPHYSSEL")&& analysisMode.Contains("local") ) {
-    //     gROOT->LoadMacro("$ALICE_PHYSICS/OADB/COMMON/MULTIPLICITY/macros/AddTaskMultSelection.C");
-    //     AliMultSelectionTask * task = AddTaskMultSelection(kFALSE); // user
-    //     task -> SetAlternateOADBforEstimators ("LHC15o");
-    // }
-
-     // TString Triggers = "CMUL7-B-NOPF-MUFAST";
+    // TString Triggers = "CMUL7-B-NOPF-MUFAST";
     // TString Triggers = "CINT7-B-NOPF-MUFAST,CINT7-B-NOPF-MUFAST&0MSL,CINT7-B-NOPF-MUFAST&0MUL,CMUL7-B-NOPF-MUFAST,CMSL7-B-NOPF-MUFAST,CMSL7-B-NOPF-MUFAST&0MUL";
     // TString inputs = "0MSL:17,0MSH:18,0MLL:19,0MUL:20,0V0M:3";
     
