@@ -61,7 +61,7 @@ Double_t oldYParam[2] = {1.18296, -0.0405994};
 Bool_t oldFixYParam[2] = {kFALSE, kFALSE};
 
 TString newYFormula = "[0] * ( 1 + [1]*x*x)";
-Double_t newYParam[2] =  {1.18296, -0.08};
+Double_t newYParam[2] =  {1.18296, -0.0405994};
 Bool_t newFixYParam[2] = {kFALSE, kFALSE};
 
 // TString newYFormula = "[0]*TMath::Exp(-(1./2.)*TMath::Power(((x-[1])/[2]),2))";
