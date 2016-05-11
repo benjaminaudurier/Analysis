@@ -1,0 +1,370 @@
+  *******************************************
+  *                                         *
+  *        W E L C O M E  to  R O O T       *
+  *                                         *
+  *   Version   5.34/30     23 April 2015   *
+  *                                         *
+  *  You are welcome to visit our Web site  *
+  *          http://root.cern.ch            *
+  *                                         *
+  *******************************************
+
+ROOT 5.34/30 (heads/alice/v5-34-30@v5-34-30-18-g19b634a, Jan 04 2016, 09:28:07 on macosx64)
+
+CINT/ROOT C/C++ Interpreter version 5.18.00, July 2, 2010
+Type ? for help. Commands must be C++ statements.
+Enclose multiple statements between { }.
+ Benjamin Audurier rootlogon.C
+
+Processing sim.C(6)...
+I-AliQAManager::Init: AliEn classes enabled in Root. AliCDBGrid factory registered.
+I-AliSimulation::SetRunQA: QA will be done on "MUON" for "Hits SDigits Digits"
+
+I-AliSimulation::ProcessEnvironmentVars: Processing environment variables
+I-AliSimulation::ProcessEnvironmentVars: Seed for random number generation = -1850292729 
+I-AliSimulation::ProcessEnvironmentVars: Run number = 244467
+I-AliSimulation::Run: fRunHLT is set to "", no attempt to extract HLT mode from GRP will be done
+I-AliCDBManager::Init: AliEn classes enabled in Root. AliCDBGrid factory registered.
+I-AliCDBGrid::AliCDBGrid: Connection to the Grid...
+=> Trying to connect to Server [1] root://pcapiserv08.cern.ch:10000 as User baudurie 
+I-AliCDBGrid::QueryCDB: Querying files valid for run 244467 and path "*" into CDB storage  "alien:///alice/data/2015/OCDB/"
+I-AliCDBGrid::QueryValidFiles: Only latest version will be returned
+I-AliCDBGrid::QueryCDB: 274 valid files found!
+I-AliCDBGrid::QueryCDB: Querying files valid for run 244467 and path "MUON/Align/Data" into CDB storage  "alien:///alice/simulation/2008/v4-15-Release/Full/"
+I-AliCDBGrid::QueryValidFiles: Only latest version will be returned
+I-AliCDBGrid::QueryCDB: 1 valid files found!
+I-AliCDBManager::Print: Run number = 244467; Cache is ACTIVE; Number of active storages: 2
+	*** Default Storage URI: "alien://?User=?DBFolder=/alice/data/2015/OCDB?SE=default?CacheFolder=?OperateDisconnected=1?CacheSize=1073741824?CleanupInterval=0"
+	*** Specific storage 1: Path "MUON/Align/Data" -> URI "alien://?User=?DBFolder=/alice/simulation/2008/v4-15-Release/Full?SE=default?CacheFolder=?OperateDisconnected=1?CacheSize=1073741824?CleanupInterval=0"
+
+I-AliSimulation::RunSimulation: initializing gAlice with config file Config.C
+     ****************************************************************
+     *                                                              *
+     *    You are running AliRoot version NewIO
+     *    The SVN version for the current program is $Id$
+     *                                                              *
+     ****************************************************************
+I-TAlienFile::Open: Accessing image 1 of alien:///alice/data/2015/OCDB/GRP/GRP/Data/Run244467_244467_v1_s0.root in SE <ALICE::CERN::OCDB>
+I-AliGRPManager::ReadGRPEntry: Found an AliGRPObject in GRP/GRP/Data, reading it
+E-AliGRPManager::SetMagField: GRP/GRP/Data entry:  missing value for the beam type ! Using UNKNOWN
+E-AliGRPManager::SetMagField: GRP/GRP/Data entry:  missing value for the beam energy ! Using 0
+I-AliMagF::CreateFieldMap: Assume no LHC magnet field for the beam type UNKNOWN, 
+I-AliMagF::Print: MagneticFieldMap:L3: +30000 Dip: +5999 kA;  | Polarities in LHC convention
+I-AliMagF::Print: Solenoid (+1.00*)5 kG, Dipole ON (+1.00) 
+I-AliMagF::Print: Machine B fields for No Beam beam (0 GeV): QGrad: 0.0000 Dipole: 0.0000
+I-AliMagF::Print: Uses Sol30_Dip6_Hole of $(ALICE_ROOT)/data/maps/mfchebKGI_sym.root
+I-TGeoGlobalMagField::SetField: Global magnetic field set to <MagneticFieldMap>
+I-TGeoGlobalMagField::Lock: Global magnetic field <MagneticFieldMap> is now locked
+I-AliGRPManager::SetMagField: Running with the B field constructed out of GRP !
+I-AliSimulation::RunSimulation: Field is locked now. It cannot be changed in Config.C
+Run type set to kMuon
+Energy set to 5000 GeV
+Config.C: Seed for random number generation= 2444674567
+Config.C: Creating Run Loader ...
+
+ MZSTOR.  ZEBRA table base TAB(0) in /MZCC/ at adr   134114935     7FE6E77 HEX
+
+ MZSTOR.  Initialize Store  0  in /GCBANK/
+          with Store/Table at absolute adrs   128704869   134114935
+                                        HEX     7ABE165     7FE6E77
+                                        HEX    FFAD7132           0
+                              relative adrs    -5410510           0
+          with     1 Str. in     2 Links in   5300 Low words in 4999970 words.
+          This store has a fence of   16 words.
+
+ MZLOGL.  Set Log Level 0 for store  0
+1*****  GEANT Version  3.21/11 Released on 100298
+0*****  Correction Cradle Version  0.1100
+
+ MZDIV.   Initialize Division  Constant  in Store  0
+          NW/NWMAX=   20004000000,  MODE/KIND=  1  2
+          Division 20 initialized.
+
+ MZLINK.  Initialize Link Area  /GCLINK/  for Store  0 NL/NS=    20    20
+
+ MZLINK.  Initialize Link Area  /GCSLNK/  for Store  0 NL/NS=   100   100
+1                                                                              
+ ******************************************************************************
+ ******************************************************************************
+ **                                                                          **
+ **                                                                          **
+ **              *......*                  Welcome to the Lund Monte Carlo!  **
+ **         *:::!!:::::::::::*                                               **
+ **      *::::::!!::::::::::::::*          PPP  Y   Y TTTTT H   H III   A    **
+ **    *::::::::!!::::::::::::::::*        P  P  Y Y    T   H   H  I   A A   **
+ **   *:::::::::!!:::::::::::::::::*       PPP    Y     T   HHHHH  I  AAAAA  **
+ **   *:::::::::!!:::::::::::::::::*       P      Y     T   H   H  I  A   A  **
+ **    *::::::::!!::::::::::::::::*!       P      Y     T   H   H III A   A  **
+ **      *::::::!!::::::::::::::* !!                                         **
+ **      !! *:::!!:::::::::::*    !!       This is PYTHIA version 6.214      **
+ **      !!     !* -><- *         !!       Last date of change: 22 Jan 2003  **
+ **      !!     !!                !!                                         **
+ **      !!     !!                !!       Now is  0 Jan 2000 at  0:00:00    **
+ **      !!                       !!                                         **
+ **      !!        lh             !!       Disclaimer: this program comes    **
+ **      !!                       !!       without any guarantees. Beware    **
+ **      !!                 hh    !!       of errors and use common sense    **
+ **      !!    ll                 !!       when interpreting results.        **
+ **      !!                       !!                                         **
+ **      !!                                Copyright T. Sjostrand (2003)     **
+ **                                                                          **
+ ** An archive of program versions and documentation is found on the web:    **
+ ** http://www.thep.lu.se/~torbjorn/Pythia.html                              **
+ **                                                                          **
+ ** When you cite this program, currently the official reference is          **
+ ** T. Sjostrand, P. Eden, C. Friberg, L. Lonnblad, G. Miu, S. Mrenna and    **
+ ** E. Norrbin, Computer Physics Commun. 135 (2001) 238.                     **
+ ** The large manual is                                                      **
+ ** T. Sjostrand, L. Lonnblad and S. Mrenna, LU TP 01-21 [hep-ph/0108264].   **
+ ** Also remember that the program, to a large extent, represents original   **
+ ** physics research. Other publications of special relevance to your        **
+ ** studies may therefore deserve separate mention.                          **
+ **                                                                          **
+ ** Main author: Torbjorn Sjostrand; Department of Theoretical Physics 2,    **
+ **   Lund University, Solvegatan 14A, S-223 62 Lund, Sweden;                **
+ **   phone: + 46 - 46 - 222 48 16; e-mail: torbjorn@thep.lu.se              **
+
+ 
+ Diamond size x-y:  4.963e-03 z:  5.300e+00
+ 
+EvtGen:Defining EvtPhotosEngine using photonType = gamma
+EvtGen:Setting up PHOTOS.
+EvtGen:Using EvtGen random number engine also for Photos++
+Message from PHCORK(MODCOR):: initialization
+MODOP=5 -- corrects Energy from mass+flow
+
+********************************************************************************
+
+                            =========================
+                              PHOTOS, Version:  3.56
+                              Released at:  3/5/14
+                            =========================
+
+                     Photos QED corrections in Particle Decays
+
+           Monte Carlo Program - by E. Barberio, B. van Eijk and Z. Was
+           From version 2.09   - by P. Golonka and Z. Was
+           From version 3.00   - by N. Davidson, T. Przedzinski and Z. Was
+********************************************************************************
+
+                  Internal (default) input parameters: 
+
+                    INTERF= 1 ISEC= 0 ITRE= 0 IEXP= 1 IFTOP= 1 IFW= 1
+                    ALPHA_QED= 0x1.de3d3945c2bf2p-8 XPHCUT= 0x1.ad7f29abcaf48p-24
+
+                    Option with interference is active
+                    Option with exponentiation is active EPSEXP=0x1.a36e2eb1c432dp-14
+                    Emision in t tbar production is active
+                    Correction wt in decay of W is active
+
+          WARNING:  /HEPEVT/ is not anymore used.
+
+********************************************************************************
+MODOP=2 -- blocks emission in Kl  to gamma e+e-: DEFAULT
+MODOP=2 -- blocks emission in pi0 to gamma e+e-: DEFAULT
+ IPHQRK_setQarknoEmission MODOP=1 -- blocks emission from light quarks:  DEFAULT
+Message from PHCORK(MODCOR):: initialization
+MODOP=5 -- corrects Energy from mass+flow
+EvtGen:Defining EvtPythiaEngine: data tables defined in /Users/audurier/alicesw/aliroot/master/inst/PYTHIA8/pythia8210/xmldoc
+EvtGen:Pythia 6 codes in decay files will be converted to Pythia 8 codes
+EvtGen:Using EvtGen random engine for Pythia 8 as well
+EvtGen:Creating generic Pythia generator
+
+ *------------------------------------------------------------------------------------* 
+ |                                                                                    | 
+ |  *------------------------------------------------------------------------------*  | 
+ |  |                                                                              |  | 
+ |  |                                                                              |  | 
+ |  |   PPP   Y   Y  TTTTT  H   H  III    A      Welcome to the Lund Monte Carlo!  |  | 
+ |  |   P  P   Y Y     T    H   H   I    A A     This is PYTHIA version 8.210      |  | 
+ |  |   PPP     Y      T    HHHHH   I   AAAAA    Last date of change: 29 Jun 2015  |  | 
+ |  |   P       Y      T    H   H   I   A   A                                      |  | 
+ |  |   P       Y      T    H   H  III  A   A    Now is 11 Apr 2016 at 17:05:12    |  | 
+ |  |                                                                              |  | 
+ |  |   Torbjorn Sjostrand;  Department of Astronomy and Theoretical Physics,      |  | 
+ |  |      Lund University, Solvegatan 14A, SE-223 62 Lund, Sweden;                |  | 
+ |  |      e-mail: torbjorn@thep.lu.se                                             |  | 
+ |  |   Jesper Roy Christiansen;  Department of Astronomy and Theoretical Physics, |  | 
+ |  |      Lund University, Solvegatan 14A, SE-223 62 Lund, Sweden;                |  | 
+ |  |      e-mail: Jesper.Roy.Christiansen@thep.lu.se                              |  | 
+ |  |   Nishita Desai;  Institut fuer Theoretische Physik,                         |  | 
+ |  |     Universitaet Heidelberg, Philosophenweg 16, D-69120 Heidelberg, Germany; |  | 
+ |  |      e-mail: n.desai@thphys.uni-heidelberg.de                                |  | 
+ |  |   Philip Ilten;  Massachusetts Institute of Technology,                      |  | 
+ |  |      stationed at CERN, CH-1211 Geneva 23, Switzerland;                      |  | 
+ |  |      e-mail: philten@cern.ch                                                 |  | 
+ |  |   Stephen Mrenna;  Computing Division, Simulations Group,                    |  | 
+ |  |      Fermi National Accelerator Laboratory, MS 234, Batavia, IL 60510, USA;  |  | 
+ |  |      e-mail: mrenna@fnal.gov                                                 |  | 
+ |  |   Stefan Prestel;  Theoretical Physics Group,                                |  | 
+ |  |      SLAC National Accelerator Laboratory, Menlo Park, CA 94025, USA;        |  | 
+ |  |      e-mail: prestel@slac.stanford.edu                                       |  | 
+ |  |   Christine O. Rasmussen;  Department of Astronomy and Theoretical Physics,  |  | 
+ |  |      Lund University, Solvegatan 14A, SE-223 62 Lund, Sweden;                |  | 
+ |  |      e-mail: christine.rasmussen@thep.lu.se                                  |  | 
+ |  |   Peter Skands;  School of Physics,                                          |  | 
+ |  |      Monash University, PO Box 27, 3800 Melbourne, Australia;                |  | 
+ |  |      e-mail: peter.skands@monash.edu                                         |  | 
+ |  |                                                                              |  | 
+ |  |   The main program reference is 'An Introduction to PYTHIA 8.2',             |  | 
+ |  |   T. Sjostrand et al, Comput. Phys. Commun. 191 (2005) 159                   |  | 
+ |  |   [arXiv:1410.3012 [hep-ph]]                                                 |  | 
+ |  |                                                                              |  | 
+ |  |   The main physics reference is the 'PYTHIA 6.4 Physics and Manual',         |  | 
+ |  |   T. Sjostrand, S. Mrenna and P. Skands, JHEP05 (2006) 026 [hep-ph/0603175]  |  | 
+ |  |                                                                              |  | 
+ |  |   An archive of program versions and documentation is found on the web:      |  | 
+ |  |   http://www.thep.lu.se/Pythia                                               |  | 
+ |  |                                                                              |  | 
+ |  |   This program is released under the GNU General Public Licence version 2.   |  | 
+ |  |   Please respect the MCnet Guidelines for Event Generator Authors and Users. |  | 
+ |  |                                                                              |  | 
+ |  |   Disclaimer: this program comes without any guarantees.                     |  | 
+ |  |   Beware of errors and use common sense when interpreting results.           |  | 
+ |  |                                                                              |  | 
+ |  |   Copyright (C) 2015 Torbjorn Sjostrand                                      |  | 
+ |  |                                                                              |  | 
+ |  |                                                                              |  | 
+ |  *------------------------------------------------------------------------------*  | 
+ |                                                                                    | 
+ *------------------------------------------------------------------------------------* 
+
+EvtGen:Creating alias Pythia generator
+
+ *------------------------------------------------------------------------------------* 
+ |                                                                                    | 
+ |  *------------------------------------------------------------------------------*  | 
+ |  |                                                                              |  | 
+ |  |                                                                              |  | 
+ |  |   PPP   Y   Y  TTTTT  H   H  III    A      Welcome to the Lund Monte Carlo!  |  | 
+ |  |   P  P   Y Y     T    H   H   I    A A     This is PYTHIA version 8.210      |  | 
+ |  |   PPP     Y      T    HHHHH   I   AAAAA    Last date of change: 29 Jun 2015  |  | 
+ |  |   P       Y      T    H   H   I   A   A                                      |  | 
+ |  |   P       Y      T    H   H  III  A   A    Now is 11 Apr 2016 at 17:05:12    |  | 
+ |  |                                                                              |  | 
+ |  |   Torbjorn Sjostrand;  Department of Astronomy and Theoretical Physics,      |  | 
+ |  |      Lund University, Solvegatan 14A, SE-223 62 Lund, Sweden;                |  | 
+ |  |      e-mail: torbjorn@thep.lu.se                                             |  | 
+ |  |   Jesper Roy Christiansen;  Department of Astronomy and Theoretical Physics, |  | 
+ |  |      Lund University, Solvegatan 14A, SE-223 62 Lund, Sweden;                |  | 
+ |  |      e-mail: Jesper.Roy.Christiansen@thep.lu.se                              |  | 
+ |  |   Nishita Desai;  Institut fuer Theoretische Physik,                         |  | 
+ |  |     Universitaet Heidelberg, Philosophenweg 16, D-69120 Heidelberg, Germany; |  | 
+ |  |      e-mail: n.desai@thphys.uni-heidelberg.de                                |  | 
+ |  |   Philip Ilten;  Massachusetts Institute of Technology,                      |  | 
+ |  |      stationed at CERN, CH-1211 Geneva 23, Switzerland;                      |  | 
+ |  |      e-mail: philten@cern.ch                                                 |  | 
+ |  |   Stephen Mrenna;  Computing Division, Simulations Group,                    |  | 
+ |  |      Fermi National Accelerator Laboratory, MS 234, Batavia, IL 60510, USA;  |  | 
+ |  |      e-mail: mrenna@fnal.gov                                                 |  | 
+ |  |   Stefan Prestel;  Theoretical Physics Group,                                |  | 
+ |  |      SLAC National Accelerator Laboratory, Menlo Park, CA 94025, USA;        |  | 
+ |  |      e-mail: prestel@slac.stanford.edu                                       |  | 
+ |  |   Christine O. Rasmussen;  Department of Astronomy and Theoretical Physics,  |  | 
+ |  |      Lund University, Solvegatan 14A, SE-223 62 Lund, Sweden;                |  | 
+ |  |      e-mail: christine.rasmussen@thep.lu.se                                  |  | 
+ |  |   Peter Skands;  School of Physics,                                          |  | 
+ |  |      Monash University, PO Box 27, 3800 Melbourne, Australia;                |  | 
+ |  |      e-mail: peter.skands@monash.edu                                         |  | 
+ |  |                                                                              |  | 
+ |  |   The main program reference is 'An Introduction to PYTHIA 8.2',             |  | 
+ |  |   T. Sjostrand et al, Comput. Phys. Commun. 191 (2005) 159                   |  | 
+ |  |   [arXiv:1410.3012 [hep-ph]]                                                 |  | 
+ |  |                                                                              |  | 
+ |  |   The main physics reference is the 'PYTHIA 6.4 Physics and Manual',         |  | 
+ |  |   T. Sjostrand, S. Mrenna and P. Skands, JHEP05 (2006) 026 [hep-ph/0603175]  |  | 
+ |  |                                                                              |  | 
+ |  |   An archive of program versions and documentation is found on the web:      |  | 
+ |  |   http://www.thep.lu.se/Pythia                                               |  | 
+ |  |                                                                              |  | 
+ |  |   This program is released under the GNU General Public Licence version 2.   |  | 
+ |  |   Please respect the MCnet Guidelines for Event Generator Authors and Users. |  | 
+ |  |                                                                              |  | 
+ |  |   Disclaimer: this program comes without any guarantees.                     |  | 
+ |  |   Beware of errors and use common sense when interpreting results.           |  | 
+ |  |                                                                              |  | 
+ |  |   Copyright (C) 2015 Torbjorn Sjostrand                                      |  | 
+ |  |                                                                              |  | 
+ |  |                                                                              |  | 
+ |  *------------------------------------------------------------------------------*  | 
+ |                                                                                    | 
+ *------------------------------------------------------------------------------------* 
+
+EvtGen:Defining EvtTauolaEngine.
+EvtGen:Setting up TAUOLA.
+EvtGen:Using EvtGen random number engine also for Tauola++
+
+ *************************************
+ *     TAUOLA C++ Interface v1.1.4   *
+ *-----------------------------------*
+ *                                   *
+ *   (c) Nadia    Davidson,   (1,2)  *
+ *       Gizo     Nanava,     (3)    *
+ *       Tomasz   Przedzinski,(4)    *
+ *       Elzbieta Richter-Was,(2,4)  *
+ *       Zbigniew Was         (2,5)  *
+ *                                   *
+ *  1) Unimelb, Melbourne, Australia *
+ *  2)     INP, Krakow, Poland       *
+ *  3) University Bonn, Germany      *
+ *  4)      UJ, Krakow, Poland       *
+ *  5)    CERN, Geneva, Switzerland  *
+ *************************************
+Reading SANC input files.
+File 'table1-1.txt'  missing... skipped.
+File 'table2-2.txt'  missing... skipped.
+File 'table11-11.txt' missing... skipped.
+
+EvtGen:Initializing EvtGen
+EvtGen:Storing known decay models
+EvtGen:Defining EvtBcToNPi model: Bc -> V + npi and Bc -> P + npi decays
+from A.V. Berezhnoy, A.K. Likhoded, A.V. Luchinsky: Phys.Rev.D 82, 014012 (2010) and arXiV:1104.0808.
+EvtGen:Main decay file name  :/Users/audurier/alicesw/aliroot/master/inst/TEvtGen/EvtGen/DECAY.DEC
+EvtGen:PDT table file name   :/Users/audurier/alicesw/aliroot/master/inst/TEvtGen/EvtGen/evt.pdl
+EvtGen:In readDecayFile, reading:/Users/audurier/alicesw/aliroot/master/inst/TEvtGen/EvtGen/DECAY.DEC
+EvtGen:Warning, sum of branching fractions for omega is 0.994
+EvtGen:rescaled to one! 
+EvtGen:Warning, sum of branching fractions for phi is 0.999
+EvtGen:rescaled to one! 
+EvtGen:Warning, sum of branching fractions for f_2 is 0.999
+EvtGen:rescaled to one! 
+EvtGen:Warning, sum of branching fractions for chi_c1 is 0.996
+EvtGen:rescaled to one! 
+EvtGen:Warning, sum of branching fractions for Upsilon(2S) is 0.992
+EvtGen:rescaled to one! 
+EvtGen:Warning, sum of branching fractions for Upsilon(3S) is 0.999
+EvtGen:rescaled to one! 
+EvtGen:Mixing type integer set to 1
+EvtGen:Done initializing EvtGen
+EvtGen:In readDecayFile, reading:/Users/audurier/alicesw/aliroot/master/inst/TEvtGen/EvtGen/DecayTable/DIMUON.DEC
+EvtGen:Redefined decay of rho0
+EvtGen:Redefined decay of phi
+EvtGen:Redefined decay of eta
+EvtGen:Redefined decay of omega
+EvtGen:Redefined decay of J/psi
+EvtGen:Redefined decay of psi(2S)
+EvtGen:Redefined decay of Upsilon
+EvtGen:Redefined decay of Upsilon(2S)
+EvtGen:Redefined decay of Upsilon(3S)
+I-TAlienFile::Open: Accessing image 1 of alien:///alice/data/2015/OCDB/MUON/Calib/MappingData/Run0_999999999_v1_s0.root in SE <ALICE::CERN::OCDB>
+I-AliSimulation::RunSimulation: Generated events TimeStamps will be set to 0
+########## AliMC::AddParticles
+E-TGeant3TGeo::SetParticle: Particle already exists.
+Particle -311 not in geant
+Particle 311 not in geant
+ <message repeated 1 time>
+I-TGeoManager::TGeoManager: Geometry ALICE, ALICE geometry created
+I-AliMC::ConstructGeometry:       BODY R:0.00s C:0.00s
+I-AliMC::ConstructGeometry:        MAG R:0.00s C:0.01s
+I-AliMC::ConstructGeometry:       ABSO R:0.00s C:0.00s
+I-AliMC::ConstructGeometry:       DIPO R:0.00s C:0.01s
+I-AliMC::ConstructGeometry:       HALL R:0.00s C:0.00s
+I-AliMC::ConstructGeometry:      FRAME R:0.00s C:0.00s
+I-AliMC::ConstructGeometry:       SHIL R:0.00s C:0.00s
+I-AliMC::ConstructGeometry:       PIPE R:0.00s C:0.01s
+I-AliMC::ConstructGeometry:        ITS R:0.18s C:0.17s
+I-AliMC::ConstructGeometry:        FMD R:0.03s C:0.03s
+## In AliMUONTriggerGeometryBuilder 0
+## In AliMUONTriggerGeometryBuilder 1
+## In AliMUONTriggerGeometryBuilder 2
+## In AliMUONTriggerGeometryBuilder 3
