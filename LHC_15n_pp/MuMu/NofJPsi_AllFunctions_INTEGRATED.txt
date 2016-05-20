@@ -1,0 +1,38 @@
+ ================================================================ 
+                       Number of PSI
+ ================================================================ 
+ -_-_-_-_- INTEGRATED_/PSMUL/CMUL7-B-NOPF-MUFAST/PP/pALLPAIRYPAIRPTIN0.0-12.0RABSMATCHLOWETAPDCA/PSI-INTEGRATED -_-_-_-_- 
+ -------- 
+ -- subresult CB2VWG_1.7_4.8_SP1.2 :  8943 +/- 132 
+ -------- 
+ -- subresult CB2VWG_2.0_4.5_SP1.2 :  8968 +/- 130 
+ -------- 
+ -- subresult CB2VWG2_1.7_4.8_SP1.2 :  8928 +/- 133 
+ -------- 
+ -- subresult CB2VWG2_2.0_4.5_SP1.2 :  8982 +/- 140 
+ -------- 
+ -- subresult CB2POL1POL2_1.7_4.8_SP1.2 :  8671 +/- 121 
+ -------- 
+ -- subresult CB2POL1POL2_2.0_4.5_SP1.2 :  8865 +/- 127 
+ -------- 
+ -- subresult CB2POL2POL3_1.7_4.8_SP1.2 :  8927 +/- 131 
+ -------- 
+ -- subresult CB2POL2POL3_2.0_4.5_SP1.2 :  9018 +/- 139 
+ -------- 
+ -- subresult NA60NEWVWG_1.7_4.8_SP1.2 :  8839 +/- 120 
+ -------- 
+ -- subresult NA60NEWVWG_2.0_4.5_SP1.2 :  8895 +/- 119 
+ -------- 
+ -- subresult NA60NEWVWG2_1.7_4.8_SP1.2 :  8822 +/- 0 
+ -------- 
+ -- subresult NA60NEWVWG2_2.0_4.5_SP1.2 :  8863 +/- 117 
+ -------- 
+ -- subresult NA60NEWPOL1POL2_1.7_4.8_SP1.2 :  8853 +/- 123 
+ -------- 
+ -- subresult NA60NEWPOL1POL2_2.0_4.5_SP1.2 :  8880 +/- 242 
+ -------- 
+ -- subresult NA60NEWPOL2POL3_1.7_4.8_SP1.2 :  8861 +/- 127 
+ -------- 
+ -- subresult NA60NEWPOL2POL3_2.0_4.5_SP1.2 :  8916 +/- 129 
+ -------- 
+ ------ Mean :  8894 +/- 138 +/- 81 ------ 

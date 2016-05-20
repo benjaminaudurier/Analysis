@@ -1,0 +1,219 @@
+root [5] PrintFitMacro("Y")
+ ================================================================ 
+                       Number of PSI
+ ================================================================ 
+ -_-_-_-_- Y_BENJ_m4.00_m3.75_/PSMUL/CMUL7-B-NOPF-MUFAST/PP/pALLPAIRYPAIRPTIN0.0-12.0RABSMATCHLOWETAPDCA/PSI-Y -_-_-_-_- 
+ -------- 
+ -- subresult CB2VWG_1.7_4.8_SP1.2 :  446 +/- 27 
+ -------- 
+ -- subresult CB2VWG_2.0_4.5_SP1.2 :  438 +/- 27 
+ -------- 
+ -- subresult CB2VWG2_1.7_4.8_SP1.2 :  424 +/- 0 
+ -------- 
+ -- subresult CB2VWG2_2.0_4.5_SP1.2 :  445 +/- 35 
+ -------- 
+ -- subresult CB2POL1POL2_1.7_4.8_SP1.2 :  431 +/- 27 
+ -------- 
+ -- subresult CB2POL1POL2_2.0_4.5_SP1.2 :  447 +/- 30 
+ -------- 
+ -- subresult CB2POL2POL3_1.7_4.8_SP1.2 :  420 +/- 28 
+ -------- 
+ -- subresult CB2POL2POL3_2.0_4.5_SP1.2 :  445 +/- 30 
+ -------- 
+ -- subresult NA60NEWVWG_1.7_4.8_SP1.2 :  441 +/- 28 
+ -------- 
+ -- subresult NA60NEWVWG_2.0_4.5_SP1.2 :  430 +/- 69 
+ -------- 
+ -- subresult NA60NEWVWG2_1.7_4.8_SP1.2 :  417 +/- 26 
+ -------- 
+ -- subresult NA60NEWVWG2_2.0_4.5_SP1.2 :  437 +/- 65 
+ -------- 
+ -- subresult NA60NEWPOL1POL2_1.7_4.8_SP1.2 :  426 +/- 25 
+ -------- 
+ -- subresult NA60NEWPOL1POL2_2.0_4.5_SP1.2 :  427 +/- 63 
+ -------- 
+ -- subresult NA60NEWPOL2POL3_1.7_4.8_SP1.2 :  423 +/- 26 
+ -------- 
+ -- subresult NA60NEWPOL2POL3_2.0_4.5_SP1.2 :  440 +/- 27 
+ -------- 
+ ------ Mean :  434 +/- 39 +/- 10 ------ 
+
+ -_-_-_-_- Y_BENJ_m3.75_m3.50_/PSMUL/CMUL7-B-NOPF-MUFAST/PP/pALLPAIRYPAIRPTIN0.0-12.0RABSMATCHLOWETAPDCA/PSI-Y -_-_-_-_- 
+ -------- 
+ -- subresult CB2VWG_1.7_4.8_SP1.2 :  1409 +/- 48 
+ -------- 
+ -- subresult CB2VWG_2.0_4.5_SP1.2 :  1419 +/- 52 
+ -------- 
+ -- subresult CB2VWG2_1.7_4.8_SP1.2 :  1407 +/- 0 
+ -------- 
+ -- subresult CB2VWG2_2.0_4.5_SP1.2 :  1393 +/- 0 
+ -------- 
+ -- subresult CB2POL1POL2_1.7_4.8_SP1.2 :  1404 +/- 49 
+ -------- 
+ -- subresult CB2POL1POL2_2.0_4.5_SP1.2 :  1399 +/- 50 
+ -------- 
+ -- subresult CB2POL2POL3_1.7_4.8_SP1.2 :  1386 +/- 49 
+ -------- 
+ -- subresult CB2POL2POL3_2.0_4.5_SP1.2 :  1397 +/- 51 
+ -------- 
+ -- subresult NA60NEWVWG_1.7_4.8_SP1.2 :  1399 +/- 46 
+ -------- 
+ -- subresult NA60NEWVWG_2.0_4.5_SP1.2 :  1404 +/- 50 
+ -------- 
+ -- subresult NA60NEWVWG2_1.7_4.8_SP1.2 :  1375 +/- 0 
+ -------- 
+ -- subresult NA60NEWVWG2_2.0_4.5_SP1.2 :  1379 +/- 0 
+ -------- 
+ -- subresult NA60NEWPOL1POL2_1.7_4.8_SP1.2 :  1372 +/- 45 
+ -------- 
+ -- subresult NA60NEWPOL1POL2_2.0_4.5_SP1.2 :  1388 +/- 49 
+ -------- 
+ -- subresult NA60NEWPOL2POL3_1.7_4.8_SP1.2 :  1374 +/- 45 
+ -------- 
+ -- subresult NA60NEWPOL2POL3_2.0_4.5_SP1.2 :  1382 +/- 47 
+ -------- 
+ ------ Mean :  1394 +/- 48 +/- 14 ------ 
+
+ -_-_-_-_- Y_BENJ_m3.50_m3.25_/PSMUL/CMUL7-B-NOPF-MUFAST/PP/pALLPAIRYPAIRPTIN0.0-12.0RABSMATCHLOWETAPDCA/PSI-Y -_-_-_-_- 
+ -------- 
+ -- subresult CB2VWG_1.7_4.8_SP1.2 :  2196 +/- 67 
+ -------- 
+ -- subresult CB2VWG_2.0_4.5_SP1.2 :  2198 +/- 59 
+ -------- 
+ -- subresult CB2VWG2_1.7_4.8_SP1.2 :  3099 +/- 0 
+ -------- 
+ -- subresult CB2VWG2_2.0_4.5_SP1.2 :  2201 +/- 0 
+ -------- 
+ -- subresult CB2POL1POL2_1.7_4.8_SP1.2 :  2178 +/- 65 
+ -------- 
+ -- subresult CB2POL1POL2_2.0_4.5_SP1.2 :  2167 +/- 62 
+ -------- 
+ -- subresult CB2POL2POL3_1.7_4.8_SP1.2 :  2165 +/- 61 
+ -------- 
+ -- subresult CB2POL2POL3_2.0_4.5_SP1.2 :  2159 +/- 63 
+ -------- 
+ -- subresult NA60NEWVWG_1.7_4.8_SP1.2 :  2149 +/- 56 
+ -------- 
+ -- subresult NA60NEWVWG_2.0_4.5_SP1.2 :  2182 +/- 0 
+ -------- 
+ -- subresult NA60NEWVWG2_1.7_4.8_SP1.2 :  2148 +/- 65 
+ -------- 
+ -- subresult NA60NEWVWG2_2.0_4.5_SP1.2 :  2149 +/- 63 
+ -------- 
+ -- subresult NA60NEWPOL1POL2_1.7_4.8_SP1.2 :  2161 +/- 57 
+ -------- 
+ -- subresult NA60NEWPOL1POL2_2.0_4.5_SP1.2 :  2165 +/- 117 
+ -------- 
+ -- subresult NA60NEWPOL2POL3_1.7_4.8_SP1.2 :  2150 +/- 103 
+ -------- 
+ -- subresult NA60NEWPOL2POL3_2.0_4.5_SP1.2 :  2142 +/- 0 
+ -------- 
+ ------ Mean :  2165 +/- 72 +/- 17 ------ 
+
+ -_-_-_-_- Y_BENJ_m3.25_m3.00_/PSMUL/CMUL7-B-NOPF-MUFAST/PP/pALLPAIRYPAIRPTIN0.0-12.0RABSMATCHLOWETAPDCA/PSI-Y -_-_-_-_- 
+ -------- 
+ -- subresult CB2VWG_1.7_4.8_SP1.2 :  2430 +/- 64 
+ -------- 
+ -- subresult CB2VWG_2.0_4.5_SP1.2 :  2415 +/- 76 
+ -------- 
+ -- subresult CB2VWG2_1.7_4.8_SP1.2 :  2446 +/- 0 
+ -------- 
+ -- subresult CB2VWG2_2.0_4.5_SP1.2 :  2053 +/- 0 
+ -------- 
+ -- subresult CB2POL1POL2_1.7_4.8_SP1.2 :  2397 +/- 146 
+ -------- 
+ -- subresult CB2POL1POL2_2.0_4.5_SP1.2 :  2419 +/- 149 
+ -------- 
+ -- subresult CB2POL2POL3_1.7_4.8_SP1.2 :  2431 +/- 0 
+ -------- 
+ -- subresult CB2POL2POL3_2.0_4.5_SP1.2 :  2417 +/- 71 
+ -------- 
+ -- subresult NA60NEWVWG_1.7_4.8_SP1.2 :  2422 +/- 64 
+ -------- 
+ -- subresult NA60NEWVWG_2.0_4.5_SP1.2 :  2391 +/- 143 
+ -------- 
+ -- subresult NA60NEWVWG2_1.7_4.8_SP1.2 :  2379 +/- 0 
+ -------- 
+ -- subresult NA60NEWVWG2_2.0_4.5_SP1.2 :  2394 +/- 75 
+ -------- 
+ -- subresult NA60NEWPOL1POL2_1.7_4.8_SP1.2 :  2386 +/- 140 
+ -------- 
+ -- subresult NA60NEWPOL1POL2_2.0_4.5_SP1.2 :  2396 +/- 70 
+ -------- 
+ -- subresult NA60NEWPOL2POL3_1.7_4.8_SP1.2 :  2381 +/- 65 
+ -------- 
+ -- subresult NA60NEWPOL2POL3_2.0_4.5_SP1.2 :  2391 +/- 66 
+ -------- 
+ ------ Mean :  2403 +/- 101 +/- 16 ------ 
+
+ -_-_-_-_- Y_BENJ_m3.00_m2.75_/PSMUL/CMUL7-B-NOPF-MUFAST/PP/pALLPAIRYPAIRPTIN0.0-12.0RABSMATCHLOWETAPDCA/PSI-Y -_-_-_-_- 
+ -------- 
+ -- subresult CB2VWG_1.7_4.8_SP1.2 :  1928 +/- 60 
+ -------- 
+ -- subresult CB2VWG_2.0_4.5_SP1.2 :  1954 +/- 64 
+ -------- 
+ -- subresult CB2VWG2_1.7_4.8_SP1.2 :  1921 +/- 61 
+ -------- 
+ -- subresult CB2VWG2_2.0_4.5_SP1.2 :  1948 +/- 64 
+ -------- 
+ -- subresult CB2POL1POL2_1.7_4.8_SP1.2 :  1923 +/- 60 
+ -------- 
+ -- subresult CB2POL1POL2_2.0_4.5_SP1.2 :  1953 +/- 62 
+ -------- 
+ -- subresult CB2POL2POL3_1.7_4.8_SP1.2 :  1923 +/- 132 
+ -------- 
+ -- subresult CB2POL2POL3_2.0_4.5_SP1.2 :  1950 +/- 61 
+ -------- 
+ -- subresult NA60NEWVWG_1.7_4.8_SP1.2 :  1919 +/- 59 
+ -------- 
+ -- subresult NA60NEWVWG_2.0_4.5_SP1.2 :  1939 +/- 124 
+ -------- 
+ -- subresult NA60NEWVWG2_1.7_4.8_SP1.2 :  1911 +/- 60 
+ -------- 
+ -- subresult NA60NEWVWG2_2.0_4.5_SP1.2 :  1933 +/- 62 
+ -------- 
+ -- subresult NA60NEWPOL1POL2_1.7_4.8_SP1.2 :  1915 +/- 59 
+ -------- 
+ -- subresult NA60NEWPOL1POL2_2.0_4.5_SP1.2 :  1936 +/- 62 
+ -------- 
+ -- subresult NA60NEWPOL2POL3_1.7_4.8_SP1.2 :  1909 +/- 59 
+ -------- 
+ -- subresult NA60NEWPOL2POL3_2.0_4.5_SP1.2 :  1937 +/- 120 
+ -------- 
+ ------ Mean :  1931 +/- 77 +/- 15 ------ 
+
+ -_-_-_-_- Y_BENJ_m2.75_m2.50_/PSMUL/CMUL7-B-NOPF-MUFAST/PP/pALLPAIRYPAIRPTIN0.0-12.0RABSMATCHLOWETAPDCA/PSI-Y -_-_-_-_- 
+ -------- 
+ -- subresult CB2VWG_1.7_4.8_SP1.2 :  600 +/- 34 
+ -------- 
+ -- subresult CB2VWG_2.0_4.5_SP1.2 :  607 +/- 37 
+ -------- 
+ -- subresult CB2VWG2_1.7_4.8_SP1.2 :  610 +/- 36 
+ -------- 
+ -- subresult CB2VWG2_2.0_4.5_SP1.2 :  606 +/- 37 
+ -------- 
+ -- subresult CB2POL1POL2_1.7_4.8_SP1.2 :  604 +/- 80 
+ -------- 
+ -- subresult CB2POL1POL2_2.0_4.5_SP1.2 :  609 +/- 36 
+ -------- 
+ -- subresult CB2POL2POL3_1.7_4.8_SP1.2 :  605 +/- 35 
+ -------- 
+ -- subresult CB2POL2POL3_2.0_4.5_SP1.2 :  609 +/- 82 
+ -------- 
+ -- subresult NA60NEWVWG_1.7_4.8_SP1.2 :  606 +/- 34 
+ -------- 
+ -- subresult NA60NEWVWG_2.0_4.5_SP1.2 :  612 +/- 36 
+ -------- 
+ -- subresult NA60NEWVWG2_1.7_4.8_SP1.2 :  615 +/- 79 
+ -------- 
+ -- subresult NA60NEWVWG2_2.0_4.5_SP1.2 :  611 +/- 37 
+ -------- 
+ -- subresult NA60NEWPOL1POL2_1.7_4.8_SP1.2 :  610 +/- 77 
+ -------- 
+ -- subresult NA60NEWPOL1POL2_2.0_4.5_SP1.2 :  613 +/- 76 
+ -------- 
+ -- subresult NA60NEWPOL2POL3_1.7_4.8_SP1.2 :  618 +/- 37 
+ -------- 
+ -- subresult NA60NEWPOL2POL3_2.0_4.5_SP1.2 :  613 +/- 36 
+ -------- 
+ ------ Mean :  609 +/- 53 +/- 4 ------ 
