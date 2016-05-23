@@ -4,58 +4,46 @@
 /// \author Benjamin Audurier
 ///
 
-
-// Sim :
-// Find;BasePath=/alice/cern.ch/user/l/laphecet/Analysis/LHC13d/simjpsi/CynthiaTuneWithRejectList/195760/;FileName=AliAOD.Muons.root
-// 
-// Data:
-// Find;BasePath=/alice/data/2013/LHC13d/000195760/ESDs/muon_pass2/AOD134;FileName=AliAOD.root
-
-
 //______________________________________________________________________________
 AliAnalysisTask* runMuMu(TString runMode, 
-                TString analysisMode,
-                TString inputName       = "Find;BasePath=/alice/data/2013/LHC13d/000195682/ESDs/muon_pass2/AOD134;FileName=AliAOD.root;Mode=cache;",
-                TString inputOptions    = "",
-                TString analysisOptions = "",
-                TString softVersions    = "aliphysics=vAN-20151115-1",
-                TString taskOptions     = "" )
+                        TString analysisMode,
+                        TString inputName       = "Find;FileName=AliAOD.Muons.root;BasePath=/alice/sim/2016/LHC16b1/244918/p80/*;",
+                        TString inputOptions    = "EMBED,AOD",
+                        TString analysisOptions = "",
+                        TString softVersions    = "",
+                        TString taskOptions     = "" )
 {
-    // path for macro usefull for saf3
-    gROOT->LoadMacro(gSystem->ExpandPathName("$TASKDIR/runTaskUtilities.C")); 
-    
+    gROOT->LoadMacro(gSystem->ExpandPathName("$TASKDIR/runTaskUtilities.C"));     
      
     // Macro to connect to proof. First argument useless for saf3
-    SetupAnalysis(runMode,analysisMode,inputName,inputOptions,softVersions,analysisOptions, "libPWGPPMUONlite.so","$ALICE_ROOT/include $ALICE_PHYSICS/include");
-    cout <<"toto"<< endl;
-    
+    SetupAnalysis(runMode,analysisMode,inputName,inputOptions,softVersions,analysisOptions, "PWGmuon.par /Users/audurier/Documents/Analysis/LHC_15o_PbPb/MuMu/Simulation/pt=0-8/AddTaskMuMu.C",". $ALICE_ROOT/include $ALICE_PHYSICS/include");    
+    TString outputdir = "Analysis/LHC15o/MuMuPar/";
+    if(analysisMode.Contains("grid")) AliAnalysisManager::GetAnalysisManager()->GetGridHandler()->SetGridWorkingDir(outputdir.Data());
+
     //Flag for MC
     Bool_t isMC = IsMC(inputOptions);
-    
-    
-    // Fill the trigger list with desired trigger combinations (See on ALICE log book for denomination)
-    //==============================================================================
+
     TList* triggers = new TList; // Create pointer for trigger list
     triggers->SetOwner(kTRUE); // Give rights to trigger liser
-    if (!isMC)
-    {
-        // pA trigger
-        triggers->Add(new TObjString("CINT7-B-NOPF-ALLNOTRD"));//MB
-        triggers->Add(new TObjString("CMUL7-B-NOPF-MUON"));// Dimuon
+    
+    if ( (isMC && inputOptions.Contains("EMBED")) || (!isMC && inputOptions.Contains("")) ) {
+        triggers->Add(new TObjString("CINT7-B-NOPF-MUFAST"));// Dimuon
     }
-  
-    // Load task
+    
+    // Load centrality task
     //==============================================================================
-    TString outputname = Form("%s.%s.MuMu.root",inputName.Data(),analysisMode.Data()); // Create output name in case of no dataset selected
-  	// TString outputname = AliAnalysisManager::GetAnalysisManager()->GetCommonFileName();
-    gROOT->LoadMacro("AddTaskMuMu.C");
-  	cout <<"tata"<< endl;
-    AddTaskMuMu(outputname.Data(),triggers,"pp2015",isMC);
+    // if(analysisOptions.Contains("NOPHYSSEL")&& analysisMode.Contains("local") ) {
+    //     gROOT->LoadMacro("$ALICE_PHYSICS/OADB/COMMON/MULTIPLICITY/macros/AddTaskMultSelection.C");
+    //     AliMultSelectionTask * task = AddTaskMultSelection(kFALSE); // user
+    //     task -> SetAlternateOADBforEstimators ("LHC15o");
+    // }
+
+    TString output = Form("%s",AliAnalysisManager::GetCommonFileName());
+    AddTaskMuMu(output.Data(),triggers,"PbPb2015",isMC);
     cout <<"add task mumu done"<< endl;
 
     // Start analysis
     //==============================================================================
-  
     StartAnalysis(runMode,analysisMode,inputName,inputOptions);     
    
     delete triggers;
