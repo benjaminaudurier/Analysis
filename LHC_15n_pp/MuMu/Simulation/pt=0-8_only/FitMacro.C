@@ -13,11 +13,12 @@
 #include <TObjString.h>
 #include <AliAnalysisMuMu.h>
 #include <TROOT.h>
+#include <TString.h>
 
-char           * sfile="AnalysisResults.JPSI.root";
-char           * sasso="";
-char           * sasso2="";
-char           * beamYear="mumu.pp2015.simu.config";
+char* sfile="AnalysisResults.JPSI.root";
+char* sasso="";
+char* sasso2="";
+char* beamYear="mumu.pp2015.simu.config";
 
 
 //_____________________________________________________________________________
@@ -30,12 +31,13 @@ void FitMacro( char* what ="pt",const char* printWhat = "", int debug =0 )
     Bool_t clean = kFALSE;
     Bool_t print = kFALSE;
 
-    TObjArray* sprint = TString(printWhat).Tokenize(",");
+    TString sprint (printWhat);
+    TString What (what);
 
     //Set bool
-    if(sprint->FindObject("rawcount")) rawcount =kTRUE;
-    if(sprint->FindObject("clean")) clean       =kTRUE;
-    if(sprint->FindObject("print")) print       =kTRUE;
+    if(sprint.Contains("rawcount")) rawcount =kTRUE;
+    if(sprint.Contains("clean")) clean       =kTRUE;
+    if(sprint.Contains("print")) print       =kTRUE;
 
    //General conf.
     TObjArray* whatArray= TString(what).Tokenize(",");
@@ -56,10 +58,10 @@ void FitMacro( char* what ="pt",const char* printWhat = "", int debug =0 )
 
     // analysis.PrintNofParticle("PSI","NofJPsi","YVSPT",kFALSE);
     // analysis.PrintNofParticle("PSI","NofJPsi","Y",kFALSE);
-    if(print && what == "pt") analysis.PrintNofParticle("PSI","NofJPsi","PT",kFALSE);
-    if(print && what == "y") analysis.PrintNofParticle("PSI","NofJPsi","Y",kFALSE);
-    if(print && what == "integrated") analysis.PrintNofParticle("PSI","NofJPsi","INTEGRATED",kFALSE);
-    if(print && what == "yvspt") analysis.PrintNofParticle("PSI","NofJPsi","YVSPT",kFALSE);
+    if( What.Contains("pt"))         analysis.PrintNofParticle("PSI","NofJPsi","PT",kFALSE);
+    if( What.Contains("y"))          analysis.PrintNofParticle("PSI","NofJPsi","Y",kFALSE);
+    if( What.Contains("integrated")) analysis.PrintNofParticle("PSI","NofJPsi","INTEGRATED",kFALSE);
+    if( What.Contains("yvspt"))      analysis.PrintNofParticle("PSI","NofJPsi","YVSPT",kFALSE);
 
     if(rawcount){
         analysis.ComputeDimuonRawCount(2.8,3.4);

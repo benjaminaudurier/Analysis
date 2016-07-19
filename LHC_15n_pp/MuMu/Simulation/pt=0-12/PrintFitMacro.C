@@ -29,7 +29,7 @@ char                   * beamYear="mumu.pp2015.config";
 TString striggerDimuon ="CMUL7-B-NOPF-MUFAST";
 TString striggerMB     ="CINT7-B-NOPF-MUFAST";
 TString seventType     ="PSALL";
-TString spairCut       ="pALLPAIRYPAIRPTIN0.0-12.0RABSMATCHLOWETAPDCA";
+TString spairCut       ="pALLPAIRYPAIRPTIN0.0-12.0RABSMATCHLOWETA";
 TString scentrality    ="PP";
 
 TString param          =  "sJPsi,mJPsi,NofJPsi,FitChi2PerNDF";

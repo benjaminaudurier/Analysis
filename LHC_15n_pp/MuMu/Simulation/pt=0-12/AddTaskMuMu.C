@@ -156,6 +156,8 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
     {
       // Array of cut elements
       TObjArray cutElements;
+      //pt cut on mc
+      minvAnalysis->SetMCptCut(0.,12.);
 
       // Cuts on track level
       AliAnalysisMuMuCutElement* pairTrue = cr->AddTrackPairCut(*cr,"AlwaysTrue","const AliVParticle&,const AliVParticle&","");// Apply "AlwaysTrue" cut on AliVParticle derived from AliAnalysisMuMuMinv
@@ -168,7 +170,7 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
       cutElements.Add(rabs);
       cutElements.Add(matchlow);
       cutElements.Add(eta);
-      cutElements.Add(pdca);
+      // cutElements.Add(pdca);
       // cutElements.Add(ps);
       // add them
       cr->AddCutCombination(cutElements);    
@@ -189,7 +191,7 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   {  
 
     // Integrated
-    binning->AddBin("psi","integrated");
+    // binning->AddBin("psi","integrated");
 
      // pt binning
     binning->AddBin("psi","pt", 0.0, 1.0,"BENJ");

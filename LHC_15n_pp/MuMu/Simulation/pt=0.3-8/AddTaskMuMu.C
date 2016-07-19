@@ -106,6 +106,7 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
     if ( minvAnalysis ){
       // Array of cut elements
       TObjArray cutElements;
+      minvAnalysis->SetMCptCut(0.,8.);
 
       // Cuts on track level
       AliAnalysisMuMuCutElement* pairTrue = cr->AddTrackPairCut(*cr,"AlwaysTrue","const AliVParticle&,const AliVParticle&","");// Apply "AlwaysTrue" cut on AliVParticle derived from AliAnalysisMuMuMinv
@@ -118,7 +119,7 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
       cutElements.Add(rabs);
       cutElements.Add(matchlow);
       cutElements.Add(eta);
-      cutElements.Add(pdca);
+      // cutElements.Add(pdca);
       // add them
       cr->AddCutCombination(cutElements);    
       // Adding the sub analysis

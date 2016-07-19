@@ -24,7 +24,7 @@
 char                   * sfile="AnalysisResults.JPSI.root";
 char                   * sasso="";
 char                   * sasso2="";
-char                   * beamYear="mumu.pp2015.config";
+char                   * beamYear="mumu.pp2015.simu.config";
 
 TString striggerDimuon ="ANY";
 TString seventType     ="ALL";
@@ -43,7 +43,7 @@ void PrintDist(TObjString* swhat,Bool_t yield,AliAnalysisMuMu &ana);
 void PrintYield(AliAnalysisMuMuSpectra *spec,AliAnalysisMuMu &an,TObjString* cent);
 
 //_____________________________________________________________________________
-void PrintFitMacro(char         * what ="PT",const char * printWhat = "distribution",int debug =0)
+void PrintFitMacro(char* what ="PT",const char * printWhat = "distribution",int debug =0)
 {
 
     AliLog::SetGlobalDebugLevel(debug);
@@ -53,17 +53,14 @@ void PrintFitMacro(char         * what ="PT",const char * printWhat = "distribut
     Bool_t print             = kFALSE;
     Bool_t yield             = kFALSE;
 
-
     TObjArray* sprint = TString(printWhat).Tokenize(",");
     TObjArray* sparam = TString(param).Tokenize(",");
-
 
     //Set bool
     if(sprint->FindObject("raa")) Raa                        =kTRUE;
     if(sprint->FindObject("distribution")) PrintDistribution =kTRUE;
     if(sprint->FindObject("save")) print                     =kTRUE;
     if(sprint->FindObject("yield")) yield                    =kTRUE;
-
 
     //General conf.
     TObjArray* whatArray= TString(what).Tokenize(",");
@@ -74,22 +71,21 @@ void PrintFitMacro(char         * what ="PT",const char * printWhat = "distribut
     AliAnalysisMuMu analysis(sfile,sasso,sasso2,beamYear);
 
     //_____ Draw
-    while ( ( swhat = static_cast<TObjString*>(nextWhat()) ) )
-    {
+    while ( ( swhat = static_cast<TObjString*>(nextWhat()) ) ){
+
         analysis.DrawFitResults("PSI",swhat->String().Data(),"histo",print);
         analysis.PrintNofParticle("PSI","NofJPsi",swhat->String(),kFALSE);
+        
         TIter nextParam(sparam);
         TObjString* sParam;
         if(swhat->String().Contains("PT") || swhat->String().Contains("Y")) while ((sParam=static_cast<TObjString*>(nextParam()))) analysis.PrintFitParam("PSI",sParam->String().Data(),swhat->String().Data(),subresults.Data(),"",kFALSE);
 
-
         if (Raa) {
             if(swhat->String().Contains("INTEGRATED")) analysis.RAAasGraphic("PSI",swhat->String().Data(),"externFile_PT.txt","externFile_CENT.txt",scentrality.Data(),kFALSE);
-            else if(swhat->String().Contains("Y")) analysis.RAAasGraphic("PSI","Y","externFile_Y.txt","externFile_CENT.txt",scentrality.Data(),kFALSE);
-            else if(swhat->String().Contains("PT")) analysis.RAAasGraphic("PSI","PT","externFile_PT.txt","externFile_CENT.txt",scentrality.Data(),kFALSE);
+            else if(swhat->String().Contains("Y"))     analysis.RAAasGraphic("PSI","Y","externFile_Y.txt","externFile_CENT.txt",scentrality.Data(),kFALSE);
+            else if(swhat->String().Contains("PT"))    analysis.RAAasGraphic("PSI","PT","externFile_PT.txt","externFile_CENT.txt",scentrality.Data(),kFALSE);
             else continue;
         }
-
         if (PrintDistribution) PrintDist(swhat,yield,analysis);
     }
 
@@ -112,8 +108,7 @@ void PrintDist(TObjString* swhat,Bool_t yield,AliAnalysisMuMu &ana)
         printf("--- Centrality = %s\n", scent->String().Data());
 
         AliAnalysisMuMuSpectra * spectra = static_cast<AliAnalysisMuMuSpectra*>(ana.OC()->GetObject(spectraPath.Data()));
-        if(!spectra)
-        {
+        if(!spectra){
             cout << Form("Cannot find spectra with name %s",spectraPath.Data()) <<endl;
             return;
         }
