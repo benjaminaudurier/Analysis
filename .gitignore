@@ -3,7 +3,8 @@
 *.lo
 *.o
 *.root
-
+*_C.d
+*_cxx.d
 
 #xcode
 *.DS_Store
@@ -29,3 +30,20 @@
 G__*.c
 G__*.cxx
 G__*.h
+
+# ALICE specific
+*.xml
+*.par
+runAnalysis.sh
+outputs_valid
+*_validation_merge.sh
+*.jdl
+*.sh
+*_merge.C
+*_merge.jdl
+*_merge.sh
+*_merge_final.jdl
+*_validation.sh
+*.log
+datasetSaf3.txt
+SetupMuonBasedTasks.C
