@@ -52,13 +52,13 @@ void FitMacro( char* what ="pt",const char* printWhat = "", int debug =0 )
     //_____ Fit
     while ( ( swhat = static_cast<TObjString*>(nextWhat()) ) ) {
         if(swhat->String().Contains("integrated")) {
-            analysis.Jpsi(swhat->String().Data(),"",kFALSE,kFALSE);
+            // analysis.Jpsi(swhat->String().Data(),"",kFALSE,kFALSE);
             analysis.ComputeYield("INTEGRATED","",MCRefResult);
         } else if(swhat->String().Contains("pt")) {
-            analysis.Jpsi(swhat->String().Data(),"BENJ",kFALSE,kFALSE);
+            // analysis.Jpsi(swhat->String().Data(),"BENJ",kFALSE,kFALSE);
             analysis.ComputeYield("PT","",MCRefResult);
         } else if(swhat->String().Contains("y")) {
-            analysis.Jpsi(swhat->String().Data(),"BENJ",kFALSE,kFALSE);
+            // analysis.Jpsi(swhat->String().Data(),"BENJ",kFALSE,kFALSE);
             analysis.ComputeYield("Y","",MCRefResult);
         }
     }

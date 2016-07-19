@@ -72,27 +72,13 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   AliAnalysisMuMuCutElement * eventTrue = cr->AddEventCut(*eventCutter,"IsTrue","const AliVEvent&","");
   AliAnalysisMuMuCutElement * triggerSelection = cr->AddTriggerClassCut(*eventCutter,"SelectTriggerClass","const TString&,TString&,UInt_t,UInt_t,UInt_t","");
   AliAnalysisMuMuCutElement* ps = eventTrue;
-  AliAnalysisMuMuCutElement* ps1 = eventTrue;
 
-  if (!simulations)
-  {
-    ps = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedANY","const AliInputEventHandler&","");
-    ps1 = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedINT7","const AliInputEventHandler&","");
-    ps2 = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedMUSPB","const AliInputEventHandler&","");
-    ps3 = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedMUL","const AliInputEventHandler&","");
-    ps4 = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedMSL","const AliInputEventHandler&","");
-    ps5 = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedVDM","const AliVEvent&","");
-  }
+  if (!simulations) ps = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedMUL","const AliInputEventHandler&","");
 
   // Apply default cut
   cr->AddCutCombination(triggerSelection);
   cr->AddCutCombination(eventTrue);
   cr->AddCutCombination(ps,triggerSelection);
-  cr->AddCutCombination(ps1,triggerSelection);
-  cr->AddCutCombination(ps2,triggerSelection);
-  cr->AddCutCombination(ps3,triggerSelection);
-  cr->AddCutCombination(ps4,triggerSelection);
-  cr->AddCutCombination(ps5,triggerSelection);
 
   task->SetBeamYear(beamYear);
 
@@ -143,7 +129,7 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
       cutElements.Add(rabs);
       cutElements.Add(matchlow);
       cutElements.Add(eta);
-      cutElements.Add(pdca);
+      // cutElements.Add(pdca);
       // cutElements.Add(ps);
       // add them
       cr->AddCutCombination(cutElements);
@@ -162,11 +148,8 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
 
   if (minvAnalysis)
   {
-
-    // Integrated
-    binning->AddBin("psi","integrated");
-
-
+    // // Integrated
+    // binning->AddBin("psi","integrated");
 
      // pt binning
     binning->AddBin("psi","pt", 0.0, 1.0,"BENJ");
@@ -180,15 +163,6 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
     binning->AddBin("psi","pt", 8.0, 9.0,"BENJ");
     binning->AddBin("psi","pt", 9.0, 10.0,"BENJ");
     binning->AddBin("psi","pt", 10.0, 12.0,"BENJ");
-    // binning->AddBin("psi","pt", 11.0, 12.0,"BENJ");
-    // binning->AddBin("psi","pt", 12.0, 13.0,"BENJ");
-    // binning->AddBin("psi","pt", 13.0, 14.0,"BENJ");
-    // binning->AddBin("psi","pt", 14.0, 15.0,"BENJ");
-    // binning->AddBin("psi","pt", 15.0, 16.0,"BENJ");
-    // binning->AddBin("psi","pt", 16.0, 17.0,"BENJ");
-    // binning->AddBin("psi","pt", 17.0, 18.0,"BENJ");
-    // binning->AddBin("psi","pt", 18.0, 19.0,"BENJ");
-    // binning->AddBin("psi","pt", 19.0, 20.0,"BENJ");
 
     // y binning
    binning->AddBin("psi","y",-4,-3.75,"BENJ");
@@ -197,36 +171,6 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
    binning->AddBin("psi","y",-3.25,-3,"BENJ");
    binning->AddBin("psi","y",-3,-2.75,"BENJ");
    binning->AddBin("psi","y",-2.75,-2.5,"BENJ");
-
-   // binning->AddBin("psi","y",-4,-3.5,"BENJ");
-   // binning->AddBin("psi","y",-3.5,-3.,"BENJ");
-   // binning->AddBin("psi","y",-3,-2.5,"BENJ");
-
-    // phi binning
-   // binning->AddBin("psi","phi",0,0.4,"BENJ");
-   // binning->AddBin("psi","phi",0.4,0.8,"BENJ");
-   // binning->AddBin("psi","phi",0.8,1.2,"BENJ");
-   // binning->AddBin("psi","phi",1.2,1.6,"BENJ");
-   // binning->AddBin("psi","phi",1.6,2,"BENJ");
-   // binning->AddBin("psi","phi",2,2.4,"BENJ");
-   // binning->AddBin("psi","phi",2.4,2.8,"BENJ");
-   // binning->AddBin("psi","phi",2.4,2.8,"BENJ");
-   // binning->AddBin("psi","phi",2.8,3.14,"BENJ");
-
-
-   // yvspt bin
-  // for ( Int_t i = 0; i < 3; ++i ) {
-  //   Double_t dy= 0.5;
-  //   Double_t y = -4+i*dy;
-
-  //   for (int j = 0; j < 8; ++j) {
-  //     Double_t dpt =1.;
-  //     Double_t pt = 0.+j*dpt;
-  //     binning->AddBin("psi","yvspt",pt, pt+dpt,y,y+dy,"BENJ");
-  //     // printf("Pt interval  =[%f,%f] y interval  =[%f,%f]\n",pt,pt+dpt,y,y+dy);
-  //   }
-  // }
-
   }
 
 

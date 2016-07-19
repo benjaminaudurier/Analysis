@@ -35,11 +35,11 @@ char                   * beamYear="mumu.pp2015.config";
 TString striggerDimuon ="CMUL7-B-NOPF-MUFAST";
 TString striggerMB     ="CINT7-B-NOPF-MUFAST";
 TString seventType     ="PSMUL";
-TString spairCut       ="pALLPAIRYPAIRPTIN0.3-8.0RABSMATCHLOWETAPDCA";
+TString spairCut       ="pALLPAIRYPAIRPTIN0.3-8.0RABSMATCHLOWETA";
 TString scentrality    ="PP";
 
 // TString param          =  "c,c',sJPsi,mJPsi,NofJPsi,SignalOverBkg3s,FitChi2PerNDF";
-TString param          =  "sJPsi,mJPsi,NofJPsi,FitChi2PerNDF,Significance3s,SignalOverBkg3s";
+TString param          =  "sJPsi,mJPsi,NofJPsi,FitChi2PerNDF";
 // TString param          =  "";
 
 
@@ -54,10 +54,12 @@ void PrintFitMacro(char         * what ="PT",const char * printWhat = "distribut
 {
 
     TString subresults = "";
-    subresults = "CB2VWG_2.0_4.8_SP1.2,CB2VWG_2.2_4.5_SP1.2,";
-    subresults += "CB2POL1POL2_2.0_4.8_SP1.2,CB2POL1POL2_2.2_4.5_SP1.2,";
-    subresults += "NA60NEWVWG_2.0_4.8_SP1.2,NA60NEWVWG_2.2_4.5_SP1.2,";
-    subresults += "NA60NEWPOL1POL2_2.0_4.8_SP1.2,NA60NEWPOL1POL2_2.2_4.5_SP1.2,";
+    subresults = "CB2VWG_1.7_4.8_SP1.1,CB2VWG_2.0_4.4_SP1.1,";
+    subresults += "CB2POL1POL2_1.7_4.8_SP1.1,CB2POL1POL2_2.0_4.4_SP1.1,";
+    subresults += "CB2VWG_1.7_4.8_Weight=2.0_SP1.1,CB2VWG_2.0_4.4_Weight=2.0_SP1.1,";
+    subresults += "CB2POL1POL2_1.7_4.8_Weight=2.0_SP1.1,CB2POL1POL2_2.0_4.4_Weight=2.0_SP1.1,";
+    subresults += "NA60NEWVWG_1.7_4.8_SP1.1,NA60NEWVWG_2.0_4.4_SP1.1,";
+    subresults += "NA60NEWPOL1POL2_1.7_4.8_SP1.1,NA60NEWPOL1POL2_2.0_4.4_SP1.1,";
 
 
     AliLog::SetGlobalDebugLevel(debug);
@@ -87,17 +89,17 @@ void PrintFitMacro(char         * what ="PT",const char * printWhat = "distribut
     //_____ Draw
     while ( ( swhat = static_cast<TObjString*>(nextWhat()) ) )
     {
-        analysis.DrawFitResults("PSI",swhat->String().Data(),subresults.Data());
-        analysis.PrintNofParticle("PSI","NofJPsi",swhat->String(),kFALSE);
-        TIter nextParam(sparam);
-        TObjString* sParam;
-         if(swhat->String().Contains("PT") || swhat->String().Contains("Y")) 
-            while ((sParam=static_cast<TObjString*>(nextParam()))) 
-                analysis.PrintFitParam("PSI",sParam->String().Data(),swhat->String().Data(),subresults.Data(),"",kFALSE);
-            
+        // analysis.DrawFitResults("PSI",swhat->String().Data(),subresults.Data());
+        // analysis.PrintNofParticle("PSI","NofJPsi",swhat->String(),kFALSE);
+        // TIter nextParam(sparam);
+        // TObjString* sParam;
+        //  if(swhat->String().Contains("PT") || swhat->String().Contains("Y")) 
+        //     while ((sParam=static_cast<TObjString*>(nextParam()))) 
+        //         analysis.PrintFitParam("PSI",sParam->String().Data(),swhat->String().Data(),subresults.Data(),"",kFALSE);
 
         PrintDist(swhat,kTRUE,analysis);
     }
+
     return ;
 }
 
@@ -120,9 +122,11 @@ void PrintDist(TObjString* swhat,Bool_t yield,AliAnalysisMuMu &ana)
         }
         if(swhat->String().Contains("PT") || swhat->String().Contains("Y"))
         {
-           new TCanvas;
-           spectra->Plot("NofJPsi","",kTRUE)->DrawCopy("");
+           // new TCanvas;
+           // spectra->Plot("NofJPsi","",kTRUE)->DrawCopy("");
+            if(swhat->String().Contains("PT")) ana.ComputePPCrossSection(swhat->String().Data(),"PSI","CorrNofJPsi","externFile_PT.txt");
+            else ana.ComputePPCrossSection(swhat->String().Data(),"PSI","CorrNofJPsi","externFile_Y.txt");
+
         }
-       ana.ComputePPCrossSection(swhat->String().Data());
     }
 }

@@ -35,11 +35,11 @@ char                   * beamYear="mumu.pp2015.config";
 TString striggerDimuon ="CMUL7-B-NOPF-MUFAST";
 TString striggerMB     ="CINT7-B-NOPF-MUFAST";
 TString seventType     ="PSMUL";
-TString spairCut       ="pALLPAIRYPAIRPTIN0.0-12.0RABSMATCHLOWETAPDCA";
+TString spairCut       ="pALLPAIRYPAIRPTIN0.0-12.0RABSMATCHLOWETA";
 TString scentrality    ="PP";
 
 // TString param          =  "c,c',sJPsi,mJPsi,NofJPsi,SignalOverBkg3s,FitChi2PerNDF";
-TString param          =  "sJPsi,mJPsi,NofJPsi,FitChi2PerNDF,Significance3s,SignalOverBkg3s";
+TString param          =  "sJPsi,mJPsi,NofJPsi,FitChi2PerNDF,SignalOverBkg3s";
 // TString param          =  "";
 
 
@@ -47,16 +47,20 @@ TString param          =  "sJPsi,mJPsi,NofJPsi,FitChi2PerNDF,Significance3s,Sign
 
 
 void PrintDist(TObjString* swhat,Bool_t yield,AliAnalysisMuMu &ana);
+// void PrintCrossSection(AliAnalysisMuMuSpectra *spec,AliAnalysisMuMu &an,char*what);
 
 //_____________________________________________________________________________
 void PrintFitMacro(char         * what ="PT",const char * printWhat = "distribution",int debug =0)
 {
 
     TString subresults = "";
-    subresults = "CB2VWG_1.7_4.8_SP1.2,CB2VWG_2.0_4.6_SP1.2,";
-    subresults += "CB2POL1POL2_1.7_4.8_SP1.2,CB2POL1POL2_2.0_4.6_SP1.2,";
-    subresults += "NA60NEWVWG_1.7_4.8_SP1.2,NA60NEWVWG_2.0_4.6_SP1.2,";
-    subresults += "NA60NEWPOL1POL2_1.7_4.8_SP1.2,NA60NEWPOL1POL2_2.0_4.6_SP1.2,";
+    subresults = "CB2VWG_1.7_4.8_SP1.1";
+    // subresults = "CB2VWG_1.7_4.8_SP1.1,CB2VWG_2.0_4.4_SP1.1,";
+    // subresults += "CB2POL1POL2_1.7_4.8_SP1.1,CB2POL1POL2_2.0_4.4_SP1.1,";
+    // subresults += "CB2VWG_1.7_4.8_Weight=2.0_SP1.1,CB2VWG_2.0_4.4_Weight=2.0_SP1.1,";
+    // subresults += "CB2POL1POL2_1.7_4.8_Weight=2.0_SP1.1,CB2POL1POL2_2.0_4.4_Weight=2.0_SP1.1,";
+    // subresults += "NA60NEWVWG_1.7_4.8_SP1.1,NA60NEWVWG_2.0_4.4_SP1.1,";
+    // subresults += "NA60NEWPOL1POL2_1.7_4.8_SP1.1,NA60NEWPOL1POL2_2.0_4.4_SP1.1,";
 
 
     AliLog::SetGlobalDebugLevel(debug);
@@ -90,22 +94,13 @@ void PrintFitMacro(char         * what ="PT",const char * printWhat = "distribut
         analysis.PrintNofParticle("PSI","NofJPsi",swhat->String(),kFALSE);
         TIter nextParam(sparam);
         TObjString* sParam;
-         if(swhat->String().Contains("PT") || swhat->String().Contains("Y")) 
-            while ((sParam=static_cast<TObjString*>(nextParam()))) 
-                analysis.PrintFitParam("PSI",sParam->String().Data(),swhat->String().Data(),subresults.Data(),"",kFALSE);
-
-        if (Raa) {
-            if(swhat->String().Contains("INTEGRATED")) 
-                analysis.RAAasGraphic("PSI",swhat->String().Data(),"externFile_PT.txt","externFile_CENT.txt",scentrality.Data(),kFALSE);
-            else if(swhat->String().Contains("Y")) 
-                analysis.RAAasGraphic("PSI","Y","externFile_Y.txt","externFile_CENT.txt",scentrality.Data(),kFALSE);
-            else if(swhat->String().Contains("PT")) 
-                analysis.RAAasGraphic("PSI","PT","externFile_PT.txt","externFile_CENT.txt",scentrality.Data(),kFALSE);
-            else continue;
-        }
+         // if(swhat->String().Contains("PT") || swhat->String().Contains("Y")) 
+         //    while ((sParam=static_cast<TObjString*>(nextParam()))) 
+         //        analysis.PrintFitParam("PSI",sParam->String().Data(),swhat->String().Data(),subresults.Data(),"",kFALSE);
 
         PrintDist(swhat,kTRUE,analysis);
     }
+
     return ;
 }
 
@@ -128,9 +123,11 @@ void PrintDist(TObjString* swhat,Bool_t yield,AliAnalysisMuMu &ana)
         }
         if(swhat->String().Contains("PT") || swhat->String().Contains("Y"))
         {
-           new TCanvas;
-           spectra->Plot("NofJPsi","",kTRUE)->DrawCopy("");
+           // new TCanvas;
+           // spectra->Plot("NofJPsi","",kTRUE)->DrawCopy("");
+            if(swhat->String().Contains("PT")) ana.ComputePPCrossSection(swhat->String().Data(),"PSI","CorrNofJPsi","externFile_PT.txt","",kTRUE);
+            else ana.ComputePPCrossSection(swhat->String().Data(),"PSI","CorrNofJPsi","externFile_Y.txt");
+
         }
-       ana.ComputePPCrossSection(swhat->String().Data());
     }
 }

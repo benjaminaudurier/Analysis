@@ -69,30 +69,16 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   // task->SelectCollisionCandidates(AliVEvent::kINT7);
 
   // Default cuts on trigger and event level
-  AliAnalysisMuMuCutElement * eventTrue = cr->AddEventCut(*eventCutter,"IsTrue","const AliVEvent&","");
-  AliAnalysisMuMuCutElement * triggerSelection = cr->AddTriggerClassCut(*eventCutter,"SelectTriggerClass","const TString&,TString&,UInt_t,UInt_t,UInt_t","");
+  AliAnalysisMuMuCutElement* eventTrue = cr->AddEventCut(*eventCutter,"IsTrue","const AliVEvent&","");
+  AliAnalysisMuMuCutElement* triggerSelection = cr->AddTriggerClassCut(*eventCutter,"SelectTriggerClass","const TString&,TString&,UInt_t,UInt_t,UInt_t","");
   AliAnalysisMuMuCutElement* ps = eventTrue;
-  AliAnalysisMuMuCutElement* ps1 = eventTrue;
 
-  if (!simulations)
-  {
-    ps = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedANY","const AliInputEventHandler&","");
-    ps1 = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedINT7","const AliInputEventHandler&","");
-    ps2 = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedMUSPB","const AliInputEventHandler&","");
-    ps3 = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedMUL","const AliInputEventHandler&","");
-    ps4 = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedMSL","const AliInputEventHandler&","");
-    ps5 = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedVDM","const AliVEvent&","");
-  }
+  if (!simulations) ps = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedMUL","const AliInputEventHandler&","");
 
   // Apply default cut
   cr->AddCutCombination(triggerSelection);
   cr->AddCutCombination(eventTrue);
   cr->AddCutCombination(ps,triggerSelection);
-  cr->AddCutCombination(ps1,triggerSelection);
-  cr->AddCutCombination(ps2,triggerSelection);
-  cr->AddCutCombination(ps3,triggerSelection);
-  cr->AddCutCombination(ps4,triggerSelection);
-  cr->AddCutCombination(ps5,triggerSelection);
 
   task->SetBeamYear(beamYear);
 
@@ -143,7 +129,7 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
       cutElements.Add(rabs);
       cutElements.Add(matchlow);
       cutElements.Add(eta);
-      cutElements.Add(pdca);
+      // cutElements.Add(pdca);
       // cutElements.Add(ps);
       // add them
       cr->AddCutCombination(cutElements);
@@ -164,8 +150,23 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   {
     // Integrated
     binning->AddBin("psi","integrated");
+
      // pt binning
-    binning->AddBin("psi","pt", 0.0, 8.0,"BENJ");
+    binning->AddBin("psi","pt", 0.0, 1.0,"BENJ");
+    binning->AddBin("psi","pt", 1.0, 2.0,"BENJ");
+    binning->AddBin("psi","pt", 2.0, 3.0,"BENJ");
+    binning->AddBin("psi","pt", 3.0, 4.0,"BENJ");
+    binning->AddBin("psi","pt", 4.0, 5.0,"BENJ");
+    binning->AddBin("psi","pt", 5.0, 6.0,"BENJ");
+    binning->AddBin("psi","pt", 6.0, 8.0,"BENJ");
+
+    // y binning
+   binning->AddBin("psi","y",-4,-3.75,"BENJ");
+   binning->AddBin("psi","y",-3.75,-3.5,"BENJ");
+   binning->AddBin("psi","y",-3.5,-3.25,"BENJ");
+   binning->AddBin("psi","y",-3.25,-3,"BENJ");
+   binning->AddBin("psi","y",-3,-2.75,"BENJ");
+   binning->AddBin("psi","y",-2.75,-2.5,"BENJ");
   }
 
 

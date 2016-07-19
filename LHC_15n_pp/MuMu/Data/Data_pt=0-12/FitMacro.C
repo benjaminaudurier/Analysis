@@ -13,7 +13,7 @@
 #include <AliAnalysisMuMu.h>
 #include <TROOT.h>
 
-char           * sfile="AnalysisResults.root";
+char           * sfile="AnalysisResults.25.root";
 char           * sasso="../../Simulation/pt=0-12/AnalysisResults.JPSI.root";
 char           * sasso2="";
 char           * beamYear="mumu.pp2015.config";
@@ -50,12 +50,13 @@ void FitMacro( char* what ="pt",const char* printWhat = "", int debug =0 )
     if(clean) analysis.CleanAllSpectra();
 
     //_____ Fit
-    while ( ( swhat = static_cast<TObjString*>(nextWhat()) ) ) {
-        if(swhat->String().Contains("integrated")) analysis.Jpsi(swhat->String().Data(),"",kFALSE,kFALSE);
-        else if(swhat->String().Contains("pt")) analysis.Jpsi(swhat->String().Data(),"BENJ",kFALSE,kFALSE);
-        else if(swhat->String().Contains("y")) analysis.Jpsi(swhat->String().Data(),"BENJ",kFALSE,kFALSE);
-    }
+    // while ( ( swhat = static_cast<TObjString*>(nextWhat()) ) ) {
+    //     if(swhat->String().Contains("integrated")) analysis.Jpsi(swhat->String().Data(),"",kFALSE,kFALSE);
+    //     else if(swhat->String().Contains("pt")) analysis.Jpsi(swhat->String().Data(),"BENJ",kFALSE,kFALSE);
+    //     else if(swhat->String().Contains("y")) analysis.Jpsi(swhat->String().Data(),"BENJ",kFALSE,kFALSE);
+    // }
 
+    nextWhat.Reset();
     //_____ Yield
     while ( ( swhat = static_cast<TObjString*>(nextWhat()) ) ) {
         if(swhat->String().Contains("integrated")) analysis.ComputeYield("INTEGRATED","",MCRefResult);
