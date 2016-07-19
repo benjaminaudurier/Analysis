@@ -113,7 +113,7 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
 
   if (!simulations)
   {
-    ps = cr->AddEventCut(*eventCutter,"IsPhysicsSelected","const AliInputEventHandler&","");
+    ps = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedANY","const AliInputEventHandler&","");
   }
 
   // Apply default cut
@@ -152,7 +152,7 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
     cr->AddCutCombination(rabs,eta);
     cr->AddCutCombination(pdca);
     // Adding the sub analysis
-    task->AdoptSubAnalysis(singleAnalysis);
+    // task->AdoptSubAnalysis(singleAnalysis);
 
     if ( minvAnalysis )
     {
@@ -196,14 +196,14 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
 
 
      // pt binning
-    // binning->AddBin("psi","pt", 0.0, 1.0,"BENJ");
-    // binning->AddBin("psi","pt", 1.0, 2.0,"BENJ");
-    // binning->AddBin("psi","pt", 2.0, 3.0,"BENJ");
-    // binning->AddBin("psi","pt", 3.0, 4.0,"BENJ");
-    // binning->AddBin("psi","pt", 4.0, 5.0,"BENJ");
-    // binning->AddBin("psi","pt", 5.0, 6.0,"BENJ");
-    // binning->AddBin("psi","pt", 6.0, 8.0,"BENJ");
-    // binning->AddBin("psi","pt", 7.0, 8.0,"BENJ");
+    binning->AddBin("psi","pt", 0.0, 1.0,"BENJ");
+    binning->AddBin("psi","pt", 1.0, 2.0,"BENJ");
+    binning->AddBin("psi","pt", 2.0, 3.0,"BENJ");
+    binning->AddBin("psi","pt", 3.0, 4.0,"BENJ");
+    binning->AddBin("psi","pt", 4.0, 5.0,"BENJ");
+    binning->AddBin("psi","pt", 5.0, 6.0,"BENJ");
+    binning->AddBin("psi","pt", 6.0, 8.0,"BENJ");
+    binning->AddBin("psi","pt", 7.0, 8.0,"BENJ");
     //
     //
     // binning->AddBin("psi","pt", 0.0, 2.0,"BENJ");
@@ -236,17 +236,17 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
    // binning->AddBin("psi","phi",2.8,3.14,"BENJ");
 
    // yvspt bin
-  for ( Int_t i = 0; i < 3; ++i ) {
-    Double_t dy= 0.5;
-    Double_t y = -4+i*dy;
+  // for ( Int_t i = 0; i < 3; ++i ) {
+  //   Double_t dy= 0.5;
+  //   Double_t y = -4+i*dy;
 
-    for (int j = 0; j < 8; ++j) {
-      Double_t dpt =1.;
-      Double_t pt = 0.+j*dpt;
-      binning->AddBin("psi","yvspt",pt, pt+dpt,y,y+dy,"BENJ");
-      printf("Pt interval  =[%f,%f] y interval  =[%f,%f]\n",pt,pt+dpt,y,y+dy);
-    }
-  }
+  //   for (int j = 0; j < 8; ++j) {
+  //     Double_t dpt =1.;
+  //     Double_t pt = 0.+j*dpt;
+  //     binning->AddBin("psi","yvspt",pt, pt+dpt,y,y+dy,"BENJ");
+  //     printf("Pt interval  =[%f,%f] y interval  =[%f,%f]\n",pt,pt+dpt,y,y+dy);
+  //   }
+  // }
 
   }
 

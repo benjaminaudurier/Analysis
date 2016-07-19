@@ -41,7 +41,7 @@ Bool_t oldFixPtParam[4] = {kTRUE,kTRUE,kTRUE,kTRUE};
 
 TString newPtFormula = "[0]*x / TMath::Power([1] + TMath::Power(x,[2]),[3])";
 Double_t newPtParam[4] = {4654.3, 12.8133, 1.9647, 3.66641};
-Bool_t newFixPtParam[4] = {kTRUE,kTRUE,kTRUE,kTRUE};
+Bool_t newFixPtParam[4] = {kFALSE,kFALSE,kFALSE,kFALSE};
 
 Double_t ptRange[2] = {0., 50.};
 
@@ -58,7 +58,7 @@ Double_t ptRange[2] = {0., 50.};
 // tune2 LHC15n jpsi
 TString oldYFormula = " [0] * ( 1 + [1]*x*x ) ";
 Double_t oldYParam[2] = {1.18296, -0.0405994};
-Bool_t oldFixYParam[2] = {kFALSE, kFALSE};
+Bool_t oldFixYParam[2] = {kTRUE, kTRUE};
 
 TString newYFormula = "[0] * ( 1 + [1]*x*x)";
 Double_t newYParam[2] =  {1.18296, -0.0405994};
@@ -76,15 +76,15 @@ Bool_t applyPhysicsSelection = kFALSE;
 //For Y projection
 Int_t firstybin=lastybin=-1; // Projection bin in rapidity. No projection if =-1
 // For pT Projection
-Int_t firstxbin=lastxbin=1;
+Int_t firstxbin=lastxbin=-1;
 
 
 void UpdateParametersAndRanges(Int_t iStep);
 
 //__________Setting for spectra path
 TString striggerDimuon  ="CMUL7-B-NOPF-MUFAST";
-TString seventType      ="PSALL";
-TString spairCut        ="pALLPAIRYPAIRPTIN0.0-8.0RABSMATCHLOWETAPDCA";
+TString seventType      ="PSMUL";
+TString spairCut        ="pALLPAIRYPAIRPTIN0.0-12.0RABSMATCHLOWETA";
 TString scentrality     ="PP";
 TString subResultName   = "";/*"YVSPT_BENJ_02.00_04.00_m03.50_m03.00";*/
 //__________
@@ -256,8 +256,11 @@ TObject* CreateAnalysisTrain(TObject* alienHandler, Int_t iStep)
     TH1* hy= spectraY->Plot("NofJPsi",subResultName,kTRUE);// new
     dataFile->Close();
 
-    new TCanvas;
-    hy->DrawCopy();
+    // new TCanvas;
+    // hpt->DrawCopy();
+    // new TCanvas;
+    // hy->DrawCopy();
+    // return;
 
     if(hpt && hy && ptnofbin>0 && ynofbin>0 ){
         genTuner->SetPtRefHisto(hpt);
