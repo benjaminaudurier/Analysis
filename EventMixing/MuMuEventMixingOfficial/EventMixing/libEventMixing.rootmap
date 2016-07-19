@@ -1,0 +1,6 @@
+Library.AliAnalysisTaskMixInfo:             libEventMixing libANALYSIS libANALYSISalice libAOD libESD libSTEERBase libCore libGpad libHist libRIO libTree
+Library.AliMixEventCutObj:                  libEventMixing libANALYSIS libANALYSISalice libAOD libESD libSTEERBase libCore libGpad libHist libRIO libTree
+Library.AliMixEventPool:                    libEventMixing libANALYSIS libANALYSISalice libAOD libESD libSTEERBase libCore libGpad libHist libRIO libTree
+Library.AliMixInfo:                         libEventMixing libANALYSIS libANALYSISalice libAOD libESD libSTEERBase libCore libGpad libHist libRIO libTree
+Library.AliMixInputEventHandler:            libEventMixing libANALYSIS libANALYSISalice libAOD libESD libSTEERBase libCore libGpad libHist libRIO libTree
+Library.AliMixInputHandlerInfo:             libEventMixing libANALYSIS libANALYSISalice libAOD libESD libSTEERBase libCore libGpad libHist libRIO libTree
