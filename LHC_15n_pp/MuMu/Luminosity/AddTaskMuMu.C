@@ -73,11 +73,17 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   AliAnalysisMuMuCutElement* triggerSelection = cr->AddTriggerClassCut(*eventCutter,"SelectTriggerClass","const TString&,TString&,UInt_t,UInt_t,UInt_t","");
   AliAnalysisMuMuCutElement* ps = eventTrue;
   AliAnalysisMuMuCutElement* ps1 = eventTrue;
+  AliAnalysisMuMuCutElement* ps2 = eventTrue;
+  AliAnalysisMuMuCutElement* ps3 = eventTrue;
+  AliAnalysisMuMuCutElement* ps4 = eventTrue;
 
 
   if (!simulations){
     ps  = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedMUL","const AliInputEventHandler&","");
     ps1 = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedVDM","const AliVEvent&","");
+    ps2 = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedMUSPB","const AliInputEventHandler&","");
+    ps3 = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedANY","const AliInputEventHandler&","");
+    ps4 = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedMSL","const AliInputEventHandler&","");
   } 
 
   // Apply default cut
@@ -85,6 +91,9 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   cr->AddCutCombination(eventTrue);
   cr->AddCutCombination(ps,triggerSelection);
   cr->AddCutCombination(ps1,triggerSelection);
+  cr->AddCutCombination(ps2,triggerSelection);
+  cr->AddCutCombination(ps3,triggerSelection);
+  cr->AddCutCombination(ps4,triggerSelection);
 
   task->SetBeamYear(beamYear);
 
