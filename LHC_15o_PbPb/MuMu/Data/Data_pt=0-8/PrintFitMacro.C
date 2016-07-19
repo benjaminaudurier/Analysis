@@ -56,7 +56,7 @@ void PrintFitMacro(char         * what ="PT",const char * printWhat = "distribut
     //Set bool
     if(sprint->FindObject("raa")) Raa                        =kTRUE;
     if(sprint->FindObject("distribution")) PrintDistribution =kTRUE;
-    if(sprint->FindObject("save")) print                     =kTRUE;
+    if(sprint->FindObject("print")) print                     =kTRUE;
 
 
     //General conf.
@@ -79,9 +79,9 @@ void PrintFitMacro(char         * what ="PT",const char * printWhat = "distribut
         // /*if(swhat->String().Contains("PT") || swhat->String().Contains("Y")) */while ((sParam=static_cast<TObjString*>(nextParam()))) analysis.PrintFitParam("PSI",sParam->String().Data(),swhat->String().Data(),subresults.Data(),"",kFALSE);
 
         if (Raa) {
-            if(swhat->String().Contains("INTEGRATED")) analysis.RAAasGraphic("PSI",swhat->String().Data(),"externFile_PT.txt","externFile_CENT.txt",scentrality.Data(),kFALSE);
-            else if(swhat->String().Contains("Y")) analysis.RAAasGraphic("PSI","Y","externFile_Y.txt","externFile_CENT.txt",scentrality.Data(),kFALSE);
-            else if(swhat->String().Contains("PT")) analysis.RAAasGraphic("PSI","PT","externFile_PT.txt","externFile_CENT.txt",scentrality.Data(),kFALSE);
+            if(swhat->String().Contains("INTEGRATED")) analysis.RAAasGraphic("PSI",swhat->String().Data(),"externFile_PT.txt","externFile_CENT.txt",scentrality.Data(),print);
+            else if(swhat->String().Contains("Y")) analysis.RAAasGraphic("PSI","Y","externFile_Y.txt","externFile_CENT.txt",scentrality.Data(),print);
+            else if(swhat->String().Contains("PT")) analysis.RAAasGraphic("PSI","PT","externFile_PT.txt","externFile_CENT.txt",scentrality.Data(),print);
             else continue;
         }
 

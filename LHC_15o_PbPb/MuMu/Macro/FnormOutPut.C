@@ -11,10 +11,11 @@
 std::set<int> RunNumbers(AliAnalysisMuMu* a);
 void ComputeCentEffFactor(AliAnalysisMuMu* a);
 void ComputeFnormScalersForC0V0M(AliAnalysisMuMu* a);
-Double_t* ComputeSumOfMB(AliAnalysisMuMu* a1, TH1* h1  );
+Double_t* ComputeSumOfMB(AliAnalysisMuMu* a1, TH1* h1,TH1* h2  );
 
 void FnormOutPut(const char * filename ="../TrainRootFile/AnalysisResults_ESDs_3_20160112.root:MuMuCount" ,
-	const char * filename2 ="../TrainRootFile/AnalysisResults_27_20160120-2124.root:MuMuCount")
+	const char * filename2 ="../TrainRootFile/AnalysisResults_27_20160120-2124.root:MuMuCount",
+	const char * filename3 ="../TrainRootFile/ResultsRawEvents.root")
 {
 	// Offline
 	TH1*FnormOffline1PUPS =0x0;
@@ -35,6 +36,19 @@ void FnormOutPut(const char * filename ="../TrainRootFile/AnalysisResults_ESDs_3
 	AliAnalysisMuMu ana(filename,"","","PbPb2015");
 	AliAnalysisMuMu ana2(filename2,"","","PbPb2015");
 
+	TFile* file = TFile::Open(filename3);
+	if ( ! file ) {
+		printf("Fatal: cannot find %s\n", filename3);
+		return;
+	}
+	
+	TH1*ResultsMohamad = static_cast<TH1*>(file->FindObjectAny("fHistoCMULEventsPerRun")->Clone());
+	if ( ! ResultsMohamad ) {
+		printf("Fatal: cannot find histo \n");
+		return;
+	}
+	// ResultsMohamad->Print("all");
+
 	ComputeFnormScalersForC0V0M(&ana2);
 
 
@@ -50,16 +64,18 @@ void FnormOutPut(const char * filename ="../TrainRootFile/AnalysisResults_ESDs_3
 	// FnormScalersPUPS->Write();
 	// return;
 	
-	Double_t* F1 = ComputeSumOfMB(&ana,FnormOffline1PUPS);
-	Double_t* F2 = ComputeSumOfMB(&ana,FnormOffline2PUPS);
-	Double_t* F3 = ComputeSumOfMB(&ana,FnormScalersPUPS);
-
+	Double_t* F1 = ComputeSumOfMB(&ana,FnormOffline1PUPS,ResultsMohamad);
+	Double_t* F2 = ComputeSumOfMB(&ana,FnormOffline2PUPS,ResultsMohamad);
+	Double_t* F3 = ComputeSumOfMB(&ana,FnormScalersPUPS,ResultsMohamad);
+	
 	//Compute Mean FNorm
 	Double_t FMean = (F1[0]/F1[1] + F2[0]/F2[1] + F3[0]/F3[1]) / ( 1./F1[1] + 1./F2[1] + 1./F3[1]) ;
 	Double_t FMeanError = TMath::Sqrt(        1./ (   1./F1[1]+1./F2[1]+1./F3[1] )   ) ;
-	Double_t MUL = ana.CC()->GetSum(Form("trigger:CMUL7-B-NOPF-MUFAST/centrality:V0M_00.00_90.00"));
+	// Double_t MUL = ana2.CC()->GetSum(Form("trigger:CMUL7-B-NOPF-MUFAST/centrality:V0M_00.00_90.00,event:PSMUL"));
+	Double_t MUL = 1.267787e+08;
 	printf("MUL = %f\n", MUL);
 	printf("Mean MBeq = %f +/- %f \n",FMean , FMeanError );
+	printf("Mean FNorm = %f +/- %f \n",FMean/MUL,FMeanError/MUL);
 
 	// ______Projection histograms
 	// New Histo to plot purposes
@@ -299,7 +315,7 @@ void ComputeFnormScalersForC0V0M(AliAnalysisMuMu* a)
 
 }
 //______________________________________________
-Double_t* ComputeSumOfMB(AliAnalysisMuMu* a1, TH1* h1 )
+Double_t* ComputeSumOfMB(AliAnalysisMuMu* a1, TH1* h1,TH1* h2 )
 {
 	std::set<int> runs= RunNumbers(a1);
 	Double_t sum =0.;
@@ -309,7 +325,15 @@ Double_t* ComputeSumOfMB(AliAnalysisMuMu* a1, TH1* h1 )
 	for ( std::set<int>::const_iterator it = runs.begin(); it != runs.end(); ++it )
 	{
 		Int_t runNumber = *it;
-		Double_t nMUL = a1->CC()->GetSum(Form("run:%d/trigger:CMUL7-B-NOPF-MUFAST/centrality:V0M_00.00_90.00",runNumber));
+		Double_t nMUL = 0.;
+		 if (h2){
+		 	Int_t bin = h2->GetXaxis()->FindBin(runNumber);
+		 	// printf("bin = %d\n",bin);
+		 	nMUL =  h2->GetBinContent(bin);
+		 }
+		 else nMUL = a1->CC()->GetSum(Form("run:%d/trigger:CMUL7-B-NOPF-MUFAST/centrality:V0M_00.00_90.00/event:PSALL",runNumber));
+		// printf("nMUL for run %d = %f\n",runNumber, nMUL );
+
 		Double_t FNorm = h1->GetBinContent(i);
 		Double_t FNormerr = h1->GetBinError(i);
 		// printf("FNorm for run %d = %f\n",runNumber, FNorm );
@@ -320,6 +344,7 @@ Double_t* ComputeSumOfMB(AliAnalysisMuMu* a1, TH1* h1 )
 	}
 
 	printf("NMBeq for %s   : %.0f +/- %0.f ( %f percent ) \n",h1->GetName(), sum, TMath::Sqrt(sumerr2), 100*TMath::Sqrt(sumerr2)/sum );
+	printf("FNorm for %s   : %.5f +/- %0.5f ( %f percent ) \n",h1->GetName(), sum/1.267787e+08, TMath::Sqrt(sumerr2)/1.267787e+08, 100*TMath::Sqrt(sumerr2)/sum );
 	Double_t* F  = new Double_t[2];
 	F[0]= sum;
 	F[1] =sumerr2;

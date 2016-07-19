@@ -23,7 +23,8 @@
 //Some strings and constants
 char           * sfile="AnalysisResults.root";
 // char                   * sfile="../Simulation/AnalysisResults.JPSI.root";
-char                   * sasso="../Simulation/AnalysisResults.JPSI.root";
+// char                   * sasso="../Simulation/AnalysisResults.JPSI.root";
+char                   * sasso="";
 char                   * sasso2="";
 char                   * beamYear="mumu.PbPb2015.0.3-8.config";
 // char                   * beamYear="mumu.PbPb2015.simu.config";
@@ -31,7 +32,7 @@ char                   * beamYear="mumu.PbPb2015.0.3-8.config";
 TString striggerDimuon ="CMUL7-B-NOPF-MUFAST";
 TString striggerMB     ="CINT7-B-NOPF-MUFAST";
 TString seventType     ="PSALL";
-TString spairCut       ="pALLPAIRYPAIRPTIN0.0-12.0RABSMATCHLOWETAPDCA";
+TString spairCut       ="pALLPAIRYPAIRPTIN0.3-8.0RABSMATCHLOWETAPDCA";
 TString scentrality    ="V0M_00.00_90.00";
 
 TString param          =  "sJPsi,mJPsi,NofJPsi,SignalOverBkg3s,FitChi2PerNDF,Significance3s";

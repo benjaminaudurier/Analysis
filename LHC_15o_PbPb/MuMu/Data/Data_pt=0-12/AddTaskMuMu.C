@@ -16,14 +16,12 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   }  
   
   // Check the analysis type using the event handlers connected to the analysis manager.
-  //==============================================================================
   if (!mgr->GetInputEventHandler()) {
     ::Error("AddTaskMuMu", "This task requires an input event handler");
     return NULL;
   }
   
   // Add new trigger in case of Simulation
-  //===========================================================================
   if (simulations && triggerClassesToConsider )
   {
       triggerClassesToConsider->Add(new TObjString("ANY"));
@@ -39,14 +37,9 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
       triggerClassesToConsider->Add(new TObjString("MULL"));
       triggerClassesToConsider->Add(new TObjString("MUHU"));
       triggerClassesToConsider->Add(new TObjString("MUHL"));  
-//
-// for dpmjet simulations (at least) we have the following "triggers" :
-//    C0T0A,C0T0C,MB1,MBBG1,V0L,V0R,MULow,EMPTY,MBBG3,MULL,MULU,MUHigh
   }
-  //===========================================================================
   
   //  Configure inputmaps (Default on is in AliMuonEventCuts)
-  //===========================================================================
   TList* triggerInputsMap = new TList();
   triggerInputsMap->SetOwner(kTRUE);
   
@@ -57,10 +50,8 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   triggerInputsMap->Add(new TObjString("0MLL:15")); 
   triggerInputsMap->Add(new TObjString("0MLH:16")); 
 
-  //===========================================================================
 
   //  Configure task
-  //===========================================================================
   AliAnalysisTaskMuMu       * task = new AliAnalysisTaskMuMu; // Call the task
   AliAnalysisMuMuEventCutter* eventCutter = new AliAnalysisMuMuEventCutter(triggerClassesToConsider,triggerInputsMap); // To handle cuts on event
   AliAnalysisMuMuCutRegistry* cr = task->CutRegistry(); // Set CutRegistry
@@ -90,7 +81,6 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   AliAnalysisMuMuMinv  * minvAnalysis = new AliAnalysisMuMuMinv;// Analysis creating invariant mass spectrum
     
   // Configure sub analysis
-  //===========================================================================
   if ( globalAnalysis )
   {
     // Cuts on trigger level
@@ -130,7 +120,7 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
       cutElements.Add(rabs);
       cutElements.Add(matchlow);
       cutElements.Add(eta);
-      cutElements.Add(pdca);
+      // cutElements.Add(pdca);
       // cutElements.Add(ps);
       // add them
       cr->AddCutCombination(cutElements);    
@@ -144,7 +134,6 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
   /// - adding bins (in pt, y, centrality, etc...) for minv (and meanpt)
     
   // Configure sub analysis
-  //===========================================================================
   AliAnalysisMuMuBinning* binning = task->Binning(); // Create and set the "binning manager"
   
   if (minvAnalysis)
@@ -166,17 +155,18 @@ AliAnalysisTask* AddTaskMuMu(const char* outputname,
     binning->AddBin("psi","pt", 9.0, 10.0,"BENJ");
     binning->AddBin("psi","pt", 10.0, 12.0,"BENJ");
   
-    // y binning
-    binning->AddBin("psi","y",-4,-3.75,"BENJ");
-    binning->AddBin("psi","y",-3.75,-3.5,"BENJ");
-    binning->AddBin("psi","y",-3.5,-3.25,"BENJ");
-    binning->AddBin("psi","y",-3.25,-3,"BENJ");
-    binning->AddBin("psi","y",-3,-2.75,"BENJ");
-    binning->AddBin("psi","y",-2.75,-2.5,"BENJ");   
+    // // y binning
+    // binning->AddBin("psi","y",-4,-3.75,"BENJ");
+    // binning->AddBin("psi","y",-3.75,-3.5,"BENJ");
+    // binning->AddBin("psi","y",-3.5,-3.25,"BENJ");
+    // binning->AddBin("psi","y",-3.25,-3,"BENJ");
+    // binning->AddBin("psi","y",-3,-2.75,"BENJ");
+    // binning->AddBin("psi","y",-2.75,-2.5,"BENJ");   
   }
   
   // v0 centrality binning
   binning->AddBin("centrality","V0M",0.,90.);
+  binning->AddBin("centrality","V0M",0.,20.);
   binning->AddBin("centrality","V0M",0.,10.);
   binning->AddBin("centrality","V0M",10.,20.);
   binning->AddBin("centrality","V0M",20.,30.);

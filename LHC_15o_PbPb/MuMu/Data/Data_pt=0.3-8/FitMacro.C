@@ -17,7 +17,7 @@
 char           * sfile="AnalysisResults.root";
 char           * sasso="../../Simulation/pt=0-12/AnalysisResults.JPSI.root";
 char           * sasso2="";
-char           * beamYear="mumu.PbPb2015.config";
+char           * beamYear="mumu.PbPb2015.0.3-8.config";
 
 const char * MCRefResult = "PSICB2";
 
