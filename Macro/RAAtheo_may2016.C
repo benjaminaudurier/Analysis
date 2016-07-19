@@ -1,3 +1,5 @@
+
+
 void RAAtheo_may2016(){
 
 //Theory predictions for 
@@ -427,7 +429,7 @@ Double_t ErrNPart_data[9]={8.,8.,8.,8.,8.,8.,8.,8.,8.};
 //Pt
 const int npt=11;
 Double_t Pt_data[11]={0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5,8.5,9.5,11};
-Double_t ErrPt_data[11]={0.5.,0.5.,0.5.,0.5.,0.5.,0.5.,0.5.,0.5.,0.5.,0.5.,1.};
+Double_t ErrPt_data[11]={0.25.,0.25.,0.25.,0.25.,0.25.,0.25.,0.25.,0.25.,0.25.,0.25.,0.5};
 
 // 5 to 2 TeV Ratio
 Double_t Ratio_5_276[n]={1.197,1.179,1.157,1.146,1.227,1.099,1.109,1.333,1.184};
@@ -445,20 +447,19 @@ for(Int_t jj=0;jj<n;jj++){
 }
 
 // 5TeV Raa
-Double_t RAA5_data[n]={0.662,0.670,0.687,0.656,0.742,0.791,0.923,1.123,1.285};
-Double_t ErrStat_RAA5_data[n]={0.016,0.017,0.018,0.018,0.021,0.023,0.029,0.039,0.056};
-Double_t ErrSyst_RAA5_data[n]={0.017,0.018,0.019,0.025,0.026,0.033,0.049,0.076,0.109};
+Double_t RAA5_data[n]={0.656,0.664,0.689,0.647,0.725,0.772,0.902,1.093,1.258};
+Double_t ErrStat_RAA5_data[n]={0.011,0.011,0.013,0.013,0.016,0.019,0.023,0.036,0.051};
+Double_t ErrSyst_RAA5_data[n]={0.025,0.024,0.024,0.027,0.031,0.041,0.055,0.079,0.122};
+ 
+// 5TeV Raa 0.3<pt<8 with pp@5TeV
+Double_t RAA5_data_pt3_pp[n]={0.635,0.644,0.667,0.624,0.690,0.718,0.813,0.920,0.897};
+Double_t ErrStat_RAA5_data_pt3_pp[n]={0.011,0.012,0.012,0.013,0.015,0.018,0.022,0.033,0.044};
+Double_t ErrSyst_RAA5_data_pt3_pp[n]={0.025,0.023,0.024,0.026,0.030,0.039,0.051,0.066,0.076};// 5TeV Raa
 
-// // 5TeV Raa pt>0.3 with pp@5TeV
-// Double_t RAA5_data_pt3_pp[n]={0.569,0.576,0.591,0.562,0.628,0.655,0.740,0.842,0.822};
-// Double_t ErrStat_RAA5_data_pt3_pp[n]={0.009,0.010,0.010,0.011,0.013,0.015,0.019,0.029,0.040};
-// Double_t ErrSyst_RAA5_data_pt3_pp[n]={0.015,0.016,0.016,0.021,0.022,0.027,0.040,0.057,0.070};// 5TeV Raa
-
-
-// 5TeV Raa pt>0.3 with interpolation
-Double_t RAA5_data_pt3_pp[n]={0.663,0.671,0.688,0.655,0.731,0.763,0.862,0.981,0.957};
-Double_t ErrStat_RAA5_data_pt3_pp[n]={0.011,0.012,0.012,0.013,0.016,0.018,0.023,0.034,0.046};
-Double_t ErrSyst_RAA5_data_pt3_pp[n]={0.031,0.031,0.031,0.033,0.037,0.045,0.057,0.071,0.080};// 5TeV Raa
+ // 5TeV Raa pt>0.3 with interpolation
+// Double_t RAA5_data_pt3_pp[n]={0.663,0.671,0.688,0.655,0.731,0.763,0.862,0.981,0.957};
+// Double_t ErrStat_RAA5_data_pt3_pp[n]={0.011,0.012,0.012,0.013,0.016,0.018,0.023,0.034,0.046};
+// Double_t ErrSyst_RAA5_data_pt3_pp[n]={0.031,0.031,0.031,0.033,0.037,0.045,0.057,0.071,0.080};// 5TeV Raa
 
 
 // 2.76eV Raa pt>3 
@@ -466,15 +467,15 @@ Double_t RAA276_data_pt3[n]={0.545,0.560,0.594,0.570,0.592,0.715,0.805,0.778,0.8
 Double_t ErrStat_RAA276_data_pt3[n]={0.017,0.018,0.020,0.021,0.025,0.033,0.047,0.062,0.064};
 Double_t ErrSyst_RAA276_data_pt3[n]={0.016,0.017,0.018,0.023,0.024,0.030,0.044,0.064,0.078};// 5TeV Raa
 
-// 5 TeV with pp@5TeV Ref
-Double_t RAA5_data_pp[n]={0.588,0.595,0.610,0.583,0.659,0.702,0.820,0.997,1.141};
-Double_t ErrStat_RAA5_data_pp[n]={0.009,0.010,0.011,0.011,0.014,0.016,0.020,0.029,0.045};
-Double_t ErrSyst_RAA5_data_pp[n]={0.015,0.016,0.017,0.022,0.023,0.029,0.043,0.068,0.097};
+// 5TeV Raa 0<pt<8 with pp@5TeV
+Double_t RAA5_data_pp[n]={0.632,0.640,0.664,0.624,0.699,0.745,0.870,1.054,1.213};
+Double_t ErrStat_RAA5_data_pp[n]={0.011,0.011,0.012,0.013,0.015,0.018,0.022,0.035,0.049};
+Double_t ErrSyst_RAA5_data_pp[n]={0.024,0.024,0.023,0.026,0.030,0.039,0.053,0.076,0.118};
 
 // Pt coordinates
-Double_t RAA5_data_PT[npt]={0.785,0.748,0.704,0.577,0.578,0.454,0.428,0.397,0.445,0.329,0.431};
-Double_t ErrStat_RAA5_data_PT[npt]={0.019,0.012,0.011,0.009,0.014,0.016,0.020,0.018,0.022,0.022,0.056};
-Double_t ErrSyst_RAA5_data_PT[npt]={0.107,0.087,0.084,0.065,0.082,0.057,0.063,0.077,0.105,0.122,0.250};
+Double_t RAA5_data_PT[npt]={0.751,0.729,0.644,0.509,0.466,0.376,0.324,0.296,0.349,0.233,0.352};
+Double_t ErrStat_RAA5_data_PT[npt]={0.027,0.017,0.016,0.013,0.016,0.015,0.014,0.021,0.026,0.025,0.032};
+Double_t ErrSyst_RAA5_data_PT[npt]={0.067,0.058,0.047,0.037,0.043,0.031,0.032,0.037,0.063,0.051,0.075}; 
 
 
 // TGraphs data
@@ -541,7 +542,7 @@ gRAA5_datas->SetMarkerSize(1.5);
 //gRAA5_datas->SetLineColor(kGreen+1);
 gRAA5_datas->SetFillStyle(0);
 
-Double_t globRAA_data = 0.09213;
+Double_t globRAA_data = 0.077496;
 TBox *box_globRAA_data = new TBox(435.,1.-globRAA_data,450,1+globRAA_data);
 box_globRAA_data->SetFillColor(1);
 //____________________________
@@ -563,7 +564,7 @@ gRAA5_datas_pp->SetMarkerSize(1.5);
 //gRAA5_datas_pp->SetLineColor(kGreen+1);
 gRAA5_datas_pp->SetFillStyle(0);
 
-Double_t globRAA_data_pt = 0.083479;
+Double_t globRAA_data_pt = 0.076086;
 TBox *box_globRAA_data_pt = new TBox(420.,1.-globRAA_data_pt,435,1+globRAA_data_pt);
 box_globRAA_data_pt->SetFillColor(kBlue+1);
 
@@ -586,8 +587,8 @@ gRAA5_datas_pt3_pp->SetMarkerSize(1.5);
 //gRAA5_datas_pt3_pp->SetLineColor(kGreen+1);
 gRAA5_datas_pt3_pp->SetFillStyle(0);
 
-Double_t globRAA_data_pt3 = 0.09213; // Interpolation
-// Double_t globRAA_data_pt3 = 0.082207; // Data
+// Double_t globRAA_data_pt3 = 0.09213; // Interpolation
+Double_t globRAA_data_pt3 = 0.074591; // Data
 TBox *box_globRAA_data_pt3_pp = new TBox(435.,1.-globRAA_data_pt3,450,1+globRAA_data_pt3);
 box_globRAA_data_pt3_pp->SetFillColor(kRed+1);
 
@@ -610,14 +611,14 @@ gRAA5_datas_pt_sys->SetMarkerSize(1.5);
 gRAA5_datas_pt_sys->SetLineColor(kRed+1);
 gRAA5_datas_pt_sys->SetFillStyle(0);
 
-Double_t glob2015_pt_12 = 0.056256;
+Double_t glob2015_pt_12 = 0.040247;
 TBox *box_glob2015_pt_12 = new TBox(11.5,1.-glob2015_pt_12,12,1+glob2015_pt_12);
 box_glob2015_pt_12->SetFillColor(kRed+1);
 //____________________________
 
 
 
-//====================================================================================================
+
 //====================================================================================================
 //====================================================================================================
 //====================================================================================================
@@ -950,3 +951,5 @@ legDoubleRatiocompare3->Draw();
 
 
 }
+
+

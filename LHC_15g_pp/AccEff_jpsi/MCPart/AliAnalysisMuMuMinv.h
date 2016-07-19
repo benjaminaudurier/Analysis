@@ -59,6 +59,8 @@ private:
   Double_t powerLaw3Par(Double_t *x, Double_t *par);
   
   Double_t normPol12Par(Double_t *x, Double_t *par);
+  
+  Double_t TriggerLptApt(Double_t *x, Double_t *par);
 
 private:
   Bool_t fcomputeMeanPt;
