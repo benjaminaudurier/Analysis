@@ -82,7 +82,7 @@ void CreateAnalysisTrain(Bool_t isMC,Bool_t Mix)
 {
   /// create the analysis train and configure it
   
-   // // analysis manager
+   // analysis manager
    AliAnalysisManager        *mgr          = new AliAnalysisManager("MuMuAnalysis");
    AliMultiInputEventHandler*inputHandler = 0x0;
    // AliMultiInputEventHandler*inputHandler = new AliMultiInputEventHandler();
@@ -120,7 +120,7 @@ void CreateAnalysisTrain(Bool_t isMC,Bool_t Mix)
   triggers->SetOwner(kTRUE); // Give rights to trigger liser
   if (!isMC) triggers->Add(new TObjString("CMSL7-B-NOPF-MUFAST"));
   
-  TString output =  Mix ? Form("MIX_%s",AliAnalysisManager::GetCommonFileName()) : Form("%s",AliAnalysisManager::GetCommonFileName());
+  TString output =  /*Mix ? Form("MIX_%s",AliAnalysisManager::GetCommonFileName()) : */Form("%s",AliAnalysisManager::GetCommonFileName());
   gROOT->LoadMacro("AddTaskMuMu.C");
   AliAnalysisTaskMuMu* TaskMuMu = AddTaskMuMu(output.Data(),triggers,"PbPb2015",isMC);
   if(Mix)TaskMuMu->RunOnMixEvent();
@@ -132,7 +132,7 @@ void CreateAndCopyParFile(TString parfile)
 {
   ///Create and copy ParFiles locally
   
-  TString aliceBuildDir = gSystem->ExpandPathName("$ALICE_PHYSICS/../build");
+  TString aliceBuildDir = gSystem->ExpandPathName("$ALICE_WORK_DIR/BUILD/AliPhysics-latest-ali-master/AliPhysics");
   TString command = "";
   TString workDirFull = gSystem->pwd();
 
