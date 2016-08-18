@@ -13,6 +13,7 @@
   TString extraIncs         ="include";
   TString extraTasks        ="";
   TString extraPkgs         ="EventMixing:PWGmuon";
+  TString dataType          ="AOD";
 
   // --- grid specific setup ---
   TString dataDir           = "/alice/cern.ch/user/p/ppillot/Sim/LHC15n/JPsiTune1/VtxShift/results";
@@ -33,11 +34,10 @@
   const Int_t mixNum = 1; // ??
 
 //______________________________________________________________________________
-void runMuMuFacilities(TString smode = "local", TString inputFileName = "AliAOD.root", Bool_t isMC = kFALSE,Bool_t Mix =kTRUE)
+void runMuMuFacilities(TString smode = "local", TString inputFileName = "AliAOD.Muons.root", Bool_t isMC = kFALSE, Bool_t Mix = kTRUE)
 {
   /// Fill counters with triggered events
-  
-    
+
   TList pathList; pathList.SetOwner();
   TList fileList; fileList.SetOwner();
   fileList.Add(new TObjString( "runMuMuFacilities.C" ));
@@ -72,9 +72,7 @@ void runMuMuFacilities(TString smode = "local", TString inputFileName = "AliAOD.
     if (smode == "saf3" && splitDataset) AliAnalysisManager::GetAnalysisManager()->SetSkipTerminate(kTRUE);
     
     RunAnalysis(smode, inputFileName, rootVersion, alirootVersion, aliphysicsVersion, extraLibs, extraIncs, extraTasks, extraPkgs, dataDir, dataPattern, outDir, analysisMacroName, runFormat, ttl, maxFilesPerJob, maxMergeFiles, maxMergeStages);
-    
   }
-  
 }
 
 //______________________________________________________________________________
@@ -87,22 +85,29 @@ void CreateAnalysisTrain(Bool_t isMC,Bool_t Mix)
    AliMultiInputEventHandler*inputHandler = 0x0;
    // AliMultiInputEventHandler*inputHandler = new AliMultiInputEventHandler();
    
-   if (Mix) {
-
+  if (Mix) {
       // Create MultiInputEventHandler
       inputHandler = new AliMultiInputEventHandler();
 
-      // Comment the ones you don't want
-      inputHandler->AddInputEventHandler(new AliAODInputHandler());
-      // inputHandler->AddInputEventHandler(new AliESDInputHandler());
-      // inputHandler->AddInputEventHandler(new AliMCEventHandler());  
-   }
-   
-   if(inputHandler)mgr->SetInputEventHandler(inputHandler);
-   else if (isMC)  mgr->SetMCtruthEventHandler(new AliMCEventHandler());
-   else            mgr->SetInputEventHandler(new AliAODInputHandler());
-   // else            mgr->SetInputEventHandler(new AliESDInputHandler());
+      // Select correct handler  
+      if(dataType.Contains("AOD"))inputHandler->AddInputEventHandler(new AliAODInputHandler());
+      else if(dataType.Contains("ESD"))inputHandler->AddInputEventHandler(new AliESDInputHandler());
+      else if(isMC)inputHandler->AddInputEventHandler(new AliMCEventHandler());  
+      else {
+        printf("Cannot determine data type\n");
+        return;
+      } 
+    }
 
+  if(inputHandler)mgr->SetInputEventHandler(inputHandler);
+  else if (isMC)  mgr->SetMCtruthEventHandler(new AliMCEventHandler());
+  else if(dataType.Contains("AOD")) mgr->SetInputEventHandler(new AliAODInputHandler());
+  else if(dataType.Contains("ESD")) mgr->SetInputEventHandler(new AliESDInputHandler());
+  else {
+      printf("Cannot determine data type\n");
+      return;
+  }
+    
   // Load centrality task
   // gROOT->LoadMacro("$ALICE_PHYSICS/OADB/COMMON/MULTIPLICITY/macros/AddTaskMultSelection.C");
   // AliMultSelectionTask* task = AddTaskMultSelection(kFALSE); // user
@@ -119,11 +124,11 @@ void CreateAnalysisTrain(Bool_t isMC,Bool_t Mix)
   TList* triggers = new TList; // Create pointer for trigger list
   triggers->SetOwner(kTRUE); // Give rights to trigger liser
   if (!isMC) triggers->Add(new TObjString("CMSL7-B-NOPF-MUFAST"));
+  if (!isMC) triggers->Add(new TObjString("CMUL7-B-NOPF-MUFAST"));
   
-  TString output =  /*Mix ? Form("MIX_%s",AliAnalysisManager::GetCommonFileName()) : */Form("%s",AliAnalysisManager::GetCommonFileName());
+  TString output =  Form("%s",AliAnalysisManager::GetCommonFileName());
   gROOT->LoadMacro("AddTaskMuMu.C");
   AliAnalysisTaskMuMu* TaskMuMu = AddTaskMuMu(output.Data(),triggers,"PbPb2015",isMC);
-  if(Mix)TaskMuMu->RunOnMixEvent();
   
 }
 

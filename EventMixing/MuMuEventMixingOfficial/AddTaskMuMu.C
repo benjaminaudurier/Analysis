@@ -45,13 +45,19 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
   AliAnalysisMuMuCutElement* eventTrue        = cr->AddEventCut(*eventCutter,"IsTrue","const AliVEvent&","");
   AliAnalysisMuMuCutElement* triggerSelection = cr->AddTriggerClassCut(*eventCutter,"SelectTriggerClass","const TString&,TString&,UInt_t,UInt_t,UInt_t","");
   AliAnalysisMuMuCutElement* ps               = eventTrue;
+  AliAnalysisMuMuCutElement* ps1              = eventTrue;
 
-  if (!simulations) ps = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedMSL","const AliInputEventHandler&","");
+  if (!simulations) 
+  {
+   ps  = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedMSL","const AliInputEventHandler&",""); 
+   ps1 = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedMUL","const AliInputEventHandler&",""); 
+  }
 
   // Apply default cut
   // cr->AddCutCombination(triggerSelection);
   // cr->AddCutCombination(eventTrue);
   cr->AddCutCombination(ps,triggerSelection);
+  cr->AddCutCombination(ps1,triggerSelection);
 
   task->SetBeamYear(beamYear);
 
@@ -136,7 +142,7 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
     binning->AddBin("psi","integrated");
 
    //   // pt binning
-   //  binning->AddBin("psi","pt", 0.0, 1.0,"BENJ");
+    binning->AddBin("psi","pt", 0.0, 1.0,"BENJ");
    //  binning->AddBin("psi","pt", 1.0, 2.0,"BENJ");
    //  binning->AddBin("psi","pt", 2.0, 3.0,"BENJ");
    //  binning->AddBin("psi","pt", 3.0, 4.0,"BENJ");
@@ -155,7 +161,7 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
 
 
   // v0 centrality binning
-  binning->AddBin("centrality","V0M",0.,90.);
+  // binning->AddBin("centrality","V0M",0.,90.);
   binning->AddBin("centrality","V0M",0.,10.);
   binning->AddBin("centrality","V0M",10.,20.);
   binning->AddBin("centrality","V0M",20.,30.);
