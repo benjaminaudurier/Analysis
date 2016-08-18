@@ -1,2 +1,0 @@
-Find;FileName=AliAOD.Muons.root;BasePath=/alice/data/2011/LHC11h/000170027/ESDs/pass2_muon/AOD119
-Find;FileName=AliAOD.Muons.root;BasePath=/alice/data/2011/LHC11h/000170036/ESDs/pass2_muon/AOD119
