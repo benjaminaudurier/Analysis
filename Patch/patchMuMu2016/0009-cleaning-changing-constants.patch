@@ -1,0 +1,58 @@
+From 6d6babeca4ead027eafd35c09fb206ccb29fd990 Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Fri, 27 May 2016 10:06:55 +0200
+Subject: [PATCH 09/36] cleaning + changing constants
+
+---
+ PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx | 20 ++++++--------------
+ 1 file changed, 6 insertions(+), 14 deletions(-)
+
+diff --git a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx
+index ddcaeb0..30331f3 100644
+--- a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx
++++ b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx
+@@ -57,14 +57,9 @@ using std::ifstream;
+ namespace
+ {
+   const Double_t BR           = 5.93/100; // Branching ratio
+-  //Normalization factor
+-  //FIXME                     : Fnorm store in TH1, make in general
+-  // const Double_t Fnorm        = 11.827;    // Normalization
+-  // const Double_t FnormStat    = 0.011;     // Normalization
+-  // const Double_t FnormSyst    = 0.01;     // Normalization
+   //luminosity
+-  const Double_t lumi         = 104.35; // nb^-1
+-  const Double_t lumiStat     = 1.52; // nb^-1
++  const Double_t lumi         = 113.07; // nb^-1
++  const Double_t lumiStat     = 0.10; // nb^-1
+   const Double_t lumiSys      = 5./100; // nb^-1
+   // Global MC sys. err. for centrality integrated in pt and Y
+   const Double_t MCParamError = 3./100;
+@@ -161,8 +156,10 @@ TList* AliAnalysisMuMuSpectraCapsulePP::ComputePPCrossSection(const char* what)
+           continue;
+         }
+ 
+-        AliDebug(1,Form("%s      = %f +/- %f",what,r->GetValue(what),r->GetErrorStat(what)));
+-        AliDebug(1,Form("NofJPsi = %f +/- %f",NofJPsi,NofJPsiError));
++        AliDebug(1,Form(""));
++        AliDebug(1,Form("%s      = %f +/- %f\n",what,r->GetValue(what),r->GetErrorStat(what)));
++        AliDebug(1,Form("NofJPsi = %f +/- %f +/- %f \n ",NofJPsi,NofJPsiError,r->GetRMS("NofJPsi")));
++        AliDebug(1,Form(""));
+ 
+         // Select weither or not we divide by bin width
+         if(bin->WidthX() <= 2.0)sigma = r->GetValue(what)/(lumi*BR*1000.*bin->WidthX()); // For pT_0_1,pT_1_2...Y_4_3.75...
+@@ -447,11 +444,6 @@ void AliAnalysisMuMuSpectraCapsulePP::PrintConst() const
+       cout << Form("      Constants for Spectra %s",fSpectraName.Data()) << endl;
+       cout <<      " ================================================================ " << endl;
+       cout <<  "   Branching ratio = " <<  5.93/100 << endl; // 
+-      //Normalization factor
+-      //FIXME                                               : Fnorm store in TH1, make in general
+-      // cout <<  "   FNorm                                    = " <<  Fnorm << endl;    // 
+-      // cout <<  "   FNorm stat.                              = " <<  FnormStat << endl;     // Normalization
+-      // cout <<  "   FNorm syst.                              = " <<  FnormSyst << endl;     // Normalization
+       
+       // Corr. error for pt case
+       cout <<  "  TrajPt. error                             = " <<  TrajPT << endl;
+-- 
+2.7.4 (Apple Git-66)
+

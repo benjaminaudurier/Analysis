@@ -54,7 +54,7 @@ void PrintFitMacro(char         * what ="PT",const char * printWhat = "distribut
 {
 
     TString subresults = "";
-    subresults = "CB2VWG_1.7_4.8_SP1.1";
+    subresults = "CB2VWG_2.0_4.4_SP1.1";
     // subresults = "CB2VWG_1.7_4.8_SP1.1,CB2VWG_2.0_4.4_SP1.1,";
     // subresults += "CB2POL1POL2_1.7_4.8_SP1.1,CB2POL1POL2_2.0_4.4_SP1.1,";
     // subresults += "CB2VWG_1.7_4.8_Weight=2.0_SP1.1,CB2VWG_2.0_4.4_Weight=2.0_SP1.1,";

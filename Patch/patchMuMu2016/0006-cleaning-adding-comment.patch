@@ -1,0 +1,409 @@
+From ac21c9b1b2c6f2ae18fe9e1e14a17925647a16f0 Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Fri, 27 May 2016 10:04:41 +0200
+Subject: [PATCH 06/36] cleaning + adding comment
+
+---
+ PWG/muondep/AliAnalysisMuMu.cxx | 224 +++++++++++++++++-----------------------
+ 1 file changed, 94 insertions(+), 130 deletions(-)
+
+diff --git a/PWG/muondep/AliAnalysisMuMu.cxx b/PWG/muondep/AliAnalysisMuMu.cxx
+index ac9d206..a84bd88 100644
+--- a/PWG/muondep/AliAnalysisMuMu.cxx
++++ b/PWG/muondep/AliAnalysisMuMu.cxx
+@@ -968,7 +968,7 @@ void AliAnalysisMuMu::DrawMinv(const char* type, const char* particle, const cha
+ {
+   /// Draw minv spectra for binning of given type
+ 
+-//  AliWarning("Reimplement me!");
++  //  AliWarning("Reimplement me!");
+ 
+   if (!fConfig)
+   {
+@@ -1041,7 +1041,6 @@ void AliAnalysisMuMu::ExecuteCanvasEvent(Int_t event, Int_t /*px*/, Int_t /*py*/
+ 
+ }
+ 
+-
+ //_____________________________________________________________________________
+ void AliAnalysisMuMu::RAAasGraphic(const char* particle,
+                                    const char* binType,
+@@ -1051,14 +1050,14 @@ void AliAnalysisMuMu::RAAasGraphic(const char* particle,
+                                    Bool_t AccEffCorr
+                                    )const
+ {
+-    /**
+-     * Function to use after fitting procedur ( Jpsi() for instance ).
+-     * Loops over all combination of /eventype/trigger/centrality (etc.), compute, store and print RAA on terminal.
+-     * <binType> can be either "PT"/"Y"/"INTEGRATED" for the moment.
+-     *
+-     * Some comments: In case of PT/Y/CENTRALITY(single bin), the method implemented in AliAnalysisMuMuSpectraCapsulePbPb does the job, but for RAAvsCENTRALITY,
+-     * we have to create a new TGraph (see inside for details)
+-     */
++    ///
++    /// Function to use after fitting procedur ( Jpsi() for instance ).
++    /// Loops over all combination of /eventype/trigger/centrality (etc.), compute, store and print RAA on terminal.
++    /// <binType> can be either "PT"/"Y"/"INTEGRATED" for the moment.
++    ///
++    /// Some comments: In case of PT/Y/CENTRALITY(single bin), the method implemented in AliAnalysisMuMuSpectraCapsulePbPb does the job, but for RAAvsCENTRALITY,
++    /// we have to create a new TGraph (see inside for details)
++    ///
+ 
+     if (!OC() || !CC())
+         {
+@@ -1387,7 +1386,7 @@ AliAnalysisMuMu::ExpandPathName(const char* file)
+ //_____________________________________________________________________________
+ void AliAnalysisMuMu::TwikiOutputFnorm(const char* series) const
+ {
+-  // make a twiki-compatible output of the Fnorm factor(s)
++  /// make a twiki-compatible output of the Fnorm factor(s)
+   TObjArray* what = TString(series).Tokenize(",");
+   TObjString* s;
+   TObjArray graphs;
+@@ -1504,7 +1503,7 @@ void AliAnalysisMuMu::TwikiOutputFnorm(const char* series) const
+ TFile*
+ AliAnalysisMuMu::FileOpen(const char* file)
+ {
+-    // Open a file after expansion of its name
++    /// Open a file after expansion of its name
+ 
+     return TFile::Open(ExpandPathName(file).Data());
+ }
+@@ -2295,7 +2294,7 @@ AliAnalysisMuMu::GetParametersFromResult(TString& fitType, AliAnalysisMuMuJpsiRe
+ //_____________________________________________________________________________
+ ULong64_t AliAnalysisMuMu::GetTriggerScalerCount(const char* triggerList, Int_t runNumber)
+ {
+-    // Get the expected (from OCDB scalers) trigger count
++    /// Get the expected (from OCDB scalers) trigger count
+ 
+     AliAnalysisTriggerScalers ts(runNumber,Config()->OCDBPath());
+ 
+@@ -2981,12 +2980,12 @@ void AliAnalysisMuMu::ComputeRelativeValueAndSESystematics(const char* quantity,
+ TH1* AliAnalysisMuMu::PlotJpsiYield(const char* whatever)
+ {
+ 
+-    //FIXME::Make it general
+-    if ( IsSimulation() )
+-        {
+-        AliError("Cannot compute J/Psi yield: Is a simulation file");
+-        return 0x0;
+-        }
++    /// Plot the Jpsi Yield
++    /// FIXME : not general
++    if ( IsSimulation() ){
++      AliError("Cannot compute J/Psi yield: Is a simulation file");
++      return 0x0;
++    }
+ 
+     TString path(Form("/%s/%s/%s/%s",
+                       Config()->First(Config()->EventSelectionKey(),kFALSE).Data(),
+@@ -3013,18 +3012,17 @@ TH1* AliAnalysisMuMu::PlotJpsiYield(const char* whatever)
+     Double_t bR = 0.0593; // BR(JPsi->mu+mu-)
+     Double_t bRerror = 0.0006 ;
+ 
+-    for (Int_t i = 1 ; i <= hy->GetNbinsX() ; i++)
+-        {
+-        Double_t yield = hry->GetBinContent(i)/(hN->GetBinContent(i)*bR);
+-        Double_t yieldError = TMath::Sqrt(TMath::Power(hry->GetBinError(i)/(hN->GetBinContent(i)*bR),2.) +
+-                                          TMath::Power(hN->GetBinError(i)*bR/TMath::Power(hN->GetBinContent(i)*bR,2.),2.) +
+-                                          TMath::Power(hry->GetBinContent(i)*hN->GetBinContent(i)*bRerror/TMath::Power(hN->GetBinContent(i)*bR,2.),2.));
++    for (Int_t i = 1 ; i <= hy->GetNbinsX() ; i++){
++      Double_t yield = hry->GetBinContent(i)/(hN->GetBinContent(i)*bR);
++      Double_t yieldError = TMath::Sqrt(TMath::Power(hry->GetBinError(i)/(hN->GetBinContent(i)*bR),2.) +
++                                        TMath::Power(hN->GetBinError(i)*bR/TMath::Power(hN->GetBinContent(i)*bR,2.),2.) +
++                                        TMath::Power(hry->GetBinContent(i)*hN->GetBinContent(i)*bRerror/TMath::Power(hN->GetBinContent(i)*bR,2.),2.));
+ 
+-        std::cout << yield << " +- " << yieldError << std::endl;
++      std::cout << yield << " +- " << yieldError << std::endl;
+ 
+-        hy->SetBinContent(i,yield);
+-        hy->SetBinError(i,yieldError);
+-        }
++      hy->SetBinContent(i,yield);
++      hy->SetBinError(i,yieldError);
++    }
+ 
+     delete hry;
+     delete hN;
+@@ -3210,7 +3208,7 @@ AliAnalysisMuMu::GetCollections(const char* rootfile,
+ //_____________________________________________________________________________
+ Bool_t AliAnalysisMuMu::IsSimulation() const
+ {
+-    // whether or not we have MC information
++    /// whether or not we have MC information
+ 
+     //  return kFALSE;
+ 
+@@ -3221,10 +3219,9 @@ Bool_t AliAnalysisMuMu::IsSimulation() const
+     TObjString* str;
+     Bool_t ok(kFALSE);
+ 
+-    while ( ( str = static_cast<TObjString*>(next()) ) )
+-        {
+-        if ( str->String().Contains(AliAnalysisMuMuBase::MCInputPrefix()) ) ok = kTRUE;
+-        }
++    while ( ( str = static_cast<TObjString*>(next()) ) ){
++      if ( str->String().Contains(AliAnalysisMuMuBase::MCInputPrefix()) ) ok = kTRUE;
++    }
+     delete list;
+ 
+     return ok;
+@@ -3599,10 +3596,9 @@ void AliAnalysisMuMu::ShowList(const char* title, const TString& list, const cha
+     TIter next(parts);
+     TObjString* str;
+ 
+-    while ( ( str = static_cast<TObjString*>(next()) ) )
+-        {
+-        std::cout << "    " << str->String().Data() << std::endl;
+-        }
++    while ( ( str = static_cast<TObjString*>(next()) ) ){
++      std::cout << "    " << str->String().Data() << std::endl;
++    }
+ 
+     if ( parts->GetEntries()==0) std::cout << endl;
+ 
+@@ -3612,82 +3608,59 @@ void AliAnalysisMuMu::ShowList(const char* title, const TString& list, const cha
+ //_____________________________________________________________________________
+ void AliAnalysisMuMu::Print(Option_t* opt) const
+ {
+-    /// printout
+-    std::cout << "Reading from file : " << fFilename.Data() << std::endl;
++  /// printout
++  std::cout << "Reading from file : " << fFilename.Data() << std::endl;
+ 
+-    TString copt(opt);
++  TString copt(opt);
+ 
+-    if (IsSimulation() || SIM() )
+-        {
+-        copt += "SIM";
+-        }
++  if (IsSimulation() || SIM() )copt += "SIM";
++  if ( !IsSimulation() )copt += "REAL";
+ 
+-    if ( !IsSimulation() )
+-        {
+-        copt += "REAL";
+-        }
++  Config()->Print(copt.Data());
+ 
+-    Config()->Print(copt.Data());
++  if ( RunNumbers().size() > 1 )std::cout << RunNumbers().size() << " runs";
++  else std::cout << RunNumbers().size() << " run";
+ 
+-    if ( RunNumbers().size() > 1 )
+-        {
+-        std::cout << RunNumbers().size() << " runs";
+-        }
+-    else
+-        {
+-        std::cout << RunNumbers().size() << " run";
+-        }
+ 
+-    if ( fCorrectionPerRun )
+-        {
+-        std::cout << " with correction factors";
+-        }
+-    std::cout << std::endl;
+-    Int_t i(0);
+-    for ( std::set<int>::const_iterator it = RunNumbers().begin(); it != RunNumbers().end(); ++it )
+-        {
+-        std::cout << (*it);
+-        if ( fCorrectionPerRun )
+-            {
+-            std::cout << Form("(%e)",fCorrectionPerRun->GetY()[i]);
+-            }
+-        std::cout << ",";
+-        ++i;
+-        }
+-    std::cout << std::endl;
++  if ( fCorrectionPerRun ) std::cout << " with correction factors";
+ 
+-    TString sopt(opt);
+-    sopt.ToUpper();
++  std::cout << std::endl;
++  Int_t i(0);
++  for ( std::set<int>::const_iterator it = RunNumbers().begin(); it != RunNumbers().end(); ++it )
++  {
++    std::cout << (*it);
++    if ( fCorrectionPerRun ) std::cout << Form("(%e)",fCorrectionPerRun->GetY()[i]);
++    std::cout << ",";
++    ++i;
++  }
++  std::cout << std::endl;
+ 
+-    if ( sopt.Contains("BIN") && BIN() )
+-        {
+-        std::cout << "Binning : " << std::endl;
+-        TString topt(sopt);
+-        topt.ReplaceAll("BIN","");
+-        BIN()->Print(topt.Data());
+-        }
+-    if ( sopt.Contains("MC") && OC() )
+-        {
+-        TString topt(sopt);
+-        topt.ReplaceAll("MC","");
+-        OC()->Print(topt.Data());
+-        }
+-    if ( sopt.Contains("CC") && CC() )
+-        {
+-        CC()->Print("trigger/event");
+-        }
++  TString sopt(opt);
++  sopt.ToUpper();
+ 
+-    if ( sopt.Contains("SIZE") )
+-        {
+-        TFile* f = ReOpen(fFilename,"READ");
+-        TIter next(f->GetListOfKeys());
+-        TKey* key;
++  if ( sopt.Contains("BIN") && BIN() ){
++    std::cout << "Binning : " << std::endl;
++    TString topt(sopt);
++    topt.ReplaceAll("BIN","");
++    BIN()->Print(topt.Data());
++  }
+ 
+-        while ( ( key = static_cast<TKey*>(next()) ) )
+-            {
+-            std::cout << key->GetName() << " " << key->GetNbytes() << " " << key->GetObjlen() << std::endl;
+-            }
+-        }
++  if ( sopt.Contains("MC") && OC() ){
++    TString topt(sopt);
++    topt.ReplaceAll("MC","");
++    OC()->Print(topt.Data());
++  }
++
++  if ( sopt.Contains("CC") && CC() )CC()->Print("trigger/event");
++
++
++  if ( sopt.Contains("SIZE") ){
++    TFile* f = ReOpen(fFilename,"READ");
++    TIter next(f->GetListOfKeys());
++    TKey* key;
++
++    while ( ( key = static_cast<TKey*>(next()) ) )std::cout << key->GetName() << " " << key->GetNbytes() << " " << key->GetObjlen() << std::endl;
++  }
+ }
+ 
+ //_____________________________________________________________________________
+@@ -3828,24 +3801,19 @@ void AliAnalysisMuMu::PrintNofParticle(const char* particle, const char* what, c
+ //_____________________________________________________________________________
+ TFile* AliAnalysisMuMu::ReOpen(const char* filename, const char* mode) const
+ {
+-    /// Tries to reopen the file with a new mode
+-
+-    TFile* f = static_cast<TFile*>(gROOT->GetListOfFiles()->FindObject(filename));
++  /// Tries to reopen the file with a new mode
+ 
+-    if (f)
+-        {
+-        delete f;
+-        }
++  TFile* f = static_cast<TFile*>(gROOT->GetListOfFiles()->FindObject(filename));
++  if (f)delete f;
+ 
+-    f = TFile::Open(filename,mode);
++  f = TFile::Open(filename,mode);
+ 
+-    if ( !f || !f->IsOpen() )
+-        {
+-        AliError(Form("Cannot open file %s in mode %s",filename,mode));
+-        return 0x0;
+-        }
++  if ( !f || !f->IsOpen() ){
++    AliError(Form("Cannot open file %s in mode %s",filename,mode));
++    return 0x0;
++  }
+ 
+-    return f;
++  return f;
+ }
+ 
+ ////_____________________________________________________________________________
+@@ -4680,7 +4648,7 @@ void AliAnalysisMuMu::ComputePPCrossSection(const char* binType, const char* par
+                         if(sbinType->String().Contains("PT")) gPad->SetLogy();
+ 
+                         TLegend * leg = new TLegend(0.4,0.7,0.70,0.9);
+-                        leg->SetHeader(Form("ALICE, p-p #sqrt{s_{NN}}=5.02 TeV, L_{int}= 116.67 +/- 5.31 #mub^{-1})"));
++                        leg->SetHeader(Form("ALICE, p-p #sqrt{s_{NN}}=5.02 TeV, L_{int}= 113.07 +/- 0.1 #mub^{-1})"));
+                         if(sbinType->String().Contains("PT")) leg->AddEntry(graph,"Inclusive J/#psi cross-section 2.5 < y < 4","pe");
+                         if(sbinType->String().Contains("Y")) leg->AddEntry(graph,"Inclusive J/#psi cross-section 0 < pT < 12 GeV/c^2","pe");
+                         leg->AddEntry(graphErr,"systematic uncertainty ","f");
+@@ -4870,7 +4838,7 @@ void AliAnalysisMuMu::ComputeFnormWeightedMeanGraphs(AliAnalysisMuMuFnorm::ETrig
+     /// Compute the FNorm Weighted Mean Graph
+     /// Parameters:
+     ///   - refTrigger    : kMUL, kMB ...
+-    ///   - patternOrList : name of the graphs included in th emean proceedur. Two mean graphs are separated by ":" and graphics used to compute a mean graphs are
++    ///   - patternOrList : name of the graphs included in the mean proceedur. Two mean graphs are separated by ":" and graphics used to compute a mean graphs are
+     ///                     separated by ',' . For example: FnormOffline2PUPS,FnormOffline1PUPS:FnormOffline2PUPS,FnormOffline1PUPS,FnormScalers1PUPS will compute
+     ///                     one mean graph with  FnormOffline2PUPS - FnormOffline1PUPS, and one mean graph with FnormOffline2PUPS - FnormOffline1PUPS - FnormScalers1PUPS.
+     ///   -  graphName    : name of the output mean graph. Selected by default otherwise
+@@ -5000,7 +4968,6 @@ void AliAnalysisMuMu::ComputeIntFnormFromCounters(AliAnalysisMuMuFnorm::ETrigger
+     OC()->Attach(fnorm,"/FNORM/Offline/");
+     //Update
+     Update();
+-
+ }
+ 
+ //_____________________________________________________________________________
+@@ -5178,8 +5145,6 @@ void AliAnalysisMuMu::ComputeMeanFnorm(const char* triggerCluster, const char* e
+ 
+     if ( adoptOK ) std::cout << "+++FNorm histo " << hFnormMean->GetName() << " adopted" << std::endl;
+     else AliError(Form("Could not adopt FNorm histo %s",hFnormMean->GetName()));
+-
+-
+ }
+ 
+ 
+@@ -5640,8 +5605,6 @@ void AliAnalysisMuMu::ComputeJpsiMPt(Bool_t relative, const char* evSelInt, cons
+ 
+ 
+     return;
+-
+-
+ }
+ 
+ //_____________________________________________________________________________
+@@ -5794,7 +5757,6 @@ void AliAnalysisMuMu::ComputeMBXSectionFractionInBins(const char* filePileUpCorr
+     delete[] nCINTBin;
+ 
+     return;
+-
+ }
+ 
+ //_____________________________________________________________________________
+@@ -5862,15 +5824,17 @@ AliAnalysisMuMuSpectra* AliAnalysisMuMu::CorrectSpectra(const char* type, const
+       AliError("Cannot compute corrected yield without associated MC file !");
+       return 0x0;
+     }
++    else{
++      cout <<      " ================================================================ " << endl;
++      cout <<      "                       CorrectSpectra                           " << endl;
++      cout <<      " ================================================================ " << endl;
++    }
+ 
+     TString Event         =Config()->First(Config()->EventSelectionKey(),kTRUE);
+     TString Centrality    =Config()->First(Config()->CentralitySelectionKey(),kTRUE);
+     TString DimuonTrigger =Config()->First(Config()->DimuonTriggerKey(),kTRUE);
+     TString PairSelection =Config()->First(Config()->PairSelectionKey(),kTRUE);
+ 
+-    cout << " ----> Correcting Specta " << endl;
+-    // cout << " Correcting Specta : " << Form("%s,%s,%s,%s",Event.Data(),DimuonTrigger.Data(),Centrality.Data(),PairSelection.Data()) << endl;
+-
+     AliAnalysisMuMuSpectra* realSpectra = GetSpectra(type,flavour);
+     AliAnalysisMuMuSpectra* simSpectra = SIM()->GetMCSpectra(type,Event.Data(),DimuonTrigger.Data(),Centrality.Data(),PairSelection.Data(),flavour);
+     
+@@ -5977,7 +5941,7 @@ AliAnalysisMuMuSpectra* AliAnalysisMuMu::RABy(const char* type, const char* dire
+   Double_t y2_norma= 3.25/ymax;
+   Double_t normalization = 0.25*(230.8+212.1)/ydist.Integral(y1_norma, y2_norma);
+   ydist.SetParameter(0,normalization);
+-//  AliInfoClass(Form("ymax=%e normalization=%f",ymax,ydist.Integral(y1_norma, y2_norma)));
++  //  AliInfoClass(Form("ymax=%e normalization=%f",ymax,ydist.Integral(y1_norma, y2_norma)));
+ 
+   AliAnalysisMuMuSpectra* realSpectra = static_cast<AliAnalysisMuMuSpectra*>(OC()->GetObject(Form("/PSALL/CMUL7-B-NOPF-MUON/PP/pMATCHLOWRABSBOTH/PSI-%s",type)));
+   AliAnalysisMuMuSpectra* simSpectra = static_cast<AliAnalysisMuMuSpectra*>(SIM()->OC()->GetObject(Form("/ALL/CMULLO-B-NOPF-MUON/PP/pMATCHLOWRABSBOTH/PSI-%s",type)));
+-- 
+2.7.4 (Apple Git-66)
+

@@ -1,0 +1,42 @@
+From cce1306479498936fc05c455e6cfaffd1bc864a3 Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Fri, 24 Jun 2016 14:06:57 +0200
+Subject: [PATCH 35/36] update cross section value
+
+---
+ PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx
+index 91ea96f..bd08e21 100644
+--- a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx
++++ b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx
+@@ -69,9 +69,9 @@ namespace
+   const Double_t FnormSyst         = 0.059;     // Normalization
+   
+   //pp Cross-section integrated for pp@5TeV 0<pt<8 , -4<y<-2.5
+-  const Double_t sigmaPP        = 5.61;    // for fully integrated case
+-  const Double_t dsigmaPP       = 0.08;    // idem
+-  const Double_t dsigmaPPCorr   = 0.29;    // for fully integrated case
++  // const Double_t sigmaPP        = 5.55;    // for fully integrated case
++  // const Double_t dsigmaPP       = 0.08;    // idem
++  // const Double_t dsigmaPPCorr   = 0.28;    // for fully integrated case
+   
+   // pp Cross-section integrated for pp@5TeV 0.3<pT<8 , -4<y<-2.5
+   // const Double_t sigmaPP        = 5.47;    // for fully integrated case
+@@ -79,9 +79,9 @@ namespace
+   // const Double_t dsigmaPPCorr   = 0.27;    // for fully integrated case
+   
+   //pp Cross-section integrated for pp@5TeV 0<pT<12 , -4<y<-2.5
+-  // const Double_t sigmaPP           = 5.51;    // for fully integrated case
+-  // const Double_t dsigmaPP          = 0.08;    // idem
+-  // const Double_t dsigmaPPCorr      = 0.28;    // for fully integrated case
++  const Double_t sigmaPP           = 5.61;    // for fully integrated case
++  const Double_t dsigmaPP          = 0.08;    // idem
++  const Double_t dsigmaPPCorr      = 0.27;    // for fully integrated case
+   
+   // Global MC sys. err. for centrality integrated in pt and Y
+   const Double_t MCParamError      = 2.0;//%
+-- 
+2.7.4 (Apple Git-66)
+

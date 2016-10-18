@@ -1,0 +1,46 @@
+From 141bedc265af5d69bbba9d7ffbb5625450d63bf1 Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Fri, 27 May 2016 10:07:26 +0200
+Subject: [PATCH 10/36] changing cross-section values
+
+---
+ PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx
+index 654ba96..cd3b072 100644
+--- a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx
++++ b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx
+@@ -64,19 +64,19 @@ namespace
+   const Double_t FnormSyst      = 0.059;     // Normalization
+   
+   //pp Cross-section integrated for pp@5TeV 0<pt<8 , -4<y<-2.5
+-  // const Double_t sigmaPP         = 5.851362;    // for fully integrated case
+-  // const Double_t dsigmaPP        = 0.118919;    // idem
+-  // const Double_t dsigmaPPCorr    = 0.350270;    // for fully integrated case
++  // const Double_t sigmaPP         = 5.352424;    // for fully integrated case
++  // const Double_t dsigmaPP        = 0.218480;    // idem
++  // const Double_t dsigmaPPCorr    = 0.304410;    // for fully integrated case
+ 
+-  //pp Cross-section integrated for pp@5TeV 0.3<pT<8 , -4<y<-2.5
+-  const Double_t sigmaPP        = 5.823154;    // for fully integrated case
+-  const Double_t dsigmaPP       = 0.164146;    // idem
+-  const Double_t dsigmaPPCorr   = 0.333051;    // for fully integrated case
++  // pp Cross-section integrated for pp@5TeV 0.3<pT<8 , -4<y<-2.5
++  const Double_t sigmaPP        = 5.280759;    // for fully integrated case
++  const Double_t dsigmaPP       = 0.237406;    // idem
++  const Double_t dsigmaPPCorr   = 0.301285;    // for fully integrated case
+ 
+   //pp Cross-section integrated for pp@5TeV 0<pT<12 , -4<y<-2.5
+-  // const Double_t sigmaPP        = 5.884675;    // for fully integrated case
+-  // const Double_t dsigmaPP       = 0.166477;    // idem
+-  // const Double_t dsigmaPPCorr   = 0.352264;    // for fully integrated case
++  // const Double_t sigmaPP        = 5.405032;    // for fully integrated case
++  // const Double_t dsigmaPP       = 0.228325;    // idem
++  // const Double_t dsigmaPPCorr   = 0.306719;    // for fully integrated case
+   
+   // Global MC sys. err. for centrality integrated in pt and Y
+   const Double_t MCParamError   = 1.6;//%
+-- 
+2.7.4 (Apple Git-66)
+

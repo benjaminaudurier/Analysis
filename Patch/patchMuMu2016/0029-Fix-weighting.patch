@@ -1,0 +1,25 @@
+From a14cc7d7d7f724d2476fccee5f89a79d6f9b5a68 Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Fri, 17 Jun 2016 15:43:35 +0200
+Subject: [PATCH 29/36] Fix weighting
+
+---
+ PWG/muon/AliAnalysisMuMuMinv.cxx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/PWG/muon/AliAnalysisMuMuMinv.cxx b/PWG/muon/AliAnalysisMuMuMinv.cxx
+index 72fb6f9..a5aff77 100644
+--- a/PWG/muon/AliAnalysisMuMuMinv.cxx
++++ b/PWG/muon/AliAnalysisMuMuMinv.cxx
+@@ -280,7 +280,7 @@ void AliAnalysisMuMuMinv::FillHistosForPair(const char* eventSelection,
+     mcpj+=mcpi;
+     
+     // Weight tracks if specified
+-    if(!fWeightMuon)      inputWeightMC = WeightPairDistribution(mcpj.Pt(),mcpj.Rapidity());
++    if(!fWeightMuon)      inputWeightMC = WeightPairDistribution(mother->Pt(),mother->Y());
+     else if(fWeightMuon)  inputWeightMC = WeightMuonDistribution(mcTracki->Px()) * WeightMuonDistribution(mcTrackj->Px());
+   }
+   
+-- 
+2.7.4 (Apple Git-66)
+

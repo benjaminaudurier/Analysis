@@ -6,10 +6,10 @@
 
 # printenv
 
-cd $HOME/alice/sw/BUILD/AliPhysics-latest-ali-master/AliPhysics/$2
+cd $HOME/alice/sw/BUILD/AliPhysics-latest-ali-master/AliPhysics/$1
 
-if [ $# -eq 3 ]; then
-  cd $3
+if [ $# -eq 2 ]; then
+  cd $2
 fi
 
 /usr/bin/make -j$MJ install 2>&1

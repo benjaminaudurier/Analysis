@@ -1,0 +1,955 @@
+From f438851e10eb1d460e8f275606f1082bc4b50efa Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Wed, 15 Jun 2016 15:18:46 +0200
+Subject: [PATCH 18/36] Implement Capsule Family
+
+---
+ PWG/muondep/AliAnalysisMuMuSpectraCapsule.cxx     |  33 ++-
+ PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx   | 322 +++++++++++++++-------
+ PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.h     |  14 +-
+ PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx | 268 +++++++++++-------
+ PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.h   |   9 +-
+ 5 files changed, 429 insertions(+), 217 deletions(-)
+
+diff --git a/PWG/muondep/AliAnalysisMuMuSpectraCapsule.cxx b/PWG/muondep/AliAnalysisMuMuSpectraCapsule.cxx
+index b5acd38..5890808 100644
+--- a/PWG/muondep/AliAnalysisMuMuSpectraCapsule.cxx
++++ b/PWG/muondep/AliAnalysisMuMuSpectraCapsule.cxx
+@@ -57,11 +57,18 @@ AliAnalysisMuMuSpectraCapsule::~AliAnalysisMuMuSpectraCapsule()
+ //_____________________________________________________________________________
+ Bool_t AliAnalysisMuMuSpectraCapsule::SetConstantFromExternFile(const char* file, Double_t* constantArray, const TString* spectraName)
+ {
+-  /**
+-   *
+-   * Set member constants depending on centrality bin from an ewternfile.
+-   *
+-   */
++  /// Set member constants depending on centrality bin from an ewternfile.
++  /// If values are empty and can be obtained from a graph provided by the AliAnalysisMuMu Framework, this value is set by default
++  /// For the PP capsule ine could be :
++  /// 
++  /// #centrality Low  High  lumi.    lumi (stat)  lumi (syst. %)  Trigg  Trigg (local board)   Traj.err.(%)  MC Input (%)  Matching(%)  AccEff  dAccEff  NofJpsi Stat.Jpsi SystJpsi
++  /// PP          PP   PP    0.         0.0         0.0            0.0    0.0                    04           03            01           0.0     0.0      0.0     0.0        0.0
++  /// 
++  /// Note that for the PP case, the centrality limits are irrelevant
++  /// 
++  /// For PbPb capsule :
++  /// #centrality Low  High  <npart>    d<npart>    TAA           dTAA      sys.AP(%)           Traj.err.(%)   Trigg.err.(%) Matching(%)   AccEff   dAccEff  NofJpsi Stat.Jpsi SystJpsi
++  /// V0M         00   10    359        31.2        23.4          0.351     2.00                04             03             01            0.1297   0.00040  105159  1693      488
+ 
+     // Reset on fConstant
+     for (int i = 0; i < 13; ++i) constantArray[i]=0.;
+@@ -91,17 +98,24 @@ Bool_t AliAnalysisMuMuSpectraCapsule::SetConstantFromExternFile(const char* file
+             TString centrality   =  static_cast<TObjString*>(lineArray->At(0))->String().Data();
+             TString intervalLow  =  TString::Format("%.2f",static_cast<TObjString*>(lineArray->At(1))->String().Atof());
+             TString intervalHigh =  TString::Format("%.2f",static_cast<TObjString*>(lineArray->At(2))->String().Atof());
+-             AliDebug(1,Form(" --__--__-- interval low = %s",intervalLow.Data()));
+-              AliDebug(1,Form(" --__--__-- interval high = %s",intervalHigh.Data()));
++            AliDebug(1,Form(" --__--__-- interval low = %s",intervalLow.Data()));
++            AliDebug(1,Form(" --__--__-- interval high = %s",intervalHigh.Data()));
+             if (intervalLow.EqualTo("0.00")) intervalLow ="00.00";
+ 
+-            // Select the good interval. Since interval is written in <binAsString>, just need them to match
++            // Select the good interval for PbPb case. Since interval is written in <binAsString>, just need them to match
+             if(spectraName->Contains(Form("%s",centrality.Data()))&& spectraName->Contains(Form("%s_%s",intervalLow.Data(),intervalHigh.Data())) && spectraName->Contains(Form("%s_%s",centrality.Data(),intervalLow.Data()))){
+                 AliDebug(1,Form(" spectraName = %s",spectraName->Data()));
+                 AliDebug(1,Form(" -- line selected -- "));
+                 ok = kTRUE;
+                 break;
+             }
++            // PP case
++            else if(centrality.Contains("PP")){
++                AliDebug(1,Form(" spectraName = %s",spectraName->Data()));
++                AliDebug(1,Form(" -- line selected -- "));
++                ok = kTRUE;
++                break;
++            }
+             else continue;
+         }
+         infile.close();
+@@ -194,7 +208,8 @@ void AliAnalysisMuMuSpectraCapsule::PrintNofWhat(const char* what) const
+ 
+     }
+     cout << Form(" -------- ") << endl;
+-    cout << Form(" ------ Mean :  %.0f +/- %.0f +/- %.0f ------ ",result->GetValue(what),result->GetErrorStat(what),result->GetRMS(what)) << endl;
++    cout << Form(" ------ Mean :  %.1f +/- %.1f (%.1f %%) +/- %.1f (%.1f %%) ------ ",
++      result->GetValue(what),result->GetErrorStat(what),100*result->GetErrorStat(what)/result->GetValue(what),result->GetRMS(what),100*result->GetRMS(what)/result->GetValue(what)) << endl;
+     cout << "" << endl;
+     nofResult++;
+   }
+diff --git a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx
+index 30331f3..f213a91 100644
+--- a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx
++++ b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx
+@@ -56,37 +56,30 @@ using std::ifstream;
+ 
+ namespace
+ {
+-  const Double_t BR           = 5.93/100; // Branching ratio
++  const Double_t BR           = 5.96/100; // Branching ratio
++  const Double_t BRerr        = 0.03/5.96;   // Branching ratio
+   //luminosity
+-  const Double_t lumi         = 113.07; // nb^-1
+-  const Double_t lumiStat     = 0.10; // nb^-1
+-  const Double_t lumiSys      = 5./100; // nb^-1
+-  // Global MC sys. err. for centrality integrated in pt and Y
+-  const Double_t MCParamError = 3./100;
+-  // Corr. error for centrality
+-  const Double_t Traj         = 1./100.;
+-  const Double_t Trigg        = 1./100.;
+-  const Double_t Pair         = 1./100.;
+-  const Double_t Tails        = 2./100.;
+-  // Corr. error for pt case
+-  const Double_t TrajPT       = 1./100.;
+-  const Double_t TriggPT      = 1./100.;
+-  const Double_t PairPt       = 1./100.;
+-  // Corr. error for y case
+-  const Double_t TrajY        = 2./100.;
+-  const Double_t TriggY       = 1./100.;
+-  const Double_t PairY        = 1./100.;
++  const Double_t lumi         = 109.07; // nb^-1
++  const Double_t lumiStat     = 0.09;   // nb^-1
++  const Double_t lumiSys      = 3./100; // (%)
++  const Double_t Trigg        = 1.5/100; // (%)
++
+ }
+ 
+ 
+ //_____________________________________________________________________________
+  AliAnalysisMuMuSpectraCapsulePP::AliAnalysisMuMuSpectraCapsulePP(
+ const AliAnalysisMuMuSpectra*  spectra,
+-const TString                 spectraPath)
++const TString                 spectraPath,
++const char                  * externFile,
++const char                  * externFile2)
+ :
+   AliAnalysisMuMuSpectraCapsule(),
+   fSpectra(spectra),
+-  fSpectraName(spectraPath)
++  fSpectraName(spectraPath),
++  fExternFile(externFile),
++  fExternFile2(externFile2),
++  fPrintFlag(kFALSE)
+ {
+   //Check point
+   if (!fSpectra)
+@@ -102,8 +95,11 @@ const TString                 spectraPath)
+     AliWarning(Form("No spectra name ! "));
+     return;
+   }
+-  for (int i = 0; i < 10; ++i) fConstArray[i]=0.;
+-
++ 
++  if(!AliAnalysisMuMuSpectraCapsule::SetConstantFromExternFile(fExternFile2,&fConstArray[0],&fSpectraName))
++  {
++    AliWarning(Form("No extern file readed"));
++  }
+ }
+ 
+ //_____________________________________________________________________________
+@@ -139,88 +135,169 @@ TList* AliAnalysisMuMuSpectraCapsulePP::ComputePPCrossSection(const char* what)
+       if(j==1 && bin->AsString().Contains("PT"))      sbin ="PT";
+       else if(j==1 && bin->AsString().Contains("Y"))  sbin ="Y";
+ 
+-      if(sbin.Contains("PT") || sbin.Contains("Y")){ // PT and Y bin
+-        Double_t sigma        =0.;
+-        Double_t sigmaerror   =0.;
++      // PT and Y bin
++      if(sbin.Contains("PT") || sbin.Contains("Y")){ 
+         
+-        Double_t CorrNofJPsi  =0.;
+-        Double_t NofJPsi      =0.;
+-        Double_t NofJPsiError =0.;
++        // read exterfile and get the correct value
++        float valueArray[4];
++        //  valueArray[0],   valueArray[1],   valueArray[2],   valueArray[3]
++        //  sysMC(%)         TrajEffError(%)  TriggerError(%)  matchingError(%) 
++        if(ReadFromFile(bin->AsString(),&valueArray[0])==kFALSE) return 0x0;
++        AliDebug(1, " Values correctly read from extern file");
++        //Define quantities
++        Double_t sigma          =0.;
++        Double_t sigmaerrorstat =0.;
++        
++        Double_t CorrNofJPsi    =0.;
++        Double_t NofJPsi        =0.;
++        Double_t NofJPsiError   =0.;
++        Double_t AccEff         =0.;
+         // Get Jpsi numbers
+         CorrNofJPsi  =r->GetValue(what);
+         NofJPsi      =r->GetValue("NofJPsi");
+         NofJPsiError =r->GetErrorStat("NofJPsi");
+-
++        
++        if(fPrintFlag){
++          printf("\n");
++          printf("%s                        = %f +/- %f\n",what,r->GetValue(what),r->GetErrorStat(what));
++          printf("NofJPsi                   = %f +/- %f +/- %f \n ",NofJPsi,NofJPsiError,r->GetRMS("NofJPsi"));
++          printf("Systematic MC             = %f \n ",valueArray[0]);
++          printf("Tracking Error            = %f \n ",valueArray[1]);
++          printf("Trigger  Error            = %f \n ",valueArray[2]);
++          printf("matching Error            = %f \n ",valueArray[3]);
++          printf("Trigger Error local board = %f %%\n ",100*Trigg);
++          printf("Lumiosity                 = %f +/- %f  +/- %f %% \n ",lumi,lumiStat,lumiSys);
++          printf("BR                        = %f +/- %f (%%)\n ",BR,100*BRerr);
++          printf("\n");
++        }
++        
++        
+         if(CorrNofJPsi==0. || NofJPsi ==0.){
+           printf(" cannot found Corrected NofJpsi or NofJpsi, did you compute AccEff ? Abording...");
+           continue;
+         }
+ 
+-        AliDebug(1,Form(""));
+-        AliDebug(1,Form("%s      = %f +/- %f\n",what,r->GetValue(what),r->GetErrorStat(what)));
+-        AliDebug(1,Form("NofJPsi = %f +/- %f +/- %f \n ",NofJPsi,NofJPsiError,r->GetRMS("NofJPsi")));
+-        AliDebug(1,Form(""));
++        // Select Delta y according to bin
++        Double_t deltaY =0.;
++        if(sbin.Contains("PT") && bin->WidthX() <= 2.0 )deltaY = 1.5; // For pT_0_1,pT_1_2...Y_4_3.75...
++        else  deltaY =1.; 
++        
++        // Compute cross section
++        if(bin->WidthX() <= 2.0)sigma = (r->GetValue(what))/(lumi*BR*1000.*bin->WidthX()); // For pT_0_1,pT_1_2...Y_4_3.75...
++        else                    sigma = (r->GetValue(what))/(lumi*BR*1000.);               // For pT_0_8,pT_0_12...Y_4_2.5...
+ 
+-        // Select weither or not we divide by bin width
+-        if(bin->WidthX() <= 2.0)sigma = r->GetValue(what)/(lumi*BR*1000.*bin->WidthX()); // For pT_0_1,pT_1_2...Y_4_3.75...
+-        else                 sigma = r->GetValue(what)/(lumi*BR*1000.);               // For pT_0_8,pT_0_12...Y_4_2.5...
+ 
+-        sigmaerror = sigma*TMath::Sqrt(  
+-          r->GetErrorStat("NofJPsi")*r->GetErrorStat("NofJPsi")/r->GetValue("NofJPsi")/r->GetValue("NofJPsi") 
+-          //                                    Signal stat.
+-        + lumiStat*lumiStat/lumi/lumi );
+-          //                                    Lumi  stat.
++        // Compute stat. error on cross section
++        sigmaerrorstat = sigma*TMath::Sqrt(  
++          r->GetErrorStat("NofJPsi")*r->GetErrorStat("NofJPsi")/r->GetValue("NofJPsi")/r->GetValue("NofJPsi"));
++        //                                    Signal stat.
+         
+          // Get X
+         Double_t xmin = bin->Xmin();
+         Double_t xmax = bin->Xmax();
+         Double_t x    = xmin + (xmax-xmin)/2;
+ 
+-        // Uncorrelated
+-        Double_t UncError =
+-          (r->GetRMS("NofJPsi")/r->GetValue("NofJPsi"))*(r->GetRMS("NofJPsi")/r->GetValue("NofJPsi")) + TrajPT*TrajPT + TriggPT*TriggPT + PairPt*PairPt;
+-        //          Signal                                                                                Tracking        Trigger           matching
++        // Uncorrelated error squared (%)
++        Double_t UncError2 =
++          (r->GetRMS("NofJPsi")/r->GetValue("NofJPsi"))*(r->GetRMS("NofJPsi")/r->GetValue("NofJPsi")) // Signal 
++          + pow(valueArray[0]/100.,2)  // systemtic MC(%) 
++          + pow(valueArray[1]/100.,2)  // Tracking Error(%)
++          + pow(valueArray[2]/100.,2)  // Trigger  Error(%) (trigger response)
++          + pow(valueArray[3]/100.,2)  // matching Error(%)
++          + Trigg*Trigg;               // Trigger  Error (plateau) 
++                                                                                                   
++        
++        // Correlated squared (%)
++        Double_t CorrError2 = lumiSys*lumiSys + lumiStat*lumiStat/lumi/lumi +BRerr*BRerr ;
++        //                        lumi sys. (%)    lumi stat.                 BR (%)
+         
+-        // Correlated
+-        Double_t CorrError = lumiSys*lumiSys;
+-        //                        lumi (%)  
++        // In case of fully integrated results == large pT bins
++        Double_t CorrErrorFull2 =  CorrError2 + UncError2;
+         
+-        Double_t CorrErrorFullPtY = 
+-        r->GetRMS("NofJPsi")/r->GetValue("NofJPsi")*(r->GetRMS("NofJPsi")/r->GetValue("NofJPsi"))//signal  
+-        +Traj*Traj //Tracking
+-        +Pair*Pair // matching
+-        +Trigg*Trigg // trigger
+-        +Tails*Tails  // tails
+-        +lumiSys*lumiSys; //lumi
++        printf("  -------- cross section for bin %s = %f +/- %f (stat. %f %%) +/- %f (uncorr. %f %%) +/- %f (corr. %f %%)  (#Delta y = %f) -------- \n"
++          ,bin->AsString().Data(),
++          sigma/deltaY,
++          sigmaerrorstat/deltaY,
++          100*sigmaerrorstat/sigma,
++          sigma*TMath::Sqrt(UncError2)/deltaY,
++          100*TMath::Sqrt(UncError2),
++          sigma*TMath::Sqrt(CorrError2)/deltaY,
++          100*TMath::Sqrt(CorrError2),
++          deltaY);
++
++        printf("  --------  if fully integrated dsigma_corr. = %f (corrFull. %f %%)  -------- \n\n"
++          ,sigma*TMath::Sqrt(CorrErrorFull2)/deltaY,
++          100*TMath::Sqrt(CorrErrorFull2));
++
++        // Fill graphs
++        gCrossSection->SetPoint(j,x,sigma/deltaY);
++        gCrossSection->SetPointError(j,bin->WidthX()/2,sigmaerrorstat/deltaY);
++
++        gSys->SetPoint(j,x,sigma/deltaY);
++        gSys->SetPointError(j,bin->WidthX()/2,sigma*TMath::Sqrt(UncError2)/deltaY);
+         
+-        printf("  -------- cross section for bin %s = %f +/- %f (stat. %f %%) +/- %f (uncorr. %f %%) +/- %f (corr. %f %%)   -------- \n"
+-          ,bin->AsString().Data(),sigma,sigmaerror,100*sigmaerror/sigma,sigma*TMath::Sqrt(UncError),100*TMath::Sqrt(UncError),TMath::Sqrt(CorrError),sigma*TMath::Sqrt(CorrError));
+-        printf("  --------  if fully integrated dsigma_corr. = %f (corrFull. %f %%)  -------- \n"
+-          ,sigma*TMath::Sqrt(CorrErrorFullPtY),100*TMath::Sqrt(CorrErrorFullPtY));
+ 
+-        gCrossSection->SetPoint(j,x,sigma);
+-        gCrossSection->SetPointError(j,bin->WidthX()/2,sigmaerror);
++        j++;
++      } 
++      else { // Integrated
+ 
+-        gSys->SetPoint(j,x,sigma);
+-        gSys->SetPointError(j,bin->WidthX()/2,sigma*TMath::Sqrt(UncError));
++        Double_t sigma        =0.;
++        Double_t sigmaerror   =0.;
++        Double_t sigmasys2    =0.;
++        
++        Double_t CorrNofJPsi  =0.;
++        Double_t NofJPsi      =0.;
++        Double_t NofJPsiError =0.;
++        Double_t NofJPsiSys   =0.;
++        
++        NofJPsi               = fSpectra->GetResultForBin("INTEGRATED")->GetValue("NofJPsi");
++        CorrNofJPsi           = fSpectra->GetResultForBin("INTEGRATED")->GetValue(what);
++        
++        NofJPsiSys            = fSpectra->GetResultForBin("INTEGRATED")->GetRMS("NofJPsi");
++        NofJPsiError          = fSpectra->GetResultForBin("INTEGRATED")->GetErrorStat("NofJPsi");
+ 
+-        j++;
+-      } else { // Integrated
+-
+-         Double_t jpsi      = fSpectra->GetResultForBin("INTEGRATED")->GetValue("NofJPsi");
+-         Double_t corrjpsi  = fSpectra->GetResultForBin("INTEGRATED")->GetValue(what);
+-         
+-         Double_t jpsisys   = fSpectra->GetResultForBin("INTEGRATED")->GetRMS("NofJPsi");
+-         Double_t jpsistat  = fSpectra->GetResultForBin("INTEGRATED")->GetErrorStat("NofJPsi");
+-         
+-         Double_t sigma     = corrjpsi/(lumi*BR*1000.);
+-         Double_t sigmastat = sigma*AliAnalysisMuMuResult::ErrorAB(jpsi,jpsistat,lumi,lumiStat);
+-         //                                                           Signal          lumi
+-         Double_t sigmasys2 = jpsisys/jpsi*jpsisys/jpsi  +Traj*Traj +    Pair*Pair +    Trigg*Trigg +   Tails*Tails + lumiSys*lumiSys ;
+-         //                                               Tracking       Matching       Trigger          tails         lumi          
+-
+-          printf("integrated cross section for  %s = %f +/- %f +/- %f #mubarn\n",fSpectra->GetName(),sigma,sigmastat,sigma*TMath::Sqrt(sigmasys2) );
+-          return 0x0;
++        AliDebug(1,Form(""));
++        AliDebug(1,Form("%s      = %f +/- %f\n",what,r->GetValue(what),r->GetErrorStat(what)));
++        AliDebug(1,Form("NofJPsi = %f +/- %f +/- %f \n ",NofJPsi,NofJPsiError,r->GetRMS("NofJPsi")));
++        AliDebug(1,Form(""));
++
++        if(CorrNofJPsi==0. || NofJPsi ==0.|| NofJPsiSys ==0.|| NofJPsiError ==0.){
++          printf(" cannot found Corrected NofJpsi or NofJpsi, did you compute AccEff ? Abording...");
++          continue;
++        }
++
++        sigma      = CorrNofJPsi/(fConstArray[0]*BR*1000.);
++        sigmaerror = sigma*TMath::Sqrt(  
++          r->GetErrorStat("NofJPsi")*r->GetErrorStat("NofJPsi")/r->GetValue("NofJPsi")/r->GetValue("NofJPsi"));
++        //                                    Signal stat.    
++        sigmasys2 = 
++        NofJPsiSys/NofJPsi*NofJPsiSys/NofJPsi // Signal extraction 
++        +pow(lumiStat/lumi,2)                 // Lumi stat.
++        +pow(fConstArray[2]/100.,2)           // Lumi syst.
++        +pow(fConstArray[3]/100.,2)           // Trigger
++        +pow(fConstArray[4]/100.,2)           // Trigger Local board
++        +pow(fConstArray[5]/100.,2)           // Tracking
++        +pow(fConstArray[6]/100.,2)           // MC Input
++        +pow(fConstArray[7]/100.,2)           // Matching
++        +BRerr*BRerr ;                        // BR
++        
++
++        if(fPrintFlag){
++          printf("\n");
++          printf("%s                        = %f +/- %f\n",what,r->GetValue(what),r->GetErrorStat(what));
++          printf("NofJPsi                   = %f +/- %f +/- %f \n ",NofJPsi,NofJPsiError,r->GetRMS("NofJPsi"));
++          printf("Systematic MC             = %f \n ",100*fConstArray[6]);
++          printf("Tracking Error            = %f \n ",100*fConstArray[5]);
++          printf("Trigger  Error            = %f \n ",100*fConstArray[4]);
++          printf("matching Error            = %f \n ",100*fConstArray[7]);
++          printf("Trigger Error local board = %f %%\n ",100*fConstArray[4]);
++          printf("Lumiosity                 = %f +/- %f  +/- %f %% \n ",lumi,lumiStat,100*fConstArray[2]);
++          printf("BR                        = %f +/- %f (%%)\n ",BR,100*BRerr);
++          printf("\n");
++        }
++
++        printf("integrated cross section for  %s = %f +/- %f +/- %f #mubarn\n",fSpectra->GetName(),sigma,sigmaerror,sigma*TMath::Sqrt(sigmasys2) );
++        return 0x0;
+       }
+   }
+ 
+@@ -443,30 +520,77 @@ void AliAnalysisMuMuSpectraCapsulePP::PrintConst() const
+       cout <<      " ================================================================ " << endl;
+       cout << Form("      Constants for Spectra %s",fSpectraName.Data()) << endl;
+       cout <<      " ================================================================ " << endl;
+-      cout <<  "   Branching ratio = " <<  5.93/100 << endl; // 
++      cout <<  "   Branching ratio = " <<  5.96/100 << endl; // 
+       
+-      // Corr. error for pt case
+-      cout <<  "  TrajPt. error                             = " <<  TrajPT << endl;
+-      cout <<  "   TriggPt. error                           = " <<  TriggPT << endl;
+-      cout <<  "    PairPt. error                           = " <<  PairPt << endl;
+-      // Corr. error for y case
+-      cout <<  "  TrajY. error                              = " <<  TrajY << endl;
+-      cout <<  "   TriggY. error                            = " <<  TriggY << endl;
+-      cout <<  "    PariY. error                            = " <<  PairY << endl;
+-      
+-      cout << Form(" -- Value of <Npart>                    = %f",fConstArray[0]) << endl;
+-      cout << Form(" -- Value of d<Npart>                   = %f",fConstArray[1]) << endl;
+-      cout << Form(" -- Value of TAA                        = %f",fConstArray[2]) << endl;
+-      cout << Form(" -- Value of dTAA                       = %f",fConstArray[3]) << endl;
+-      cout << Form(" -- Value of sys.AP                     = %f",fConstArray[4]) << endl;
++      cout << Form(" -- Value of Lumi                       = %f",fConstArray[0]) << endl;
++      cout << Form(" -- Value of Lumi stat.                 = %f",fConstArray[1]) << endl;
++      cout << Form(" -- Value of Lumi syst (%%)              = %f",fConstArray[2]) << endl;
++      cout << Form(" -- Value of Trigg syst (%%)             = %f",fConstArray[3]) << endl;
++      cout << Form(" -- Value of Trigg Local board (%%)      = %f",fConstArray[4]) << endl;
+       cout << Form(" -- Value of Traj. err.                 = %f",fConstArray[5]) << endl;
+-      cout << Form(" -- Value of Trigg. err.                = %f",fConstArray[6]) << endl;
+-      cout << Form(" -- Value of Pair. err.                 = %f",fConstArray[7]) << endl;
++      cout << Form(" -- Value of MC Input. err.             = %f",fConstArray[6]) << endl;
++      cout << Form(" -- Value of Matching. err.             = %f",fConstArray[7]) << endl;
+       cout << Form(" -- Value of AccEff                     = %f",fConstArray[8]) << endl;
+       cout << Form(" -- Value of dAccEff                    = %f",fConstArray[9]) << endl;
+-      cout << Form(" -- Value of NofJpsi from exterfile     = %f",fConstArray[10]) << endl;
++      cout << Form(" -- Value of NofJpsi     from exterfile = %f",fConstArray[10]) << endl;
+       cout << Form(" -- Value of StatNofJpsi from exterfile = %f",fConstArray[11]) << endl;
+       cout << Form(" -- Value of SystNofJpsi from exterfile = %f",fConstArray[12]) << endl;
+   }
+ }
+ 
++//_____________________________________________________________________________
++Bool_t AliAnalysisMuMuSpectraCapsulePP::ReadFromFile(TString sbin, float valueArray[]) const
++{
++    ///
++    /// Read extern file lines and store associated values. Exemple of line :
++    /// #intervalLow intervalHight  sysMC   TrajEffError(%)  TriggerError(%)  matchingError(%) 
++    /// 00           01             1.600    4.0              4.6             1.0
++    ///
++    /// All white space must be single whitespace, i.e " " and not "<tab>"
++
++    Bool_t ok =kFALSE;
++
++    //________Open file
++    ifstream infile(fExternFile.Data(),std::ios::in);
++    TString line;
++    TObjArray* lineArray;
++
++    if (infile)
++    {
++      AliDebug(1, " ==== opening file ==== ");
++      // Loop until end of file is reached
++      while(infile.eof()!=kTRUE){
++
++        //read the line
++        line.ReadLine(infile,kFALSE);
++        if (line.BeginsWith("#"))continue;
++        AliDebug(1,Form(" Read line : %s",line.Data()));
++
++        // Put the line in a TObjArray
++        lineArray = line.Tokenize(" ");
++
++        // Select the good interval. Since interval is written in <binAsString>, just need them to match
++        TString intervalLow  = TString::Format("%.2f",static_cast<TObjString*>(lineArray->At(0))->String().Atof());
++        TString intervalHigh = TString::Format("%.2f",static_cast<TObjString*>(lineArray->At(1))->String().Atof());
++        AliDebug(1,Form("intervalLow = %s\n", intervalLow.Data()));
++        AliDebug(1,Form("intervalHigh = %s\n", intervalHigh.Data()));
++        AliDebug(1,Form("sbin = %s\n", sbin.Data()));
++
++        if(sbin.Contains(Form("%s",intervalLow.Data())) && sbin.Contains(Form("%s",intervalHigh.Data()))){
++            AliDebug(1,Form(" -- line selected -- "));
++            ok = kTRUE;
++            break;
++        }
++        else continue;
++      }
++      infile.close();
++      AliDebug(1, " ==== closing file ==== ");
++
++      // Store the value
++        for (int i =0 ; i<4 ; i++) {
++            valueArray[i]= static_cast<TObjString*>(lineArray->At(i+2))->String().Atof();
++        }
++        return ok;
++    }
++    else return ok;
++}
+diff --git a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.h b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.h
+index 36cbf1a..9c73b21 100644
+--- a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.h
++++ b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.h
+@@ -33,7 +33,9 @@ public:
+   //ctor
+   AliAnalysisMuMuSpectraCapsulePP(
+                              const AliAnalysisMuMuSpectra            *  spectra=0x0,
+-                             const TString                           spectraPath ="");
++                             const TString                           spectraPath ="",
++                             const char                              * externFile="",
++                             const char                              * externFile2="");
+   // dtor
+   virtual ~AliAnalysisMuMuSpectraCapsulePP();
+   // Compute Yield
+@@ -42,6 +44,8 @@ public:
+   TList* ComputePPCrossSection(const char* what ="CorrNofJPsi") const ;
+   // Draw fit results and save them if wanted
+   void DrawResults(const char* particle="PSI",const char* subresults="")const;
++  // Print Flag
++  void SetPrintFlag(){fPrintFlag=kTRUE;};
+   // Print some data members
+   void Print(Option_t* opt="") const;
+   // Print constants used
+@@ -54,6 +58,8 @@ public:
+    const Double_t              * GetConstArray()     const {return fConstArray;};
+ 
+ private:
++  // Read extern file for Pt and Y case
++  Bool_t ReadFromFile(TString sbin, float valueArray[]) const;
+   // Equality operator
+   AliAnalysisMuMuSpectraCapsulePP(const AliAnalysisMuMuSpectraCapsulePP& rhs);// not implemented on purpose
+   AliAnalysisMuMuSpectraCapsulePP& operator=(const AliAnalysisMuMuSpectraCapsulePP& rhs);// not implemented on purpose
+@@ -63,11 +69,13 @@ private:
+ 
+   const AliAnalysisMuMuSpectra* fSpectra;// Spectra with result and subresults
+   const TString               fSpectraName;     // SpectraName
++  TString fExternFile;      // name of spectra selected
++  TString fExternFile2;     // name of spectra selected
+   Double_t fConstArray[13]; // Array to store constant according to centrality bins
+-
++  Bool_t fPrintFlag;
+ 
+ /// \cond CLASSIMP
+-ClassDef(AliAnalysisMuMuSpectraCapsulePP,1);
++ClassDef(AliAnalysisMuMuSpectraCapsulePP,2);
+ /// \endcond
+ };
+ 
+diff --git a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx
+index e0e1f89..81ffb8f 100644
+--- a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx
++++ b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx
+@@ -56,37 +56,41 @@ using std::ifstream;
+ 
+ namespace
+ {
+-  const Double_t BR             = 5.93/100; // Branching ratio
++  const Double_t BR                = 5.96/100; // Branching ratio
++  const Double_t BRerr             = 0.03/5.96; // Branching ratio
+   //Normalization factor
+-  //FIXME : Fnorm store in TH1, make in general
+-  const Double_t Fnorm          = 11.842;    // Normalization
+-  const Double_t FnormStat      = 0.00095;     // Normalization
+-  const Double_t FnormSyst      = 0.059;     // Normalization
++  //FIXME                          : Fnorm store in TH1, make in general
++  const Double_t Fnorm             = 11.842;    // Normalization
++  const Double_t FnormStat         = 0.00095;     // Normalization
++  const Double_t FnormSyst         = 0.059;     // Normalization
+   
+   //pp Cross-section integrated for pp@5TeV 0<pt<8 , -4<y<-2.5
+-  const Double_t sigmaPP         = 5.437398;    // for fully integrated case
+-  const Double_t dsigmaPP        = 0.080294;    // idem
+-  const Double_t dsigmaPPCorr    = 0.309059;    // for fully integrated case
+-
++  const Double_t sigmaPP        = 5.41;    // for fully integrated case
++  const Double_t dsigmaPP       = 0.08;    // idem
++  const Double_t dsigmaPPCorr   = 0.29;    // for fully integrated case
++  
+   // pp Cross-section integrated for pp@5TeV 0.3<pT<8 , -4<y<-2.5
+-  // const Double_t sigmaPP        = 5.383466;    // for fully integrated case
+-  // const Double_t dsigmaPP       = 0.117246;    // idem
+-  // const Double_t dsigmaPPCorr   = 0.305869;    // for fully integrated case
+-
++  // const Double_t sigmaPP        = 5.33;    // for fully integrated case
++  // const Double_t dsigmaPP       = 0.08;    // idem
++  // const Double_t dsigmaPPCorr   = 0.29;    // for fully integrated case
++  
+   //pp Cross-section integrated for pp@5TeV 0<pT<12 , -4<y<-2.5
+-  // const Double_t sigmaPP        = 5.487604;    // for fully integrated case
+-  // const Double_t dsigmaPP       = 0.103672;    // idem
+-  // const Double_t dsigmaPPCorr   = 0.311192;    // for fully integrated case
++  // const Double_t sigmaPP           = 5.46;    // for fully integrated case
++  // const Double_t dsigmaPP          = 0.08;    // idem
++  // const Double_t dsigmaPPCorr      = 0.30;    // for fully integrated case
+   
+   // Global MC sys. err. for centrality integrated in pt and Y
+-  const Double_t MCParamError   = 1.6;//%
+-  
++  const Double_t MCParamError      = 2.0;//%
+   // NofMUL correspondind to signal extraction from 2015
+-  const Double_t Mul2015        = 126148800;
+-  // Syst. associated to tails param
+-  const Double_t tailsErro      = 2.;//%
+-  // Syst. associated to pairing
+-  const Double_t pairError      = 2.;//%
++  const Double_t Mul2015           = 126778700;
++  // Syst. associated to matching
++  const Double_t MatchingError     = 1.;//%
++  // Syst. associated to Intrinsic trigger efficiency
++  const Double_t TriggerError      = 1.5;//%
++  // Syst. associated to Intrinsic trigger efficiency
++  const Double_t TrackingErrorCent = 1.;//%
++  // Syst. associated to Intrinsic trigger efficiency
++  const Double_t TriggerErrorCent  = 1.;//%
+ 
+   
+ }
+@@ -103,7 +107,8 @@ const char                  * externFile2)
+   fSpectra(spectra),
+   fSpectraName(spectraPath),
+   fExternFile(externFile),
+-  fExternFile2(externFile2)
++  fExternFile2(externFile2),
++  fPrintFlag(kFALSE)
+ {
+   //Check point
+   if (!fSpectra)
+@@ -360,8 +365,8 @@ void AliAnalysisMuMuSpectraCapsulePbPb::DrawResults( const char* particle,const
+       // Get our final result
+       subresult = static_cast<AliAnalysisMuMuJpsiResult*>(result->SubResult(Form("%s",sr->GetName())));
+       if (!subresult){
+-      AliError(Form("Cannot find subresult "));
+-      return;
++        AliError(Form("Cannot find subresult "));
++        return;
+       }
+       AliDebug(1,Form("subresult(%s) = %p",sr->GetName(),subresult));
+       if(!sres.IsNull() && !sres.Contains(sr->GetName())) continue;
+@@ -409,6 +414,7 @@ void AliAnalysisMuMuSpectraCapsulePbPb::DrawResults( const char* particle,const
+     if (h){
+       ++n;
+       c->cd(n);// got to pad
++      gPad->SetLogy();
+       if (xmin>0){
+         // Loop to configure the pad as you like
+         h->GetXaxis()->SetRangeUser(xmin,xmax);
+@@ -451,12 +457,10 @@ void AliAnalysisMuMuSpectraCapsulePbPb::DrawResults( const char* particle,const
+ //_____________________________________________________________________________
+ TList * AliAnalysisMuMuSpectraCapsulePbPb::RAAasGraphic(Double_t MUL) const
+ {
+-  /**
+-   *
+-   * Run over each bin, calculate RAA according to fBinType throught GetValuesFromExternFiles() :
+-   * Return a graph to be deleted by owner.
+-   *
+-   */
++   ///
++   /// Run over each bin, calculate RAA according to fBinType throught GetValuesFromExternFiles() :
++   /// Return a graph to be deleted by owner.
++   ///
+ 
+   // Some constants
+   const TString histoName = Form("%s",fSpectraName.Data());
+@@ -562,7 +566,7 @@ TList * AliAnalysisMuMuSpectraCapsulePbPb::RAAasGraphic(Double_t MUL) const
+     num[2] = result->GetRMS("NofJPsi");
+ 
+     //Main methods
+-    if(!ComputeRAA(binAsString,&num[0],MUL)) continue;
++    if(!ComputeRAA(binAsString,&num[0],MUL,r->WidthX())) continue;
+ 
+     // Set the corr. syst. point at  x=0.5,y=1. Computing for each results, maybe a cleaver way to do...
+     graph_syscorr->SetPoint(0,1.,1.);
+@@ -572,7 +576,14 @@ TList * AliAnalysisMuMuSpectraCapsulePbPb::RAAasGraphic(Double_t MUL) const
+     if(fSpectraName.Contains("-INTEGRATED")){
+       //Output messages
+       cout << Form("") << endl;
+-      cout << Form("  |    %s    |   %.0f  %.0f  %.0f  |  %.3f  %.3f  %.3f  |  %.1f   %.1f  |"  ,binAsString.Data(),num[0],num[1],num[2],num[4],num[5],num[7],fConstArray[0],fConstArray[1]) << endl;
++      printf("  |    %s    || RAA : %.3f +/-  %.3f (%.2f %%) +/- %.3f (%.2f %%)  | Npart :  %.1f   %.1f  | \n"  
++        ,binAsString.Data(),
++        num[4],
++        num[5],
++        100*num[5]/num[4],
++        num[7],
++        100*num[7]/num[4],
++        fConstArray[0],fConstArray[1]);
+ 
+       // Add results to TGraphs
+       graph->SetPoint(nofResult,fConstArray[0],num[4]);
+@@ -581,9 +592,15 @@ TList * AliAnalysisMuMuSpectraCapsulePbPb::RAAasGraphic(Double_t MUL) const
+       graph_sysUncorr->SetPointError(nofResult,0.2,num[7]);
+     }
+     else if (fSpectraName.Contains("-PT")){
+-      num[4]=num[4]/(r->WidthX());
+       cout << Form("") << endl;
+-      cout << Form("  | %s |   %.0f  %.0f  %.0f  |  %.3f  %.3f  %.3f  |  %.1f   %.1f  |"  ,binAsString.Data(),num[0],num[1],num[2],num[4],num[5],num[7],fConstArray[0],fConstArray[1]) << endl;
++      printf("  |    %s    || RAA : %.3f +/-  %.3f (%.2f %%) +/- %.3f (%.2f %%)  | Npart :  %.1f   %.1f  | \n"  
++        ,binAsString.Data(),
++        num[4],
++        num[5],
++        100*num[5]/num[4],
++        num[7],
++        100*num[7]/num[4],
++        fConstArray[0],fConstArray[1]);
+       //Fill graph
+       Double_t binCenter = (binArray[nofResult+1]-binArray[nofResult])/2 + binArray[nofResult] ;
+       graph->SetPoint(nofResult,binCenter,num[4]);
+@@ -592,9 +609,15 @@ TList * AliAnalysisMuMuSpectraCapsulePbPb::RAAasGraphic(Double_t MUL) const
+       graph_sysUncorr->SetPointError(nofResult,r->WidthX()/5,num[7]);
+     }
+     else if (fSpectraName.Contains("-Y")){
+-      num[4]=num[4]/(r->WidthX());
+       cout << Form("") << endl;
+-      cout << Form("  | %s |   %.0f  %.0f  %.0f  |  %.3f  %.3f  %.3f  |  %.1f   %.1f  |"  ,binAsString.Data(),num[0],num[1],num[2],num[4],num[5],num[7],fConstArray[0],fConstArray[1]) << endl;
++      printf("  |    %s    || RAA : %.3f +/-  %.3f (%.2f %%) +/- %.3f (%.2f %%)  | Npart :  %.1f   %.1f  | \n"  
++        ,binAsString.Data(),
++        num[4],
++        num[5],
++        100*num[5]/num[4],
++        num[7],
++        100*num[7]/num[4],
++        fConstArray[0],fConstArray[1]);
+       //Fill graph
+       Double_t binCenter = -((binArray[nofResult+1]-binArray[nofResult])/2 + binArray[nofResult]) ;
+       graph->SetPoint(nofResult,binCenter,num[4]);
+@@ -631,23 +654,29 @@ TList * AliAnalysisMuMuSpectraCapsulePbPb::RAAasGraphic(Double_t MUL) const
+ 
+ 
+ //_____________________________________________________________________________
+-Bool_t AliAnalysisMuMuSpectraCapsulePbPb::ComputeRAA(TString sbin, Double_t numArray[], Double_t MUL) const
++Bool_t AliAnalysisMuMuSpectraCapsulePbPb::ComputeRAA(TString sbin, Double_t numArray[], Double_t MUL, Double_t binwidth) const
+ {
+-  /**
+-   *
+-   * Checks bin type and read files (or not) accordingly. Then computes and stores several results in numArray.
+-   *
+-   */
++   ///
++   /// Checks bin type and read files (or not) accordingly. Then computes and stores several results in numArray.
++   ///
+ 
+   AliWarning("INNER NORMALIZATION FACTOR, YOU MIGHT CHECK THE CODE !!");
+ 
++  Double_t CentralityNormalization =1.;
++  if (fSpectraName.Contains("V0M_00.00_90.00"))CentralityNormalization = 1.;
++  else if (fSpectraName.Contains("V0M_00.00_20.00")) CentralityNormalization = (2./9.);
++  else CentralityNormalization = (1./9.);
++
++  // Taking 2015 value
++  if(Mul2015!=0) MUL= Mul2015;
++
+   //________PT and Y case
+   if (fSpectraName.Contains("-PT") || fSpectraName.Contains("-Y"))
+   {
+     // read exterfile and get the correct value
+     float valueArray[13];
+-    //  valueArray[0], valueArray[1], valueArray[2], valueArray[3],  valueArray[4], valueArray[5], valueArray[6], valueArray[7], valueArray[8], valueArray[9], valueArray[10], valueArray[11] valueArray[12]
+-    //  sigmapp         dsigmapp      dsigmappCorr   dsigmappUncorr  AccEff         dAccEff        sysMC          TrajEffError    TriggerError  PairError,      NofJpsi      , NofJpsiStat,    NofJpsiSys
++    //  valueArray[0], valueArray[1], valueArray[2], valueArray[3],     valueArray[4], valueArray[5], valueArray[6], valueArray[7], valueArray[8], valueArray[9], valueArray[10], valueArray[11] valueArray[12]
++    //  sigmapp         dsigmapp      dsigmappUnCorr   dsigmappCorr(%)  AccEff         dAccEff        sysMC          TrajEffError    TriggerError  MatchingError,  NofJpsi,       NofJpsiStat,    NofJpsiSys
+ 
+     if(ReadFromFile(sbin,&valueArray[0])==kFALSE) return kFALSE;
+     AliDebug(1, " Values correctly read from extern file");
+@@ -657,47 +686,59 @@ Bool_t AliAnalysisMuMuSpectraCapsulePbPb::ComputeRAA(TString sbin, Double_t numA
+     if(valueArray[11]!=0.)numArray[1]=valueArray[11];
+     if(valueArray[12]!=0.)numArray[2]=valueArray[12];
+     
+-    // Taking 2015 value
+-    if(Mul2015!=0) MUL= Mul2015;
+-
+-    //Normalization according to centrality bin
+-    if (fSpectraName.Contains("V0M_00.00_90.00")) numArray[3] = fConstArray[2]*BR*MUL*Fnorm*(valueArray[0]/1000.)*(valueArray[4]);
+-    else numArray[3] = (1./9.)*fConstArray[2]*BR*MUL*Fnorm*(valueArray[0]/1000.)*(valueArray[4]);
+-
+-    AliDebug(1,Form("BR                 = %f\n", BR));
+-    AliDebug(1,Form("Fnorm              = %f\n", Fnorm));
+-    AliDebug(1,Form("sigma pp           = %f ub \n", valueArray[0]));
+-    AliDebug(1,Form("AccEff             = %f\n", valueArray[4]));
+-    AliDebug(1,Form("TAA                = %f\n", fConstArray[2]));
+-    AliDebug(1,Form("MUL                = %f\n", MUL));
+-    AliDebug(1,Form("denominator        = %f\n", numArray[3]));
+-    AliDebug(1,Form("NofJpsi extern     = %f\n", valueArray[10]));
+-    AliDebug(1,Form("NofJpsiStat extern = %f\n", valueArray[11]));
+-    AliDebug(1,Form("NofJpsiSys extern  = %f\n", valueArray[12]));
+-
+-    //Compute RAA accoroding to NofJpsi entry type
+-    if(valueArray[10]==0.)numArray[4] = numArray[0]/numArray[3];
+-    else numArray[4] = valueArray[10]/numArray[3];
++    if(fPrintFlag){
++      printf("\n");
++      printf("BR                           = %f +/- %f \n", BR,BRerr);
++      printf("Fnorm                        = %f +/- %f (%f %% ) +/- %f (%f %% ) \n", Fnorm,FnormStat,100*FnormStat/Fnorm,FnormSyst,100*FnormSyst/Fnorm);
++      printf("sigma pp                     = %f +/- %f +/- %f (global %f %%) ub \n", valueArray[0],valueArray[1],valueArray[2],valueArray[3]);
++      printf("AccEff                       = %f +/- %f (%f %% )\n", valueArray[4],valueArray[5],100*valueArray[5]/valueArray[4]);
++      printf("TAA                          = %f +/- %f (%f %% ) \n", fConstArray[2],fConstArray[3],100*fConstArray[3]/fConstArray[2]);
++      printf("Systematic A.P               = %f %% \n", fConstArray[4]);
++      printf("MUL                          = %f\n", MUL);
++      printf("NofJpsi                      = %f +/- %f (%f %% ) +/- %f (%f %% ) \n", numArray[0],numArray[1],100*numArray[1]/numArray[0],numArray[2],100*numArray[2]/numArray[0]);
++      printf("systematic A.P               = %f %% \n", fConstArray[4]);
++      printf("sysMC                        = %f %% \n", valueArray[6]);
++      printf("TrajEffError                 = %f %% \n", valueArray[7]);
++      printf("TriggerError                 = %f %% \n", valueArray[8]);
++      printf("TriggerError   (local board) = %f %% \n", TriggerError);
++      printf("MatchingError                = %f %% \n", valueArray[9]);
++      printf("CentralityNormalization      = %f\n", CentralityNormalization);
++      }
++
++     // Compute Raa
++     numArray[3] = CentralityNormalization*fConstArray[2]*BR*MUL*Fnorm*(valueArray[0]/1000.)*(valueArray[4]);
++     numArray[4] = numArray[0]/numArray[3]/binwidth;
+ 
++    // Divide by 1.5 in case of pt bins
++    if(fSpectraName.Contains("-PT") )numArray[4] =numArray[4]/1.5; 
+   
+-    //Stat error
+-    numArray[5] = numArray[4] * AliAnalysisMuMuResult::ErrorAB(numArray[0],numArray[1],Fnorm,FnormStat);
+-    //                                                                      signal          FNorm
++    //Stat error (%)
++    numArray[5] =TMath::Sqrt( 
++      pow(numArray[1]/numArray[0],2)          //signal
++    + pow(valueArray[5]/valueArray[4],2)      // accxeff
++    + pow(FnormStat/Fnorm,2));                // Fnorm
+     
+-    //Corr error
++    numArray[5] = numArray[4]*numArray[5];
++    
++    //Corr error in %
+     numArray[6]     =  TMath::Sqrt(  
+-    + fConstArray[4]*fConstArray[4]                                       // syst. AP
+-    + 100*100*fConstArray[3]*fConstArray[3]/fConstArray[2]/fConstArray[2] // Taa
+-    + 100*100*valueArray[2]*valueArray[2]/sigmaPP/sigmaPP                 // pp cross-section
+-    + tailsErro*tailsErro                                                 // Tails
+-    + 100*100*FnormSyst*FnormSyst/Fnorm/Fnorm);                           // FNorm
+-
+-    //UnCorr error
+-      numArray[7] = numArray[4] * AliAnalysisMuMuResult::ErrorABCD(100.,valueArray[6],numArray[0],numArray[2],100.,valueArray[7],100.,valueArray[8])
+-    //                                                                sysMC                 signal           TrajEffError      TriggerError
+-                  + numArray[4] * AliAnalysisMuMuResult::ErrorABC(100.,valueArray[9],valueArray[0],valueArray[2],valueArray[0],valueArray[1]);
+-    //                                                                pair                  sigmapp
+-
++    + fConstArray[4]*fConstArray[4]             // syst. AP
++    + valueArray[3]*valueArray[3]               // corr. pp cross-section
++    + TriggerErrorCent *TriggerErrorCent         // Trigger Local board (%)
++    + pow(100*fConstArray[3]/fConstArray[2],2)  // Taa
++    + pow(100*FnormSyst/Fnorm,2)                // FNorm
++    - pow(100*BRerr,2));                        // Br cancel out             
++
++    //UnCorr error absolut
++      numArray[7] = numArray[4] * TMath::Sqrt(
++      pow(numArray[2]/numArray[0],2)          //signal
++      + pow(valueArray[6]/100,2)              // MC input
++      + pow(valueArray[7]/100,2)              // tracking
++      + pow(valueArray[8]/100,2)              // trigger
++      + pow(TriggerError/100,2)               // trigger (local board)
++      + pow(valueArray[9]/100,2)              // matching
++      + pow(valueArray[1]/valueArray[0],2)    // stat. cross-section pp
++      + pow(valueArray[2]/valueArray[0],2));  // uncorr. cross-section pp
+   }
+   //________Integrated case
+   else if(fSpectraName.Contains("-INTEGRATED")){
+@@ -705,29 +746,50 @@ Bool_t AliAnalysisMuMuSpectraCapsulePbPb::ComputeRAA(TString sbin, Double_t numA
+     if(fConstArray[10]!=0.)numArray[0]=fConstArray[10];
+     if(fConstArray[11]!=0.)numArray[1]=fConstArray[11];
+     if(fConstArray[12]!=0.)numArray[2]=fConstArray[12];
+-
+-    //Normalization according to centrality bin
+-    if (!fSpectraName.Contains("V0M_00.00_90.00")) numArray[3] = (1./9.)*BR*fConstArray[2]*Fnorm*MUL*(sigmaPP/1000)*(fConstArray[8]);
+-    else                                           numArray[3] = BR*fConstArray[2]*Fnorm*MUL*(sigmaPP/1000)*(fConstArray[8]);
++   
++    if(fPrintFlag){
++      printf("\n");
++      printf("BR                           = %f +/- %f \n", BR,BRerr);
++      printf("Fnorm                        = %f +/- %f (%f %% ) +/- %f (%f %% ) \n", Fnorm,FnormStat,100*FnormStat/Fnorm,FnormSyst,100*FnormSyst/Fnorm);
++      printf("sigma pp                     = %f +/- %f +/- %f (%f %%) (global %f %%) ub \n", sigmaPP,dsigmaPP,100*dsigmaPP/sigmaPP,dsigmaPPCorr,100*dsigmaPPCorr/sigmaPP);
++      printf("AccEff                       = %f +/- %f (%f %% )\n", fConstArray[8],fConstArray[9],100*fConstArray[9]/fConstArray[8]);
++      printf("TAA                          = %f +/- %f (%f %% ) \n", fConstArray[2],fConstArray[3],100*fConstArray[3]/fConstArray[2]);
++      printf("MUL                          = %f\n", MUL);
++      printf("NofJpsi                      = %f +/- %f (%f %% ) +/- %f (%f %% ) \n", numArray[0],numArray[1],100*numArray[1]/numArray[0],numArray[2],100*numArray[2]/numArray[0]);
++      printf("systematic A.P               = %f %% \n", fConstArray[4]);
++      printf("TrajEffError                 = %f %% \n", fConstArray[5]);
++      printf("TriggerError                 = %f %% \n", fConstArray[6]);
++      printf("TriggerError   (local board) = %f %% \n", TriggerError);
++      printf("MatchingError                = %f %% \n", fConstArray[7]);
++      printf("Systematic MC                = %f %% \n", MCParamError);
++      printf("CentralityNormalization      = %f\n", CentralityNormalization);
++    }
++    
++    //Compute Raa
++    numArray[3] = CentralityNormalization*BR*fConstArray[2]*Fnorm*MUL*(sigmaPP/1000)*(fConstArray[8]);
+     numArray[4] = numArray[0]/numArray[3];
+     //Stat error
+-    numArray[5] = numArray[4] * numArray[1]/numArray[0];
+-    //                             signal 
++    numArray[5] = numArray[4] * AliAnalysisMuMuResult::ErrorAB(numArray[0],numArray[1],fConstArray[8],fConstArray[9]);
++    //                               signal 
++    
+     //Corr error
+-    numArray[6]     =  TMath::Sqrt( 
+-    MCParamError    *MCParamError                       // MC 
+-    + fConstArray[5]*fConstArray[5]                     // Traj.
+-    + fConstArray[6]*fConstArray[6]                     // Trigg.
+-    + tailsErro*tailsErro                               // Tails.
+-    + pairError*pairError                               // Pairing.
+-    + 100*100*dsigmaPP*dsigmaPP/sigmaPP/sigmaPP         // pp stat
+-    + 100*100*dsigmaPPCorr*dsigmaPPCorr/sigmaPP/sigmaPP // pp cross-section
+-    + 100*100*FnormSyst*FnormSyst/Fnorm/Fnorm);         // FNorm
+-
++    numArray[6]        =  TMath::Sqrt( 
++    MCParamError       *MCParamError             // MC input (%)
++    + fConstArray[5]   *fConstArray[5]           // Tracking (%)
++    + fConstArray[6]   *fConstArray[6]           // Trigger  (%)
++    + TriggerError     *TriggerError             // Trigger Local board (%)
++    + TrackingErrorCent*TrackingErrorCent        // Trigger Local board (%)
++    + TriggerErrorCent *TriggerErrorCent         // Trigger Local board (%)
++    + fConstArray[7]   *fConstArray[7]           // matching. (%)
++    + pow(100          *dsigmaPP/sigmaPP,2)      // stat. pp cross section
++    + pow(100          *dsigmaPPCorr/sigmaPP,2)  // corr. pp cross-section
++    + pow(100          *FnormSyst/Fnorm,2)       // FNorm
++    - pow(100          *BRerr,2));               // BR cancel out
++
++    //Uncorrelated error
+     numArray[7] = numArray[4] * AliAnalysisMuMuResult::ErrorABC(numArray[0],numArray[2],fConstArray[2],fConstArray[3], 100.,fConstArray[4]);
+     //                                                                  signal                       TAA                       AP
+-  }
+-  else {
++  } else {
+     AliError("Unowned bin type... I Told you !");
+     return kFALSE;
+   }
+@@ -783,8 +845,8 @@ Bool_t AliAnalysisMuMuSpectraCapsulePbPb::ReadFromFile(TString sbin, float value
+ {
+     ///
+     /// Read extern file lines and store associated values. Exemple of line :
+-    /// #intervalLow    intervalHight   sigmapp dsigmapp    dsigmappCorr    dsigmappUncorr  AccEff dAccEff  sysMC TrajEffError  TriggerError    PairError
+-    /// 00              01              0.6413  0.02611     0.000           0.000           0.1435 0.0009   0.000 0.000         0.04            0.00
++    ///#intervalLow intervalHight sigmapp     dsigmapp   dsigmappUncorr  dsigmappcorr(%)  AccEff    dAccEff   sysMC   TrajEffError(%)  TriggerError(%)  PairError(%)  NofPsi StatJpsi SystJpsi
++    ///00           01            0.8421      0.0255      0.0463        0.052             0.13434   0.00058   1.600    4.0              4.6             1.0           36836  1292     760
+     ///
+     /// All white space must be single whitespace, i.e " " and not "<tab>"
+ 
+diff --git a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.h b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.h
+index b1148b7..7e20330 100644
+--- a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.h
++++ b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.h
+@@ -42,6 +42,8 @@ public:
+   TGraphErrors* ComputeYield(const char* what="", const TH1* histo=0x0, const char* sResName="");
+   // Draw fit results and save them if wanted
+   void DrawResults(const char* particle="PSI",const char* subresults="")const;
++  // Print Flag
++  void SetPrintFlag(){fPrintFlag=kTRUE;};
+   // Print some data members
+   void Print(Option_t* opt="") const;
+   // Print constants used
+@@ -57,8 +59,8 @@ public:
+ 
+ private:
+   // Read and compute values from extern file
+-  Bool_t ComputeRAA(TString sbin, Double_t numArray[],Double_t MUL) const;
+-  // Read exterfil for Pt and Y case
++  Bool_t ComputeRAA(TString sbin, Double_t numArray[],Double_t MUL, Double_t binwidth) const;
++  // Read extern file for Pt and Y case
+   Bool_t ReadFromFile(TString sbin, float valueArray[]) const;
+   // Set global constants according to centrality
+   Bool_t SetConstantFromExternFile(const char* file);
+@@ -71,12 +73,13 @@ private:
+   TString fExternFile;      // name of spectra selected
+   TString fExternFile2;     // name of spectra selected
+   Double_t fConstArray[13]; // Array to store constant according to centrality bins
++  Bool_t fPrintFlag;        
+ 
+   const AliAnalysisMuMuSpectra* fSpectra;// Spectra with result and subresults
+   const TString               fSpectraName;     // SpectraName
+ 
+ /// \cond CLASSIMP
+-ClassDef(AliAnalysisMuMuSpectraCapsulePbPb,1);
++ClassDef(AliAnalysisMuMuSpectraCapsulePbPb,2);
+ /// \endcond
+ };
+ 
+-- 
+2.7.4 (Apple Git-66)
+

@@ -1,0 +1,47 @@
+From 63c903f50b9744be716c0311f94b8e6c6b18a1df Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Fri, 17 Jun 2016 13:06:45 +0200
+Subject: [PATCH 28/36] Small fixes
+
+---
+ PWG/muon/AliAnalysisMuMuMinv.cxx                | 3 ++-
+ PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/PWG/muon/AliAnalysisMuMuMinv.cxx b/PWG/muon/AliAnalysisMuMuMinv.cxx
+index 0ad6997..72fb6f9 100644
+--- a/PWG/muon/AliAnalysisMuMuMinv.cxx
++++ b/PWG/muon/AliAnalysisMuMuMinv.cxx
+@@ -834,7 +834,7 @@ Double_t AliAnalysisMuMuMinv::WeightMuonDistribution(Double_t pt)
+   if (!HasMC() ) return 1.;
+   if (!fWeightMuon) return 1.;
+ 
+-  
++
+   //================ Trigger Efficiency distribution pp@5TeV ==============//
+   //value for input distribution
+   Double_t parptpp5 [8]     = {6.24341e-01,2.68680e-01,6.57929e-01,1.00000e+00,1.00000e+00,1.00000e+00,-1.00000e+00,9.67072e-01}; //Initial dunction
+@@ -1231,6 +1231,7 @@ void AliAnalysisMuMuMinv::SetNewYFunc(TString formula, const Double_t *param, Do
+ void AliAnalysisMuMuMinv::NormFunc(TF1 *f, Double_t min, Double_t max)
+ {
+   /// normalize the function to its integral in the given range
++   f->SetNpx(100.*(max-min));
+   Double_t integral = f->Integral(min, max);
+   if (integral != 0.) f->SetParameter(0, f->GetParameter(0)/integral);
+ }
+diff --git a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx
+index 1cd1b18..9a12aed 100644
+--- a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx
++++ b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx
+@@ -231,7 +231,7 @@ TList* AliAnalysisMuMuSpectraCapsulePP::ComputePPCrossSection(const char* what)
+ 
+         // Fill graphs
+         if(sbin.Contains("Y"))gCrossSection->SetPoint(j,-x,sigma/deltaY);
+-        else gCrossSection->SetPoint(j,-x,sigma/deltaY);
++        else gCrossSection->SetPoint(j,x,sigma/deltaY);
+         gCrossSection->SetPointError(j,bin->WidthX()/2,sigmaerrorstat/deltaY);
+ 
+         if(sbin.Contains("Y"))gSys->SetPoint(j,-x,sigma/deltaY);
+-- 
+2.7.4 (Apple Git-66)
+

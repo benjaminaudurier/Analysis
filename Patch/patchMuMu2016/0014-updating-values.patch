@@ -1,0 +1,95 @@
+From a3e8dd5eb605f3a65d6a8f16f4437505a59aa81a Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Thu, 2 Jun 2016 17:06:00 +0200
+Subject: [PATCH 14/36] updating values
+
+---
+ PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx | 50 +++++++++++------------
+ 1 file changed, 24 insertions(+), 26 deletions(-)
+
+diff --git a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx
+index cd3b072..e0e1f89 100644
+--- a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx
++++ b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx
+@@ -64,19 +64,19 @@ namespace
+   const Double_t FnormSyst      = 0.059;     // Normalization
+   
+   //pp Cross-section integrated for pp@5TeV 0<pt<8 , -4<y<-2.5
+-  // const Double_t sigmaPP         = 5.352424;    // for fully integrated case
+-  // const Double_t dsigmaPP        = 0.218480;    // idem
+-  // const Double_t dsigmaPPCorr    = 0.304410;    // for fully integrated case
++  const Double_t sigmaPP         = 5.437398;    // for fully integrated case
++  const Double_t dsigmaPP        = 0.080294;    // idem
++  const Double_t dsigmaPPCorr    = 0.309059;    // for fully integrated case
+ 
+   // pp Cross-section integrated for pp@5TeV 0.3<pT<8 , -4<y<-2.5
+-  const Double_t sigmaPP        = 5.280759;    // for fully integrated case
+-  const Double_t dsigmaPP       = 0.237406;    // idem
+-  const Double_t dsigmaPPCorr   = 0.301285;    // for fully integrated case
++  // const Double_t sigmaPP        = 5.383466;    // for fully integrated case
++  // const Double_t dsigmaPP       = 0.117246;    // idem
++  // const Double_t dsigmaPPCorr   = 0.305869;    // for fully integrated case
+ 
+   //pp Cross-section integrated for pp@5TeV 0<pT<12 , -4<y<-2.5
+-  // const Double_t sigmaPP        = 5.405032;    // for fully integrated case
+-  // const Double_t dsigmaPP       = 0.228325;    // idem
+-  // const Double_t dsigmaPPCorr   = 0.306719;    // for fully integrated case
++  // const Double_t sigmaPP        = 5.487604;    // for fully integrated case
++  // const Double_t dsigmaPP       = 0.103672;    // idem
++  // const Double_t dsigmaPPCorr   = 0.311192;    // for fully integrated case
+   
+   // Global MC sys. err. for centrality integrated in pt and Y
+   const Double_t MCParamError   = 1.6;//%
+@@ -406,34 +406,32 @@ void AliAnalysisMuMuSpectraCapsulePbPb::DrawResults( const char* particle,const
+   {
+     AliDebug(1,Form(" - subcanvas = %d",n));
+     h = static_cast<TH1*>(histos->At(n));
+-    if (h)
+-    {
++    if (h){
+       ++n;
+       c->cd(n);// got to pad
+-      gPad->SetLogy();
+-      if (xmin>0)
+-        {
+-          // Loop to configure the pad as you like
+-          h->GetXaxis()->SetRangeUser(xmin,xmax);
+-          h->SetTitleSize(10);
+-        }
+-      h->GetXaxis()->SetRangeUser(1.,5.);
+-      h->DrawCopy("histes");
++      if (xmin>0){
++        // Loop to configure the pad as you like
++        h->GetXaxis()->SetRangeUser(xmin,xmax);
++        h->SetTitleSize(10);
++      }
++      h->GetXaxis()->SetRangeUser(1.5,5.);
++      h->GetXaxis()->SetTitle("M GeV/c^2");
++      h->Draw();
+ 
+       //Get fitting functions and draw them
+       f1 = h->GetFunction("signal+bck");
+       f2 = h->GetFunction("signalJPsi");
+       f3 = h->GetFunction("signalPsiP");
+       f4 = h->GetFunction("bck");
++      
+       if(f1) f1->DrawCopy("same");
+       if(f2) f2->DrawCopy("same");
+       if(f3) f3->DrawCopy("same");
+-      if(f4)
+-          {
+-            f4->SetLineColor(kBlue);
+-            f4->SetLineStyle(16);
+-            f4->DrawCopy("same");
+-          }
++      if(f4){
++        f4->SetLineColor(kBlue);
++        f4->SetLineStyle(16);
++        f4->DrawCopy("same");
++      }
+       f1 = h->GetFunction("signal");
+       if(f1) f1->DrawCopy("same");
+       gPad->Modified();
+-- 
+2.7.4 (Apple Git-66)
+

@@ -1,0 +1,181 @@
+From 19c3436bdd39f3d9ad69145e81656fa618ccd103 Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Wed, 15 Jun 2016 15:34:46 +0200
+Subject: [PATCH 24/36] minor changes
+
+---
+ PWG/muondep/AliAnalysisMuMu.cxx | 65 ++++++++++++++++++++++-------------------
+ PWG/muondep/AliAnalysisMuMu.h   |  6 +++-
+ 2 files changed, 40 insertions(+), 31 deletions(-)
+
+diff --git a/PWG/muondep/AliAnalysisMuMu.cxx b/PWG/muondep/AliAnalysisMuMu.cxx
+index cba7a79..fa87bb5 100644
+--- a/PWG/muondep/AliAnalysisMuMu.cxx
++++ b/PWG/muondep/AliAnalysisMuMu.cxx
+@@ -1047,11 +1047,12 @@ void AliAnalysisMuMu::RAAasGraphic(const char* particle,
+                                    const char* externfile,
+                                    const char* externfile2,
+                                    const char* RefCent,
++                                   Bool_t print,
+                                    Bool_t AccEffCorr
+                                    )const
+ {
+     ///
+-    /// Function to use after fitting procedur ( Jpsi() for instance ).
++    /// Function to use after fitting procedure ( Jpsi() for instance ).
+     /// Loops over all combination of /eventype/trigger/centrality (etc.), compute, store and print RAA on terminal.
+     /// <binType> can be either "PT"/"Y"/"INTEGRATED" for the moment.
+     ///
+@@ -1164,9 +1165,6 @@ void AliAnalysisMuMu::RAAasGraphic(const char* particle,
+                         }
+                         gStyle->SetOptStat(0);
+ 
+-                        cout << Form("  __________________________________________________________ ") << endl;
+-                        cout << Form("  |         bin      |   JPsi  Stat.  Syst. | RAA  Stat.  Syst. | <NPART>  d<NPART> |") << endl;
+-
+                         Int_t n=1; // counter
+                         nextCentrality.Reset();
+                         // Loop on each centrality (not the ones in MuMuConfig but the ones set)
+@@ -1192,7 +1190,7 @@ void AliAnalysisMuMu::RAAasGraphic(const char* particle,
+                             AliAnalysisMuMuSpectraCapsulePbPb * capsule = new AliAnalysisMuMuSpectraCapsulePbPb(spectra,spectraPath,externfile,externfile2);
+                             if(!capsule) continue;
+                             AliDebug(1,Form("Spectra = %p",capsule));
+-                            // capsule->PrintConst();
++                            if(print)capsule->SetPrintFlag();
+ 
+                             // Get Graph with RAA results
+                             list = capsule->RAAasGraphic(NofMUL);
+@@ -1678,6 +1676,16 @@ AliAnalysisMuMu::FitParticle(const char* particle,
+       std::cout << "Fitting " << hname.Data() << " with " << sFitType.Data() << std::endl;
+       std::cout << "" << std::endl;
+ 
++      // Hard coded until find a smart wayto do it
++      if (sFitType.Contains("PSIPSIPRIMENA60NEWVWG") && sFitType.Contains("range=2.0;4.4") && bin->AsString().Contains("PT_BENJ_03.00_04.00") ){
++        cout << "" << endl;
++        cout << " specific histo with specific parameters" << endl;
++        cout << "" << endl;
++        sFitType += ":binNormJPsi=3.15:binNormPsiP=3.67:sigmaJPsi:0.085";
++      }
++
++      
++
+       // Conf. for MC Tails (see function type)
+       if ( sFitType.Contains("mctails",TString::kIgnoreCase) ) //FIXME: Find a univoque way to determine the correctly the fit type
+       {
+@@ -4504,7 +4512,7 @@ void AliAnalysisMuMu::ComputeDimuonRawCount(const Double_t rlow, const Double_t
+     return;
+ }
+ 
+-void AliAnalysisMuMu::ComputePPCrossSection(const char* binType, const char* particle, const char* what, Bool_t AccEffCorr)
++void AliAnalysisMuMu::ComputePPCrossSection(const char* binType, const char* particle, const char* what,const char* externfile, const char* externfile2, Bool_t print, Bool_t AccEffCorr)
+ {
+     /// Compute the PP Cross section
+     /// Parameters:
+@@ -4600,18 +4608,14 @@ void AliAnalysisMuMu::ComputePPCrossSection(const char* binType, const char* par
+                         if(!spectra){
+                           AliError(Form("Cannot find spectra with name %s",spectraPath.Data()));
+                           return;
+-                        }
+-                        //________
+-
+-                        // //________Get Trigger sum
+-                        // Int_t NofMUL = TMath::Nint(CC()->GetSum(Form("trigger:%s/event:%s/centrality:%s",striggerDimuon->String().Data(),seventType->String().Data(),scentrality->String().Data())));
+-                        // //________
+-                        
++                        }                        
+ 
+-                        AliAnalysisMuMuSpectraCapsulePP * capsule = new AliAnalysisMuMuSpectraCapsulePP(spectra,spectraPath);
++                        // Create capsule who will compute the cross section
++                        AliAnalysisMuMuSpectraCapsulePP * capsule = new AliAnalysisMuMuSpectraCapsulePP(spectra,spectraPath,externfile,externfile2);
+                         if(!capsule) continue;
+                         AliDebug(1,Form("Spectra = %p",capsule));
+                         // capsule->PrintConst();
++                        if(print)capsule->SetPrintFlag();
+ 
+                         // Get Graph with RAA results
+                         list = capsule->ComputePPCrossSection(what);
+@@ -4625,33 +4629,34 @@ void AliAnalysisMuMu::ComputePPCrossSection(const char* binType, const char* par
+ 
+                         graphErr->SetFillColor(2);
+                         graphErr->SetFillStyle(3001);
+-                        graphErr->SetTitle(Form("J/psi cross section"));
+-                        if(sbinType->String().Contains("PT")) graphErr->GetYaxis()->SetTitle(Form("d^{2}#sigma/dp_{T}(#muBxGeV^{-1}xc)"));
+-                        if(sbinType->String().Contains("Y")) graphErr->GetYaxis()->SetTitle(Form("d^{2}#sigma/dY(#muB)"));
++                        graphErr->SetTitle(Form("J/#psi cross section"));
++                        if(sbinType->String().Contains("PT")) graphErr->GetYaxis()->SetTitle(Form("d^{2}#sigma/dp_{T}dy (#muB x (GeV/c)^{-1})"));
++                        if(sbinType->String().Contains("Y")) graphErr->GetYaxis()->SetTitle(Form("d^{2}#sigma/dy(#muB)"));
+                         graphErr->GetXaxis()->SetTitle(Form("%s",sbinType->String().Data()));
+                         graphErr->SetMarkerSize(1.7);
+ 
+-                        TF1* fit=0x0;
+-                        TFitResultPtr Fitpoint=0x0;
++                        // TF1* fit=0x0;
++                        // TFitResultPtr Fitpoint=0x0;
+ 
+-                        if(sbinType->String().Contains("PT")){
+-                            fit = new TF1("fit","[0]*x*(1/pow((1+pow(x/[1], [2])) ,[3]))",0,12);
+-                            fit->SetParameters(2424.41, 4.74409,1.70488, 4.42257);
+-                        }
++                        // if(sbinType->String().Contains("PT")){
++                        //     fit = new TF1("fit","[0]*x*(1/pow((1+pow(x/[1], [2])) ,[3]))",0,12);
++                        //     fit->SetParameters(2424.41, 4.74409,1.70488, 4.42257);
++                        // }
+ 
+-                        if(sbinType->String().Contains("Y")){
+-                            fit= new TF1("fit","[0] * TMath::Exp(-0.5*TMath::Power((x-[1])/[2],2.))", -10, 2.5);
+-                            fit->SetParameters(2.8,0.00,2.9271);
+-                            fit->FixParameter(1,0.00);
+-                        }
++                        // if(sbinType->String().Contains("Y")){
++                        //     fit= new TF1("fit","[0] * TMath::Exp(-0.5*TMath::Power((x-[1])/[2],2.))", -10, 2.5);
++                        //     fit->SetParameters(2.8,0.00,2.9271);
++                        //     fit->FixParameter(1,0.00);
++                        // }
+                         new TCanvas;
+                         if(sbinType->String().Contains("PT")) gPad->SetLogy();
+ 
+                         TLegend * leg = new TLegend(0.4,0.7,0.70,0.9);
+-                        leg->SetHeader(Form("ALICE, p-p #sqrt{s_{NN}}=5.02 TeV, L_{int}= 113.07 +/- 0.1 #mub^{-1})"));
++                        leg->SetHeader(Form("ALICE, p-p #sqrt{s_{NN}}=5.02 TeV, L_{int}= 109.07 +/- 0.09 #mub^{-1})"));
+                         if(sbinType->String().Contains("PT")) leg->AddEntry(graph,"Inclusive J/#psi cross-section 2.5 < y < 4","pe");
+-                        if(sbinType->String().Contains("Y")) leg->AddEntry(graph,"Inclusive J/#psi cross-section 0 < pT < 12 GeV/c^2","pe");
++                        if(sbinType->String().Contains("Y")) leg->AddEntry(graph,"Inclusive J/#psi cross-section 0 < pT < 12 GeV/c","pe");
+                         leg->AddEntry(graphErr,"systematic uncertainty ","f");
++                        if(sbinType->String().Contains("PT") || sbinType->String().Contains("Y"))leg->AddEntry((TObject*)0,"global uncert. : 3.04 %","");
+                         leg->SetTextSize(0.03);
+ 
+                         graphErr->DrawClone("A2P[]");
+diff --git a/PWG/muondep/AliAnalysisMuMu.h b/PWG/muondep/AliAnalysisMuMu.h
+index c752e7f..0edaeeb 100644
+--- a/PWG/muondep/AliAnalysisMuMu.h
++++ b/PWG/muondep/AliAnalysisMuMu.h
+@@ -10,7 +10,7 @@
+ /// AliAnalysisMuMu : Facade class of all subclass called to digest/plot/massage results from
+ /// AliAnalysisTaskMuMu
+ ///
+-/// author : Laurent Aphecetche (Subatech) and Javier Martin Blanco
++/// author : Laurent Aphecetche (Subatech), Javier Martin Blanco, Benjamin Audurier
+ 
+ #include "AliAnalysisMuMuBinning.h"
+ #include "AliAnalysisMuMuFnorm.h"
+@@ -110,6 +110,9 @@ public:
+       const char        * binType="PT",
+       const char        * particle ="PSI",
+       const char        * what ="CorrNofJPsi",
++      const char        * externfile = "",
++      const char        * externfile2 = "",
++      Bool_t print      =kFALSE,
+       Bool_t AccEffCorr =kFALSE);
+ 
+     TH2* ComputeSPDCorrection(
+@@ -215,6 +218,7 @@ public:
+       const char        * externfile1="externFile_PT.txt",
+       const char        * externfile2="externFile_CENT.txt",
+       const char        * RefCent ="V0M_00.00_90.00",
++      Bool_t print      = kFALSE,
+       Bool_t AccEffCorr =kFALSE)const;
+ 
+     void DrawFitResults(
+-- 
+2.7.4 (Apple Git-66)
+

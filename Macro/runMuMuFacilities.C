@@ -12,7 +12,7 @@
   TString extraLibs         ="";
   TString extraIncs         ="include";
   TString extraTasks        ="";
-  TString extraPkgs         ="PWGmuon:EventMixing";
+  TString extraPkgs         ="EventMixing:PWGmuon";
   TString dataType          ="AOD";
 
   // --- grid specific setup ---
@@ -27,26 +27,25 @@
   Int_t maxMergeStages      = 2;
 
   // --- saf3 specific setup ---
-  Bool_t splitDataset = kFALSE;
+  Bool_t splitDataset = kTRUE;
 
   // ---     Pool setup      ---
-  const Int_t bufferSize = 1; // pool size
-  const Int_t mixNum = 10; // ??
+  const Int_t bufferSize = 20; // pool size
+  const Int_t mixNum = 1; // ??
 
 //______________________________________________________________________________
-void runMuMuFacilities(TString smode = "local", TString inputFileName = "AliAOD.root", Bool_t isMC = kFALSE,Bool_t Mix =kTRUE)
+void runMuMuFacilities(TString smode = "local", TString inputFileName = "AliAOD.Muons.root", Bool_t isMC = kFALSE, Bool_t Mix = kTRUE)
 {
   /// Fill counters with triggered events
-  
-    
+
   TList pathList; pathList.SetOwner();
   TList fileList; fileList.SetOwner();
   fileList.Add(new TObjString( "runMuMuFacilities.C" ));
   fileList.Add(new TObjString( "AddTaskMuMu.C" ));
   fileList.Add(new TObjString( "AddMixingHandler.C" ));
   fileList.Add(new TObjString( "AddAnalysisTaskMixInfo.C" ));
-  fileList.Add(new TObjString( "EventMixing.par" ));
-  fileList.Add(new TObjString( "PWGmuon.par" ));
+  // fileList.Add(new TObjString( "EventMixing.par" ));
+  // fileList.Add(new TObjString( "PWGmuon.par" ));
  
   // Automatically generate parfile
   TObjString* Obj=0x0;
@@ -73,9 +72,7 @@ void runMuMuFacilities(TString smode = "local", TString inputFileName = "AliAOD.
     if (smode == "saf3" && splitDataset) AliAnalysisManager::GetAnalysisManager()->SetSkipTerminate(kTRUE);
     
     RunAnalysis(smode, inputFileName, rootVersion, alirootVersion, aliphysicsVersion, extraLibs, extraIncs, extraTasks, extraPkgs, dataDir, dataPattern, outDir, analysisMacroName, runFormat, ttl, maxFilesPerJob, maxMergeFiles, maxMergeStages);
-    
   }
-  
 }
 
 //______________________________________________________________________________
@@ -83,12 +80,12 @@ void CreateAnalysisTrain(Bool_t isMC,Bool_t Mix)
 {
   /// create the analysis train and configure it
   
-    // // analysis manager
-    AliAnalysisManager        *mgr          = new AliAnalysisManager("MuMuAnalysis");
-    AliMultiInputEventHandler*inputHandler  = 0x0;
-    // AliMultiInputEventHandler*inputHandler = new AliMultiInputEventHandler();
-
-    if (Mix) {
+   // analysis manager
+   AliAnalysisManager        *mgr          = new AliAnalysisManager("MuMuAnalysis");
+   AliMultiInputEventHandler*inputHandler = 0x0;
+   // AliMultiInputEventHandler*inputHandler = new AliMultiInputEventHandler();
+   
+  if (Mix) {
       // Create MultiInputEventHandler
       inputHandler = new AliMultiInputEventHandler();
 
@@ -102,28 +99,35 @@ void CreateAnalysisTrain(Bool_t isMC,Bool_t Mix)
       } 
     }
 
-      if(inputHandler)mgr->SetInputEventHandler(inputHandler);
-      else if (isMC)  mgr->SetMCtruthEventHandler(new AliMCEventHandler());
-      else if(dataType.Contains("AOD")) mgr->SetInputEventHandler(new AliAODInputHandler());
-      else if(dataType.Contains("ESD")) mgr->SetInputEventHandler(new AliESDInputHandler());
-      else {
-          printf("Cannot determine data type\n");
-          return;
-      }
+  if(inputHandler)mgr->SetInputEventHandler(inputHandler);
+  else if (isMC)  mgr->SetMCtruthEventHandler(new AliMCEventHandler());
+  else if(dataType.Contains("AOD")) mgr->SetInputEventHandler(new AliAODInputHandler());
+  else if(dataType.Contains("ESD")) mgr->SetInputEventHandler(new AliESDInputHandler());
+  else {
+      printf("Cannot determine data type\n");
+      return;
+  }
+    
+  // Load centrality task
+  // gROOT->LoadMacro("$ALICE_PHYSICS/OADB/COMMON/MULTIPLICITY/macros/AddTaskMultSelection.C");
+  // AliMultSelectionTask* task = AddTaskMultSelection(kFALSE); // user
+  // task->SetAlternateOADBforEstimators("LHC15o");              // only if run locally
 
-    // Load centrality task
-    // gROOT->LoadMacro("$ALICE_PHYSICS/OADB/COMMON/MULTIPLICITY/macros/AddTaskMultSelection.C");
-    // AliMultSelectionTask* task = AddTaskMultSelection(kFALSE); // user
-    // task->SetAlternateOADBforEstimators("LHC15o");              // only if run locally
+  // add mixing handler
+  gROOT->LoadMacro("AddMixingHandler.C");
+  if(Mix)AddMixingHandler(inputHandler,isMC,bufferSize,mixNum,""); 
 
-    TList* triggers = new TList; // Create pointer for trigger list
-    triggers->SetOwner(kTRUE); // Give rights to trigger liser
-    if (!isMC) triggers->Add(new TObjString("CMSL7-B-NOPF-MUFAST"));
+  // Add Mix Info
+  gROOT->LoadMacro ("AddAnalysisTaskMixInfo.C");
+  if(Mix)AddAnalysisTaskMixInfo(""); 
 
-    TString output =  Mix ? Form("MIX_%s",AliAnalysisManager::GetCommonFileName()) : Form("%s",AliAnalysisManager::GetCommonFileName());
-    gROOT->LoadMacro("AddTaskMuMu.C");
-    AliAnalysisTaskMuMu* TaskMuMu = AddTaskMuMu(output.Data(),triggers,"pp2015",isMC);
-    if(Mix)TaskMuMu->RunOnMixEvent();
+  TList* triggers = new TList; // Create pointer for trigger list
+  triggers->SetOwner(kTRUE); // Give rights to trigger liser
+  if (!isMC) triggers->Add(new TObjString("CMSL7-B-NOPF-MUFAST"));
+  
+  TString output =  Form("%s",AliAnalysisManager::GetCommonFileName());
+  gROOT->LoadMacro("AddTaskMuMu.C");
+  AliAnalysisTaskMuMu* TaskMuMu = AddTaskMuMu(output.Data(),triggers,"PbPb2015",isMC);
   
 }
 
@@ -132,7 +136,7 @@ void CreateAndCopyParFile(TString parfile)
 {
   ///Create and copy ParFiles locally
   
-  TString aliceBuildDir = gSystem->ExpandPathName("$ALICE_PHYSICS/../build");
+  TString aliceBuildDir = gSystem->ExpandPathName("$ALICE_WORK_DIR/BUILD/AliPhysics-latest-ali-master/AliPhysics");
   TString command = "";
   TString workDirFull = gSystem->pwd();
 

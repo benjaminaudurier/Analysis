@@ -1,0 +1,77 @@
+From 3a4b2279a3135eac87e6366c4759ef2212ef0c0a Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Fri, 24 Jun 2016 08:57:05 +0200
+Subject: [PATCH 34/36] Update cross-sections due to last VDM values
+
+---
+ PWG/muondep/AliAnalysisMuMu.cxx                   |  6 +++---
+ PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx   |  4 ++--
+ PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx | 10 +++++-----
+ 3 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/PWG/muondep/AliAnalysisMuMu.cxx b/PWG/muondep/AliAnalysisMuMu.cxx
+index 5cba290..e1b57ee 100644
+--- a/PWG/muondep/AliAnalysisMuMu.cxx
++++ b/PWG/muondep/AliAnalysisMuMu.cxx
+@@ -4603,10 +4603,10 @@ void AliAnalysisMuMu::ComputePPCrossSection(const char* binType, const char* par
+                         else leg = new TLegend(0.4,0.4,0.70,0.6);
+ 
+                         leg->SetHeader(Form("ALICE, pp #sqrt{#it{s}} = 5.02 TeV"));
+-                        if(sbinType->String().Contains("PT")) leg->AddEntry(graph,"Inclusive J/#psi -> #mu+#mu- , 2.5 < #it{y} < 4 , L_{int} = 109 #mub^{-1}  ","pe");
+-                        if(sbinType->String().Contains("Y")) leg->AddEntry(graph,"Inclusive J/#psi -> #mu+#mu- , 0 < #it{p}_{T} < 12 GeV/c, L_{int} = 109 #mub^{-1}","pe");
++                        if(sbinType->String().Contains("PT")) leg->AddEntry(graph,"Inclusive J/#psi , 2.5 < #it{y} < 4 , L_{int} = 106 #mub^{-1}  ","pe");
++                        if(sbinType->String().Contains("Y")) leg->AddEntry(graph,"Inclusive J/#psi , 0 < #it{p}_{T} < 12 GeV/c, L_{int} = 106 #mub^{-1}","pe");
+                         leg->AddEntry(graphErr,"systematic uncertainty ","f");
+-                        if(sbinType->String().Contains("PT") || sbinType->String().Contains("Y"))leg->AddEntry((TObject*)0,"global uncert. : 3 % ","");
++                        if(sbinType->String().Contains("PT") || sbinType->String().Contains("Y"))leg->AddEntry((TObject*)0,"global uncert. : 2 % ","");
+                         leg->SetTextSize(0.035);
+                         TLegendEntry *header = (TLegendEntry*)leg->GetListOfPrimitives()->First();
+                         header->SetTextSize(.06);
+diff --git a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx
+index 39b6b03..262d030 100644
+--- a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx
++++ b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx
+@@ -59,9 +59,9 @@ namespace
+   const Double_t BR           = 5.96/100; // Branching ratio
+   const Double_t BRerr        = 0.03/5.96;   // Branching ratio
+   //luminosity
+-  const Double_t lumi         = 109.07; // nb^-1
++  const Double_t lumi         = 106.28; // nb^-1
+   const Double_t lumiStat     = 0.09;   // nb^-1
+-  const Double_t lumiSys      = 3./100; // (%)
++  const Double_t lumiSys      = 2.1/100; // (%)
+   const Double_t Trigg        = 1.5/100; // (%)
+ 
+ }
+diff --git a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx
+index fc00a5f..91ea96f 100644
+--- a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx
++++ b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx
+@@ -69,19 +69,19 @@ namespace
+   const Double_t FnormSyst         = 0.059;     // Normalization
+   
+   //pp Cross-section integrated for pp@5TeV 0<pt<8 , -4<y<-2.5
+-  const Double_t sigmaPP        = 5.41;    // for fully integrated case
++  const Double_t sigmaPP        = 5.61;    // for fully integrated case
+   const Double_t dsigmaPP       = 0.08;    // idem
+   const Double_t dsigmaPPCorr   = 0.29;    // for fully integrated case
+   
+   // pp Cross-section integrated for pp@5TeV 0.3<pT<8 , -4<y<-2.5
+-  // const Double_t sigmaPP        = 5.33;    // for fully integrated case
++  // const Double_t sigmaPP        = 5.47;    // for fully integrated case
+   // const Double_t dsigmaPP       = 0.08;    // idem
+-  // const Double_t dsigmaPPCorr   = 0.29;    // for fully integrated case
++  // const Double_t dsigmaPPCorr   = 0.27;    // for fully integrated case
+   
+   //pp Cross-section integrated for pp@5TeV 0<pT<12 , -4<y<-2.5
+-  // const Double_t sigmaPP           = 5.46;    // for fully integrated case
++  // const Double_t sigmaPP           = 5.51;    // for fully integrated case
+   // const Double_t dsigmaPP          = 0.08;    // idem
+-  // const Double_t dsigmaPPCorr      = 0.30;    // for fully integrated case
++  // const Double_t dsigmaPPCorr      = 0.28;    // for fully integrated case
+   
+   // Global MC sys. err. for centrality integrated in pt and Y
+   const Double_t MCParamError      = 2.0;//%
+-- 
+2.7.4 (Apple Git-66)
+

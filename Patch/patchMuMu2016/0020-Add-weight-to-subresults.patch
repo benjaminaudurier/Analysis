@@ -1,0 +1,124 @@
+From 6fd358991a2de80ff43c06a49e12387984efcb46 Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Wed, 15 Jun 2016 15:27:55 +0200
+Subject: [PATCH 20/36] Add weight to subresults
+
+---
+ PWG/muondep/AliAnalysisMuMuJpsiResult.cxx | 44 +++++++++++++++++--------------
+ 1 file changed, 24 insertions(+), 20 deletions(-)
+
+diff --git a/PWG/muondep/AliAnalysisMuMuJpsiResult.cxx b/PWG/muondep/AliAnalysisMuMuJpsiResult.cxx
+index 36b23cd..1f2dc3a 100644
+--- a/PWG/muondep/AliAnalysisMuMuJpsiResult.cxx
++++ b/PWG/muondep/AliAnalysisMuMuJpsiResult.cxx
+@@ -97,6 +97,7 @@ namespace {
+   const TString kKeyCount     = "Count";
+   const TString kKeyHistoType = "HistoType";
+   const TString kKeyTails     = "Tails";
++  const TString kKeyWeight    = "Weight";
+   const TString kKeySPsiP     = "FSigmaPsiP"; //Factor to fix the psi' sigma to sigmaJPsi*SigmaPsiP (Usually factor SigmaPsiP = 1, 0.9 and 1.1)
+   const TString kKeyMinvRS    = "MinvRS"; // FIXME: not very correct since "MinvRS" is in AliAnalysisMuMu::GetParametersFromResult
+ 
+@@ -147,42 +148,43 @@ fMinvRS("")
+ 
+   DecodeFitType(fitType);
+ 
++  SetWeight(GetValue(kKeyWeight));
++
++  AliDebug(1,Form("weight = %f\n",Weight()));
++
+   TString name(fFitFunction);
+   if ( !name.Contains("PSICB2") && !name.Contains("PSINA60NEW") && !name.Contains("PSICOUNT") ) //To avoid adding things to the name of simu results
+   {
+     Bool_t isMPt = kFALSE;
+ 
+     if ( name.BeginsWith("PSI") ) name.ReplaceAll("PSIPSIPRIME","");
+-    else if ( name.BeginsWith("MPT") )
+-    {
++    else if ( name.BeginsWith("MPT") ) {
+       name.ReplaceAll("MPTPSIPSIPRIME","");
+       isMPt = kTRUE;
+     }
++
+     name += "_";
+     name += Form("%1.1f",GetValue(kFitRangeLow));
+     name += "_";
+     name += Form("%1.1f",GetValue(kFitRangeHigh));
+-    if ( !isMPt )
+-    {
++    if(GetValue(kKeyWeight)!=1.){
+       name += "_";
+-      name += Form("SP%1.1f",GetValue(kKeySPsiP));
++      name += Form("Weight=%1.1f",GetValue(kKeyWeight));
+     }
+-    else
+-    {
+-      name += Form("(Sig:%s)",fMinvRS.Data());
++    
++    if ( !isMPt ) {
++      name += "_";
++      name += Form("SP%1.1f",GetValue(kKeySPsiP));
+     }
++    else name += Form("(Sig:%s)",fMinvRS.Data());
+   }
+   SetName(name.Data());
+ 
+   Int_t rebin = TMath::Nint(GetValue(kKeyRebin));
+ 
+-  if (rebin>0)
+-  {
+-    fHisto->Rebin(rebin);
+-  }
++  if (rebin>0) fHisto->Rebin(rebin);
+ 
+-  if ( fHisto->GetEntries()<100 && !TString(GetName()).Contains(kKeyCount) )
+-  {
++  if ( fHisto->GetEntries()<100 && !TString(GetName()).Contains(kKeyCount) ){
+     // not enough statistics to perform a fit.
+     Invalidate();
+     std::cout << "Fit Excluded: Not enough statistics to perform a fit" << std::endl;
+@@ -7886,11 +7888,11 @@ void AliAnalysisMuMuJpsiResult::DecodeFitType(const char* fitType)
+   TString fitFunction;
+   TString histoType("minv");
+   TString tails("");
+-  Int_t rebin=1;
+-  Double_t fitMinvMin=2.0;
+-  Double_t fitMinvMax=5.0;
+-  Double_t paramSPsiP= 3.68609/3.096916;
+-
++  Int_t rebin         =1;
++  Double_t fitMinvMin =2.0;
++  Double_t fitMinvMax =5.0;
++  Double_t paramSPsiP = 1.05 ;/*3.68609/3.096916;*/
++  Double_t Weight = 1.;
+   TString sFitType(fitType);
+ 
+   if (!sFitType.Contains(kKeyFunc,TString::kIgnoreCase)) return;
+@@ -7908,6 +7910,7 @@ void AliAnalysisMuMuJpsiResult::DecodeFitType(const char* fitType)
+       AliErrorClass(Form("Invalid key=value pair %s",str->String().Data()));
+       continue;
+     }
++    AliDebug(1,Form("key = %s, value = %s",key.Data(),value.Data()));
+ 
+     if ( key.CompareTo(kKeyFunc,TString::kIgnoreCase) == 0 )
+     {
+@@ -7963,7 +7966,7 @@ void AliAnalysisMuMuJpsiResult::DecodeFitType(const char* fitType)
+       }
+     }
+     else if ( key.CompareTo(kKeySPsiP,TString::kIgnoreCase) == 0 )paramSPsiP = value.Atof();
+-
++    else if ( key.CompareTo(kKeyWeight,TString::kIgnoreCase) == 0 )Weight = value.Atof();
+     else if ( key.CompareTo(kKeyMinvRS,TString::kIgnoreCase) == 0 )fMinvRS = value.Data();
+ 
+     else Set(key.Data(),value.Atof(),0.0);
+@@ -7984,6 +7987,7 @@ void AliAnalysisMuMuJpsiResult::DecodeFitType(const char* fitType)
+     Set(kKeyRebin,rebin,0.0);
+     Set(kFitRangeLow,fitMinvMin,0.0);
+     Set(kFitRangeHigh,fitMinvMax,0.0);
++    Set(kKeyWeight,Weight,0.0);
+   }
+ 
+   delete parts;
+-- 
+2.7.4 (Apple Git-66)
+

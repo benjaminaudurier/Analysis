@@ -1,0 +1,430 @@
+From 899bf3e6a8f33df96991a0e19065db4d64c2396a Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Tue, 21 Jun 2016 09:35:56 +0200
+Subject: [PATCH 32/36] changing histo style
+
+---
+ PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx | 313 ++++++++++------------
+ PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.h   |   3 +
+ 2 files changed, 148 insertions(+), 168 deletions(-)
+
+diff --git a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx
+index a5bf95d..b4c9303 100644
+--- a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx
++++ b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx
+@@ -33,6 +33,7 @@ ClassImp(AliAnalysisMuMuSpectraCapsulePbPb)
+ #include "THashList.h"
+ #include "TLegend.h"
+ #include "TLegendEntry.h"
++#include "TPaveText.h"
+ #include "TLine.h"
+ #include "TList.h"
+ #include "TMath.h"
+@@ -346,11 +347,24 @@ void AliAnalysisMuMuSpectraCapsulePbPb::DrawResults( const char* particle,const
+   //Iterator for bin
+   TIter nextBin(bins);
+ 
++  std::vector<double> NofJpsi;
++  std::vector<double> NofJpsiErr;
++  std::vector<double> SoverB;
++  std::vector<double> BinRange;
++  std::vector<double> massJpsi;
++  std::vector<double> massJpsiErr;
++  std::vector<double> sigmaJpsi;
++  std::vector<double> sigmaJpsiErr;
++
++  TString BinType;
++  
+   // Loop on bins
+   //==============================================================================
+   while ((r = static_cast<AliAnalysisMuMuBinning::Range*>(nextBin())))
+   {
+     // Make bin a MuMuResult
++    BinType =Form("%s",GetSpectra()->GetName());
++
+     result = GetSpectra()->GetResultForBin(*r);
+     if (!result)
+     {
+@@ -384,6 +398,17 @@ void AliAnalysisMuMuSpectraCapsulePbPb::DrawResults( const char* particle,const
+         AliError(Form("Cannot set histo result "));
+         return;
+       }
++
++      // To go on the TLegend
++      NofJpsi.push_back( subresult->GetValue("NofJPsi") );
++      NofJpsiErr.push_back( subresult->GetErrorStat("NofJPsi") );
++      SoverB.push_back ( subresult->GetValue("SignalOverBkg3s") );
++      BinRange.push_back ( r->Xmin() );
++      BinRange.push_back ( r->Xmax() );
++      massJpsi.push_back( subresult->GetValue("mJPsi") );
++      massJpsiErr.push_back( subresult->GetErrorStat("mJPsi") );
++      sigmaJpsi.push_back( subresult->GetValue("sJPsi") );
++      sigmaJpsiErr.push_back( subresult->GetErrorStat("sJPsi") );
+     }
+   }
+   //Configure canvas
+@@ -399,19 +424,16 @@ void AliAnalysisMuMuSpectraCapsulePbPb::DrawResults( const char* particle,const
+     nx = TMath::Nint((nofResult/ny) +0.6);
+   }
+ 
+-  TCanvas *c = new TCanvas("canFit", "canFit",0,45,1024,712);;
++  TCanvas *c = new TCanvas("canFit", "canFit");
+   
+   // ------ Configure pad ------
+-  gStyle->SetOptStat(0);
+-  gStyle->SetOptTitle(0);
+-  c->Range(0,0,1,1);
+-  c->SetFillColor(0);
+-  c->SetBorderMode(0);
+-  c->SetBorderSize(0);
+-  c->SetRightMargin(0.04989154);
+-  c->SetTopMargin(0.04902248);
+-  c->SetBottomMargin(0.0800598);
+-  c->SetFrameBorderMode(0);
++  SetCanvasStyle(c);
++  // c->SetBorderMode(0);
++  // c->SetBorderSize(0);
++  // c->SetRightMargin(0.04989154);
++  // c->SetTopMargin(0.04902248);
++  // c->SetBottomMargin(0.0800598);
++  // c->SetFrameBorderMode(0);
+   c->Divide(nx,ny,0,0);
+   c->SetTitle(Form("%s",fSpectraName.Data()));
+   c->Draw();
+@@ -431,196 +453,87 @@ void AliAnalysisMuMuSpectraCapsulePbPb::DrawResults( const char* particle,const
+     if (h){
+       ++n;
+       c->cd(n);// got to pad
+-      // gPad->SetLogy();
+-      
+-      // ------ Configure pad ------
+-      gPad->SetFillColor(10);
+-      gPad->SetBorderMode(0);
+-      gPad->SetBorderSize(2);
+-      gPad->SetTickx(1);
+-      gPad->SetTicky(1);
+-      gPad->SetLeftMargin(0.25);
+-      gPad->SetRightMargin(0);
+-      gPad->SetTopMargin(0);
+-      gPad->SetBottomMargin(0.18);
+-      gPad->SetFrameFillColor(0);
+-      gPad->SetFrameBorderMode(0);
+-      gPad->SetFrameBorderMode(0);
+-      //____________________________
+-
+-      if (xmin>0){
+-        // Loop to configure the pad as you like
+-        h->GetXaxis()->SetRangeUser(xmin,xmax);
+-        h->SetTitleSize(10);
+-      }
+ 
+       // ---- Configure histo ----
+-      h->GetXaxis()->SetRangeUser(2.4,4.7);
+-      Int_t ci;      // for color index setting
+-      TColor *color; // for color definition with alpha
+-      ci = TColor::GetColor("#000099");
+-      h->SetLineColor(ci);
+-      h->SetMarkerStyle(20);
+-      h->SetMarkerSize(0.8);
+-      h->GetXaxis()->SetTitle("m_{#mu#mu} (GeV/#it{c}^{2})");
+-      // h->GetXaxis()->SetRange(48,94);
+-      h->GetXaxis()->SetLabelFont(42);
+-      h->GetXaxis()->SetLabelOffset(0.01);
+-      h->GetXaxis()->SetLabelSize(0.078);
+-      h->GetXaxis()->SetTitleSize(0.078);
++      Double_t scale = (h->GetNbinsX())/(h->GetXaxis()->GetXmax()-h->GetXaxis()->GetXmin());
++      h->GetXaxis()->SetRangeUser(2.2,4.7);
+       h->GetXaxis()->SetTitleOffset(1.1);
++      h->SetMinimum(1);
++      h->GetXaxis()->SetLabelFont(42);
+       h->GetXaxis()->SetTitleFont(42);
+-      h->GetYaxis()->SetTitle(Form("Counts per %.0f MeV/#it{c}^{2}",1000*h->GetBinWidth(4)));
+-      // gStyle->SetTitleAlign(13);
+-      h->GetYaxis()->CenterTitle(true);
++      h->GetXaxis()->SetTitleSize(0.08);
++      h->GetXaxis()->SetTitle("m_{#mu#mu} (GeV/#it{c}^{2})");
++      h->GetYaxis()->CenterTitle();
+       h->GetYaxis()->SetLabelFont(42);
+-      h->GetYaxis()->SetLabelOffset(0.01);
+-      h->GetYaxis()->SetLabelSize(0.07);
+-      h->GetYaxis()->SetTitleSize(0.085);
+-      h->GetYaxis()->SetTickLength(0.02);
+-      h->GetYaxis()->SetTitleOffset(1.1);
+       h->GetYaxis()->SetTitleFont(42);
+-      h->GetZaxis()->SetLabelFont(42);
+-      h->GetZaxis()->SetLabelOffset(0.01);
+-      h->GetZaxis()->SetLabelSize(0.05);
+-      h->GetZaxis()->SetTitleSize(0.05);
+-      h->GetZaxis()->SetTitleFont(42);
++      h->SetMarkerSize(0.8);
++      h->SetMarkerStyle(20);
++      h->GetYaxis()->SetTitle(Form("Counts per %.0f MeV/#it{c}^{2}",1000*h->GetBinWidth(4)));
+       //____________________________
+ 
+       h->Draw();
+ 
+       //Get fitting functions and draw them
+       f1 = h->GetFunction("signal+bck");
+-      f1->SetFillColor(19);
+-      f1->SetFillStyle(0);
+-      f1->SetMarkerSize(1.3);
+-      f1->SetLineColor(4);
+-      f1->SetLineWidth(3);
+-      f1->GetXaxis()->SetLabelFont(42);
+-      f1->GetXaxis()->SetLabelSize(0.035);
+-      f1->GetXaxis()->SetTitleSize(0.035);
+-      f1->GetXaxis()->SetTitleFont(42);
+-      f1->GetYaxis()->SetLabelFont(42);
+-      f1->GetYaxis()->SetLabelSize(0.035);
+-      f1->GetYaxis()->SetTitleSize(0.035);
+-      f1->GetYaxis()->SetTitleFont(42);
++      f1->SetNpx(150);
++      f1->SetLineColor(kBlue);
+       Double_t chi2 =f1->GetChisquare()/f1->GetNDF();
+       Double_t sb =f1->GetChisquare()/f1->GetNDF();
+ 
+-
+       f2 = h->GetFunction("signalJPsi");
+-      f2->SetFillColor(19);
+-      f2->SetFillStyle(0);
+-      f2->SetMarkerSize(1.3);
+-      f2->SetLineColor(2);
+-      f2->SetLineWidth(3);
++      f2->SetLineColor(kRed);
+       f2->SetLineStyle(7);
+-      f2->GetXaxis()->SetLabelFont(42);
+-      f2->GetXaxis()->SetLabelSize(0.035);
+-      f2->GetXaxis()->SetTitleSize(0.035);
+-      f2->GetXaxis()->SetTitleFont(42);
+-      f2->GetYaxis()->SetLabelFont(42);
+-      f2->GetYaxis()->SetLabelSize(0.035);
+-      f2->GetYaxis()->SetTitleSize(0.035);
+-      f2->GetYaxis()->SetTitleFont(42);
++      f2->SetNpx(150);
+ 
+       f3 = h->GetFunction("signalPsiP");
+-      f3->SetFillColor(19);
+-      f3->SetFillStyle(0);
+-      f3->SetMarkerSize(1.3);
+-      f3->SetLineColor(2);
+-      f3->SetLineWidth(3);
++      f3->SetLineColor(kRed);
+       f3->SetLineStyle(7);
+-      f3->GetXaxis()->SetLabelFont(42);
+-      f3->GetXaxis()->SetLabelSize(0.035);
+-      f3->GetXaxis()->SetTitleSize(0.035);
+-      f3->GetXaxis()->SetTitleFont(42);
+-      f3->GetYaxis()->SetLabelFont(42);
+-      f3->GetYaxis()->SetLabelSize(0.035);
+-      f3->GetYaxis()->SetTitleSize(0.035);
+-      f3->GetYaxis()->SetTitleFont(42);
++      f3->SetNpx(150);
+       
+       f4 = h->GetFunction("bck");
+-      f4->SetFillColor(19);
+-      f4->SetFillStyle(0);
+-      f4->SetMarkerSize(1.3);
+-      f4->SetLineColor(17);
+-      f4->SetLineWidth(3);
++      f4->SetLineColor(kGray+2);
+       f4->SetLineStyle(7);
+-      f4->GetXaxis()->SetLabelFont(42);
+-      f4->GetXaxis()->SetLabelSize(0.035);
+-      f4->GetXaxis()->SetTitleSize(0.035);
+-      f4->GetXaxis()->SetTitleFont(42);
+-      f4->GetYaxis()->SetLabelFont(42);
+-      f4->GetYaxis()->SetLabelSize(0.035);
+-      f4->GetYaxis()->SetTitleSize(0.035);
+-      f4->GetYaxis()->SetTitleFont(42);
++      f4->SetNpx(150);
+       
+       if(f1) f1->DrawCopy("same");
+       if(f2) f2->DrawCopy("same");
+-      // if(f3) f3->DrawCopy("same");
+-      if(f4){
+-        // f4->SetLineColor(kBlue);
+-        // f4->SetLineStyle(16);
+-        f4->DrawCopy("same");
+-      }
+-      f1 = h->GetFunction("signal");
+-      if(f1) f1->DrawCopy("same");
++      if(f3) f3->DrawCopy("same");
++      if(f4) f4->DrawCopy("same");
+      
+ 
+-      TLegend* leg = new TLegend(0.55,0.2,0.95,0.95);
+-      leg->SetTextSize(0.035);
++      TLegend* leg = new TLegend(0.5209804,0.2662884,0.7326179,0.7057458);
++      leg->SetTextSize(0.05);
+ 
+       leg->SetBorderSize(0);
+ 
+-      ci = 927;
+-      color = new TColor(ci, 1, 1, 1, " ", 0);
+-      leg->SetLineColor(ci);
+-      leg->SetLineStyle(1);
+-      leg->SetLineWidth(2);
+-      leg->SetFillColor(0);
+-      leg->SetFillStyle(0);
+-
+-      TLegendEntry *entry1 = leg->AddEntry((TObject*)0,"ALICE, pp #sqrt{#it{s}} = 5.02 TeV","");
+-      entry1->SetTextFont(42);
+-      entry1->SetLineColor(1);
+-      entry1->SetLineStyle(1);
+-      entry1->SetLineWidth(1);
+-      entry1->SetMarkerColor(1);
+-      entry1->SetMarkerStyle(21);
+-      entry1->SetMarkerSize(1);
+-      entry1->SetTextFont(42);
+-
+-      TLegendEntry *entry2 = leg->AddEntry((TObject*)0,"0 < #it{p}_{T }< 12 GeV/#it{c}^{2}, 2.5 < #it{y} < 4, L_{int} = 109 #mub^{-1}","");
+-      entry2->SetTextFont(42);
+-      entry2->SetLineColor(1);
+-      entry2->SetLineStyle(1);
+-      entry2->SetLineWidth(1);
+-      entry2->SetMarkerColor(1);
+-      entry2->SetMarkerStyle(21);
+-      entry2->SetMarkerSize(1);
+-      entry2->SetTextFont(42);
+-
+-      TLegendEntry *entry3=leg->AddEntry((TObject*)0,Form("#chi^{2}/ndf = %.2f",chi2),"");
+-      entry3->SetLineColor(1);
+-      entry3->SetLineStyle(1);
+-      entry3->SetLineWidth(1);
+-      entry3->SetMarkerColor(1);
+-      entry3->SetMarkerStyle(21);
+-      entry3->SetMarkerSize(1);
+-      entry3->SetTextFont(42);
++      leg->AddEntry((TObject*)0,Form("#chi^{2}/ndf = %.2f ",chi2),"");
++      leg->AddEntry((TObject*)0,Form("S/B = %.1f",SoverB[n-1]),"");
++      leg->AddEntry((TObject*)0,Form("m_{J/#psi} = %.4f +/-  %.4f ",massJpsi[n-1],massJpsiErr[n-1]),"");
++      leg->AddEntry((TObject*)0,Form("#sigma_{J/#psi} = %.3f +/-  %.3f",sigmaJpsi[n-1],sigmaJpsiErr[n-1]),"");
++      leg->AddEntry((TObject*)0,Form("N_{J/#psi} = %.0f +/-  %.0f",NofJpsi[n-1],NofJpsiErr[n-1]),"");
++  
+       leg->Draw("same");
+ 
+-      // pt = new TPaveText(0.3440666,0.322827,0.785787,0.4672496,"brNDC");
+-      // pt->SetBorderSize(0);
+-      // pt->SetFillStyle(0);
+-      // pt->SetLineWidth(2);
+-      // pt->SetTextAlign(12);
+-      // pt->SetTextFont(42);
+-      // pt->SetTextSize(0.0538);
+-      // text = pt->AddText("Combinatorial background");
+-      // text = pt->AddText("subtracted");
+-      // pt->Draw()
++      TPaveText* pt = new TPaveText(0.55,0.75,0.75,0.95,"brNDC");
++      pt->SetBorderSize(0);
++      pt->SetFillStyle(0);
++      pt->SetLineWidth(2);
++      pt->SetTextAlign(12);
++      pt->SetTextFont(42);
++      pt->SetTextSize(0.058);
++      // pt->AddText("ALICE Performance 20/08/2016 ");
++      // pt->AddText("pp #sqrt{#it{s}} = 5.02 TeV, L_{int} = 109 #mub^{-1}");
++      if(BinType.Contains("PT")){
++        if (n & 1)pt->AddText(Form(" %.0f < #it{p}_{T } < %.0f GeV/#it{c}^{2}",BinRange[n-1],BinRange[n]));
++        else pt->AddText(Form(" %.0f < #it{p}_{T } < %.0f GeV/#it{c}^{2}",BinRange[n],BinRange[n+1]));
++        pt->AddText(Form("2.5 < #it{y} < 4"));
++      }
++      else if(BinType.Contains("Y")){
++        if (n & 1)pt->AddText(Form(" 0 < #it{p}_{T } < 12 GeV/#it{c}^{2}, %.0f < #it{y} < %.0f",BinRange[n-1],BinRange[n]));
++        else pt->AddText(Form(" 0 < #it{p}_{T } < 12 GeV/#it{c}^{2}, %.0f < #it{y} < %.0f",BinRange[n],BinRange[n+1]));
++        pt->AddText(Form(" 0 < #it{p}_{T } < 12 GeV/#it{c}^{2}"));
++      }
++      pt->Draw();
+       gPad->Modified();
+       gPad->Update();
+     }
+@@ -1073,3 +986,67 @@ Bool_t AliAnalysisMuMuSpectraCapsulePbPb::ReadFromFile(TString sbin, float value
+     }
+     else return ok;
+ }
++
++//_____________________________________________________________________________
++void  AliAnalysisMuMuSpectraCapsulePbPb::SetCanvasStyle(TCanvas *can) const {
++  gStyle->SetOptStat(0);
++  gStyle->SetOptTitle(0);
++
++  int font = 42;
++
++  gROOT->SetStyle("Plain");
++  gStyle->SetFrameBorderMode(0);
++  gStyle->SetFrameFillColor(0);
++  gStyle->SetCanvasBorderMode(0);
++  gStyle->SetPadBorderMode(0);
++  gStyle->SetPadColor(10);
++  gStyle->SetCanvasColor(10);
++  gStyle->SetTitleFillColor(10);
++  gStyle->SetTitleBorderSize(1);
++  gStyle->SetStatColor(10);
++  gStyle->SetStatBorderSize(1);
++  gStyle->SetLegendBorderSize(1);
++  gStyle->SetDrawBorder(0);
++  gStyle->SetTextFont(font);
++  gStyle->SetStatFont(font);
++  gStyle->SetStatFontSize(0.05);
++  gStyle->SetStatX(0.97);
++  gStyle->SetStatY(0.98);
++  gStyle->SetStatH(0.03);
++  gStyle->SetStatW(0.3);
++  gStyle->SetTickLength(0.02,"y");
++  gStyle->SetEndErrorSize(3);
++  gStyle->SetLabelSize(0.05,"xyz");
++  gStyle->SetLabelFont(font,"xyz");
++  gStyle->SetLabelOffset(0.01,"xyz");
++  gStyle->SetTitleFont(font,"xyz");
++  gStyle->SetTitleOffset(1.1,"xy");
++  gStyle->SetTitleSize(0.05,"xyz");
++  gStyle->SetMarkerSize(1.3);
++  gStyle->SetPalette(1,0);
++
++  gROOT->ForceStyle();
++  gStyle->SetOptStat(0);
++  gStyle->SetOptTitle(0);
++  gStyle->SetLineWidth(2);
++  gStyle->SetLegendFont(42);
++  gStyle->SetLegendBorderSize(0);
++  gStyle->SetLegendFillColor(10);
++  gStyle->SetPadTickY(1);
++  gStyle->SetPadTickX(1);
++  gStyle->SetEndErrorSize(0);
++
++
++  // can->SetFillColor(0);
++
++  can->SetBorderMode(0);
++
++  can->SetBorderSize(0);
++
++  can->SetLeftMargin(0.18);
++  can->SetRightMargin(0.1);
++  can->SetBottomMargin(0.1518219);
++  can->SetTopMargin(0.);
++  can->SetFrameBorderMode(0);
++
++}
+diff --git a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.h b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.h
+index 7e20330..5d8bb3f 100644
+--- a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.h
++++ b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.h
+@@ -17,6 +17,7 @@
+ 
+ #include "TNamed.h"
+ #include "TMath.h"
++#include "TCanvas.h"
+ #include <TString.h>
+ #include "TGraphErrors.h"
+ #include "AliAnalysisMuMuSpectra.h"
+@@ -44,6 +45,8 @@ public:
+   void DrawResults(const char* particle="PSI",const char* subresults="")const;
+   // Print Flag
+   void SetPrintFlag(){fPrintFlag=kTRUE;};
++  // Style for canvas
++  void SetCanvasStyle(TCanvas *can) const ;
+   // Print some data members
+   void Print(Option_t* opt="") const;
+   // Print constants used
+-- 
+2.7.4 (Apple Git-66)
+

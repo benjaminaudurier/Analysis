@@ -1,0 +1,48 @@
+From e808ffb8916de3b4dd458b1010cb3867a7e37e0a Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Wed, 13 Jul 2016 08:11:17 +0200
+Subject: [PATCH 36/36] update output for cross-section
+
+---
+ PWG/muondep/AliAnalysisMuMu.cxx | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
+
+diff --git a/PWG/muondep/AliAnalysisMuMu.cxx b/PWG/muondep/AliAnalysisMuMu.cxx
+index e1b57ee..e34a55e 100644
+--- a/PWG/muondep/AliAnalysisMuMu.cxx
++++ b/PWG/muondep/AliAnalysisMuMu.cxx
+@@ -4571,8 +4571,8 @@ void AliAnalysisMuMu::ComputePPCrossSection(const char* binType, const char* par
+                         graphErr->SetTitle(Form("J/#psi cross section"));
+                         
+                         if(sbinType->String().Contains("PT")){ 
+-                          graphErr->GetXaxis()->SetTitle(Form("#it{p}_{T}(GeV/c)")); 
+-                          graphErr->GetYaxis()->SetTitle(Form("d^{2}#sigma/d#it{p}_{T}d#it{y} (#mub(GeV/c)^{-1})")); 
++                          graphErr->GetXaxis()->SetTitle(Form("#it{p}_{T}(GeV/#it{c})")); 
++                          graphErr->GetYaxis()->SetTitle(Form("d^{2}#sigma/d#it{y}d#it{p}_{T} (#mub(GeV/#it{c})^{-1})")); 
+                           graphErr->GetYaxis()->SetTitleSize(0.06); 
+                           graphErr->GetYaxis()->SetRangeUser(10e-4,2); 
+                         }
+@@ -4603,13 +4603,14 @@ void AliAnalysisMuMu::ComputePPCrossSection(const char* binType, const char* par
+                         else leg = new TLegend(0.4,0.4,0.70,0.6);
+ 
+                         leg->SetHeader(Form("ALICE, pp #sqrt{#it{s}} = 5.02 TeV"));
+-                        if(sbinType->String().Contains("PT")) leg->AddEntry(graph,"Inclusive J/#psi , 2.5 < #it{y} < 4 , L_{int} = 106 #mub^{-1}  ","pe");
+-                        if(sbinType->String().Contains("Y")) leg->AddEntry(graph,"Inclusive J/#psi , 0 < #it{p}_{T} < 12 GeV/c, L_{int} = 106 #mub^{-1}","pe");
+-                        leg->AddEntry(graphErr,"systematic uncertainty ","f");
+-                        if(sbinType->String().Contains("PT") || sbinType->String().Contains("Y"))leg->AddEntry((TObject*)0,"global uncert. : 2 % ","");
+-                        leg->SetTextSize(0.035);
++                        if(sbinType->String().Contains("PT")) leg->AddEntry(graph,"Inclusive J/#psi , 2.5 < #it{y} < 4 ","pe");
++                        if(sbinType->String().Contains("Y")) leg->AddEntry(graph,"Inclusive J/#psi , 0 < #it{p}_{T} < 12 GeV/#it{c}","pe");
++                        leg->AddEntry((TObject*)0,"L_{int} = 106.3 #pm 2.1% #mub^{-1}","");
++                        // leg->AddEntry(graphErr,"systematic uncertainty ","f");
++                        // if(sbinType->String().Contains("PT") || sbinType->String().Contains("Y"))leg->AddEntry((TObject*)0,"global uncert. : 2 % ","");
++                        leg->SetTextSize(0.04);
+                         TLegendEntry *header = (TLegendEntry*)leg->GetListOfPrimitives()->First();
+-                        header->SetTextSize(.06);
++                        header->SetTextSize(.055);
+ 
+                         graphErr->DrawClone("A5.[]");
+ 
+-- 
+2.7.4 (Apple Git-66)
+

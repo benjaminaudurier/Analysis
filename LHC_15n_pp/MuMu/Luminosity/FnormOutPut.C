@@ -20,11 +20,11 @@ void FnormOutPut(
 {
 	// Offline
 	TH1*FnormOffline2PUPSCINT =0x0;
-	
+
 	//Scaler
 	TH1*FnormScalersPUPSCINT =0x0;
 	TH1*FnormScalersPUPSCOTVX =0x0;
-	
+
 	//Purity for CINT7
 	TH1*CINTPurityCINT7PS =0x0;
 	TH1*CINTPurityCINT7 =0x0;
@@ -35,37 +35,37 @@ void FnormOutPut(
 	TH1*CINTPU1 =0x0;
 	TH1*CINTPU2 =0x0;
 	TH1*CINTPU3 =0x0;
-	
+
 	//Get files
 	AliAnalysisMuMu ana1(filename1,"","","mumu.pp2015.config");
 	AliAnalysisMuMu ana3(filename3,"","","mumu.pp2015.config");
 	AliAnalysisMuMu ana2(filename2,"","","mumu.pp2015.config");
 	// AliAnalysisMuMu ana4(filename4,"","","mumu.pp2015.config");
-	
+
 	//Get FNorm Histo
 	FnormOffline2PUPSCINT = static_cast<TH1*>(ana1.OC()->GetObject("/FNORM/Offline/GRAPHS/FnormOffline2PUPS_AsHisto")->Clone());
 	FnormScalersPUPSCOTVX = static_cast<TH1*>(ana3.OC()->GetObject("/FNORM/Scaler/GRAPHS/FnormScalersPUPS_AsHisto")->Clone());
 	FnormScalersPUPSCINT  = static_cast<TH1*>(ana1.OC()->GetObject("/FNORM/Scaler/GRAPHS/FnormScalersPUPS_AsHisto")->Clone());
 	// FnormScalersPUPS4  = static_cast<TH1*>(ana4.OC()->GetObject("/FNORM/Scaler/GRAPHS/FnormScalersPUPS_AsHisto")->Clone());
-	
+
 	//Get Purity histo
 	CINTPurityCINT7PS     =static_cast<TH1*>(ana1.OC()->GetObject("/FNORM/Scaler/GRAPHS/PurityFactorForScalerPSMB_PP_AsHisto")->Clone());
 	CINTPurityC0TVXVDM    =static_cast<TH1*>(ana3.OC()->GetObject("/FNORM/Scaler/GRAPHS/PurityFactorForScalerPSMB_PP_AsHisto")->Clone());
 	CINTPurityCINT7       =static_cast<TH1*>(ana1.OC()->GetObject("/FNORM/Scaler/GRAPHS/PurityFactorForScalerPSMB_PP_AsHisto")->Clone());
 	// CINTPurity4        =static_cast<TH1*>(ana4.OC()->GetObject("/FNORM/Scaler/GRAPHS/PurityFactorForScalerPSMB_PP_AsHisto")->Clone());
-	
+
 	//Get P.U histo
 	CINTPU1               =static_cast<TH1*>(ana1.OC()->GetObject("/FNORM/Scaler/GRAPHS/CorrectionPUPSMB_AsHisto")->Clone());
 	CINTPU3               =static_cast<TH1*>(ana3.OC()->GetObject("/FNORM/Scaler/GRAPHS/CorrectionPUPSMB_AsHisto")->Clone());
-	
+
 
 	// Compute MUL Cross-section
 	TH1* CMULCC1 = ScaleFNorm(&ana1,FnormOffline2PUPSCINT,"CINT7-B-NOPF-MUFAST","VDM",51.17,1.08);
 	TH1* CMULCC2 = ScaleFNorm(&ana1,FnormScalersPUPSCINT,"CINT7-B-NOPF-MUFAST","VDM",51.17,1.08);
 	TH1* CMULCC3 = ScaleFNorm(&ana3,FnormScalersPUPSCOTVX,"CINT7-B-NOPF-MUFAST&0TVX","VDM",21.55,0.45255);
-	
 
-	
+
+
 	if(!FnormOffline2PUPSCINT /*|| !FnormScalersPUPSCINT */|| !FnormScalersPUPSCOTVX /*||!FnormScalersPUPS4*/) {
 		printf("cannot get all the FNorm histo\n");
 		return;
@@ -92,11 +92,11 @@ void FnormOutPut(
 	// c1->Divide(1,2,0,0);
 
 	// c1->cd(1);
-	
+
 	// CINTPurityCINT7PS->SetMarkerColor(2);
 	// CINTPurityCINT7PS->SetMarkerSize(1);
 	// CINTPurityCINT7PS->SetMarkerStyle(8);
-	
+
 	// CINTPurityCINT7->SetMarkerColor(3);
 	// CINTPurityCINT7->SetMarkerSize(1);
 	// CINTPurityCINT7->SetMarkerStyle(8);
@@ -144,7 +144,7 @@ void FnormOutPut(
 	// c2->Divide(1,2,0,0);
 
 	// c2->cd(1);
-	
+
 	CINTPU1->SetLineColor(2);
 	CINTPU3->SetLineColor(4);
 	// CINTPU2->SetLineColor(3);
@@ -190,11 +190,11 @@ void FnormOutPut(
 	c3->Divide(1,2,0,0);
 
 	c3->cd(1);
-	
+
 	CMULCC1->SetMarkerColor(2);
 	CMULCC1->SetMarkerSize(1);
 	CMULCC1->SetMarkerStyle(8);
-	
+
 	// CMULCC2->SetMarkerColor(3);
 	// CMULCC2->SetMarkerSize(1);
 	// CMULCC2->SetMarkerStyle(8);
@@ -292,9 +292,9 @@ TH1* ScaleFNorm(AliAnalysisMuMu* a1, TH1* h1, TString trigger,TString event, Dou
 	int i= 1;
 	// Run by run loop
 	for ( std::set<int>::const_iterator it = runs.begin(); it != runs.end(); ++it ){
-		
+
 		Int_t runNumber    = *it;
-		
+
 		//Getting FNorm
 		Double_t FNorm     = h1->GetBinContent(i);
 		//Getting FNorm stat. error
@@ -305,11 +305,16 @@ TH1* ScaleFNorm(AliAnalysisMuMu* a1, TH1* h1, TString trigger,TString event, Dou
 		Double_t CMULCCErr = FNormErr/FNorm ;
 		// MUL Cross-section
 		Double_t CMULCC    = VdMCC/FNorm;
-		 if(runNumber == 244411) printf("Fnorm for run 244411  and trigger %s = %f +/- %f \n",trigger.Data(),FNorm,FNormErr );
-
+		 if(runNumber == 244411) {
+		 	cout << "______________________________________________" << endl;
+		 	printf("Fnorm for run 244411  and trigger %s = %f +/- %f \n",trigger.Data(),FNorm,FNormErr );
+		 	printf("MUL for run 244411 = %f \n",nMUL );
+		 	printf("CMUL for run 244411 = %f +/- %f \n",CMULCC,CMULCCErr );
+		 	cout << "______________________________________________" << endl;
+		 }
 		sum                = sum +nMUL/CMULCC;
 		sumerr2            = sumerr2 + nMUL*nMUL*FNormErr*FNormErr/VdMCC/VdMCC;
-		
+
 		sumFnorm           = sumFnorm + FNorm*nMUL;
 		sumFnormerr2       = sumFnormerr2 + nMUL*nMUL*FNormErr*FNormErr;
 
@@ -319,7 +324,7 @@ TH1* ScaleFNorm(AliAnalysisMuMu* a1, TH1* h1, TString trigger,TString event, Dou
 		// printf(" -----  Relative error on FNorm for run %d = %f %% \n",runNumber,100*CMULCCErr );
 		// printf(" -----  Absolute error on FNorm for run %d = %f  \n",runNumber,FNormErr );
 		// printf("----\n");
-		
+
 		h->SetBinContent(i,CMULCC);
 		h->SetBinError(i,CMULCC*CMULCCErr);
 
@@ -334,7 +339,7 @@ TH1* ScaleFNorm(AliAnalysisMuMu* a1, TH1* h1, TString trigger,TString event, Dou
 	printf("Sum of Fnorm             : %f  \n",sumFnorm);
 	printf("Luminosity for trigger %s: %f +/- %f nb^-1 ( %f percent ) +/-  %f percent  \n",trigger.Data(),Lumi/1000000,sigmaLumi/1000000,100*sigmaLumi/Lumi,100*VdMCCErr/VdMCC);
 	printf("FNorm for %s             : %.5f +/- %0.5f ( %f percent ) \n",h1->GetName(), sumFnorm/nMULTot, TMath::Sqrt(sumFnormerr2)/nMULTot, 100*TMath::Sqrt(sumFnormerr2)/sumFnorm );
-	printf("\n");
+	printf("______________________\n");
 	// cout << a1->CC()->GetSum(Form("trigger:CMUL7-B-NOPF-MUFAST/centrality:PP/event:PSMUL"))<< endl;
 
 	return h;

@@ -1,0 +1,46 @@
+From 958f151fca587f9f7dc87b311f79db50cbe3d563 Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Thu, 2 Jun 2016 17:05:45 +0200
+Subject: [PATCH 13/36] cosmetics
+
+---
+ PWG/muondep/AliAnalysisMuMu.cxx | 14 +++-----------
+ 1 file changed, 3 insertions(+), 11 deletions(-)
+
+diff --git a/PWG/muondep/AliAnalysisMuMu.cxx b/PWG/muondep/AliAnalysisMuMu.cxx
+index a84bd88..cba7a79 100644
+--- a/PWG/muondep/AliAnalysisMuMu.cxx
++++ b/PWG/muondep/AliAnalysisMuMu.cxx
+@@ -4656,9 +4656,9 @@ void AliAnalysisMuMu::ComputePPCrossSection(const char* binType, const char* par
+ 
+                         graphErr->DrawClone("A2P[]");
+ 
+-                        if(fit) Fitpoint = graph->Fit("fit","SR");
+-                        if(sbinType->String().Contains("PT") && static_cast<int>(Fitpoint)==0) printf("cross section = %f +/- %f \n",fit->Integral(0.,8.),fit->IntegralError(0.,8.));
+-                        if(sbinType->String().Contains("Y")  && static_cast<int>(Fitpoint)==0)  printf("cross section = %f +/- %f \n",fit->Integral(-4.,-2.5),fit->IntegralError(-4.,-2.5));
++                        // if(fit) Fitpoint = graph->Fit("fit","SR");
++                        // if(sbinType->String().Contains("PT") && static_cast<int>(Fitpoint)==0) printf("cross section = %f +/- %f \n",fit->Integral(0.,8.),fit->IntegralError(0.,8.));
++                        // if(sbinType->String().Contains("Y")  && static_cast<int>(Fitpoint)==0)  printf("cross section = %f +/- %f \n",fit->Integral(-4.,-2.5),fit->IntegralError(-4.,-2.5));
+ 
+                         graph->DrawClone("Psame");
+                         leg->DrawClone("same");
+@@ -5688,16 +5688,8 @@ void AliAnalysisMuMu::ComputeMBXSectionFractionInBins(const char* filePileUpCorr
+         nextRun.Reset();
+         while ( ( s = static_cast<TObjString*>(nextRun())) ) //Run loop
+             {
+-
+-<<<<<<< 866b569b5f510c7fdc4b9c5e5f4a301d66425d0e
+-  }
+-  
+-  delete[] axis;
+-=======
+             Double_t nCINT = CC()->GetSum(Form("/event:%s/trigger:CINT7-B-NOPF-ALLNOTRD/centrality:V0A/run:%s/bin:%s",
+                                                seventSelection.Data(),s->GetName(),r->AsString().Data()));
+->>>>>>> Commit of all mumu commits of the precedent aliroot system
+-
+             Double_t pUfactor = 1.;
+             if ( nCINT !=0. )
+                 {
+-- 
+2.7.4 (Apple Git-66)
+

@@ -1,0 +1,701 @@
+From 6b97319ac1bfcba2474339a8de355861da8434ef Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Thu, 2 Jun 2016 17:05:17 +0200
+Subject: [PATCH 12/36] new weighting on pt muon level
+
+---
+ PWG/muon/AliAnalysisMuMuMinv.cxx | 407 ++++++++++++++++++++++-----------------
+ PWG/muon/AliAnalysisMuMuMinv.h   |  45 +++--
+ 2 files changed, 259 insertions(+), 193 deletions(-)
+
+diff --git a/PWG/muon/AliAnalysisMuMuMinv.cxx b/PWG/muon/AliAnalysisMuMuMinv.cxx
+index 72f9bb0..27578b3 100644
+--- a/PWG/muon/AliAnalysisMuMuMinv.cxx
++++ b/PWG/muon/AliAnalysisMuMuMinv.cxx
+@@ -31,9 +31,10 @@
+ ClassImp(AliAnalysisMuMuMinv)
+ 
+ //_____________________________________________________________________________
+-AliAnalysisMuMuMinv::AliAnalysisMuMuMinv(TH2* accEffHisto, Bool_t computeMeanPt, Int_t systLevel)
++AliAnalysisMuMuMinv::AliAnalysisMuMuMinv(TH2* accEffHisto, Int_t systLevel)
+ : AliAnalysisMuMuBase(),
+-fcomputeMeanPt(computeMeanPt),
++fcomputeMeanPt(kFALSE),
++fWeightMuon(kFALSE),
+ fAccEffHisto(0x0),
+ fMinvBinSeparator("+"),
+ fsystLevel(systLevel),
+@@ -75,14 +76,9 @@ AliAnalysisMuMuMinv::DefineHistogramCollection(const char* eventSelection,
+   
+   CreateSemaphoreHistogram(eventSelection,triggerClassName,centrality);
+   
+-  if (!fBinsToFill)
+-  {
+-    // no bins defined by the external steering macro, use our own defaults
+-    SetBinsToFill("psi","integrated,ptvsy,yvspt,pt,y,phi");
+-  }
+-  
+-  /// Create invariant mass histograms
+-  
++  // no bins defined by the external steering macro, use our own defaults
++  if (!fBinsToFill) SetBinsToFill("psi","integrated,ptvsy,yvspt,pt,y,phi");
++    
+   // mass range
+   Double_t minvMin = fMinvMin;
+   Double_t minvMax = fMinvMax;
+@@ -99,156 +95,108 @@ AliAnalysisMuMuMinv::DefineHistogramCollection(const char* eventSelection,
+   Double_t etaMin = -5;
+   Double_t etaMax = -2;
+   Int_t nbinsEta = GetNbins(etaMin,etaMax,0.05);
++
++ //Multiplicity range
++  Double_t multMin = -0.5;  
++  Double_t multMax = 500.5;
++  Int_t nbinsMult = GetNbins(multMin,multMax,1.);
+   
+ 
+-  // Set histo
++  // Reconstructed pair distribution Histo
+   CreatePairHistos(kHistoForData | kHistoForMCInput,eventSelection,triggerClassName,centrality,"Pt","#mu+#mu- Pt distribution",200,0,20,-2);
+   
+-  CreatePairHistos(kHistoForData | kHistoForMCInput,eventSelection,triggerClassName,centrality,"Y","#mu+#mu- Y distribution",
+-                   nbinsRapidity,rapidityMin,rapidityMax,-2);
++  CreatePairHistos(kHistoForData | kHistoForMCInput,eventSelection,triggerClassName,centrality,"Y","#mu+#mu- Y distribution",nbinsRapidity,rapidityMin,rapidityMax,-2);
+   
+-  CreatePairHistos(kHistoForData | kHistoForMCInput,eventSelection,triggerClassName,centrality,"Eta","#mu+#mu- Eta distribution",
+-                   nbinsEta,etaMin,etaMax);
++  CreatePairHistos(kHistoForData | kHistoForMCInput,eventSelection,triggerClassName,centrality,"Eta","#mu+#mu- Eta distribution",nbinsEta,etaMin,etaMax);
++
++  CreatePairHistos(kHistoForData | kHistoForMCInput,eventSelection,triggerClassName,centrality,"PtPaireVsPtTrack","single #mu Pt distribution vs #mu+#mu- Pt distribution ",200,0,20,200,0,20);
++
+   
+   // Histos for pure MC
+-  CreateEventHistos(kHistoForMCInput,eventSelection,triggerClassName,centrality,"Pt","MCINPUT #mu+#mu- Pt distribution",
+-                    200,0,20,-2);
++  CreateEventHistos(kHistoForMCInput,eventSelection,triggerClassName,centrality,"Pt","MCINPUT #mu+#mu- Pt distribution",200,0,20,-2);
+   
+-  CreateEventHistos(kHistoForMCInput,eventSelection,triggerClassName,centrality,"Y","MCINPUT #mu+#mu- Y distribution",
+-                    nbinsRapidity,rapidityMin,rapidityMax,-2);
++  CreateEventHistos(kHistoForMCInput,eventSelection,triggerClassName,centrality,"Y","MCINPUT #mu+#mu- Y distribution",nbinsRapidity,rapidityMin,rapidityMax,-2);
+   
+-  CreateEventHistos(kHistoForMCInput,eventSelection,triggerClassName,centrality,"Eta","MCINPUT #mu+#mu- Eta distribution",
+-                    nbinsEta,etaMin,etaMax);
++  CreateEventHistos(kHistoForMCInput,eventSelection,triggerClassName,centrality,"Eta","MCINPUT #mu+#mu- Eta distribution",nbinsEta,etaMin,etaMax);
+   
+-  CreateEventHistos(kHistoForMCInput,eventSelection,triggerClassName,Form("%s/INYRANGE",centrality),"Pt","MCINPUT #mu+#mu- Pt distribution",
+-                    nMinvBins,minvMax,minvMax,-2);
++  CreateEventHistos(kHistoForMCInput,eventSelection,triggerClassName,Form("%s/INYRANGE",centrality),"Pt","MCINPUT #mu+#mu- Pt distribution",nMinvBins,minvMax,minvMax,-2);
+   
+-  CreateEventHistos(kHistoForMCInput,eventSelection,triggerClassName,Form("%s/INYRANGE",centrality),"Y","MCINPUT #mu+#mu- Y distribution",
+-                    nbinsRapidity,rapidityMin,rapidityMax,-2);
++  CreateEventHistos(kHistoForMCInput,eventSelection,triggerClassName,Form("%s/INYRANGE",centrality),"Y","MCINPUT #mu+#mu- Y distribution",nbinsRapidity,rapidityMin,rapidityMax,-2);
+   
+-  CreateEventHistos(kHistoForMCInput,eventSelection,triggerClassName,Form("%s/INYRANGE",centrality),"Eta","MCINPUT #mu+#mu- Eta distribution",
+-                    nbinsEta,etaMin,etaMax);
+-  //  CreatePairHistos(eventSelection,triggerClassName,centrality,"BinFlowPt","#mu+#mu- BinFlowPt distribution",
+-  //                  200,0,20);
++  CreateEventHistos(kHistoForMCInput,eventSelection,triggerClassName,Form("%s/INYRANGE",centrality),"Eta","MCINPUT #mu+#mu- Eta distribution",nbinsEta,etaMin,etaMax);
+   
+-  CreatePairHistos(kHistoForData,eventSelection,triggerClassName,centrality,"PtRecVsSim","#mu+#mu- Pt distribution rec vs sim",
+-                   200,0,20,200,0,20);
++  CreatePairHistos(kHistoForData,eventSelection,triggerClassName,centrality,"PtRecVsSim","#mu+#mu- Pt distribution rec vs sim",200,0,20,200,0,20);
+   
+-  Double_t multMin = -0.5;  //Tracklets multiplicity range
+-  Double_t multMax = 500.5;
+-  Int_t nbinsMult = GetNbins(multMin,multMax,1.);
++  //  CreatePairHistos(eventSelection,triggerClassName,centrality,"BinFlowPt","#mu+#mu- BinFlowPt distribution",200,0,20);
+   
+-  CreatePairHistos(kHistoForData,eventSelection,triggerClassName,centrality,"NchForJpsi","Corrected multiplicity distribution for 2.9 < m_{#mu^{+}#mu^{-}} < 3.3",
+-                   nbinsMult,multMin,multMax);
+-  CreatePairHistos(kHistoForData,eventSelection,triggerClassName,centrality,"NchForPsiP","Corrected multiplicity distribution for 3.6 < m_{#mu^{+}#mu^{-}} < 3.9",
+-                   nbinsMult,multMin,multMax);
++  // Multiplicity Histo
++  CreatePairHistos(kHistoForData,eventSelection,triggerClassName,centrality,"NchForJpsi","Corrected multiplicity distribution for 2.9 < m_{#mu^{+}#mu^{-}} < 3.3",nbinsMult,multMin,multMax);
++
++  CreatePairHistos(kHistoForData,eventSelection,triggerClassName,centrality,"NchForPsiP","Corrected multiplicity distribution for 3.6 < m_{#mu^{+}#mu^{-}} < 3.9",nbinsMult,multMin,multMax);
+   
+   TIter next(fBinsToFill);
+   AliAnalysisMuMuBinning::Range* r;
+   Int_t nb(0);
+ 
+-  // Create Minv Histos for each bin
+-  while ( ( r = static_cast<AliAnalysisMuMuBinning::Range*>(next()) ) )
+-  {
+-    TString minvName(GetMinvHistoName(*r,kFALSE));// Histos name
+-    
++  // Minv Histos for each bin
++  while ( ( r = static_cast<AliAnalysisMuMuBinning::Range*>(next()) ) ){
++    // Histos name
++    TString minvName(GetMinvHistoName(*r,kFALSE));
+     ++nb;
+     
+-    if ( !IsHistogramDisabled(minvName.Data()) )
+-    {
+-      
++    // Make sure histo is wanted
++    if ( !IsHistogramDisabled(minvName.Data()) ){
+       AliDebug(1,Form("bin %d %s histoname = %s",nb,r->AsString().Data(),minvName.Data()));
+       
++      // Reconstructed pair histo
+       CreatePairHistos(kHistoForData | kHistoForMCInput,eventSelection,triggerClassName,centrality,minvName.Data(),
+-                       Form("#mu+#mu- inv. mass %s;M_{#mu^{+}#mu^{-}} (GeV/c^{2});Counts",
+-                            r->AsString().Data()),
+-                       nMinvBins,minvMin,minvMax,-2);
+-      
++                       Form("#mu+#mu- inv. mass %s;M_{#mu^{+}#mu^{-}} (GeV/c^{2});Counts",r->AsString().Data()),nMinvBins,minvMin,minvMax,-2);
++      // Generated J/psi histo
+       CreateEventHistos(kHistoForMCInput,eventSelection,triggerClassName,centrality,minvName.Data(),
+-                        Form("MCINPUT #mu+#mu- inv. mass %s;M_{#mu^{+}#mu^{-}} (GeV/c^{2});Counts",
+-                             r->AsString().Data()),
+-                        nMCMinvBins,minvMin,minvMax,-2); // Pure MC histo
++                        Form("MCINPUT #mu+#mu- inv. mass %s;M_{#mu^{+}#mu^{-}} (GeV/c^{2});Counts",r->AsString().Data()),nMCMinvBins,minvMin,minvMax,-2); 
+       
+       CreateEventHistos(kHistoForMCInput,eventSelection,triggerClassName,Form("%s/INYRANGE",centrality),minvName.Data(),
+-                        Form("MCINPUT #mu+#mu- inv. mass %s;M_{#mu^{+}#mu^{-}} (GeV/c^{2});Counts",
+-                             r->AsString().Data()),
+-                        nMCMinvBins,minvMin,minvMax,-2); // Pure MC histo
++                        Form("MCINPUT #mu+#mu- inv. mass %s;M_{#mu^{+}#mu^{-}} (GeV/c^{2});Counts",r->AsString().Data()),nMCMinvBins,minvMin,minvMax,-2); // Pure MC histo
+       
+-      
+-      if ( fcomputeMeanPt )
+-      {
++      // Mean pt minv histo
++      if ( fcomputeMeanPt ){
+         TString mPtName(Form("MeanPtVs%s",minvName.Data()));
++        // Reconstructed pair histo
+         CreatePairHistos(kHistoForData | kHistoForMCInput,eventSelection,triggerClassName,centrality,mPtName.Data(),
+-                         Form("#mu+#mu- mean p_{T} %s;M_{#mu^{+}#mu^{-}} (GeV/c^2);<p_{T}^{#mu^{+}#mu^{-} (GeV/c^2)}>",
+-                              r->AsString().Data()),
+-                         nMinvBins,minvMin,minvMax,0);
+-        
++                         Form("#mu+#mu- mean p_{T} %s;M_{#mu^{+}#mu^{-}} (GeV/c^2);<p_{T}^{#mu^{+}#mu^{-} (GeV/c^2)}>",r->AsString().Data()),nMinvBins,minvMin,minvMax,0);
++        // Generated J/psi histo
+         CreateEventHistos(kHistoForMCInput,eventSelection,triggerClassName,centrality,mPtName.Data(),
+-                          Form("#mu+#mu- mean p_{T} %s;M_{#mu^{+}#mu^{-}} (GeV/c^2);<p_{T}^{#mu^{+}#mu^{-} (GeV/c^2)}>",
+-                               r->AsString().Data()),
+-                          nMinvBins,minvMin,minvMax,0); //Pure MC Histo
++                          Form("#mu+#mu- mean p_{T} %s;M_{#mu^{+}#mu^{-}} (GeV/c^2);<p_{T}^{#mu^{+}#mu^{-} (GeV/c^2)}>",r->AsString().Data()),nMinvBins,minvMin,minvMax,0);
+         
+         CreateEventHistos(kHistoForMCInput,eventSelection,triggerClassName,Form("%s/INYRANGE",centrality),mPtName.Data(),
+-                          Form("#mu+#mu- mean p_{T} %s;M_{#mu^{+}#mu^{-}} (GeV/c^2);<p_{T}^{#mu^{+}#mu^{-} (GeV/c^2)}>",
+-                               r->AsString().Data()),
+-                          nMinvBins,minvMin,minvMax,0); //Pure MC Histo
++                          Form("#mu+#mu- mean p_{T} %s;M_{#mu^{+}#mu^{-}} (GeV/c^2);<p_{T}^{#mu^{+}#mu^{-} (GeV/c^2)}>",r->AsString().Data()),nMinvBins,minvMin,minvMax,0); 
+       }
+-      
+-      //      if ( HasMC() )
+-      //      {
+-      //        TH1* h = new TH1F(minvName.Data(),Form("MC #mu+#mu- inv. mass %s",r->AsString().Data()),
+-      //                          nMCMinvBins,minvMin,minvMax);
+-      //
+-      //        HistogramCollection()->Adopt(Form("/%s/ALL",MCInputPrefix()),h);
+-      //
+-      //        HistogramCollection()->Adopt(Form("/%s/INYRANGE",MCInputPrefix()),static_cast<TH1*>(h->Clone()));
+-      //      }
+     }
++
+     // Create corrected histo
+     if ( ShouldCorrectDimuonForAccEff() )
+     {
+       minvName = GetMinvHistoName(*r,kTRUE);
+       
+-      if ( !IsHistogramDisabled(minvName.Data()) )
+-      {
++      if ( !IsHistogramDisabled(minvName.Data()) ){
+         
+         AliDebug(1,Form("bin %d %s histoname = %s",nb,r->AsString().Data(),minvName.Data()));
+-        
++        // Reconstructed pair histo
+         CreatePairHistos(kHistoForData | kHistoForMCInput,eventSelection,triggerClassName,centrality,minvName.Data(),
+-                         Form("#mu+#mu- inv. mass %s (Acc #times Eff Corrected);M_{#mu^{+}#mu^{-}}(GeV/c^{2});Counts",
+-                              r->AsString().Data()),
+-                         nMinvBins,minvMin,minvMax,-2);
+-        
++                         Form("#mu+#mu- inv. mass %s (Acc #times Eff Corrected);M_{#mu^{+}#mu^{-}}(GeV/c^{2});Counts",r->AsString().Data()),nMinvBins,minvMin,minvMax,-2);
++        // Generated J/psi histo
+         CreateEventHistos(kHistoForMCInput,eventSelection,triggerClassName,centrality,minvName.Data(),
+-                          Form("#mu+#mu- inv. mass %s (Acc #times Eff Corrected);M_{#mu^{+}#mu^{-}} (GeV/c^{2});Counts",
+-                               r->AsString().Data()),
+-                          nMCMinvBins,minvMin,minvMax,-2); // Pure MC histo
++                          Form("#mu+#mu- inv. mass %s (Acc #times Eff Corrected);M_{#mu^{+}#mu^{-}} (GeV/c^{2});Counts",r->AsString().Data()),nMCMinvBins,minvMin,minvMax,-2); 
+         
+         CreateEventHistos(kHistoForMCInput,eventSelection,triggerClassName,Form("%s/INYRANGE",centrality),minvName.Data(),
+-                          Form("#mu+#mu- inv. mass %s (Acc #times Eff Corrected);M_{#mu^{+}#mu^{-}} (GeV/c^{2});Counts",
+-                               r->AsString().Data()),
+-                          nMCMinvBins,minvMin,minvMax,-2); // Pure MC histo
+-        
+-        if ( fcomputeMeanPt )
+-        {
++                          Form("#mu+#mu- inv. mass %s (Acc #times Eff Corrected);M_{#mu^{+}#mu^{-}} (GeV/c^{2});Counts",r->AsString().Data()),nMCMinvBins,minvMin,minvMax,-2); 
++        // Mean pt accxeff corrected
++        if ( fcomputeMeanPt ){
+           TString mPtName(Form("MeanPtVs%s",minvName.Data()));
++          
+           CreatePairHistos(kHistoForData | kHistoForMCInput,eventSelection,triggerClassName,centrality,mPtName.Data(),
+-                           Form("#mu+#mu- mean p_{T} %s (Acc #times Eff Corrected);M_{#mu^{+}#mu^{-}} (GeV/c^{2});<p_{T}^{#mu^{+}#mu^{-}}>",
+-                                r->AsString().Data()),
+-                           nMinvBins,minvMin,minvMax,0);
++                           Form("#mu+#mu- mean p_{T} %s (Acc #times Eff Corrected);M_{#mu^{+}#mu^{-}} (GeV/c^{2});<p_{T}^{#mu^{+}#mu^{-}}>",r->AsString().Data()),nMinvBins,minvMin,minvMax,0);
+         }
+-        
+-        //        if ( HasMC() )
+-        //        {
+-        //          TH1*  h = new TH1F(minvName.Data(),Form("MC #mu+#mu- inv. mass %s",r->AsString().Data()),
+-        //                             nMCMinvBins,minvMin,minvMax);
+-        //
+-        //          h->Sumw2();
+-        //
+-        //          HistogramCollection()->Adopt(Form("/%s/ALL",MCInputPrefix()),h);
+-        //
+-        //          HistogramCollection()->Adopt(Form("/%s/INYRANGE",MCInputPrefix()),static_cast<TH1*>(h->Clone()));
+-        //        }
+       }
+     }
+   }
+@@ -272,7 +220,7 @@ void AliAnalysisMuMuMinv::FillHistosForPair(const char* eventSelection,
+                                             const AliVParticle& tracki,
+                                             const AliVParticle& trackj)
+ {
+-  /// Fill histograms for unlike-sign muon pairs for reconstructed pairs.
++  /// Fill histograms for unlike-sign reconstructed  muon pairs.
+   /// Two types of recontructed histograms are filled for MC :
+   ///   - For all the tracks (like for Data, stored in the usual part of the histogram collection)
+   ///   - Only for MC tracks with MC label, meaning remove contrubution from any particule not comming from an initial simulatied particle ( usefull when running on embedding).
+@@ -283,65 +231,89 @@ void AliAnalysisMuMuMinv::FillHistosForPair(const char* eventSelection,
+   if (!AliAnalysisMuonUtility::IsMuonTrack(&tracki) ) return;
+   if (!AliAnalysisMuonUtility::IsMuonTrack(&trackj) ) return;
+   
+-  // Make sure we take tracks from J/psi when running on embedding simulation
+-  if (HasMC() && tracki.GetLabel() < 0 ) return;
+-  if (HasMC() && trackj.GetLabel() < 0 ) return;
++  // Pointers in case running on MC
++  Int_t labeli               = 0;
++  Int_t labelj               = 0;
++  AliVParticle               * mcTracki(0x0);
++  AliVParticle               * mcTrackj(0x0);
++  TLorentzVector             * pair4MomentumMC(0x0);
++  Double_t inputWeightMC(1.);
++  AliMergeableCollectionProxy* mcProxy(0x0);
++  
++  // Make sure we have an associated tracks in simulation stack if running on MC
++  if(HasMC()){
++    // Get label    
++    labeli = tracki.GetLabel();
++    labelj = trackj.GetLabel();
++    if ( labeli < 0 || labelj < 0 )AliError("Got negative labels!");
++
++    //Check if first track is a muon
++    mcTracki = MCEvent()->GetTrack(labeli);
++    if ( TMath::Abs(mcTracki->PdgCode()) != 13 ) return;
++    
++    //Check if second track is a muon
++    mcTrackj = MCEvent()->GetTrack(labelj);
++    if ( TMath::Abs(mcTrackj->PdgCode()) != 13 ) return;
++
++    //Check if tracks has the same mother
++    Int_t currMotheri = mcTracki->GetMother();
++    Int_t currMotherj = mcTrackj->GetMother();
++    if(currMotheri!=currMotherj) return;
++    if(currMotheri<0) return;
++
++    // Check if mother is J/psi
++    AliMCParticle* mother = static_cast<AliMCParticle*>(MCEvent()->GetTrack(currMotheri));
++    if(mother->PdgCode() !=443) return;
++
++    // Create proxy for MC
++    mcProxy = HistogramCollection()->CreateProxy(BuildMCPath(eventSelection,triggerClassName,centrality,pairCutName));
++
++    TLorentzVector mcpi(mcTracki->Px(),mcTracki->Py(),mcTracki->Pz(),TMath::Sqrt(AliAnalysisMuonUtility::MuonMass2()+mcTracki->P()*mcTracki->P()));
++    TLorentzVector mcpj(mcTrackj->Px(),mcTrackj->Py(),mcTrackj->Pz(),TMath::Sqrt(AliAnalysisMuonUtility::MuonMass2()+mcTrackj->P()*mcTrackj->P()));    
++    mcpj+=mcpi;
++    
++    if(!fWeightMuon)      inputWeightMC = WeightPairDistribution(mcpj.Pt(),mcpj.Rapidity());
++    else if(fWeightMuon)  inputWeightMC = WeightMuonDistribution(mcTracki->Px(),mcTracki->Py()) * WeightMuonDistribution(mcTrackj->Px(),mcTrackj->Py());
++  }
+   
++  // Construct dimuons vector
+   TLorentzVector pi(tracki.Px(),tracki.Py(),tracki.Pz(),
+                     TMath::Sqrt(AliAnalysisMuonUtility::MuonMass2()+tracki.P()*tracki.P()));
+   
+   TLorentzVector pair4Momentum(trackj.Px(),trackj.Py(),trackj.Pz(),
+                                TMath::Sqrt(AliAnalysisMuonUtility::MuonMass2()+trackj.P()*trackj.P()));
+-  
+   pair4Momentum += pi;
+   
+   // Create proxy in AliMergeableCollection
+   AliMergeableCollectionProxy* proxy = HistogramCollection()->CreateProxy(BuildPath(eventSelection,triggerClassName,centrality,pairCutName));
+   
+-  // Select weight accoring to <systLevel> (see constructor)
+-  Double_t inputWeight = WeightDistribution(pair4Momentum.Pt(),pair4Momentum.Rapidity());
++  // Select weight accoring to <systLevel> and fWeightMuon (see constructor)
++  Double_t inputWeight=0.;
++  if(!fWeightMuon)      inputWeight = WeightPairDistribution(pair4Momentum.Pt(),pair4Momentum.Rapidity());
++  else if(fWeightMuon)  inputWeight = WeightMuonDistribution(tracki.Pt(),tracki.Py()) * WeightMuonDistribution(trackj.Pt(),trackj.Py());
+   
+-  // Fill Pt,Y,Eta histo
++  // Fill Pt,Y,Eta distribution histo
+   if ( !IsHistogramDisabled("Pt") )  proxy->Histo("Pt")->Fill(pair4Momentum.Pt(),inputWeight);
+   if ( !IsHistogramDisabled("Y") )   proxy->Histo("Y")->Fill(pair4Momentum.Rapidity(),inputWeight);
+   if ( !IsHistogramDisabled("Eta") ) proxy->Histo("Eta")->Fill(pair4Momentum.Eta());
++  if ( !IsHistogramDisabled("PtPaireVsPtTrack") ) {
++   static_cast<TH2*>( proxy->Histo("PtPaireVsPtTrack"))->Fill(pair4Momentum.Pt(),tracki.Pt(),inputWeight);
++   static_cast<TH2*>( proxy->Histo("PtPaireVsPtTrack"))->Fill(pair4Momentum.Pt(),trackj.Pt(),inputWeight);
++  }
++  // Get 4-vector pairs from MC stack
++  if ( HasMC() ){ 
+ 
+-  TLorentzVector* pair4MomentumMC(0x0);
+-  
+-  Double_t inputWeightMC(1.);
+-  AliMergeableCollectionProxy* mcProxy(0x0);
+-  
+-  // Fill Pt,Y,Eta and PtRecVsSim histo for reconstructed MC particles
+-  if ( HasMC() ){
+-
+-    // Create proxy for MC
+-    mcProxy = HistogramCollection()->CreateProxy(BuildMCPath(eventSelection,triggerClassName,centrality,pairCutName));
+-
+-    Int_t labeli = tracki.GetLabel(); // really usefull ??
+-    Int_t labelj = trackj.GetLabel(); // really usefull ??
++    TLorentzVector mcpi(mcTracki->Px(),mcTracki->Py(),mcTracki->Pz(),TMath::Sqrt(AliAnalysisMuonUtility::MuonMass2()+mcTracki->P()*mcTracki->P()));
++    TLorentzVector mcpj(mcTrackj->Px(),mcTrackj->Py(),mcTrackj->Pz(),TMath::Sqrt(AliAnalysisMuonUtility::MuonMass2()+mcTrackj->P()*mcTrackj->P()));    
++    mcpj+=mcpi;
+     
+-    if ( labeli < 0 || labelj < 0 )AliError("Got negative labels!");
+-    else{
++    proxy->Histo("PtRecVsSim")->Fill(mcpj.Pt(),pair4Momentum.Pt());
+ 
+-      AliVParticle* mcTracki = MCEvent()->GetTrack(labeli);
+-      AliVParticle* mcTrackj = MCEvent()->GetTrack(labelj);
+-      
+-      TLorentzVector mcpi(mcTracki->Px(),mcTracki->Py(),mcTracki->Pz(),
+-                          TMath::Sqrt(AliAnalysisMuonUtility::MuonMass2()+mcTracki->P()*mcTracki->P()));
+-      TLorentzVector mcpj(mcTrackj->Px(),mcTrackj->Py(),mcTrackj->Pz(),
+-                          TMath::Sqrt(AliAnalysisMuonUtility::MuonMass2()+mcTrackj->P()*mcTrackj->P()));
+-      
+-      mcpj += mcpi;
+-      
+-      inputWeightMC = WeightDistribution(mcpj.Pt(),mcpj.Rapidity());
+-      proxy->Histo("PtRecVsSim")->Fill(mcpj.Pt(),pair4Momentum.Pt());
+-      
+-      if ( !IsHistogramDisabled("Pt") )  mcProxy->Histo("Pt")->Fill(mcpj.Pt(),inputWeightMC);
+-      if ( !IsHistogramDisabled("Y") )   mcProxy->Histo("Y")->Fill(mcpj.Rapidity(),inputWeightMC);
+-      if ( !IsHistogramDisabled("Eta") ) mcProxy->Histo("Eta")->Fill(mcpj.Eta());
++    if ( !IsHistogramDisabled("Pt") )  mcProxy->Histo("Pt")->Fill(mcpj.Pt(),inputWeightMC);
++    if ( !IsHistogramDisabled("Y") )   mcProxy->Histo("Y")->Fill(mcpj.Rapidity(),inputWeightMC);
++    if ( !IsHistogramDisabled("Eta") ) mcProxy->Histo("Eta")->Fill(mcpj.Eta());
+ 
+-      pair4MomentumMC = &mcpj;
+-    }
++    pair4MomentumMC = &mcpj;    
+   }
+   
+   // Fill Inv. Mass histo. (can be weighted)
+@@ -608,7 +580,7 @@ void AliAnalysisMuMuMinv::FillHistosForPair(const char* eventSelection,
+           else h->Fill(pair4MomentumMC->M(),inputWeightMC); 
+         }
+         
+-        // Fille Mean pT
++        // Fill Mean pT
+         if ( fcomputeMeanPt ){
+           TString hprofName("");
+           
+@@ -722,8 +694,8 @@ void AliAnalysisMuMuMinv::FillHistosForMCEvent(const char* eventSelection,const
+     // Select only primary particles
+     if  (AliAnalysisMuonUtility::IsPrimary(part,MCEvent()) && part->GetMother()==-1){ 
+       
+-      // Get the default WeightDistribution
+-      Double_t inputWeight = WeightDistribution(part->Pt(),part->Y());
++      // Get the default WeightPairDistribution
++      Double_t inputWeight = WeightPairDistribution(part->Pt(),part->Y());
+       
+       // Fill Pt, Y, Eta histos
+       mcProxy->Histo("Pt")->Fill(part->Pt(),inputWeight);
+@@ -731,7 +703,7 @@ void AliAnalysisMuMuMinv::FillHistosForMCEvent(const char* eventSelection,const
+       mcProxy->Histo("Eta")->Fill(part->Eta());
+       
+       // Fill Pt, Y, Eta histos if tracks rapidity in range
+-      if ( part->Y() <= -2.5 && part->Y() >= -4.0 && mcInYRangeProxy ){
++      if ( part->Y() < -2.5 && part->Y() > -4.0 && mcInYRangeProxy ){
+         mcInYRangeProxy->Histo("Pt")->Fill(part->Pt(),inputWeight);
+         mcInYRangeProxy->Histo("Y")->Fill(part->Y(),inputWeight);
+         mcInYRangeProxy->Histo("Eta")->Fill(part->Eta());
+@@ -772,7 +744,7 @@ void AliAnalysisMuMuMinv::FillHistosForMCEvent(const char* eventSelection,const
+             }
+             h->Fill(part->M(),inputWeight);
+ 
+-            if ( part->Y() <= -2.5 && part->Y() >= -4.0 && mcInYRangeProxy  ){      
++            if ( part->Y() < -2.5 && part->Y() > -4.0 && mcInYRangeProxy  ){      
+               h = mcInYRangeProxy->Histo(hname.Data());
+               if (!h){
+                 AliError(Form("Could not get /%s/%s/%s/%s/INYRANGE %s",MCInputPrefix(),eventSelection,triggerClassName,centrality,hname.Data()));
+@@ -791,7 +763,7 @@ void AliAnalysisMuMuMinv::FillHistosForMCEvent(const char* eventSelection,const
+             if ( !hprof )AliError(Form("Could not get %s",hprofName.Data()));
+             else hprof->Fill(part->M(),part->Pt(),inputWeight);
+             
+-            if ( part->Y() <= -2.5 && part->Y() >= -4.0 ){
++            if ( part->Y() < -2.5 && part->Y() > -4.0 ){
+               hprof = MCProf(eventSelection,triggerClassName,Form("%s/INYRANGE",centrality),hprofName.Data());
+               if ( !hprof )AliError(Form("Could not get %s",hprofName.Data()));
+               else hprof->Fill(part->M(),part->Pt(),inputWeight);
+@@ -817,8 +789,7 @@ TString AliAnalysisMuMuMinv::GetMinvHistoName(const AliAnalysisMuMuBinning::Rang
+ //_____________________________________________________________________________
+ Double_t AliAnalysisMuMuMinv::GetAccxEff(Double_t pt,Double_t rapidity)
+ {
+-  if (!fAccEffHisto)
+-  {
++  if (!fAccEffHisto){
+     AliError("ERROR: No AccxEff histo");
+     return 0;
+   }
+@@ -828,37 +799,110 @@ Double_t AliAnalysisMuMuMinv::GetAccxEff(Double_t pt,Double_t rapidity)
+   return accXeff;
+ }
+ 
++
+ //_____________________________________________________________________________
+-Double_t AliAnalysisMuMuMinv::WeightDistribution(Double_t pt,Double_t rapidity)
++Double_t AliAnalysisMuMuMinv::WeightMuonDistribution(Double_t pt,Double_t rapidity)
+ {
+-  //Return a weight for a dimuon pt and y, which depend on the varied distributions.
++  ///Return a weight for a single pt and y, which depend on the varied distributions.
+   // FIXME: hard coded, find a clean way to fix the distribution parameters from outside
+   
+   if (!HasMC() ) return 1.;
++  if (!fWeightMuon) return 1.;
++
++
++  //================ Trigger Efficiency distribution pp@5TeV ==============//
++  //value for input distribution
++  Double_t parptpp5 [8]     = {6.24341e-01,2.68680e-01,6.57929e-01,1.00000e+00,1.00000e+00,1.00000e+00,-1.00000e+00,9.67072e-01}; //Initial dunction
++  Double_t parptpp5corr [8] = {6.24341e-01,2.70085e-01,5.85241e-01,1.00000e+00,1.00000e+00,1.00000e+00,-1.00000e+00,9.67072e-01}; //Corrected one
++
++  //______
++  Double_t weight(1.),funcptsyst(0.);
++  switch ( fsystLevel )
++  {
++    case 0:
++      weight = 1;
++      break;
++    case 1:
++      funcptsyst = TriggerLptApt(&pt,parptpp5);
++      if ( funcptsyst > 0 ) weight = funcptsyst;
++      else  weight = 1;
++      break;
++    case 2:
++      funcptsyst = TriggerLptApt(&pt,parptpp5corr);
++      if ( funcptsyst > 0 ) weight = funcptsyst;
++      else  weight = 1;
++      break;
++  }
+   
++  return weight;
++}
++
++//_____________________________________________________________________________
++Double_t AliAnalysisMuMuMinv::WeightPairDistribution(Double_t pt,Double_t rapidity)
++{
++  //Return a weight for a dimuon pt and y, which depend on the varied distributions.
++  // FIXME: hard coded, find a clean way to fix the distribution parameters from outside
++  
++  if (!HasMC() ) return 1.;
++  if (fWeightMuon ) return 1.;
++
+   //================ p-Pb ==============//
+   //value for input distribution: this is the nominal pt and y distribution
+-  Double_t paryPPB[2] = {1.0,0.174};
+-  Double_t parptPPB[3] = {1.0,0.0557,3.52};
+   
+-  Double_t paryHardPPB = 0.1344, parySoftPPB = 0.1971;
+-  Double_t par1ptHardPPB = 5.51e-2, par2ptHardPPB = 3.47,
+-  par1ptSoftPPB = 5.67e-2, par2ptSoftPPB = 3.68;
++  // Double_t paryPPB[2] = {1.0,0.174};
++  // Double_t parptPPB[3] = {1.0,0.0557,3.52};  
++  
++  // Double_t paryHardPPB = 0.1344, parySoftPPB = 0.1971;
++  // Double_t par1ptHardPPB = 5.51e-2, par2ptHardPPB = 3.47,
++  // par1ptSoftPPB = 5.67e-2, par2ptSoftPPB = 3.68;
++  // //systematic 1: hardest in y  x softest in pt
++  // Double_t pary1[2] = {1.0,paryHardPPB};
++  // Double_t parpt1[3] = {1.0,par1ptSoftPPB,par2ptSoftPPB};
++  // //systematic 2: hardest in y x hardest in pt
++  // Double_t pary2[2] = {1.0,paryHardPPB};
++  // Double_t parpt2[3] = {1.0,par1ptHardPPB,par2ptHardPPB};
++  // //systematic 3: softest in y  x softest in pt
++  // Double_t pary3[2] = {1.0, parySoftPPB};
++  // Double_t parpt3[3] = {1.0,par1ptSoftPPB,par2ptSoftPPB};
++  // //systematic 4: softest in y  x hardest in pt
++  // Double_t pary4[2] = {1.0,parySoftPPB};
++  // Double_t parpt4[3] = {1.0,par1ptHardPPB,par2ptHardPPB};
++  
++  // Double_t funcptvalPPB = powerLaw3Par(&pt,parptPPB);
++  // Double_t funcyvalPPB = normPol12Par(&rapidity,paryPPB);
++
++
++  //================ p-Pb ==============//
++  //value for input distribution: obtain with GenTuner
++  
++  Double_t paryPPB[2]  = {2.35349, 0.220533};
++  Double_t parptPPB[3] = {0.306327, 0.0234257, 7.53826};
++
++  Double_t paryHardPPB = paryPPB[1]-0.04;
++  Double_t parySoftPPB = paryPPB[1]+0.04;
++
++  Double_t par1ptHardPPB = parptPPB[1]-0.004; 
++  Double_t par2ptHardPPB = parptPPB[2]-0.05;
++
++  Double_t par1ptSoftPPB = parptPPB[1]+0.004;; 
++  Double_t par2ptSoftPPB = parptPPB[2]+0.05;
++
+   //systematic 1: hardest in y  x softest in pt
+-  Double_t pary1[2] = {1.0,paryHardPPB};
+-  Double_t parpt1[3] = {1.0,par1ptSoftPPB,par2ptSoftPPB};
++  Double_t pary1[2] = {2.35349,paryHardPPB};
++  Double_t parpt1[3] = {0.306327,par1ptSoftPPB,par2ptSoftPPB};
+   //systematic 2: hardest in y x hardest in pt
+-  Double_t pary2[2] = {1.0,paryHardPPB};
+-  Double_t parpt2[3] = {1.0,par1ptHardPPB,par2ptHardPPB};
++  Double_t pary2[2] = {2.35349,paryHardPPB};
++  Double_t parpt2[3] = {0.306327,par1ptHardPPB,par2ptHardPPB};
+   //systematic 3: softest in y  x softest in pt
+-  Double_t pary3[2] = {1.0, parySoftPPB};
+-  Double_t parpt3[3] = {1.0,par1ptSoftPPB,par2ptSoftPPB};
++  Double_t pary3[2] = {2.35349, parySoftPPB};
++  Double_t parpt3[3] = {0.306327,par1ptSoftPPB,par2ptSoftPPB};
+   //systematic 4: softest in y  x hardest in pt
+-  Double_t pary4[2] = {1.0,parySoftPPB};
+-  Double_t parpt4[3] = {1.0,par1ptHardPPB,par2ptHardPPB};
++  Double_t pary4[2] = {2.35349,parySoftPPB};
++  Double_t parpt4[3] = {0.306327,par1ptHardPPB,par2ptHardPPB};
+   
+   Double_t funcptvalPPB = powerLaw3Par(&pt,parptPPB);
+   Double_t funcyvalPPB = normPol12Par(&rapidity,paryPPB);
++
+   
+   //================ Pb-p ==============//
+   //value for input distribution
+@@ -907,7 +951,7 @@ Double_t AliAnalysisMuMuMinv::WeightDistribution(Double_t pt,Double_t rapidity)
+   
+   Double_t funcptvalPP = powerLaw3Par(&pt,parptPP);
+   Double_t funcyvalPP = normPol12Par(&rapidity,paryPP);
+-  
++
+   //______
+   Double_t weight(1.),funcptsyst(0.),funcysyst(0.);
+   switch ( fsystLevel )
+@@ -1028,6 +1072,19 @@ Double_t AliAnalysisMuMuMinv::normPol12Par(Double_t *x, Double_t *par)
+   return arg1;
+ }
+ 
++//______________________________________________
++Double_t AliAnalysisMuMuMinv::TriggerLptApt ( Double_t* xVal, Double_t* par )
++{
++  /// trigger response function
++  Double_t xx             = xVal[0];
++  Double_t currX          = TMath::Max(xx,par[6]);
++  Double_t sqrtTwo        = TMath::Sqrt(2.);
++  Double_t yVal           = par[7]+par[0]*(TMath::Erf((currX-par[1])/par[2]/sqrtTwo)-1.);
++  if ( xx < par[6] ) yVal += par[3]*(TMath::Erf((-xx-par[4])/par[5]/sqrtTwo) - TMath::Erf((-par[6]-par[4])/par[5]/sqrtTwo));
++  
++  return yVal;
++}
++
+ //_____________________________________________________________________________
+ Bool_t AliAnalysisMuMuMinv::IsPtInRange(const AliVParticle& t1, const AliVParticle& t2, Double_t& ptmin, Double_t& ptmax) const
+ {
+diff --git a/PWG/muon/AliAnalysisMuMuMinv.h b/PWG/muon/AliAnalysisMuMuMinv.h
+index 418213f..785866c 100644
+--- a/PWG/muon/AliAnalysisMuMuMinv.h
++++ b/PWG/muon/AliAnalysisMuMuMinv.h
+@@ -20,27 +20,31 @@ class AliAnalysisMuMuMinv : public AliAnalysisMuMuBase
+ {
+ public:
+ 
+-  AliAnalysisMuMuMinv(TH2* AccEffHisto=0x0, Bool_t computeMeanPt=kFALSE, Int_t systLevel=0);
++  AliAnalysisMuMuMinv(TH2* AccEffHisto=0x0, Int_t systLevel=0);
+   virtual ~AliAnalysisMuMuMinv();
+-  
++
+   Bool_t IsPtInRange(const AliVParticle& t1, const AliVParticle& t2,
+                            Double_t& ptmin, Double_t& ptmax) const;
+-  
++
+   void NameOfIsPtInRange(TString& name, Double_t& ymin, Double_t& ymax) const;
+-  
++
+   Bool_t IsRapidityInRange(const AliVParticle& t1, const AliVParticle& t2) const;
+   void NameOfIsRapidityInRange(TString& name) const { name = "PAIRY"; }
+-  
++
+   Bool_t ShouldCorrectDimuonForAccEff() { return (fAccEffHisto != 0x0); }
+-  
++
++  void FillMeanPtHisto() { fcomputeMeanPt=kTRUE; }
++
++  void SetMuonWeight() { fWeightMuon=kTRUE; }
++
+   void SetLegacyBinNaming() { fMinvBinSeparator = ""; }
+-  
++
+   void SetBinsToFill(const char* particle, const char* bins);
+ 
+   void DefineMinvRange(Double_t minvMin, Double_t minvMax, Double_t minvBinSize);
+-  
++
+ protected:
+-  
++
+   void DefineHistogramCollection(const char* eventSelection, const char* triggerClassName,
+                                  const char* centrality);
+ 
+@@ -49,25 +53,30 @@ protected:
+                                  const char* pairCutName,
+                                  const AliVParticle& part,
+                                  const AliVParticle& part2);
+-  
++
+   void FillHistosForMCEvent(const char* eventSelection,const char* triggerClassName,const char* centrality);
+-  
++
+ private:
+-  
++
+   void CreateMinvHistograms(const char* eventSelection, const char* triggerClassName, const char* centrality);
+-  
++
+   TString GetMinvHistoName(const AliAnalysisMuMuBinning::Range& r, Bool_t accEffCorrected) const;
+-  
++
+   Double_t GetAccxEff(Double_t pt,Double_t rapidity);
++
++  Double_t WeightMuonDistribution(Double_t pt,Double_t rapidity);
+   
+-  Double_t WeightDistribution(Double_t pt,Double_t rapidity);
+-  
++  Double_t WeightPairDistribution(Double_t pt,Double_t rapidity);
++
+   Double_t powerLaw3Par(Double_t *x, Double_t *par);
+-  
++
+   Double_t normPol12Par(Double_t *x, Double_t *par);
+ 
++  Double_t TriggerLptApt(Double_t *x, Double_t *par);
++
+ private:
+   Bool_t fcomputeMeanPt;
++  Bool_t fWeightMuon;
+   TH2F* fAccEffHisto;
+   TString fMinvBinSeparator;
+   Int_t fsystLevel;
+@@ -75,7 +84,7 @@ private:
+   Double_t fMinvBinSize;
+   Double_t fMinvMin;
+   Double_t fMinvMax;
+-  
++
+   ClassDef(AliAnalysisMuMuMinv,5) // implementation of AliAnalysisMuMuBase for muon pairs
+ };
+ 
+-- 
+2.7.4 (Apple Git-66)
+

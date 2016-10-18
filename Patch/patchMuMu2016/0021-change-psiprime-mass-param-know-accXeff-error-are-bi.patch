@@ -1,0 +1,403 @@
+From 4186dba6cdbd5331da44745a5c856a9a224a4c23 Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Wed, 15 Jun 2016 15:30:49 +0200
+Subject: [PATCH 21/36] change psiprime mass param + know accXeff error are
+ binomiales
+
+---
+ PWG/muondep/AliAnalysisMuMuJpsiResult.cxx | 105 ++++++++++++++++++------------
+ 1 file changed, 63 insertions(+), 42 deletions(-)
+
+diff --git a/PWG/muondep/AliAnalysisMuMuJpsiResult.cxx b/PWG/muondep/AliAnalysisMuMuJpsiResult.cxx
+index 1f2dc3a..f1d6dbd 100644
+--- a/PWG/muondep/AliAnalysisMuMuJpsiResult.cxx
++++ b/PWG/muondep/AliAnalysisMuMuJpsiResult.cxx
+@@ -691,7 +691,7 @@ Double_t AliAnalysisMuMuJpsiResult::FitFunctionTotalTwoNA60NewVWG(Double_t *x, D
+ 
+   Double_t par2[11] = {
+     par[15],
+-    3.68609+(par[5]-3.096916)/3.096916*3.68609,
++    par[5]+(3.68609-3.096916),
+     par[6]*SPsiPFactor, // /3.096916*3.68609
+     par[7],
+     par[8],
+@@ -715,7 +715,7 @@ Double_t AliAnalysisMuMuJpsiResult::FitFunctionTotalTwoNA60NewVWG2(Double_t *x,
+ 
+   Double_t par2[11] = {
+     par[16],
+-    3.68609+(par[6]-3.096916)/3.096916*3.68609,
++    par[6]+(3.68609-3.096916),
+     par[7]*SPsiPFactor, // /3.096916*3.68609
+     par[8],
+     par[9],
+@@ -739,7 +739,7 @@ Double_t AliAnalysisMuMuJpsiResult::FitFunctionTotalTwoNA60NewPol1Pol2(Double_t
+ 
+   Double_t par2[11] = {
+     par[16],
+-    3.68609+(par[6]-3.096916)/3.096916*3.68609,
++    par[6]+(3.68609-3.096916),
+     par[7]*SPsiPFactor, // /3.096916*3.68609
+     par[8],
+     par[9],
+@@ -763,7 +763,7 @@ Double_t AliAnalysisMuMuJpsiResult::FitFunctionTotalTwoNA60NewPol2Pol3(Double_t
+ 
+   Double_t par2[11] = {
+     par[18],
+-    3.68609+(par[8]-3.096916)/3.096916*3.68609,
++    par[8]+(3.68609-3.096916),
+     par[9]*SPsiPFactor, // /3.096916*3.68609
+     par[10],
+     par[11],
+@@ -787,7 +787,7 @@ Double_t AliAnalysisMuMuJpsiResult::FitFunctionTotalTwoNA60NewPol2Exp(Double_t *
+ 
+   Double_t par2[11] = {
+     par[15],
+-    3.68609+(par[5]-3.096916)/3.096916*3.68609,
++    par[5]+(3.68609-3.096916),
+     par[6]*SPsiPFactor,  // /3.096916*3.68609,
+     par[7],
+     par[8],
+@@ -812,7 +812,7 @@ Double_t AliAnalysisMuMuJpsiResult::FitFunctionTotalTwoNA60NewPol4Exp(Double_t *
+ 
+   Double_t par2[11] = {
+     par[17],
+-    3.68609+(par[7]-3.096916)/3.096916*3.68609,
++    par[7]+(3.68609-3.096916),
+     par[8]*SPsiPFactor, // /3.096916*3.68609,
+     par[9],
+     par[10],
+@@ -836,7 +836,7 @@ Double_t AliAnalysisMuMuJpsiResult::FitFunctionTotalTwoCB2Lin(Double_t *x, Doubl
+ 
+   Double_t par2[7] = {
+     par[9],
+-    3.68609+(par[3]-3.096916)/3.096916*3.68609,
++    par[3]+(3.68609-3.096916),
+     par[4]*SPsiPFactor, // /3.096916*3.68609,
+     par[5],
+     par[6],
+@@ -856,7 +856,7 @@ Double_t AliAnalysisMuMuJpsiResult::FitFunctionTotalTwoCB2Pol1Pol2(Double_t *x,
+ 
+   Double_t par2[7] = {
+     par[12],
+-    3.68609+(par[6]-3.096916)/3.096916*3.68609,
++    par[6]+(3.68609-3.096916),
+     par[7]*SPsiPFactor, // /3.096916*3.68609,
+     par[8],
+     par[9],
+@@ -876,7 +876,7 @@ Double_t AliAnalysisMuMuJpsiResult::FitFunctionTotalTwoCB2Pol2Pol3(Double_t *x,
+ 
+   Double_t par2[7] = {
+     par[14],
+-    3.68609+(par[8]-3.096916)/3.096916*3.68609,
++    par[8]+(3.68609-3.096916),
+     par[9]*SPsiPFactor, // /3.096916*3.68609,
+     par[10],
+     par[11],
+@@ -896,7 +896,7 @@ Double_t AliAnalysisMuMuJpsiResult::FitFunctionTotalTwoCB2Pol2Pol3V2(Double_t *x
+ 
+   Double_t par2[7] = {
+     par[13],
+-    3.68609+(par[7]-3.096916)/3.096916*3.68609,
++    par[7]+(3.68609-3.096916),
+     par[9]*SPsiPFactor, // /3.096916*3.68609,
+     par[9],
+     par[10],
+@@ -916,7 +916,7 @@ Double_t AliAnalysisMuMuJpsiResult::FitFunctionTotalTwoCB2Pol2Exp(Double_t *x, D
+ 
+   Double_t par2[7] = {
+     par[11],
+-    3.68609+(par[5]-3.096916)/3.096916*3.68609,
++    par[5]+(3.68609-3.096916),
+     par[6]*SPsiPFactor, // /3.096916*3.68609,
+     par[7],
+     par[8],
+@@ -934,7 +934,7 @@ Double_t AliAnalysisMuMuJpsiResult::FitFunctionTotalTwoCB2Pol2Exp(Double_t *x, D
+ //
+ //  Double_t par2[7] = {
+ //    par[12],
+-//    3.68609+(par[6]-3.096916)/3.096916*3.68609,
++//    par[6]+(3.68609-3.096916),
+ //    par[7]/3.096916*3.68609,
+ //    par[8],
+ //    par[9],
+@@ -954,7 +954,7 @@ Double_t AliAnalysisMuMuJpsiResult::FitFunctionTotalTwoCB2Pol4Exp(Double_t *x, D
+ 
+   Double_t par2[7] = {
+     par[13],
+-    3.68609+(par[7]-3.096916)/3.096916*3.68609,
++    par[7]+(3.68609-3.096916),
+     par[8]*SPsiPFactor, // /3.096916*3.68609,
+     par[9],
+     par[10],
+@@ -972,7 +972,7 @@ Double_t AliAnalysisMuMuJpsiResult::FitFunctionTotalTwoCB2Pol4Exp(Double_t *x, D
+ //
+ //  Double_t par2[7] = {
+ //    par[14],
+-//    3.68609+(par[8]-3.096916)/3.096916*3.68609,
++//    par[8]+(3.68609-3.096916),
+ //    par[9]/3.096916*3.68609,
+ //    par[10],
+ //    par[11],
+@@ -992,7 +992,7 @@ Double_t AliAnalysisMuMuJpsiResult::FitFunctionTotalTwoCB2VWG(Double_t *x, Doubl
+ 
+   Double_t par2[7] = {
+     par[11],
+-    3.68609+(par[5]-3.096916)/3.096916*3.68609,
++    par[5]+(3.68609-3.096916),
+     par[6]*SPsiPFactor, // /3.096916*3.68609,
+     par[7],
+     par[8],
+@@ -1012,7 +1012,7 @@ Double_t AliAnalysisMuMuJpsiResult::FitFunctionTotalTwoCB2VWG2(Double_t *x, Doub
+ 
+   Double_t par2[7] = {
+     par[12],
+-    3.68609+(par[6]-3.096916)/3.096916*3.68609,
++    par[6]+(3.68609-3.096916),
+     par[7]*SPsiPFactor, // /3.096916*3.68609,
+     par[8],
+     par[9],
+@@ -1032,7 +1032,7 @@ Double_t AliAnalysisMuMuJpsiResult::FitFunctionTotalTwoCB2VWGINDEPTAILS(Double_t
+ 
+   Double_t par2[7] = {
+     par[11],
+-    3.68609+(par[5]-3.096916)/3.096916*3.68609,
++    par[5]+(3.68609-3.096916),
+     par[6]*SPsiPFactor, // /3.096916*3.68609,
+     par[12],
+     par[13],
+@@ -1088,7 +1088,7 @@ Double_t AliAnalysisMuMuJpsiResult::FitFunctionMeanPtS2CB2Lin(Double_t *x, Doubl
+     par[2],
+     par[3],
+     par[11], //kPsi'
+-    3.68609+(par[5]-3.096916)/3.096916*3.68609,
++    par[5]+(3.68609-3.096916),
+     par[6]*SPsiPFactor, // /3.096916*3.68609,
+     par[7],
+     par[8],
+@@ -1120,7 +1120,7 @@ Double_t AliAnalysisMuMuJpsiResult::FitFunctionMeanPtS2CB2VWGPOL2(Double_t *x, D
+     par[2],
+     par[3],
+     par[11], //kPsi'
+-    3.68609+(par[5]-3.096916)/3.096916*3.68609,
++    par[5]+(3.68609-3.096916),
+     par[6]*SPsiPFactor, // /3.096916*3.68609,
+     par[7],
+     par[8],
+@@ -1144,7 +1144,7 @@ Double_t AliAnalysisMuMuJpsiResult::FitFunctionMeanPtS2CB2VWGPOL2EXP(Double_t *x
+     par[2],
+     par[3],
+     par[11], //kPsi'
+-    3.68609+(par[5]-3.096916)/3.096916*3.68609,
++    par[5]+(3.68609-3.096916),
+     par[6]*SPsiPFactor, // /3.096916*3.68609,
+     par[7],
+     par[8],
+@@ -1168,7 +1168,7 @@ Double_t AliAnalysisMuMuJpsiResult::FitFunctionMeanPtS2CB2POL2EXPPOL2(Double_t *
+     par[2],
+     par[3],
+     par[11], //kPsi'
+-    3.68609+(par[5]-3.096916)/3.096916*3.68609,
++    par[5]+(3.68609-3.096916),
+     par[6]*SPsiPFactor, // /3.096916*3.68609,
+     par[7],
+     par[8],
+@@ -1193,7 +1193,7 @@ Double_t AliAnalysisMuMuJpsiResult::FitFunctionMeanPtS2CB2POL2EXPPOL2EXP(Double_
+     par[2],
+     par[3],
+     par[11], //kPsi'
+-    3.68609+(par[5]-3.096916)/3.096916*3.68609,
++    par[5]+(3.68609-3.096916),
+     par[6]*SPsiPFactor, // /3.096916*3.68609,
+     par[7],
+     par[8],
+@@ -1218,7 +1218,7 @@ Double_t AliAnalysisMuMuJpsiResult::FitFunctionMeanPtS2NA60NEWVWGPOL2(Double_t *
+     par[2],
+     par[3],
+     par[15],
+-    3.68609+(par[5]-3.096916)/3.096916*3.68609,
++    par[5]+(3.68609-3.096916),
+     par[6]*SPsiPFactor, // /3.096916*3.68609,
+     par[7],
+     par[8],
+@@ -1246,7 +1246,7 @@ Double_t AliAnalysisMuMuJpsiResult::FitFunctionMeanPtS2NA60NEWVWGPOL2EXP(Double_
+     par[2],
+     par[3],
+     par[15],
+-    3.68609+(par[5]-3.096916)/3.096916*3.68609,
++    par[5]+(3.68609-3.096916),
+     par[6]*SPsiPFactor, // /3.096916*3.68609,
+     par[7],
+     par[8],
+@@ -1275,7 +1275,7 @@ Double_t AliAnalysisMuMuJpsiResult::FitFunctionMeanPtS2NA60NEWPOL2EXPPOL2(Double
+     par[2],
+     par[3],
+     par[15],
+-    3.68609+(par[5]-3.096916)/3.096916*3.68609,
++    par[5]+(3.68609-3.096916),
+     par[6]*SPsiPFactor, // /3.096916*3.68609,
+     par[7],
+     par[8],
+@@ -1303,7 +1303,7 @@ Double_t AliAnalysisMuMuJpsiResult::FitFunctionMeanPtS2NA60NEWPOL2EXPPOL2EXP(Dou
+     par[2],
+     par[3],
+     par[15],
+-    3.68609+(par[5]-3.096916)/3.096916*3.68609,
++    par[5]+(3.68609-3.096916),
+     par[6]*SPsiPFactor, // /3.096916*3.68609,
+     par[7],
+     par[8],
+@@ -1331,7 +1331,7 @@ Double_t AliAnalysisMuMuJpsiResult::FitFunctionMeanPtS2CB2VWGPOL3(Double_t *x, D
+     par[2],
+     par[3],
+     par[11], //kPsi'
+-    3.68609+(par[5]-3.096916)/3.096916*3.68609,
++    par[5]+(3.68609-3.096916),
+     par[6]*SPsiPFactor, // /3.096916*3.68609,
+     par[7],
+     par[8],
+@@ -1355,7 +1355,7 @@ Double_t AliAnalysisMuMuJpsiResult::FitFunctionMeanPtS2CB2VWGPOL4(Double_t *x, D
+     par[2],
+     par[3],
+     par[11], //kPsi'
+-    3.68609+(par[5]-3.096916)/3.096916*3.68609,
++    par[5]+(3.68609-3.096916),
+     par[6]*SPsiPFactor, // /3.096916*3.68609,
+     par[7],
+     par[8],
+@@ -1379,7 +1379,7 @@ Double_t AliAnalysisMuMuJpsiResult::FitFunctionMeanPtS2CB2VWGPOL2INDEPTAILS(Doub
+     par[2],
+     par[3],
+     par[11], //kPsi'
+-   3.68609+(par[5]-3.096916)/3.096916*3.68609,
++   par[5]+(3.68609-3.096916),
+     par[6]*SPsiPFactor, // /3.096916*3.68609,
+     par[12],
+     par[13],
+@@ -2153,7 +2153,7 @@ void AliAnalysisMuMuJpsiResult::FitPSIPSIPRIMECB2VWG()
+ 
+   TF1* signalPsiP = new TF1("signalPsiP",this,&AliAnalysisMuMuJpsiResult::FitFunctionSignalCrystalBallExtended,fHisto->GetXaxis()->GetXmin(),fHisto->GetXaxis()->GetXmax(),7,"AliAnalysisMuMuJpsiResult","FitFunctionSignalCrystalBallExtended");
+   signalPsiP->SetParameters(fitTotal->GetParameter(11),
+-                        3.68609+(fitTotal->GetParameter(5)-3.096916)/3.096916*3.68609,
++                        fitTotal->GetParameter(5) + (3.68609-3.096916),
+                         fitTotal->GetParameter(6)*paramSPsiP, // /3.096916*3.68609,
+                         fitTotal->GetParameter(7),
+                         fitTotal->GetParameter(8),
+@@ -2387,7 +2387,7 @@ void AliAnalysisMuMuJpsiResult::FitPSIPSIPRIMECB2VWG2()
+ 
+   TF1* signalPsiP = new TF1("signalPsiP",this,&AliAnalysisMuMuJpsiResult::FitFunctionSignalCrystalBallExtended,fHisto->GetXaxis()->GetXmin(),fHisto->GetXaxis()->GetXmax(),7,"AliAnalysisMuMuJpsiResult","FitFunctionSignalCrystalBallExtended");
+   signalPsiP->SetParameters(fitTotal->GetParameter(12),
+-                        3.68609+(fitTotal->GetParameter(6)-3.096916)/3.096916*3.68609,
++                        fitTotal->GetParameter(6) + (3.68609 - 3.096916),
+                         fitTotal->GetParameter(7)*paramSPsiP, // /3.096916*3.68609,
+                         fitTotal->GetParameter(8),
+                         fitTotal->GetParameter(9),
+@@ -2660,7 +2660,7 @@ void AliAnalysisMuMuJpsiResult::FitPSIPSIPRIMECB2POL1POL2()
+ 
+   TF1* signalPsiP = new TF1("signalPsiP",this,&AliAnalysisMuMuJpsiResult::FitFunctionSignalCrystalBallExtended,fHisto->GetXaxis()->GetXmin(),fHisto->GetXaxis()->GetXmax(),7,"AliAnalysisMuMuJpsiResult","FitFunctionSignalCrystalBallExtended");
+   signalPsiP->SetParameters(fitTotal->GetParameter(12),
+-                        3.68609+(fitTotal->GetParameter(6)-3.096916)/3.096916*3.68609,
++                        fitTotal->GetParameter(6) + (3.68609 - 3.096916),
+                         fitTotal->GetParameter(7)*paramSPsiP, // /3.096916*3.68609,
+                         fitTotal->GetParameter(8),
+                         fitTotal->GetParameter(9),
+@@ -3495,7 +3495,7 @@ void AliAnalysisMuMuJpsiResult::FitPSIPSIPRIMECB2VWGINDEPTAILS()
+   Set("mJPsi",fitTotal->GetParameter(5),fitTotal->GetParError(5));
+   Set("sJPsi",fitTotal->GetParameter(6),fitTotal->GetParError(6));
+ 
+-  Set("mPsiP",3.68609+(fitTotal->GetParameter(5)-3.096916)/3.096916*3.68609,fitTotal->GetParError(5)/3.096916*3.68609);
++  Set("mPsiP",fitTotal->GetParameter(5) + (3.68609-3.096916),fitTotal->GetParError(5)/3.096916*3.68609);
+   Set("sPsiP",fitTotal->GetParameter(6)*paramSPsiP,fitTotal->GetParError(6)*paramSPsiP);
+ 
+   TF1* signalJPsi = new TF1("signalJPsi",this,&AliAnalysisMuMuJpsiResult::FitFunctionSignalCrystalBallExtended,fHisto->GetXaxis()->GetXmin(),fHisto->GetXaxis()->GetXmax(),7,"AliAnalysisMuMuJpsiResult","FitFunctionSignalCrystalBallExtended");
+@@ -3509,7 +3509,7 @@ void AliAnalysisMuMuJpsiResult::FitPSIPSIPRIMECB2VWGINDEPTAILS()
+ 
+   TF1* signalPsiP = new TF1("signalPsiP",this,&AliAnalysisMuMuJpsiResult::FitFunctionSignalCrystalBallExtended,fHisto->GetXaxis()->GetXmin(),fHisto->GetXaxis()->GetXmax(),7,"AliAnalysisMuMuJpsiResult","FitFunctionSignalCrystalBallExtended");
+   signalPsiP->SetParameters(fitTotal->GetParameter(11),
+-                            3.68609+(fitTotal->GetParameter(5)-3.096916)/3.096916*3.68609,
++                            fitTotal->GetParameter(5) + (3.68609-3.096916),
+                             fitTotal->GetParameter(6)*paramSPsiP, // /3.096916*3.68609,
+                             fitTotal->GetParameter(12),
+                             fitTotal->GetParameter(13),
+@@ -3732,7 +3732,7 @@ void AliAnalysisMuMuJpsiResult::FitPSIPSIPRIMECB2POL2EXP()
+ 
+   TF1* signalPsiP = new TF1("signalPsiP",this,&AliAnalysisMuMuJpsiResult::FitFunctionSignalCrystalBallExtended,fHisto->GetXaxis()->GetXmin(),fHisto->GetXaxis()->GetXmax(),7,"AliAnalysisMuMuJpsiResult","FitFunctionSignalCrystalBallExtended");
+   signalPsiP->SetParameters(fitTotal->GetParameter(11),
+-                            3.68609+(fitTotal->GetParameter(5)-3.096916)/3.096916*3.68609,
++                            fitTotal->GetParameter(5) + (3.68609-3.096916),
+                             fitTotal->GetParameter(6)*paramSPsiP, // /3.096916*3.68609,
+                             fitTotal->GetParameter(7),
+                             fitTotal->GetParameter(8),
+@@ -4232,7 +4232,7 @@ void AliAnalysisMuMuJpsiResult::FitPSIPSIPRIMENA60NEWVWG()
+   TF1* signalPsiP = new TF1("signalPsiP",this,&AliAnalysisMuMuJpsiResult::FitFunctionNA60New,fHisto->GetXaxis()->GetXmin(),fHisto->GetXaxis()->GetXmax(),11,"AliAnalysisMuMuJpsiResult","FitFunctionNA60New");
+ 
+   signalPsiP->SetParameters(fitTotal->GetParameter(15),
+-                            3.68609+(fitTotal->GetParameter(5)-3.096916)/3.096916*3.68609,
++                            fitTotal->GetParameter(5) + (3.68609-3.096916),
+                             fitTotal->GetParameter(6)*paramSPsiP, // /3.096916*3.68609,
+                             fitTotal->GetParameter(7),
+                             fitTotal->GetParameter(8),
+@@ -4485,7 +4485,7 @@ void AliAnalysisMuMuJpsiResult::FitPSIPSIPRIMENA60NEWVWG2()
+   TF1* signalPsiP = new TF1("signalPsiP",this,&AliAnalysisMuMuJpsiResult::FitFunctionNA60New,fHisto->GetXaxis()->GetXmin(),fHisto->GetXaxis()->GetXmax(),11,"AliAnalysisMuMuJpsiResult","FitFunctionNA60New");
+ 
+   signalPsiP->SetParameters(fitTotal->GetParameter(16),
+-                            3.68609+(fitTotal->GetParameter(6)-3.096916)/3.096916*3.68609,
++                            fitTotal->GetParameter(6) + (3.68609 - 3.096916),
+                             fitTotal->GetParameter(7)*paramSPsiP, // /3.096916*3.68609,
+                             fitTotal->GetParameter(8),
+                             fitTotal->GetParameter(9),
+@@ -4742,7 +4742,7 @@ void AliAnalysisMuMuJpsiResult::FitPSIPSIPRIMENA60NEWPOL1POL2()
+   TF1* signalPsiP = new TF1("signalPsiP",this,&AliAnalysisMuMuJpsiResult::FitFunctionNA60New,fHisto->GetXaxis()->GetXmin(),fHisto->GetXaxis()->GetXmax(),11,"AliAnalysisMuMuJpsiResult","FitFunctionNA60New");
+ 
+   signalPsiP->SetParameters(fitTotal->GetParameter(16),
+-                            3.68609+(fitTotal->GetParameter(6)-3.096916)/3.096916*3.68609,
++                            fitTotal->GetParameter(6) + (3.68609 - 3.096916),
+                             fitTotal->GetParameter(7)*paramSPsiP, // /3.096916*3.68609,
+                             fitTotal->GetParameter(8),
+                             fitTotal->GetParameter(9),
+@@ -5269,7 +5269,7 @@ void AliAnalysisMuMuJpsiResult::FitPSIPSIPRIMENA60NEWPOL2EXP()
+   TF1* signalPsiP = new TF1("signalPsiP",this,&AliAnalysisMuMuJpsiResult::FitFunctionNA60New,fHisto->GetXaxis()->GetXmin(),fHisto->GetXaxis()->GetXmax(),11,"AliAnalysisMuMuJpsiResult","SignalNA60New");
+ 
+   signalPsiP->SetParameters(fitTotal->GetParameter(15),
+-                            3.68609+(fitTotal->GetParameter(5)-3.096916)/3.096916*3.68609,
++                            fitTotal->GetParameter(5) + (3.68609-3.096916),
+                             fitTotal->GetParameter(6)*paramSPsiP, // /3.096916*3.68609,
+                             fitTotal->GetParameter(7),
+                             fitTotal->GetParameter(8),
+@@ -8500,10 +8500,31 @@ void AliAnalysisMuMuJpsiResult::SetNofInputParticles(const char* particle, int n
+     npart = r->GetValue(Form("Nof%s",particle));
+     npartErr = r->GetErrorStat(Form("Nof%s",particle));
+ 
++    Double_t b1 = npart;
++    Double_t b1sq = b1*b1;
++    Double_t e1sq = npartErr;
++    
++    Double_t b2 = ninput;
++    Double_t b2sq = b2*b2;
++    Double_t e2sq = ninputErr;
++
++    Double_t value;
++    Double_t error;
++    
++    if ( b2 <= 0.0 ) return;
++    
++    value = b1/b2;
++    
++    //fully correlated bayasian
++    if (b1 != b2) {
++    error = TMath::Sqrt( TMath::Abs( ( (1. - 2.* b1 / b2) * e1sq  + b1sq * e2sq / b2sq ) / b2sq ) );
++    } 
++    else error = 0;
++
+     r->Set(Form("AccEff%s",particle),
+-           npart/ninput,
+-           (npart/ninput)*ErrorAB(npart,npartErr,ninput,ninputErr));
+-    printf("AccEff : %f \n", npart/ninput);
++           value,
++           (value)*error);
++    printf("AccEff : %f +/- %f \n", value,error);
+ 
+   }
+ }
+-- 
+2.7.4 (Apple Git-66)
+

@@ -1,0 +1,76 @@
+From a4f705b91139b6033ef95d7345fbcd3c31504d12 Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Fri, 27 May 2016 10:02:57 +0200
+Subject: [PATCH 05/36] changing binning for Trigger Efficiency purpose
+
+---
+ PWG/muon/AliAnalysisMuMuSingle.cxx | 26 +++++++++++++-------------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
+
+diff --git a/PWG/muon/AliAnalysisMuMuSingle.cxx b/PWG/muon/AliAnalysisMuMuSingle.cxx
+index d887281..7c6ba20 100644
+--- a/PWG/muon/AliAnalysisMuMuSingle.cxx
++++ b/PWG/muon/AliAnalysisMuMuSingle.cxx
+@@ -183,23 +183,23 @@ void AliAnalysisMuMuSingle::DefineHistogramCollection(const char* eventSelection
+   // dummy histogram to signal that we already defined all our histograms (see above)
+   CreateEventHistos(dt,eventSelection,triggerClassName,centrality,"AliAnalysisMuMuSingle","Dummy semaphore",1,0,1);
+   
+-  Double_t ptMin = 0;
+-  Double_t ptMax = 12*3;
+-  Int_t nbinsPt = GetNbins(ptMin,ptMax,0.5);
+-  Double_t pMin = 0;
+-  Double_t pMax = 100*3;
+-  Int_t nbinsP = GetNbins(pMin,pMax,2.0);
++  Double_t ptMin  = 0;
++  Double_t ptMax  = 12*3;
++  Int_t nbinsPt   = GetNbins(ptMin,ptMax,0.05);
++  Double_t pMin   = 0;
++  Double_t pMax   = 100*3;
++  Int_t nbinsP    = GetNbins(pMin,pMax,2.0);
+   Double_t etaMin = -5;
+   Double_t etaMax = -2;
+-  Int_t nbinsEta = GetNbins(etaMin,etaMax,0.05);
++  Int_t nbinsEta  = GetNbins(etaMin,etaMax,0.05);
+   
+   Double_t rapidityMin = -5;
+   Double_t rapidityMax = -2;
+-  Int_t nbinsRapidity = GetNbins(rapidityMin,rapidityMax,0.05);
++  Int_t nbinsRapidity  = GetNbins(rapidityMin,rapidityMax,0.05);
+   
+   Double_t phiMin = -TMath::Pi();
+   Double_t phiMax = TMath::Pi();
+-  Int_t nbinsPhi = GetNbins(phiMin,phiMax,0.05);
++  Int_t nbinsPhi  = GetNbins(phiMin,phiMax,0.05);
+   
+   CreateTrackHisto(eventSelection,triggerClassName,centrality,"Chi2MatchTrigger","Chi2 Match Trigger",72,0,72);
+   
+@@ -216,13 +216,13 @@ void AliAnalysisMuMuSingle::DefineHistogramCollection(const char* eventSelection
+   
+   Double_t chi2min = 0;
+   Double_t chi2max = 20;
+-  Int_t nbinchi2 = GetNbins(chi2min,chi2max,0.05);
++  Int_t nbinchi2   = GetNbins(chi2min,chi2max,0.05);
+   
+   CreateTrackHisto(eventSelection, triggerClassName, centrality, "Chi2Mu", "chisquare per NDF #mu", nbinchi2, chi2min, chi2max,-1, 0.0, 0.0, fShouldSeparatePlusAndMinus);
+   
+   Double_t xmin = 0;
+   Double_t xmax = 150;
+-  Int_t nbins = GetNbins(xmin,xmax,2.0);
++  Int_t nbins   = GetNbins(xmin,xmax,2.0);
+   
+   CreateTrackHisto(eventSelection,triggerClassName,centrality,"dcaP23Mu","#mu DCA vs P for 2-3 degrees;P (GeV);DCA (cm)",nbinsP,pMin,pMax,nbins,xmin,xmax,fShouldSeparatePlusAndMinus);
+   
+@@ -232,8 +232,8 @@ void AliAnalysisMuMuSingle::DefineHistogramCollection(const char* eventSelection
+   
+   CreateTrackHisto(eventSelection,triggerClassName,centrality,"dcaPwPtCut310Mu","#mu DCA vs P for 3-10 degrees with Pt Cut;P (GeV);DCA (cm)",nbinsP,pMin,pMax,nbins,xmin,xmax,fShouldSeparatePlusAndMinus);
+   
+-  xmin = 0;
+-  xmax = 3564;
++  xmin  = 0;
++  xmax  = 3564;
+   nbins = GetNbins(xmin,xmax,1.0);
+   
+   CreateTrackHisto(eventSelection,triggerClassName,centrality,"BCX","bunch-crossing ids",nbins,xmin-0.5,xmax-0.5);
+-- 
+2.7.4 (Apple Git-66)
+

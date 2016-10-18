@@ -1,0 +1,443 @@
+From 4d5028f54219c05268350f1a655e9f3441d75918 Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Fri, 17 Jun 2016 11:22:28 +0200
+Subject: [PATCH 25/36] update plot styles for PP Cross section
+
+---
+ PWG/muondep/AliAnalysisMuMu.cxx                 | 256 ++++++++++--------------
+ PWG/muondep/AliAnalysisMuMu.h                   |  34 +---
+ PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx |   8 +-
+ 3 files changed, 109 insertions(+), 189 deletions(-)
+
+diff --git a/PWG/muondep/AliAnalysisMuMu.cxx b/PWG/muondep/AliAnalysisMuMu.cxx
+index fa87bb5..2326d67 100644
+--- a/PWG/muondep/AliAnalysisMuMu.cxx
++++ b/PWG/muondep/AliAnalysisMuMu.cxx
+@@ -1684,8 +1684,6 @@ AliAnalysisMuMu::FitParticle(const char* particle,
+         sFitType += ":binNormJPsi=3.15:binNormPsiP=3.67:sigmaJPsi:0.085";
+       }
+ 
+-      
+-
+       // Conf. for MC Tails (see function type)
+       if ( sFitType.Contains("mctails",TString::kIgnoreCase) ) //FIXME: Find a univoque way to determine the correctly the fit type
+       {
+@@ -2985,61 +2983,6 @@ void AliAnalysisMuMu::ComputeRelativeValueAndSESystematics(const char* quantity,
+ 
+ 
+ //_____________________________________________________________________________
+-TH1* AliAnalysisMuMu::PlotJpsiYield(const char* whatever)
+-{
+-
+-    /// Plot the Jpsi Yield
+-    /// FIXME : not general
+-    if ( IsSimulation() ){
+-      AliError("Cannot compute J/Psi yield: Is a simulation file");
+-      return 0x0;
+-    }
+-
+-    TString path(Form("/%s/%s/%s/%s",
+-                      Config()->First(Config()->EventSelectionKey(),kFALSE).Data(),
+-                      Config()->First(Config()->DimuonTriggerKey(),kFALSE).Data(),
+-                      Config()->First(Config()->CentralitySelectionKey(),kFALSE).Data(),
+-                      Config()->First(Config()->PairSelectionKey(),kFALSE).Data()));
+-
+-    AliAnalysisMuMuSpectra* s = static_cast<AliAnalysisMuMuSpectra*>(OC()->GetObject(Form("%s/PSI-%s",path.Data(),whatever)));
+-    if ( !s )
+-        {
+-        AliError(Form("No spectra %s found in %s",whatever,path.Data()));
+-        return 0x0;
+-        }
+-
+-    std::cout << "Number of J/Psi:" << std::endl;
+-    TH1* hry = s->Plot("NofJPsi","PSIPSIPRIMECB2VWGINDEPTAILS",kFALSE); //Number of Jpsi
+-    std::cout << "" << std::endl;
+-
+-    std::cout << "Equivalent number of MB events:" << std::endl;
+-    TH1* hN = ComputeEquNofMB();
+-    std::cout << "" << std::endl;
+-
+-    TH1* hy = static_cast<TH1*>(hry->Clone("CorrJPsiYields"));
+-    Double_t bR = 0.0593; // BR(JPsi->mu+mu-)
+-    Double_t bRerror = 0.0006 ;
+-
+-    for (Int_t i = 1 ; i <= hy->GetNbinsX() ; i++){
+-      Double_t yield = hry->GetBinContent(i)/(hN->GetBinContent(i)*bR);
+-      Double_t yieldError = TMath::Sqrt(TMath::Power(hry->GetBinError(i)/(hN->GetBinContent(i)*bR),2.) +
+-                                        TMath::Power(hN->GetBinError(i)*bR/TMath::Power(hN->GetBinContent(i)*bR,2.),2.) +
+-                                        TMath::Power(hry->GetBinContent(i)*hN->GetBinContent(i)*bRerror/TMath::Power(hN->GetBinContent(i)*bR,2.),2.));
+-
+-      std::cout << yield << " +- " << yieldError << std::endl;
+-
+-      hy->SetBinContent(i,yield);
+-      hy->SetBinError(i,yieldError);
+-    }
+-
+-    delete hry;
+-    delete hN;
+-
+-    return hy;
+-}
+-
+-
+-//_____________________________________________________________________________
+ UInt_t AliAnalysisMuMu::GetSum(AliCounterCollection& cc, const char* triggerList,
+                                const char* eventSelection, Int_t runNumber)
+ {
+@@ -3824,35 +3767,6 @@ TFile* AliAnalysisMuMu::ReOpen(const char* filename, const char* mode) const
+   return f;
+ }
+ 
+-////_____________________________________________________________________________
+-//void AliAnalysisMuMu::SetCentralitySelectionList(const char* centralitySelectionList)
+-//{
+-//  /// Set centralities to be used during fitting
+-//  /// centralitySelectionList is a regular expression.
+-//
+-//  TObjArray* centralities = BIN()->CreateBinObjArray("centrality");
+-//  TIter next(centralities);
+-//  AliAnalysisMuMuBinning::Range* r;
+-//
+-//  TString csl;
+-//
+-//  TPRegexp re(centralitySelectionList);
+-//
+-//  while ( ( r = static_cast<AliAnalysisMuMuBinning::Range*>(next()) ) )
+-//  {
+-//    AliDebug(1,Form("r=%s",r->AsString().Data()));
+-//    if ( re.MatchB(r->AsString()) )
+-//    {
+-//      csl += r->AsString();
+-//      csl += ",";
+-//    }
+-//  }
+-//
+-//  Config()->SetList(AliAnalysisMuMuConfig::kCentralitySelectionList,IsSimulation(),csl);
+-//
+-//  delete centralities;
+-//}
+-
+ //_____________________________________________________________________________
+ Bool_t AliAnalysisMuMu::SetCorrectionPerRun(const TGraph& corr, const char* formula)
+ {
+@@ -4627,20 +4541,13 @@ void AliAnalysisMuMu::ComputePPCrossSection(const char* binType, const char* par
+                         graph = static_cast<TGraphErrors*>(list->At(0)->Clone());
+                         graphErr = static_cast<TGraphErrors*>(list->At(1)->Clone());
+ 
+-                        graphErr->SetFillColor(2);
+-                        graphErr->SetFillStyle(3001);
+-                        graphErr->SetTitle(Form("J/#psi cross section"));
+-                        if(sbinType->String().Contains("PT")) graphErr->GetYaxis()->SetTitle(Form("d^{2}#sigma/dp_{T}dy (#muB x (GeV/c)^{-1})"));
+-                        if(sbinType->String().Contains("Y")) graphErr->GetYaxis()->SetTitle(Form("d^{2}#sigma/dy(#muB)"));
+-                        graphErr->GetXaxis()->SetTitle(Form("%s",sbinType->String().Data()));
+-                        graphErr->SetMarkerSize(1.7);
+ 
+-                        // TF1* fit=0x0;
+-                        // TFitResultPtr Fitpoint=0x0;
++                        TF1* fit=0x0;
++                        TFitResultPtr Fitpoint=0x0;
+ 
+                         // if(sbinType->String().Contains("PT")){
+-                        //     fit = new TF1("fit","[0]*x*(1/pow((1+pow(x/[1], [2])) ,[3]))",0,12);
+-                        //     fit->SetParameters(2424.41, 4.74409,1.70488, 4.42257);
++                        //     fit = new TF1("fit","[0]*x/TMath::Power([1] + TMath::Power(x,[2]),[3])",0,12);
++                        //     fit->SetParameters(5.42*4654.3/1.5,12.8133,1.9647,3.66641);
+                         // }
+ 
+                         // if(sbinType->String().Contains("Y")){
+@@ -4648,25 +4555,69 @@ void AliAnalysisMuMu::ComputePPCrossSection(const char* binType, const char* par
+                         //     fit->SetParameters(2.8,0.00,2.9271);
+                         //     fit->FixParameter(1,0.00);
+                         // }
+-                        new TCanvas;
+-                        if(sbinType->String().Contains("PT")) gPad->SetLogy();
++                        LoadStyles();
++
++                        graph->SetMarkerColor(2);
++                        graph->SetMarkerStyle(8);
++                        graph->SetLineColor(2);
++                        graph->SetLineWidth(2);
++                        graph->SetMarkerSize(1.5);
++
++                        graphErr->SetMarkerColor(2);
++                        graphErr->SetFillColor(0);
++                        graphErr->SetLineColor(2);
++                        graphErr->SetLineWidth(2);
++                        // graphErr->SetFillStyle(3001);
++                        graphErr->SetTitle(Form("J/#psi cross section"));
++                        
++                        if(sbinType->String().Contains("PT")){ 
++                          graphErr->GetXaxis()->SetTitle(Form("#it{p}_{T}(GeV/c)")); 
++                          graphErr->GetYaxis()->SetTitle(Form("d^{2}#sigma/d#it{p}_{T}d#it{y} (#mub(GeV/c)^{-1})")); 
++                          graphErr->GetYaxis()->SetTitleSize(0.06); 
++                          graphErr->GetYaxis()->SetRangeUser(10e-4,2); 
++                        }
++                        if(sbinType->String().Contains("Y")){
++                          graphErr->GetXaxis()->SetTitle(Form(" #it{y}")); 
++                          graphErr->GetXaxis()->SetRangeUser(2.49,4.01);  
++                          graphErr->GetYaxis()->SetTitle(Form("d^{2}#sigma/d#it{y}(#muB)"));
++                          graphErr->GetYaxis()->SetTitleSize(0.06); 
++                        } 
++                        
++                        graphErr->SetMarkerSize(1.7);
+ 
+-                        TLegend * leg = new TLegend(0.4,0.7,0.70,0.9);
+-                        leg->SetHeader(Form("ALICE, p-p #sqrt{s_{NN}}=5.02 TeV, L_{int}= 109.07 +/- 0.09 #mub^{-1})"));
+-                        if(sbinType->String().Contains("PT")) leg->AddEntry(graph,"Inclusive J/#psi cross-section 2.5 < y < 4","pe");
+-                        if(sbinType->String().Contains("Y")) leg->AddEntry(graph,"Inclusive J/#psi cross-section 0 < pT < 12 GeV/c","pe");
++                        TCanvas *c = new TCanvas("c","c",4,132,1024,768);
++                        if(sbinType->String().Contains("PT")) gPad->SetLogy();
++                        c->SetFillColor(0);
++                        c->SetBorderMode(0);
++                        c->SetBorderSize(2);
++                        c->SetLeftMargin(0.15);
++                        c->SetRightMargin(0.03);
++                        c->SetTopMargin(0.03);
++                        c->SetBottomMargin(0.13);
++                        c->SetFrameBorderMode(0);
++
++                        TLegend * leg = 0x0;
++                        if(sbinType->String().Contains("PT")) leg = new TLegend(0.2,0.2,0.50,0.4);
++                        else if(sbinType->String().Contains("Y")) leg = new TLegend(0.2,0.2,0.50,0.4);
++                        else leg = new TLegend(0.4,0.4,0.70,0.6);
++
++                        leg->SetHeader(Form("ALICE, pp #sqrt{#it{s}} = 5.02 TeV, L_{int} = 109 #mub^{-1}"));
++                        if(sbinType->String().Contains("PT")) leg->AddEntry(graph,"Inclusive J/#psi -> #mu+#mu- , 2.5 < #it{y} < 4","pe");
++                        if(sbinType->String().Contains("Y")) leg->AddEntry(graph,"Inclusive J/#psi -> #mu+#mu- , 0 < #it{p}_{T} < 12 GeV/c","pe");
+                         leg->AddEntry(graphErr,"systematic uncertainty ","f");
+-                        if(sbinType->String().Contains("PT") || sbinType->String().Contains("Y"))leg->AddEntry((TObject*)0,"global uncert. : 3.04 %","");
++                        if(sbinType->String().Contains("PT") || sbinType->String().Contains("Y"))leg->AddEntry((TObject*)0,"global uncert. : 3 %","");
+                         leg->SetTextSize(0.03);
+ 
+-                        graphErr->DrawClone("A2P[]");
++                        graphErr->DrawClone("A5.[]");
+ 
+-                        // if(fit) Fitpoint = graph->Fit("fit","SR");
++                        if(fit) Fitpoint = graph->Fit("fit","WLR");
+                         // if(sbinType->String().Contains("PT") && static_cast<int>(Fitpoint)==0) printf("cross section = %f +/- %f \n",fit->Integral(0.,8.),fit->IntegralError(0.,8.));
+                         // if(sbinType->String().Contains("Y")  && static_cast<int>(Fitpoint)==0)  printf("cross section = %f +/- %f \n",fit->Integral(-4.,-2.5),fit->IntegralError(-4.,-2.5));
+ 
+                         graph->DrawClone("Psame");
+                         leg->DrawClone("same");
++                        gPad->RedrawAxis();
++
+ 
+                     }
+                 }
+@@ -4677,7 +4628,6 @@ void AliAnalysisMuMu::ComputePPCrossSection(const char* binType, const char* par
+     return;
+ }
+ 
+-
+ //_____________________________________________________________________________
+ TH2* AliAnalysisMuMu::ComputeSPDCorrection(const char* type, const char* eventSel, const char* triggerSel, Bool_t bkgReject)
+ {
+@@ -5765,53 +5715,6 @@ Double_t AliAnalysisMuMu::ErrorPropagationAxBoverCxD(Double_t a,Double_t b,Doubl
+     return TMath::Sqrt(error2);
+ }
+ 
+-// //_____________________________________________________________________________
+-// TH1* AliAnalysisMuMu::ComputeEquNofMB(const char* what,const char* quantity,const char* flavour,Bool_t printout)
+-// {
+-//   //Compute Equivalent Numbre of MB bin by bin
+-//
+-//   // Get binning
+-//   AliAnalysisMuMuBinning* binning = BIN()->Project(what,quantity,flavour);
+-//
+-//   // Copy binning array
+-//   TObjArray* dNchdEtas = binning->CreateBinObjArray();
+-//   Double_t* binArray = binning->CreateBinArray();
+-//
+-//   TIter next(dNchdEtas);
+-//   AliAnalysisMuMuBinning::Range* r;
+-//
+-//   TH1* hFNorm = ComputeDiffFnormFromHistos(what,quantity,flavour,kFALSE);
+-//
+-//   TH1* hNMB = new TH1F("hNofEqMB","Equivalent number of MB triggers vs dN_{ch}/d#eta;dN_{ch}/d#eta;FNorm",dNchdEtas->GetEntries(),binArray);
+-//
+-//   Int_t bin(0);
+-//   while ( ( r = static_cast<AliAnalysisMuMuBinning::Range*>(next()) ) )
+-//   {
+-//
+-//     TH1* hCMUL = OC()->Histo(Form("/PSALLHASSPDSPDZQA_RES0.25_ZDIF0.50SPDABSZLT10.00/CMUL7-B-NOPF-MUON/V0A/%s",
+-//                                   Form("EventsIn%s",r->AsString().Data())));
+-//     if ( !hCMUL )
+-//     {
+-//       AliError(Form("No event histo in bin %s found for CMUL7-B-NOPF-MUON",r->AsString().Data()));
+-//       return 0x0;
+-//     }
+-//
+-//     Double_t NMB = hCMUL->GetBinContent(1)*hFNorm->GetBinContent(++bin);
+-//     Double_t NMBError = TMath::Sqrt(TMath::Power(hCMUL->GetBinContent(1)*hFNorm->GetBinError(bin),2.) + TMath::Power(TMath::Sqrt(hCMUL->GetBinContent(1))*hFNorm->GetBinContent(bin),2));
+-//
+-//     if ( printout ) std::cout << r->AsString().Data() << " : " << NMB << " +- " << NMBError << std::endl;
+-//
+-//     hNMB->SetBinContent(bin,NMB);
+-//     hNMB->SetBinError(bin,NMBError);
+-//   }
+-//
+-//   delete dNchdEtas;
+-//   delete[] binArray;
+-//
+-//   return hNMB;
+-// }
+-
+-
+ //_____________________________________________________________________________
+ AliAnalysisMuMuSpectra* AliAnalysisMuMu::CorrectSpectra(const char* type, const char* flavour,const char* accEffSubResultName)
+ {
+@@ -6129,3 +6032,48 @@ void AliAnalysisMuMu::GetFileNameAndDirectory(const char* filename)
+     fDirectory = fDirectory(colon+1,strlen(filename)-colon);
+   }
+ }
++
++void  AliAnalysisMuMu::LoadStyles(){
++  int font = 42;
++  gROOT->SetStyle("Plain");
++  gStyle->SetFrameBorderMode(0);
++  gStyle->SetFrameFillColor(0);
++  gStyle->SetCanvasBorderMode(0);
++  gStyle->SetPadBorderMode(0);
++  gStyle->SetPadColor(10);
++  gStyle->SetCanvasColor(10);
++  gStyle->SetTitleFillColor(10);
++  gStyle->SetTitleBorderSize(1);
++  gStyle->SetStatColor(10);
++  gStyle->SetStatBorderSize(1);
++  gStyle->SetLegendBorderSize(1);
++  gStyle->SetDrawBorder(0);
++  gStyle->SetTextFont(font);
++  gStyle->SetStatFont(font);
++  gStyle->SetStatFontSize(0.05);
++  gStyle->SetStatX(0.97);
++  gStyle->SetStatY(0.98);
++  gStyle->SetStatH(0.03);
++  gStyle->SetStatW(0.3);
++  gStyle->SetTickLength(0.02,"y");
++  gStyle->SetEndErrorSize(3);
++  gStyle->SetLabelSize(0.05,"xyz");
++  gStyle->SetLabelFont(font,"xyz"); 
++  gStyle->SetLabelOffset(0.01,"xyz");
++  gStyle->SetTitleFont(font,"xyz");  
++  gStyle->SetTitleOffset(1.1,"xy");  
++  gStyle->SetTitleSize(0.05,"xyz");  
++  gStyle->SetMarkerSize(1.3); 
++  gStyle->SetPalette(1,0); 
++  gROOT->ForceStyle();
++  gStyle->SetOptStat(0);
++  gStyle->SetOptTitle(0);
++  gStyle->SetLineWidth(2);
++  gStyle->SetLegendFont(42);
++  gStyle->SetLegendBorderSize(0);
++  gStyle->SetLegendFillColor(10);
++  gStyle->SetPadTickY(1);
++  gStyle->SetPadTickX(1);
++  gStyle->SetEndErrorSize(0);
++    
++}
+diff --git a/PWG/muondep/AliAnalysisMuMu.h b/PWG/muondep/AliAnalysisMuMu.h
+index 0edaeeb..ab2c16f 100644
+--- a/PWG/muondep/AliAnalysisMuMu.h
++++ b/PWG/muondep/AliAnalysisMuMu.h
+@@ -125,22 +125,6 @@ public:
+ 
+     void ComputeNumberOfEvent();
+ 
+-    void ComputeDiffFnormFromCounters(
+-      const char      * filePileUpCorr="", 
+-      const char      * what ="psi",
+-      const char      * quantity="pt", 
+-      const char      * flavour="BENJ", 
+-      Bool_t printout =kTRUE);
+-
+-    void ComputeDiffFnormFromGlobal(
+-      const char* what="psi",
+-      const char* quantity="ntrcorr",
+-      const char* flavour="D2H",
+-      const char* triggerCluster="MUON",
+-      const char* eventSelectionFnorm="PSALL",
+-      const char* eventSelectionYield="PSALLHASSPDSPDZQA_RES0.25_ZDIF0.50SPDABSZLT10.00", 
+-      Bool_t printout=kTRUE);
+-
+     void ComputeMeanFnorm(
+       const char* triggerCluster="MUON", 
+       const char* eventSelection="PSALL", 
+@@ -194,12 +178,6 @@ public:
+       const char* quantity="ntrcorr", 
+       const char* flavour="D2H");
+ 
+-    TH1* ComputeEquNofMB(
+-      const char* what="psi",
+-      const char* quantity="dnchdeta",
+-      const char* flavour="JAVI",
+-      Bool_t printout=kFALSE);
+-
+     Double_t ErrorPropagationAxBoverCxD(Double_t a,Double_t b,Double_t c,Double_t d);
+ 
+     void TwikiOutputFnorm(const char* series="FnormOffline2PUPS,FnormScalersPUPS,FnormBest2,RelDifFnormScalersPUPSvsFnormOffline2PUPS,FnormScalersPUVDM,RelDifFnormScalersPUPSvsFnormScalersPUVDM") const;
+@@ -210,8 +188,6 @@ public:
+ 
+     void CleanFNorm();
+ 
+-    ///------
+-    ///
+     void RAAasGraphic(
+       const char        * particle="PSI",
+       const char        * binType="PT",
+@@ -233,14 +209,8 @@ public:
+       const char        * binType="PT",
+       Bool_t AccEffCorr =kFALSE) const;
+ 
+-    //  static AliAnalysisMuMuSpectra* ComputeYield(const char* realFile="ds.list.saf.root",
+-    //                                              const char* simFile="ds.sim.list.saf.root",
+-    //                                              const  char* type="PSI-Y VS PT");
+-
+     AliAnalysisMuMuSpectra* RABy(const char* type="", const char* direction="pPb");
+ 
+-    ///-------
+-
+     TGraph* PlotEventSelectionEvolution(
+     const char         * trigger1="CINT7-B-NOPF-MUON", 
+     const char         * event1="PSALL",
+@@ -288,8 +258,6 @@ public:
+ 
+     TH1* PlotAccEfficiency(const char* whatever="PSI-INTEGRATED");
+ 
+-    TH1* PlotJpsiYield(const char* whatever="PSI-DNCHDETA-AccEffCorr");
+-
+     UInt_t GetSum(
+       AliCounterCollection& cc, 
+       const char* triggerList, 
+@@ -380,6 +348,8 @@ private:
+                                      AliAnalysisMuMuBinning*& bin);
+     
+     void GetFileNameAndDirectory(const char* filename);
++
++    void LoadStyles();
+     
+ private:
+ 
+diff --git a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx
+index f213a91..1cd1b18 100644
+--- a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx
++++ b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx
+@@ -230,11 +230,13 @@ TList* AliAnalysisMuMuSpectraCapsulePP::ComputePPCrossSection(const char* what)
+           100*TMath::Sqrt(CorrErrorFull2));
+ 
+         // Fill graphs
+-        gCrossSection->SetPoint(j,x,sigma/deltaY);
++        if(sbin.Contains("Y"))gCrossSection->SetPoint(j,-x,sigma/deltaY);
++        else gCrossSection->SetPoint(j,-x,sigma/deltaY);
+         gCrossSection->SetPointError(j,bin->WidthX()/2,sigmaerrorstat/deltaY);
+ 
+-        gSys->SetPoint(j,x,sigma/deltaY);
+-        gSys->SetPointError(j,bin->WidthX()/2,sigma*TMath::Sqrt(UncError2)/deltaY);
++        if(sbin.Contains("Y"))gSys->SetPoint(j,-x,sigma/deltaY);
++        else gSys->SetPoint(j,x,sigma/deltaY);
++        gSys->SetPointError(j,bin->WidthX()/4,sigma*TMath::Sqrt(UncError2)/deltaY);
+         
+ 
+         j++;
+-- 
+2.7.4 (Apple Git-66)
+

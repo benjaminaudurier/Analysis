@@ -1,0 +1,263 @@
+From 3a88fb02873d30a37cc102112b3f398021d928f9 Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Fri, 27 May 2016 10:05:16 +0200
+Subject: [PATCH 07/36] cleaning + adding comment
+
+---
+ PWG/muondep/AliAnalysisMuMuFnorm.cxx | 195 ++++++++++++++++++++++++++++++-----
+ 1 file changed, 167 insertions(+), 28 deletions(-)
+
+diff --git a/PWG/muondep/AliAnalysisMuMuFnorm.cxx b/PWG/muondep/AliAnalysisMuMuFnorm.cxx
+index 09eeb32..a655e30 100644
+--- a/PWG/muondep/AliAnalysisMuMuFnorm.cxx
++++ b/PWG/muondep/AliAnalysisMuMuFnorm.cxx
+@@ -251,49 +251,189 @@ void AliAnalysisMuMuFnorm::ComputeCorrectionFactors(Int_t eventSelectionCorrecte
+   CreateAndAddGraph(graphName,title,vx,vxerr,vyGlobal,vyGlobalErr);
+ }
+ 
++
++// //_____________________________________________________________________________
++// void AliAnalysisMuMuFnorm::ComputeLuminosity(Int_t nstep, Bool_t pileUpCorrected, Int_t eventSelectionCorrected)
++// {
++//   /// Compute the run by run REF cross-section as sigma(ref) = sigma_(vdm)/FNorm and the integrated luminosity
++//   /// This method ment to run originaly for PP system.
++//   /// \argument nsteps : The FNorm reference graph, could be 1 (offline1), 2 (offline1) or 0 (Scaler)
++  
++//   TString centrality(fConfig.First(fConfig.CentralitySelectionKey()));
++
++//   TString name("Luminosity");
++//   TString title(Form("%s Cross-section",GetTriggerTypeName(fReferenceTriggerType).Data()));
++//   TString nameFNorm("Fnorm");
++//   TString nameDirectory;
++
++//   // COnfigure name
++//   if (nstep==1){
++//     name          += "Offline1";
++//     nameFNorm     += "Offline1";
++//     title         += " with pile-up correction";
++//     nameDirectory = "Offline"
++//   }
++//   else if (nstep==2){
++//     name          += "Offline2";
++//     nameFNorm     += "Offline2";
++//     title         += " with pile-up correction";
++//     nameDirectory = "Offline2"
++//   }
++//   else if (nstep==0){
++//     name          += "Scaler";
++//     nameFNorm     += "Scaler";
++//     title         += " with pile-up correction";
++//     nameDirectory = "Scaler"
++//   }
++//   if (pileUpCorrected){
++//     name      += "PU";
++//     nameFNorm += "PU";
++//     title     += " with pile-up correction";
++//   }
++//   if (eventSelectionCorrected==1){
++//     name      += "PS";
++//     nameFNorm += "PS";
++//     title     += " with (ps) purity corrections";
++//   }
++//   if (eventSelectionCorrected==2){
++//     name      += "TS";
++//     nameFNorm += "TS";
++//     title     += " with (ts) purity corrections";
++//   }
++  
++//   if (GetGraph(Form("Luminosity/%s",name.Data())))return;
++  
++//   AliDebug(2,name);
++  
++//   // Get the FNorm Graph
++//   TGraphErrors* gFnorm = 0x0;
++//   gFnorm = GetGraph(Form("%s",nameFNorm.Data());
++
++//   if(!gFnorm) {
++//    printf("cannot get  the FNorm histo %s\n",nameFNorm.Data());
++//    return;
++//   }
++
++
++//   const std::set<int>& runs = RunNumbers();
++  
++//   std::vector<double> vx;
++//   std::vector<double> vxerr;
++//   std::vector<double> vy;
++//   std::vector<double> vyerr;
++  
++//   Double_t purityREF(1.0);
++//   Double_t purityMB(1.0);
++//   Double_t purityREFerror(00);
++//   Double_t purityMBerror(0.0);
++  
++//   // compute the per run values
++//   for ( std::set<int>::const_iterator it = runs.begin(); it != runs.end(); ++it )
++//   {
++//     Int_t runNumber = *it;
++    
++//     TString mbTrigger = GetTriggerClassName(kMB,runNumber);
++// //    TString refTrigger = GetTriggerClassName(fReferenceTriggerType,runNumber);
++    
++//     purityMB=purityREF=1.0;
++//     purityMBerror=purityREFerror=0.0;
++    
++//     if (eventSelectionCorrected>0)
++//     {
++//       ComputePurityFactorForScalerGraph(kMB,eventSelectionCorrected,&centrality);
++//       ComputePurityFactorForScalerGraph(fReferenceTriggerType,eventSelectionCorrected,&centrality);
++      
++//       TGraphErrors* gpsfactorMB  = GetGraph(Form("PurityFactorForScaler%s%s_%s",GetEventSelectionName(eventSelectionCorrected).Data(), GetTriggerTypeName(kMB).Data(),centrality.Data()));
++//       TGraphErrors* gpsfactorREF = GetGraph(Form("PurityFactorForScaler%s%s_%s",GetEventSelectionName(eventSelectionCorrected).Data(), GetTriggerTypeName(fReferenceTriggerType).Data(),centrality.Data()));
++
++//       GetValueAndErrorFromGraph(gpsfactorMB,runNumber,purityMB,purityMBerror);
++//       GetValueAndErrorFromGraph(gpsfactorREF,runNumber,purityREF,purityREFerror);
++//     }
++    
++//     if (purityMB<=0.0)
++//     {
++//       AliError(Form("Got purity=%e for MB for run %9d",purityMB,runNumber));
++//       continue;
++//     }
++    
++//     TGraphErrors* gl0bMB = GetGraph(Form("L0B%s",GetTriggerTypeName(kMB).Data()));
++//     TGraphErrors* gl0bREF = GetGraph(Form("L0B%s",GetTriggerTypeName(fReferenceTriggerType).Data()));
++    
++//     Double_t L0bMB,L0bMBError;
++//     Double_t L0bREF,L0bREFError;
++    
++//     GetValueAndErrorFromGraph(gl0bMB,runNumber,L0bMB,L0bMBError);
++//     GetValueAndErrorFromGraph(gl0bREF,runNumber,L0bREF,L0bREFError);
++    
++//     Double_t pileUpFactor(1.0);
++//     Double_t pileUpFactorError(0.0);
++    
++//     if (pileUpCorrected)
++//     { 
++//       ComputePileUpGraph(kMB,eventSelectionCorrected);
++      
++//       TGraphErrors* gpu = GetGraph((Form("CorrectionPU%s%s",GetEventSelectionName(eventSelectionCorrected).Data(),GetTriggerTypeName(kMB).Data())));
++      
++//       GetValueAndErrorFromGraph(gpu,runNumber,pileUpFactor,pileUpFactorError);
++//     }
++    
++//     Double_t value;
++//     Double_t error;
++    
++//     ScalerFnorm(value,error,
++//                 L0bREF,purityREF,purityREFerror,
++//                 L0bMB,purityMB,purityMBerror,
++//                 pileUpFactor,pileUpFactorError);
++    
++//     if ( value > 0.0 )
++//     {
++//       vx.push_back(1.0*runNumber);
++//       vxerr.push_back(0.5);
++//       vy.push_back(value);
++//       vyerr.push_back(error);
++//     }
++//   }
++  
++//   CreateAndAddGraph(name,title,vx,vxerr,vy,vyerr);
++// }
++
+ //_____________________________________________________________________________
+ void AliAnalysisMuMuFnorm::ComputeFnormOffline(Int_t nstep, Bool_t pileUpCorrected, Int_t eventSelectionCorrected)
+ {
+   /// Compute MB to REF ratio using offline method, either in 1 or 2 steps
++  /// \argument nstep                  : 1 = one step method ; 2 = two steps method
++  /// \argument pileUpCorrected        : wheither or not we apply the pile-up correction factor
++  /// \argument eventSelectionCorrected: wheither or not we apply the purity facot correction
+   
+   TString name("FnormOffline");
+   TString title("Computed using offline information");
+   TString refInput = Form("0%s",GetTriggerTypeName(fReferenceTriggerType).Data());
+   printf("refInput = %s\n",refInput.Data() );
+   
+-  if (nstep==1)
+-  {
+-    name += "1";
++  // Select graph title
++  if (nstep==1){
++    name  += "1";
+     title += Form(" in one step (CINT/CINT&%s)",refInput.Data());
+   }
+-  else
+-  {
+-    name += "2";
++  else{
++    name  += "2";
+     title += Form(" in two steps (CMSL/CMSL&%s x CINT/CINT&0MSL)",refInput.Data());
+   }
+-  
+-  if (pileUpCorrected)
+-  {
++  if (pileUpCorrected){
+     name += "PU";
+     title += " with pile-up correction";
+   }
+-  if (eventSelectionCorrected==1)
+-  {
++  if (eventSelectionCorrected==1){
+     name += "PS";
+     title += " with (ps) purity corrections";
+   }
+-  else if ( eventSelectionCorrected==2 )
+-  {
++  else if ( eventSelectionCorrected==2 ){
+     name += "TS";
+     title += " with (ts) purity corrections";
+   }
++  // insure we're computing it only once
++  if ( GetGraph(name) )return;
+ 
+-  if ( GetGraph(name) )
+-  {
+-    // insure we're computing it only once
+-    return;
+-  }
+-  
+   AliDebug(2,name);
+   
+   std::vector<double> vx;
+@@ -302,21 +442,20 @@ void AliAnalysisMuMuFnorm::ComputeFnormOffline(Int_t nstep, Bool_t pileUpCorrect
+   std::vector<double> vyerr;
+ 
+   const std::set<int>& runs = RunNumbers();
+-  
++  // Main loop over all the run numbers 
+   for ( std::set<int>::const_iterator it = runs.begin(); it != runs.end(); ++it )
+   {
+     Int_t runNumber = *it;
+-    
+-    TString mbTrigger = GetTriggerClassName(kMB,runNumber);
++    // Get trigger name
++    TString mbTrigger   = GetTriggerClassName(kMB,runNumber);
+     TString muonTrigger = GetTriggerClassName(kMSL,runNumber);
+-//    TString refTrigger = GetTriggerClassName(fReferenceTriggerType,runNumber);
+-    printf("mb trigger : %s\n", mbTrigger.Data() );
+-
+-    if (!mbTrigger.Length())
+-    {
++    if (!mbTrigger.Length()){
+       AliError(Form("Cannot get MB trigger for run %d",runNumber));
+       continue;
+     }
++    AliDebug(1,Form("mb trigger  : %s\n", mbTrigger.Data()));
++    AliDebug(1,Form("muon trigger: %s\n", muonTrigger.Data()));
++
+     
+     Double_t nofMB = GetSum(mbTrigger.Data(),runNumber,eventSelectionCorrected);
+     Double_t nofMSL(0.0);
+@@ -328,7 +467,7 @@ void AliAnalysisMuMuFnorm::ComputeFnormOffline(Int_t nstep, Bool_t pileUpCorrect
+       TString counterName = muonTrigger;
+       if ( fReferenceTriggerType != kMSL ) counterName += Form("&%s",refInput.Data());
+       nofMSLw0REF = GetSum(counterName,runNumber,eventSelectionCorrected);
+-    }
++    } 
+     
+     Double_t nofMBw0REF = GetSum(Form("%s&%s",mbTrigger.Data(),refInput.Data()),runNumber,eventSelectionCorrected);
+     Double_t nofMBw0MSL = GetSum(Form("%s&0MSL",mbTrigger.Data()),runNumber,eventSelectionCorrected);
+-- 
+2.7.4 (Apple Git-66)
+

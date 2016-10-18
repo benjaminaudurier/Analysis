@@ -1,0 +1,26 @@
+From b268cc7e8df2180dcb2ec0e922adf72e99322f95 Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Fri, 27 May 2016 10:11:44 +0200
+Subject: [PATCH 11/36] update on VDM cross-section reference
+
+---
+ PWG/muondep/AliAnalysisTriggerScalers.cxx | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/PWG/muondep/AliAnalysisTriggerScalers.cxx b/PWG/muondep/AliAnalysisTriggerScalers.cxx
+index 5b87931..1c806d0 100644
+--- a/PWG/muondep/AliAnalysisTriggerScalers.cxx
++++ b/PWG/muondep/AliAnalysisTriggerScalers.cxx
+@@ -490,7 +490,8 @@ AliAnalysisTriggerScalers::GetLuminosityTriggerAndCrossSection(Int_t runNumber,
+     
+     if ( period.BeginsWith("LHC15n") ) // pp ref 5.02 TeV
+     {
+-      lumiTriggerCrossSection = 21.0; // FIXME: not from a vdM yet
++      lumiTriggerCrossSection = 20.9; // FIXME: not from a vdM yet
++      lumiTriggerCrossSectionError = 0.04; // FIXME: not from a vdM yet
+       lumiTriggerClassName = "C0TVX-B-NOPF-CENTNOTRD";
+     }
+     
+-- 
+2.7.4 (Apple Git-66)
+

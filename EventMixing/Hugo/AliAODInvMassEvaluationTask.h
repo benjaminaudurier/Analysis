@@ -1,6 +1,3 @@
-#ifndef AliAODInvMassEvaluationTask_h
-#define AliAODInvMassEvaluationTask_h
-
 #include <AliAnalysisTaskSE.h>
 #include <AliAODDimuon.h>
 #include <AliAODTrack.h>
@@ -100,5 +97,3 @@ class AliAODInvMassEvaluationTask : public AliAnalysisTaskSE
   ClassDef(AliAODInvMassEvaluationTask,1)
 
 };
-
-#endif

@@ -42,15 +42,16 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
   AliAnalysisMuMuCutRegistry* cr          = task->CutRegistry(); // Set CutRegistry
 
   // Default cuts on trigger and event level
-  AliAnalysisMuMuCutElement* eventTrue        = cr->AddEventCut(*eventCutter,"IsTrue","const AliVEvent&","");
-  AliAnalysisMuMuCutElement* triggerSelection = cr->AddTriggerClassCut(*eventCutter,"SelectTriggerClass","const TString&,TString&,UInt_t,UInt_t,UInt_t","");
-  AliAnalysisMuMuCutElement* ps               = eventTrue;
-  AliAnalysisMuMuCutElement* ps1              = eventTrue;
+  AliAnalysisMuMuCutElement * eventTrue        = cr->AddEventCut(*eventCutter,"IsTrue","const AliVEvent&","");
+  AliAnalysisMuMuCutElement * triggerSelection = cr->AddTriggerClassCut(*eventCutter,"SelectTriggerClass","const TString&,TString&,UInt_t,UInt_t,UInt_t","");
+  AliAnalysisMuMuCutElement * ps               = eventTrue;
+  AliAnalysisMuMuCutElement * ps1              = eventTrue;
+  AliAnalysisMuMuCutElement * ps2              = eventTrue;
 
-  if (!simulations) 
-  {
-   ps  = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedMSL","const AliInputEventHandler&",""); 
-   ps1 = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedMUL","const AliInputEventHandler&",""); 
+  if (!simulations){
+    ps  = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedMSL","const AliInputEventHandler&","");
+    ps1 = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedMUL","const AliInputEventHandler&","");
+    ps2 = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedMULORMLL","const AliInputEventHandler&","");
   }
 
   // Apply default cut
@@ -80,7 +81,6 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
     AliAnalysisMuMuCutElement* rabs      = cr->AddTrackCut(*singleAnalysis,"IsRabsOK","const AliVParticle&","");
     AliAnalysisMuMuCutElement* matchlow  = cr->AddTrackCut(*singleAnalysis,"IsMatchingTriggerLowPt","const AliVParticle&","");
     AliAnalysisMuMuCutElement* eta       = cr->AddTrackCut(*singleAnalysis,"IsEtaInRange","const AliVParticle&","");
-    AliAnalysisMuMuCutElement* pdca      = cr->AddTrackCut(*singleAnalysis,"IsPDCAOK","const AliVParticle&","");
 
     // Create combination of cuts to apply
     cr->AddCutCombination(trackTrue,rabs,matchlow,eta);
@@ -126,8 +126,8 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
 
       // Disable some histo. Comment the one you want
       minvAnalysis->DisableHistograms("Eta");
-      minvAnalysis->DisableHistograms("Pt");
-      minvAnalysis->DisableHistograms("Y");
+      // minvAnalysis->DisableHistograms("Pt");
+      // minvAnalysis->DisableHistograms("Y");
 
       // Adding the sub analysis
       task->AdoptSubAnalysis(minvAnalysis);

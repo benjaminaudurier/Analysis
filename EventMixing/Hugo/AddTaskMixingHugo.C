@@ -19,7 +19,7 @@ AliAODInvMassEvaluationTask* AddTaskMixingHugo(const char* outputname)
         return NULL;
     }
 
-    // ROOT->LoadMacro( "AliAODInvMassEvaluationTask.cxx++O" );
+    // gROOT->LoadMacro( "AliAODInvMassEvaluationTask.cxx++O" );
 
     // invariant mass evaluation
     AliAODInvMassEvaluationTask *invMassEvaluation = new AliAODInvMassEvaluationTask( "InvMassEvaluation" );
@@ -39,9 +39,10 @@ AliAODInvMassEvaluationTask* AddTaskMixingHugo(const char* outputname)
     AliAnalysisDataContainer *cinput = mgr->GetCommonInputContainer();
 
     AliAnalysisDataContainer *coutput = mgr->CreateContainer( "cList2", TList::Class(), AliAnalysisManager::kOutputContainer, outputname );
-    
-    analysisManager->ConnectInput( invMassEvaluation, 0, cinput );
-    analysisManager->ConnectOutput( invMassEvaluation, 1, coutput );
+
+    mgr->ConnectInput( invMassEvaluation, 0, cinput );
+    mgr->ConnectOutput( invMassEvaluation, 1, coutput );
+    return invMassEvaluation;
 }
 
 

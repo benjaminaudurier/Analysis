@@ -1,0 +1,32 @@
+From 884d4b68c5c8830ccb979f61d8c573ae51f55cc1 Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Fri, 20 May 2016 13:07:06 +0200
+Subject: [PATCH 02/36] Protection on
+ AliAnalysisMuMuSpectraCapsulePP::ComputePPCrossSection()
+
+---
+ PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx
+index 2509fe9..d2f13fd 100644
+--- a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx
++++ b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx
+@@ -160,7 +160,13 @@ TList* AliAnalysisMuMuSpectraCapsulePP::ComputePPCrossSection(const char* what)
+           continue;
+         }
+ 
+-        sigma      = r->GetValue(what)/(lumi*BR*1000.*bin->WidthX());
++        AliDebug(1,Form("%s      = %f +/- %f",what,r->GetValue(what),r->GetErrorStat(what)));
++        AliDebug(1,Form("NofJPsi = %f +/- %f",NofJPsi,NofJPsiError));
++
++        // Select weither or not we divide by bin width
++        if(bin->WidthX() <= 2.0)sigma = r->GetValue(what)/(lumi*BR*1000.*bin->WidthX()); // For pT_0_1,pT_1_2...Y_4_3.75...
++        else                 sigma = r->GetValue(what)/(lumi*BR*1000.);               // For pT_0_8,pT_0_12...Y_4_2.5...
++
+         sigmaerror = sigma*TMath::Sqrt(  
+           r->GetErrorStat("NofJPsi")*r->GetErrorStat("NofJPsi")/r->GetValue("NofJPsi")/r->GetValue("NofJPsi") 
+           //                                    Signal stat.
+-- 
+2.7.4 (Apple Git-66)
+

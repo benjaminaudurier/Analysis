@@ -1,0 +1,228 @@
+From 9433eaffe987d7c5841c2bb074f2fb6773d8420d Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Fri, 20 May 2016 15:34:04 +0200
+Subject: [PATCH 03/36] implementing constants
+
+---
+ PWG/muondep/AliAnalysisMuMu.cxx                   | 34 ++++---------------
+ PWG/muondep/AliAnalysisMuMuJpsiResult.cxx         | 18 +++++-----
+ PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx   | 15 +++++++--
+ PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx | 41 +++++++++--------------
+ 4 files changed, 46 insertions(+), 62 deletions(-)
+
+diff --git a/PWG/muondep/AliAnalysisMuMu.cxx b/PWG/muondep/AliAnalysisMuMu.cxx
+index cc0184e..ac9d206 100644
+--- a/PWG/muondep/AliAnalysisMuMu.cxx
++++ b/PWG/muondep/AliAnalysisMuMu.cxx
+@@ -5858,8 +5858,7 @@ AliAnalysisMuMuSpectra* AliAnalysisMuMu::CorrectSpectra(const char* type, const
+ {
+     /// Correct one spectra
+ 
+-    if (!SIM())
+-    {
++    if (!SIM()){
+       AliError("Cannot compute corrected yield without associated MC file !");
+       return 0x0;
+     }
+@@ -5869,19 +5868,18 @@ AliAnalysisMuMuSpectra* AliAnalysisMuMu::CorrectSpectra(const char* type, const
+     TString DimuonTrigger =Config()->First(Config()->DimuonTriggerKey(),kTRUE);
+     TString PairSelection =Config()->First(Config()->PairSelectionKey(),kTRUE);
+ 
+-    cout << " looking for spectra in : " << Form("%s,%s,%s,%s",Event.Data(),DimuonTrigger.Data(),Centrality.Data(),PairSelection.Data()) << endl;
++    cout << " ----> Correcting Specta " << endl;
++    // cout << " Correcting Specta : " << Form("%s,%s,%s,%s",Event.Data(),DimuonTrigger.Data(),Centrality.Data(),PairSelection.Data()) << endl;
+ 
+     AliAnalysisMuMuSpectra* realSpectra = GetSpectra(type,flavour);
+     AliAnalysisMuMuSpectra* simSpectra = SIM()->GetMCSpectra(type,Event.Data(),DimuonTrigger.Data(),Centrality.Data(),PairSelection.Data(),flavour);
+     
+-    if ( !realSpectra )
+-    {
++    if ( !realSpectra ){
+       AliError("could not get real spectra");
+       return 0x0;
+     }
+ 
+-    if ( !simSpectra)
+-    {
++    if ( !simSpectra){
+       AliError("could not get sim spectra");
+       return 0x0;
+     }
+@@ -5938,29 +5936,13 @@ AliAnalysisMuMuSpectra* AliAnalysisMuMu::ComputeYield(const char* type, const ch
+     Int_t i(0);
+     AliAnalysisMuMuJpsiResult* r;
+ 
+-    while ( ( bin = static_cast<AliAnalysisMuMuBinning::Range*>(nextBin()) ) )
+-    {
+-      r = static_cast<AliAnalysisMuMuJpsiResult*>(realSpectra->BinContentArray()->At(i));
++    while ( ( bin = static_cast<AliAnalysisMuMuBinning::Range*>(nextBin()) ) ){
+ 
++      r = static_cast<AliAnalysisMuMuJpsiResult*>(realSpectra->BinContentArray()->At(i));
+       StdoutToAliDebug(1,std::cout << "bin=";r->Print(););
+ 
+       AliAnalysisMuMuJpsiResult* rsim = static_cast<AliAnalysisMuMuJpsiResult*>(simSpectra->BinContentArray()->At(i));
+ 
+-      // Double_t mbeq = nofCINT7w0MUL / ( nofCINT7 * nofCMUL7);
+-      // Double_t mbeqError = mbeq * AliAnalysisMuMuResult::ErrorABC( nofCINT7w0MUL, TMath::Sqrt(nofCINT7w0MUL),
+-      //                                                             nofCINT7,TMath::Sqrt(nofCINT7),
+-      //                                                             nofCMUL7,TMath::Sqrt(nofCMUL7));
+-
+-      // r->Set("Fnorm",nofCINT7/nofCINT7w0MUL,(nofCINT7/nofCINT7w0MUL)*AliAnalysisMuMuResult::ErrorAB( nofCINT7w0MUL, TMath::Sqrt(nofCINT7w0MUL),
+-      //                                                                                               nofCINT7,TMath::Sqrt(nofCINT7)));
+-
+-      // Double_t yield =  r->GetValue("CorrNofJPsi") * mbeq;
+-
+-      // Double_t yieldError = yield * AliAnalysisMuMuResult::ErrorAB( r->GetValue("CorrNofJPsi"), r->GetErrorStat("CorrNofJPsi"),
+-      //                                                              mbeq,mbeqError);
+-
+-      // r->Set("YJpsi",yield,yieldError);
+-
+       r->Set("NofInputJPsi",rsim->GetValue("NofInputJPsi",accEffSubResultName),rsim->GetErrorStat("NofInputJPsi",accEffSubResultName));
+       r->Set("AccEffJPsi",rsim->GetValue("AccEffJPsi",accEffSubResultName),rsim->GetErrorStat("AccEffJPsi",accEffSubResultName));
+ 
+@@ -5968,9 +5950,7 @@ AliAnalysisMuMuSpectra* AliAnalysisMuMu::ComputeYield(const char* type, const ch
+     }
+ 
+     delete bins;
+-
+     Update();
+-
+     return realSpectra;
+ }
+ 
+diff --git a/PWG/muondep/AliAnalysisMuMuJpsiResult.cxx b/PWG/muondep/AliAnalysisMuMuJpsiResult.cxx
+index c117631..03b58d6 100644
+--- a/PWG/muondep/AliAnalysisMuMuJpsiResult.cxx
++++ b/PWG/muondep/AliAnalysisMuMuJpsiResult.cxx
+@@ -383,10 +383,9 @@ Bool_t AliAnalysisMuMuJpsiResult::Correct(const AliAnalysisMuMuJpsiResult& other
+ {
+   /// Assuming other has an AccxEff entry, correct this value by AccxEff of other
+ 
+-  if ( HasValue(Form("Nof%s",particle)) )
+-  {
+-    if (!other.HasValue(Form("AccEff%s",particle),subResultName))
+-    {
++  if ( HasValue(Form("Nof%s",particle)) ){
++    //Protection
++    if (!other.HasValue(Form("AccEff%s",particle),subResultName)){
+       AliError(Form("Cannot correct as I do not find the AccEff%s value (subResultName=%s)!",particle,subResultName));
+       return kFALSE;
+     }
+@@ -403,12 +402,15 @@ Bool_t AliAnalysisMuMuJpsiResult::Correct(const AliAnalysisMuMuJpsiResult& other
+ 
+     Set(Form("CorrNof%s",particle),value,error*value);
+ 
++
++     AliDebug(1,Form("Nof%s = %f +/- %f",particle,GetValue(Form("Nof%s",particle)),GetErrorStat(Form("Nof%s",particle))));
++     AliDebug(1,Form("AccEff%s = %f +/- %f",particle,other.GetValue(Form("AccEff%s",particle),subResultName),other.GetErrorStat(Form("AccEff%s",particle),subResultName)));
++     AliDebug(1,Form("CorrNof%s = %f +/- %f",particle,value,error));
++
+     return kTRUE;
+   }
+-  else
+-  {
+-    AliError(Form("Result does not have Nof%s : cannot correct it !",particle));
+-  }
++
++  else AliError(Form("Result does not have Nof%s : cannot correct it !",particle));
+   return kFALSE;
+ }
+ 
+diff --git a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx
+index d2f13fd..ddcaeb0 100644
+--- a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx
++++ b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePP.cxx
+@@ -120,6 +120,7 @@ AliAnalysisMuMuSpectraCapsulePP::~AliAnalysisMuMuSpectraCapsulePP()
+ TList* AliAnalysisMuMuSpectraCapsulePP::ComputePPCrossSection(const char* what) const
+ {
+   /// Compute the PP cross section
++  /// Warning : the cross-section is normalized to bin width only if bin width > 2
+ 
+ 
+   AliAnalysisMuMuBinning* binning = fSpectra->Binning();
+@@ -187,8 +188,18 @@ TList* AliAnalysisMuMuSpectraCapsulePP::ComputePPCrossSection(const char* what)
+         Double_t CorrError = lumiSys*lumiSys;
+         //                        lumi (%)  
+         
+-        printf("  -------- cross section for bin %s = %f +/- %f (stat. %f %%) +/- %f (uncorr. %f %%) +/- %f (corr. %f %%)  -------- \n"
+-          ,bin->AsString().Data(),sigma,sigmaerror,100*sigmaerror/sigma,sigma*TMath::Sqrt(UncError),100*TMath::Sqrt(UncError),TMath::Sqrt(CorrError),100*TMath::Sqrt(CorrError));
++        Double_t CorrErrorFullPtY = 
++        r->GetRMS("NofJPsi")/r->GetValue("NofJPsi")*(r->GetRMS("NofJPsi")/r->GetValue("NofJPsi"))//signal  
++        +Traj*Traj //Tracking
++        +Pair*Pair // matching
++        +Trigg*Trigg // trigger
++        +Tails*Tails  // tails
++        +lumiSys*lumiSys; //lumi
++        
++        printf("  -------- cross section for bin %s = %f +/- %f (stat. %f %%) +/- %f (uncorr. %f %%) +/- %f (corr. %f %%)   -------- \n"
++          ,bin->AsString().Data(),sigma,sigmaerror,100*sigmaerror/sigma,sigma*TMath::Sqrt(UncError),100*TMath::Sqrt(UncError),TMath::Sqrt(CorrError),sigma*TMath::Sqrt(CorrError));
++        printf("  --------  if fully integrated dsigma_corr. = %f (corrFull. %f %%)  -------- \n"
++          ,sigma*TMath::Sqrt(CorrErrorFullPtY),100*TMath::Sqrt(CorrErrorFullPtY));
+ 
+         gCrossSection->SetPoint(j,x,sigma);
+         gCrossSection->SetPointError(j,bin->WidthX()/2,sigmaerror);
+diff --git a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx
+index 4b3e3c0..654ba96 100644
+--- a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx
++++ b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx
+@@ -62,26 +62,24 @@ namespace
+   const Double_t Fnorm          = 11.842;    // Normalization
+   const Double_t FnormStat      = 0.00095;     // Normalization
+   const Double_t FnormSyst      = 0.059;     // Normalization
+-  //pp Cross-section integrated in pt,y
+-  // const Double_t sigmaPP         = 5.958055;    // for fully integrated case
+-  // const Double_t dsigmaPP        = 0.125539;    // idem
+-  // const Double_t dsigmaPPCorr    = 0.340055;    // for fully integrated case
+-
+-  //pp Cross-section integrated in pt>0.3,y
+-  const Double_t sigmaPP        = 5.990677;    // for fully integrated case
+-  const Double_t dsigmaPP       = 0.166477;    // idem
+-  const Double_t dsigmaPPCorr   = 0.342589;    // for fully integrated case
++  
++  //pp Cross-section integrated for pp@5TeV 0<pt<8 , -4<y<-2.5
++  // const Double_t sigmaPP         = 5.851362;    // for fully integrated case
++  // const Double_t dsigmaPP        = 0.118919;    // idem
++  // const Double_t dsigmaPPCorr    = 0.350270;    // for fully integrated case
++
++  //pp Cross-section integrated for pp@5TeV 0.3<pT<8 , -4<y<-2.5
++  const Double_t sigmaPP        = 5.823154;    // for fully integrated case
++  const Double_t dsigmaPP       = 0.164146;    // idem
++  const Double_t dsigmaPPCorr   = 0.333051;    // for fully integrated case
++
++  //pp Cross-section integrated for pp@5TeV 0<pT<12 , -4<y<-2.5
++  // const Double_t sigmaPP        = 5.884675;    // for fully integrated case
++  // const Double_t dsigmaPP       = 0.166477;    // idem
++  // const Double_t dsigmaPPCorr   = 0.352264;    // for fully integrated case
+   
+   // Global MC sys. err. for centrality integrated in pt and Y
+   const Double_t MCParamError   = 1.6;//%
+-  // Corr. error for pt case
+-  const Double_t TrajPT         = 4.;//%
+-  const Double_t TriggPT        = 2.;//%
+-  const Double_t PairPt         = 1.;//%
+-  // Corr. error for y case
+-  const Double_t TrajY          = 4.;//%
+-  const Double_t TriggY         = 2.;//%
+-  const Double_t PairY          = 1.;//%
+   
+   // NofMUL correspondind to signal extraction from 2015
+   const Double_t Mul2015        = 126148800;
+@@ -683,14 +681,7 @@ Bool_t AliAnalysisMuMuSpectraCapsulePbPb::ComputeRAA(TString sbin, Double_t numA
+     if(valueArray[10]==0.)numArray[4] = numArray[0]/numArray[3];
+     else numArray[4] = valueArray[10]/numArray[3];
+ 
+-    //Corr
+-    if (fSpectraName.Contains("-PT") ) numArray[6]    = numArray[4] * AliAnalysisMuMuResult::ErrorABCDE(100.,TrajPT,100.,TriggPT,Fnorm,FnormSyst,fConstArray[2],fConstArray[3],valueArray[0],valueArray[2]);
+-    else if (fSpectraName.Contains("-Y")) numArray[6] = numArray[4] * AliAnalysisMuMuResult::ErrorABCDE(100.,TrajY,100.,TriggY,Fnorm,FnormSyst,fConstArray[2],fConstArray[3],valueArray[0],valueArray[2]);
+-    else {
+-      AliError("Unowned bin type... I Told you !");
+-      return kFALSE;
+-    }
+-
++  
+     //Stat error
+     numArray[5] = numArray[4] * AliAnalysisMuMuResult::ErrorAB(numArray[0],numArray[1],Fnorm,FnormStat);
+     //                                                                      signal          FNorm
+-- 
+2.7.4 (Apple Git-66)
+

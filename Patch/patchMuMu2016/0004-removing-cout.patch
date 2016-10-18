@@ -1,0 +1,24 @@
+From ce9c2567c4583232854b4706e64f082ef1b63549 Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Fri, 27 May 2016 10:02:05 +0200
+Subject: [PATCH 04/36] removing cout
+
+---
+ PWG/muon/AliAnalysisMuMuEventCutter.cxx | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/PWG/muon/AliAnalysisMuMuEventCutter.cxx b/PWG/muon/AliAnalysisMuMuEventCutter.cxx
+index ea8e1ea..1e618de 100644
+--- a/PWG/muon/AliAnalysisMuMuEventCutter.cxx
++++ b/PWG/muon/AliAnalysisMuMuEventCutter.cxx
+@@ -214,7 +214,6 @@ Bool_t AliAnalysisMuMuEventCutter::IsPhysicsSelectedVDM(const AliVEvent& event)
+ {
+   // cut used in vdM scans
+ 
+-  printf("here !\n");
+   AliVVZERO* vzero = event.GetVZEROData();
+ 
+   if (vzero)
+-- 
+2.7.4 (Apple Git-66)
+

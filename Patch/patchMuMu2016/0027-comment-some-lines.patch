@@ -1,0 +1,87 @@
+From 4d7014af5d29002ed8b074cbcea14d7b60ba3196 Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Fri, 17 Jun 2016 11:50:04 +0200
+Subject: [PATCH 27/36] comment some lines
+
+---
+ PWG/muon/AliAnalysisMuMuMinv.cxx | 34 +++++++++++++++++-----------------
+ PWG/muon/AliAnalysisMuMuMinv.h   |  4 ++--
+ 2 files changed, 19 insertions(+), 19 deletions(-)
+
+diff --git a/PWG/muon/AliAnalysisMuMuMinv.cxx b/PWG/muon/AliAnalysisMuMuMinv.cxx
+index 83a0aab..0ad6997 100644
+--- a/PWG/muon/AliAnalysisMuMuMinv.cxx
++++ b/PWG/muon/AliAnalysisMuMuMinv.cxx
+@@ -834,7 +834,7 @@ Double_t AliAnalysisMuMuMinv::WeightMuonDistribution(Double_t pt)
+   if (!HasMC() ) return 1.;
+   if (!fWeightMuon) return 1.;
+ 
+-
++  
+   //================ Trigger Efficiency distribution pp@5TeV ==============//
+   //value for input distribution
+   Double_t parptpp5 [8]     = {6.24341e-01,2.68680e-01,6.57929e-01,1.00000e+00,1.00000e+00,1.00000e+00,-1.00000e+00,9.67072e-01}; //Initial dunction
+@@ -1081,28 +1081,28 @@ Double_t AliAnalysisMuMuMinv::WeightPairDistribution(Double_t pt,Double_t rapidi
+   // return weight;
+ }
+ 
+-//________________________________________________________________________
+-Double_t AliAnalysisMuMuMinv::powerLaw3Par(Double_t *x, Double_t *par)
+-{
+-  //3 parameters
+-  Double_t arg = 0;
++// //________________________________________________________________________
++// Double_t AliAnalysisMuMuMinv::powerLaw3Par(Double_t *x, Double_t *par)
++// {
++//   //3 parameters
++//   Double_t arg = 0;
+   
+-  arg = par[0]*x[0] / TMath::Power( 1 + par[1]*x[0]*x[0], par[2]);
++//   arg = par[0]*x[0] / TMath::Power( 1 + par[1]*x[0]*x[0], par[2]);
+   
+-  return arg;
+-}
++//   return arg;
++// }
+ 
+ 
+-//________________________________________________________________________
+-Double_t AliAnalysisMuMuMinv::normPol12Par(Double_t *x, Double_t *par)
+-{
+-  //2 parameters
+-  Double_t arg1 = 0;
++// //________________________________________________________________________
++// Double_t AliAnalysisMuMuMinv::normPol12Par(Double_t *x, Double_t *par)
++// {
++//   //2 parameters
++//   Double_t arg1 = 0;
+   
+-  arg1 = par[0] * ( 1 + par[1]*x[0] );
++//   arg1 = par[0] * ( 1 + par[1]*x[0] );
+   
+-  return arg1;
+-}
++//   return arg1;
++// }
+ 
+ //______________________________________________
+ Double_t AliAnalysisMuMuMinv::TriggerLptApt ( Double_t* xVal, Double_t* par )
+diff --git a/PWG/muon/AliAnalysisMuMuMinv.h b/PWG/muon/AliAnalysisMuMuMinv.h
+index ee49c2a..1db91b2 100644
+--- a/PWG/muon/AliAnalysisMuMuMinv.h
++++ b/PWG/muon/AliAnalysisMuMuMinv.h
+@@ -83,9 +83,9 @@ private:
+   
+   Double_t WeightPairDistribution(Double_t pt,Double_t rapidity);
+ 
+-  Double_t powerLaw3Par(Double_t *x, Double_t *par);
++  // Double_t powerLaw3Par(Double_t *x, Double_t *par);
+ 
+-  Double_t normPol12Par(Double_t *x, Double_t *par);
++  // Double_t normPol12Par(Double_t *x, Double_t *par);
+ 
+   Double_t TriggerLptApt(Double_t *x, Double_t *par);
+ 
+-- 
+2.7.4 (Apple Git-66)
+

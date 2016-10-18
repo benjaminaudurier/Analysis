@@ -1,0 +1,25 @@
+From 2a8f283e634ee9397e899dd62dfe15084c5216e9 Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Tue, 21 Jun 2016 18:20:57 +0200
+Subject: [PATCH 33/36] small fix
+
+---
+ PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx
+index b4c9303..fc00a5f 100644
+--- a/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx
++++ b/PWG/muondep/AliAnalysisMuMuSpectraCapsulePbPb.cxx
+@@ -524,7 +524,7 @@ void AliAnalysisMuMuSpectraCapsulePbPb::DrawResults( const char* particle,const
+       // pt->AddText("ALICE Performance 20/08/2016 ");
+       // pt->AddText("pp #sqrt{#it{s}} = 5.02 TeV, L_{int} = 109 #mub^{-1}");
+       if(BinType.Contains("PT")){
+-        if (n & 1)pt->AddText(Form(" %.0f < #it{p}_{T } < %.0f GeV/#it{c}^{2}",BinRange[n-1],BinRange[n]));
++        if (n & 1)pt->AddText(Form(" %.0f < #it{p}_{T } < %.0f GeV/#it{c}",BinRange[n-1],BinRange[n]));
+         else pt->AddText(Form(" %.0f < #it{p}_{T } < %.0f GeV/#it{c}^{2}",BinRange[n],BinRange[n+1]));
+         pt->AddText(Form("2.5 < #it{y} < 4"));
+       }
+-- 
+2.7.4 (Apple Git-66)
+

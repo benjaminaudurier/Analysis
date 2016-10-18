@@ -1,0 +1,426 @@
+From 96fe6c50da96d128c652b6982c4856f106242c5f Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Fri, 27 May 2016 10:06:06 +0200
+Subject: [PATCH 08/36] cleaning + changing fit option
+
+---
+ PWG/muondep/AliAnalysisMuMuJpsiResult.cxx | 156 +++++++++++++++++-------------
+ 1 file changed, 90 insertions(+), 66 deletions(-)
+
+diff --git a/PWG/muondep/AliAnalysisMuMuJpsiResult.cxx b/PWG/muondep/AliAnalysisMuMuJpsiResult.cxx
+index 03b58d6..36b23cd 100644
+--- a/PWG/muondep/AliAnalysisMuMuJpsiResult.cxx
++++ b/PWG/muondep/AliAnalysisMuMuJpsiResult.cxx
+@@ -1834,8 +1834,8 @@ void AliAnalysisMuMuJpsiResult::FitPSINA60NEW()
+ 
+ //     //  std::cout << fitTotal->GetParameter(0) << " ?= " << fitResult->Parameter(0) << std::endl; //Just a xcheck
+ //     // Output message
+-//     std::cout << "FitResult=" << static_cast<int>(fitResult) << std::endl;
+-//     std::cout << "CovMatrixStatus=" << fitResult->CovMatrixStatus() << std::endl;
++//     std::cout << "FitResult = " << static_cast<int>(fitResult) << std::endl;
++//     std::cout << "CovMatrixStatus = " << fitResult->CovMatrixStatus() << std::endl;
+ 
+ //     //  std::cout << fitTotal->GetParameter(0) << std::endl; //Just a xcheck
+ //     // Refit in case of error on kVWG to high
+@@ -1849,7 +1849,7 @@ void AliAnalysisMuMuJpsiResult::FitPSINA60NEW()
+ //             }
+ 
+ //         fitResult = fHisto->Fit(fitTotal,fitOption,"");
+-//         std::cout << "FitResult=" << static_cast<int>(fitResult) << std::endl;
++//         std::cout << "FitResult = " << static_cast<int>(fitResult) << std::endl;
+ //         }
+ //     // Refit in case of KkVWG to low
+ //     if ( static_cast<int>(fitResult) )
+@@ -1859,7 +1859,7 @@ void AliAnalysisMuMuJpsiResult::FitPSINA60NEW()
+ //         fitTotal->SetParameter(0, fHisto->GetMaximum()*2.); // kVWG
+ 
+ //         fitResult = fHisto->Fit(fitTotal,fitOption,"");
+-//         std::cout << "FitResult=" << static_cast<int>(fitResult) << std::endl;
++//         std::cout << "FitResult = " << static_cast<int>(fitResult) << std::endl;
+ //         }
+ //     // Idem
+ //     if ( static_cast<int>(fitResult) )
+@@ -1869,7 +1869,7 @@ void AliAnalysisMuMuJpsiResult::FitPSINA60NEW()
+ //         fitTotal->SetParameter(0, fHisto->GetMaximum()/2.); // kVWG
+ 
+ //         fitResult = fHisto->Fit(fitTotal,fitOption,"");
+-//         std::cout << "FitResult=" << static_cast<int>(fitResult) << std::endl;
++//         std::cout << "FitResult = " << static_cast<int>(fitResult) << std::endl;
+ //         }
+ //     // Set parameters to fit Total and fit with it
+ //     if ( static_cast<int>(fitResult) )
+@@ -2121,8 +2121,8 @@ void AliAnalysisMuMuJpsiResult::FitPSIPSIPRIMECB2VWG()
+   //_____________First fit attempt
+   TFitResultPtr fitResult = fHisto->Fit(fitTotal,fitOption,"");
+ 
+-  std::cout << "FitResult=" << static_cast<int>(fitResult) << std::endl;
+-  std::cout << "CovMatrixStatus=" << fitResult->CovMatrixStatus() << std::endl;
++  std::cout << "FitResult = " << static_cast<int>(fitResult) << std::endl;
++  std::cout << "CovMatrixStatus = " << fitResult->CovMatrixStatus() << std::endl;
+   //___________
+ 
+ 
+@@ -2356,8 +2356,8 @@ void AliAnalysisMuMuJpsiResult::FitPSIPSIPRIMECB2VWG2()
+   //_____________First fit attempt
+   TFitResultPtr fitResult = fHisto->Fit(fitTotal,fitOption,"");
+ 
+-  std::cout << "FitResult=" << static_cast<int>(fitResult) << std::endl;
+-  std::cout << "CovMatrixStatus=" << fitResult->CovMatrixStatus() << std::endl;
++  std::cout << "FitResult = " << static_cast<int>(fitResult) << std::endl;
++  std::cout << "CovMatrixStatus = " << fitResult->CovMatrixStatus() << std::endl;
+   //___________
+ 
+ 
+@@ -2489,7 +2489,7 @@ void AliAnalysisMuMuJpsiResult::FitPSIPSIPRIMECB2POL1POL2()
+ 
+   fHisto->GetListOfFunctions()->Delete();
+ 
+-  const char* fitOption = "SERLI";
++  const char* fitOption = "SERL";
+   const char* fitOptionBg = "SERI";
+ 
+ 
+@@ -2627,8 +2627,8 @@ void AliAnalysisMuMuJpsiResult::FitPSIPSIPRIMECB2POL1POL2()
+   TFitResultPtr fitResult = fHisto->Fit(fitTotal,fitOption,"");
+   // CheckRoots(fitResult,fitTotal,2,fitTotal->GetParameter(2),fitTotal->GetParameter(3),fitTotal->GetParameter(4),0.,fitOption);
+ 
+-  std::cout << "FitResult=" << static_cast<int>(fitResult) << std::endl;
+-  std::cout << "CovMatrixStatus=" << fitResult->CovMatrixStatus() << std::endl;
++  std::cout << "FitResult = " << static_cast<int>(fitResult) << std::endl;
++  std::cout << "CovMatrixStatus = " << fitResult->CovMatrixStatus() << std::endl;
+   //___________
+ 
+ 
+@@ -2879,8 +2879,8 @@ void AliAnalysisMuMuJpsiResult::FitPSIPSIPRIMECB2POL2POL3()
+ 
+   //_____________Fit attempt
+   TFitResultPtr fitResult = fHisto->Fit(fitTotal,fitOption,"");
+-  std::cout << "FitResult=" << static_cast<int>(fitResult) << std::endl;
+-  std::cout << "CovMatrixStatus=" << fitResult->CovMatrixStatus() << std::endl;
++  std::cout << "FitResult = " << static_cast<int>(fitResult) << std::endl;
++  std::cout << "CovMatrixStatus = " << fitResult->CovMatrixStatus() << std::endl;
+   if ( static_cast<int>(fitResult) ||  static_cast<int>(fitResult->CovMatrixStatus())!=3 ) ProcessMinvFit(fitResult,fitTotal,bckInit,fitOption,14,6); // Further attempts to fit if the first one fails
+   //___________
+ 
+@@ -3101,8 +3101,8 @@ void AliAnalysisMuMuJpsiResult::FitPSIPSIPRIMECB2POL2POL3V2()
+ 
+   //_____________Fit attempt
+   TFitResultPtr fitResult = fHisto->Fit(fitTotal,fitOption,"");
+-  std::cout << "FitResult=" << static_cast<int>(fitResult) << std::endl;
+-  std::cout << "CovMatrixStatus=" << fitResult->CovMatrixStatus() << std::endl;
++  std::cout << "FitResult = " << static_cast<int>(fitResult) << std::endl;
++  std::cout << "CovMatrixStatus = " << fitResult->CovMatrixStatus() << std::endl;
+ 
+ 
+   if ( static_cast<int>(fitResult) /*||  static_cast<int>(fitResult->CovMatrixStatus())!=3*/ ) ProcessMinvFit(fitResult,fitTotal,bckInit,fitOption,13,5); // Further attempts to fit if the first one fails
+@@ -3434,7 +3434,7 @@ void AliAnalysisMuMuJpsiResult::FitPSIPSIPRIMECB2VWGINDEPTAILS()
+ 
+   TFitResultPtr fitResult = fHisto->Fit(fitTotal,fitOption,"");
+ 
+-  std::cout << "FitResult=" << static_cast<int>(fitResult) << std::endl;
++  std::cout << "FitResult = " << static_cast<int>(fitResult) << std::endl;
+ 
+   if ( static_cast<int>(fitResult) )
+   {
+@@ -3454,7 +3454,7 @@ void AliAnalysisMuMuJpsiResult::FitPSIPSIPRIMECB2VWGINDEPTAILS()
+     }
+ 
+     fitResult = fHisto->Fit(fitTotal,fitOption,"");
+-    std::cout << "FitResult=" << static_cast<int>(fitResult) << std::endl;
++    std::cout << "FitResult = " << static_cast<int>(fitResult) << std::endl;
+   }
+ 
+ 
+@@ -3468,7 +3468,7 @@ void AliAnalysisMuMuJpsiResult::FitPSIPSIPRIMECB2VWGINDEPTAILS()
+     }
+ 
+     fitResult = fHisto->Fit(fitTotal,fitOption,"");
+-    std::cout << "FitResult=" << static_cast<int>(fitResult) << std::endl;
++    std::cout << "FitResult = " << static_cast<int>(fitResult) << std::endl;
+   }
+ 
+   if ( static_cast<int>(fitResult) )
+@@ -3478,7 +3478,7 @@ void AliAnalysisMuMuJpsiResult::FitPSIPSIPRIMECB2VWGINDEPTAILS()
+     fitTotal->SetParameter(0, fHisto->GetMaximum()/2.); // kVWG
+ 
+     fitResult = fHisto->Fit(fitTotal,fitOption,"");
+-    std::cout << "FitResult=" << static_cast<int>(fitResult) << std::endl;
++    std::cout << "FitResult = " << static_cast<int>(fitResult) << std::endl;
+   }
+ 
+   if ( static_cast<int>(fitResult) )
+@@ -3701,8 +3701,8 @@ void AliAnalysisMuMuJpsiResult::FitPSIPSIPRIMECB2POL2EXP()
+   //_____________First fit attempt
+   TFitResultPtr fitResult = fHisto->Fit(fitTotal,fitOption,"");
+ 
+-  std::cout << "FitResult=" << static_cast<int>(fitResult) << std::endl;
+-  std::cout << "CovMatrixStatus=" << fitResult->CovMatrixStatus() << std::endl;
++  std::cout << "FitResult = " << static_cast<int>(fitResult) << std::endl;
++  std::cout << "CovMatrixStatus = " << fitResult->CovMatrixStatus() << std::endl;
+   //___________
+ 
+   //___________ Further attempts to fit if the first one fails
+@@ -3957,8 +3957,8 @@ void AliAnalysisMuMuJpsiResult::FitPSIPSIPRIMECB2POL4EXP()
+   //_____________First fit attempt
+   TFitResultPtr fitResult = fHisto->Fit(fitTotal,fitOption,"");
+ 
+-  std::cout << "FitResult=" << static_cast<int>(fitResult) << std::endl;
+-  std::cout << "CovMatrixStatus=" << fitResult->CovMatrixStatus() << std::endl;
++  std::cout << "FitResult = " << static_cast<int>(fitResult) << std::endl;
++  std::cout << "CovMatrixStatus = " << fitResult->CovMatrixStatus() << std::endl;
+   //___________
+ 
+   //___________ Further attempts to fit if the first one fails
+@@ -4091,7 +4091,7 @@ void AliAnalysisMuMuJpsiResult::FitPSIPSIPRIMENA60NEWVWG()
+   /// Fit using 2 NA60(new) (signal) + variable width gaussian (background)
+ 
+   fHisto->GetListOfFunctions()->Delete();
+-  const char* fitOption = "SERLI";
++  const char* fitOption = "SERL";
+   const char* fitOptionBg = "SRL";
+ 
+ 
+@@ -4201,8 +4201,8 @@ void AliAnalysisMuMuJpsiResult::FitPSIPSIPRIMENA60NEWVWG()
+   //_____________First fit attempt
+   TFitResultPtr fitResult = fHisto->Fit(fitTotal,fitOption,"");
+ 
+-  std::cout << "FitResult=" << static_cast<int>(fitResult) << std::endl;
+-  std::cout << "CovMatrixStatus=" << fitResult->CovMatrixStatus() << std::endl;
++  std::cout << "FitResult = " << static_cast<int>(fitResult) << std::endl;
++  std::cout << "CovMatrixStatus = " << fitResult->CovMatrixStatus() << std::endl;
+   //___________
+ 
+   //___________ Further attempts to fit if the first one fails
+@@ -4454,8 +4454,8 @@ void AliAnalysisMuMuJpsiResult::FitPSIPSIPRIMENA60NEWVWG2()
+   //_____________First fit attempt
+   TFitResultPtr fitResult = fHisto->Fit(fitTotal,fitOption,"");
+ 
+-  std::cout << "FitResult=" << static_cast<int>(fitResult) << std::endl;
+-  std::cout << "CovMatrixStatus=" << fitResult->CovMatrixStatus() << std::endl;
++  std::cout << "FitResult = " << static_cast<int>(fitResult) << std::endl;
++  std::cout << "CovMatrixStatus = " << fitResult->CovMatrixStatus() << std::endl;
+   //___________
+ 
+   //___________ Further attempts to fit if the first one fails
+@@ -4602,8 +4602,8 @@ void AliAnalysisMuMuJpsiResult::FitPSIPSIPRIMENA60NEWPOL1POL2()
+ 
+   fHisto->GetListOfFunctions()->Delete();
+ 
+-  const char* fitOption = "SERLI";
+-  const char* fitOptionBg = "SRLI";
++  const char* fitOption = "SERL";
++  const char* fitOptionBg = "SRL";
+ 
+   //__________ Get tails parameters, fitting range and SigmaPsiP
+   Double_t p1Left = GetValue("p1LJPsi");
+@@ -4711,8 +4711,8 @@ void AliAnalysisMuMuJpsiResult::FitPSIPSIPRIMENA60NEWPOL1POL2()
+   //_____________First fit attempt
+   TFitResultPtr fitResult = fHisto->Fit(fitTotal,fitOption,"");
+ 
+-  std::cout << "FitResult=" << static_cast<int>(fitResult) << std::endl;
+-  std::cout << "CovMatrixStatus=" << fitResult->CovMatrixStatus() << std::endl;
++  std::cout << "FitResult = " << static_cast<int>(fitResult) << std::endl;
++  std::cout << "CovMatrixStatus = " << fitResult->CovMatrixStatus() << std::endl;
+   //___________
+ 
+   //___________ Further attempts to fit if the first one fails
+@@ -4974,8 +4974,8 @@ void AliAnalysisMuMuJpsiResult::FitPSIPSIPRIMENA60NEWPOL2POL3()
+ 
+   //_____________First fit attempt
+   TFitResultPtr fitResult = fHisto->Fit(fitTotal,fitOption,"");
+-  std::cout << "FitResult=" << static_cast<int>(fitResult) << std::endl;
+-  std::cout << "CovMatrixStatus=" << fitResult->CovMatrixStatus() << std::endl;
++  std::cout << "FitResult = " << static_cast<int>(fitResult) << std::endl;
++  std::cout << "CovMatrixStatus = " << fitResult->CovMatrixStatus() << std::endl;
+   //___________
+ 
+   //___________ Further attempts to fit if the first one fails
+@@ -5237,8 +5237,8 @@ void AliAnalysisMuMuJpsiResult::FitPSIPSIPRIMENA60NEWPOL2EXP()
+   //_____________First fit attempt
+   TFitResultPtr fitResult = fHisto->Fit(fitTotal,fitOption,"");
+ 
+-  std::cout << "FitResult=" << static_cast<int>(fitResult) << std::endl;
+-  std::cout << "CovMatrixStatus=" << fitResult->CovMatrixStatus() << std::endl;
++  std::cout << "FitResult = " << static_cast<int>(fitResult) << std::endl;
++  std::cout << "CovMatrixStatus = " << fitResult->CovMatrixStatus() << std::endl;
+   //___________
+ 
+   //___________ Further attempts to fit if the first one fails
+@@ -5503,8 +5503,8 @@ void AliAnalysisMuMuJpsiResult::FitPSIPSIPRIMENA60NEWPOL4EXP()
+   //_____________First fit attempt
+   TFitResultPtr fitResult = fHisto->Fit(fitTotal,fitOption,"");
+ 
+-  std::cout << "FitResult=" << static_cast<int>(fitResult) << std::endl;
+-  std::cout << "CovMatrixStatus=" << fitResult->CovMatrixStatus() << std::endl;
++  std::cout << "FitResult = " << static_cast<int>(fitResult) << std::endl;
++  std::cout << "CovMatrixStatus = " << fitResult->CovMatrixStatus() << std::endl;
+   //___________
+ 
+   //___________ Further attempts to fit if the first one fails
+@@ -8110,21 +8110,26 @@ void AliAnalysisMuMuJpsiResult::ProcessMinvFit(TFitResultPtr& fitResult, TF1* fi
+   if ( static_cast<int>(fitResult) || static_cast<int>(fitResult->CovMatrixStatus())!=3 /*|| static_cast<int>(fitResult->CovMatrixStatus())!=2*/)
+   {   
+     if ( (0.5*fitTotal->GetParameter(iParKPsip) <= fitTotal->GetParError(iParKPsip))) { //kPsi'
+-      std::cout << "//------- Setting Psi'norm= Psi' norm*0.8" << std::endl;
++      std::cout << "-----------------------------------------------" << std::endl;
++      std::cout << "------- Setting Psi'norm= Psi' norm*0.8 -------" << std::endl;
++      std::cout << "-----------------------------------------------" << std::endl;
+       bin = fHisto->FindBin(3.68);
+       // fitTotal->SetParLimits(iParKPsip, 0.,fHisto->GetBinContent(bin)*1.5); // we further restrict the range of psi' norm
+       fitTotal->SetParameter(iParKPsip, fHisto->GetBinContent(bin)*0.8);
+     }
+ 
+     if ( 0.5*fitTotal->GetParameter(0) <= fitTotal->GetParError(0) ) {
+-      std::cout << "//------- Setting p0=MAX/2" << std::endl;
+-      fitTotal->SetParameter(0, fHisto->GetMaximum()/2.); // kVWG
++      std::cout << "-----------------------------------------------" << std::endl;
++      std::cout << "-------       Setting p0=MAX/2          -------" << std::endl;
++      std::cout << "-----------------------------------------------" << std::endl;
+     }
+ 
+-    std::cout << "//======== Refitting again =======\\" << std::endl;
++    std::cout << "================================\\" << std::endl;
++    std::cout << "======== Refitting again =======\\" << std::endl;
++    std::cout << "================================\\" << std::endl;
+     fitResult = fHisto->Fit(fitTotal,fitOption,"");
+-    std::cout << "FitResult=" << static_cast<int>(fitResult) << std::endl;
+-    std::cout << "CovMatrixStatus=" << fitResult->CovMatrixStatus() << std::endl;
++    std::cout << "FitResult = " << static_cast<int>(fitResult) << std::endl;
++    std::cout << "CovMatrixStatus = " << fitResult->CovMatrixStatus() << std::endl;
+ 
+     //Check if there are poles somewhere/
+     if(iLastParBkg == 6 )CheckRoots(fitResult,fitTotal,3,fitTotal->GetParameter(3),fitTotal->GetParameter(4),fitTotal->GetParameter(5),fitTotal->GetParameter(6),fitOption);
+@@ -8134,20 +8139,26 @@ void AliAnalysisMuMuJpsiResult::ProcessMinvFit(TFitResultPtr& fitResult, TF1* fi
+   if ( static_cast<int>(fitResult) || static_cast<int>(fitResult->CovMatrixStatus())!=3 /*|| static_cast<int>(fitResult->CovMatrixStatus())!=2*/)
+   { 
+     if ( (0.5*fitTotal->GetParameter(iParKPsip) <= fitTotal->GetParError(iParKPsip))  ){ //kPsi'
+-      std::cout << "//------- Setting Psi'norm= Psi' norm*0.5)" << std::endl;
++      std::cout << "------------------------------------------------" << std::endl;
++      std::cout << "------- Setting Psi'norm= Psi' norm*0.5) -------" << std::endl;
++      std::cout << "------------------------------------------------" << std::endl;
+       bin = fHisto->FindBin(3.68);
+       // fitTotal->SetParLimits(iParKPsip, 0.,fHisto->GetBinContent(bin)*0.9); // we further restrict the range of psi' norm
+       fitTotal->SetParameter(iParKPsip, fHisto->GetBinContent(bin)*0.5);
+     }
+     if ( 0.5*fitTotal->GetParameter(0) <= fitTotal->GetParError(0) ) {
+-      std::cout << "//------- Setting p0=MAX/2)" << std::endl;
++      std::cout << "------------------------------------------------" << std::endl;
++      std::cout << "-------         Setting p0=MAX/2)        -------" << std::endl;
++      std::cout << "------------------------------------------------" << std::endl;
+       fitTotal->SetParameter(0, fHisto->GetMaximum()*2.); // kVWG
+     }
+ 
+-    std::cout << "//======== Refitting again =======\\" << std::endl;
++    std::cout << "================================\\" << std::endl;
++    std::cout << "======== Refitting again =======\\" << std::endl;
++    std::cout << "================================\\" << std::endl;
+     fitResult = fHisto->Fit(fitTotal,fitOption,"");
+-    std::cout << "FitResult=" << static_cast<int>(fitResult) << std::endl;
+-    std::cout << "CovMatrixStatus=" << fitResult->CovMatrixStatus() << std::endl;
++    std::cout << "FitResult = " << static_cast<int>(fitResult) << std::endl;
++    std::cout << "CovMatrixStatus = " << fitResult->CovMatrixStatus() << std::endl;
+ 
+      //Check if there are poles somewhere/
+     if(iLastParBkg == 6 )CheckRoots(fitResult,fitTotal,3,fitTotal->GetParameter(3),fitTotal->GetParameter(4),fitTotal->GetParameter(5),fitTotal->GetParameter(6),fitOption) ;
+@@ -8155,8 +8166,9 @@ void AliAnalysisMuMuJpsiResult::ProcessMinvFit(TFitResultPtr& fitResult, TF1* fi
+   }
+ 
+   if ( static_cast<int>(fitResult) ||static_cast<int>(fitResult->CovMatrixStatus())!=3 /*|| static_cast<int>(fitResult->CovMatrixStatus())!=2*/) {
+-    std::cout << "//======== Refitting bkg again (setting range rejected 2.5-3.7, and fit range 1.7-4.5)" << std::endl;
+-
++    std::cout << "============================================================================================\\" << std::endl;
++    std::cout << "======== Refitting bkg again (setting range rejected 2.5-3.7, and fit range 1.7-4.5) =======\\" << std::endl;
++    std::cout << "============================================================================================\\" << std::endl;
+     SetFitRejectRange(2.5,3.7);
+     TFitResultPtr fitResultInit = fHisto->Fit(bckInit,fitOption,"",1.7,4.5);
+     SetFitRejectRange();
+@@ -8164,8 +8176,8 @@ void AliAnalysisMuMuJpsiResult::ProcessMinvFit(TFitResultPtr& fitResult, TF1* fi
+     for ( Int_t i = 0; i < iLastParBkg+1 ; ++i ) fitTotal->SetParameter(i, bckInit->GetParameter(i)); //set initial background parameters
+ 
+     fitResult = fHisto->Fit(fitTotal,fitOption,"");
+-    std::cout << "FitResult=" << static_cast<int>(fitResult) << std::endl;
+-    std::cout << "CovMatrixStatus=" << fitResult->CovMatrixStatus() << std::endl;
++    std::cout << "FitResult = " << static_cast<int>(fitResult) << std::endl;
++    std::cout << "CovMatrixStatus = " << fitResult->CovMatrixStatus() << std::endl;
+ 
+      //Check if there are poles somewhere/
+     if(iLastParBkg == 6 )CheckRoots(fitResult,fitTotal,3,fitTotal->GetParameter(3),fitTotal->GetParameter(4),fitTotal->GetParameter(5),fitTotal->GetParameter(6),fitOption) ;
+@@ -8173,7 +8185,9 @@ void AliAnalysisMuMuJpsiResult::ProcessMinvFit(TFitResultPtr& fitResult, TF1* fi
+   }
+ 
+   if ( static_cast<int>(fitResult) ||static_cast<int>(fitResult->CovMatrixStatus())!=3 /*|| static_cast<int>(fitResult->CovMatrixStatus())!=2*/) {
+-    std::cout << "//======== Refitting bkg again (setting range rejected 2.5-3.5, and fit range 1.5-5)" << std::endl;
++    std::cout << "============================================================================================\\" << std::endl;
++    std::cout << "======== Refitting bkg again (setting range rejected 2.5-3.5, and fit range 1.5-5)  ========\\" << std::endl;
++    std::cout << "============================================================================================\\" << std::endl;
+ 
+     SetFitRejectRange(2.5,3.5);
+     TFitResultPtr fitResultInit = fHisto->Fit(bckInit,fitOption,"",1.5,5.);
+@@ -8182,8 +8196,8 @@ void AliAnalysisMuMuJpsiResult::ProcessMinvFit(TFitResultPtr& fitResult, TF1* fi
+     for ( Int_t i = 0; i < iLastParBkg+1 ; ++i ) fitTotal->SetParameter(i, bckInit->GetParameter(i)); //set initial background parameters
+ 
+     fitResult = fHisto->Fit(fitTotal,fitOption,"");
+-    std::cout << "FitResult=" << static_cast<int>(fitResult) << std::endl;
+-    std::cout << "CovMatrixStatus=" << fitResult->CovMatrixStatus() << std::endl;
++    std::cout << "FitResult = " << static_cast<int>(fitResult) << std::endl;
++    std::cout << "CovMatrixStatus = " << fitResult->CovMatrixStatus() << std::endl;
+ 
+     if(iLastParBkg == 6 )CheckRoots(fitResult,fitTotal,3,fitTotal->GetParameter(3),fitTotal->GetParameter(4),fitTotal->GetParameter(5),fitTotal->GetParameter(6),fitOption) ;
+     if(iLastParBkg == 5 )CheckRoots(fitResult,fitTotal,2,fitTotal->GetParameter(3),fitTotal->GetParameter(4),fitTotal->GetParameter(5),0.,fitOption);
+@@ -8195,22 +8209,28 @@ void AliAnalysisMuMuJpsiResult::ProcessMinvFit(TFitResultPtr& fitResult, TF1* fi
+     for ( Int_t i = 0; i < iLastParBkg+1 ; ++i ) fitTotal->SetParameter(i, bckInit->GetParameter(i));
+ 
+     if ( (0.5*fitTotal->GetParameter(iParKPsip) <= fitTotal->GetParError(iParKPsip))  ) { //kPsi'
+-      std::cout << "//------- Setting Psi'norm= Psi' norm*0.3)" << std::endl;
++      std::cout << "------------------------------------------------" << std::endl;
++      std::cout << "------- Setting Psi'norm= Psi' norm*0.3) -------" << std::endl;
++      std::cout << "------------------------------------------------" << std::endl;
+       bin = fHisto->FindBin(3.68);
+       // fitTotal->SetParLimits(iParKPsip, 0.,fHisto->GetBinContent(bin)*0.7); // we further restrict the range of psi' norm
+       fitTotal->SetParameter(iParKPsip, fHisto->GetBinContent(bin)*0.3);
+     }
+ 
+     if ( 0.5*fitTotal->GetParameter(0) <= fitTotal->GetParError(0) ){
+-      std::cout << "//-------Setting p0=MAX*0.6)" << std::endl;
++      std::cout << "------------------------------------------------" << std::endl;
++      std::cout << "-------         Setting p0=MAX*0.        -------" << std::endl;
++      std::cout << "------------------------------------------------" << std::endl;
+       // fitTotal->SetParLimits(0,bckInit->GetParameter(0)*0.1,bckInit->GetParameter(0)*1.5);
+       fitTotal->SetParameter(0, fHisto->GetMaximum()*0.6); // kVWG
+     }
+ 
+-    std::cout << "//======== Refitting again =======\\" << std::endl;
+-    fitResult = fHisto->Fit(fitTotal,fitOption,"");
+-    std::cout << "FitResult=" << static_cast<int>(fitResult) << std::endl;
+-    std::cout << "CovMatrixStatus=" << fitResult->CovMatrixStatus() << std::endl;
++    std::cout << "================================\\" << std::endl;
++    std::cout << "======== Refitting again =======\\" << std::endl;
++    std::cout << "================================\\" << std::endl;    fitResult = fHisto->Fit(fitTotal,fitOption,"");
++
++    std::cout << "FitResult = " << static_cast<int>(fitResult) << std::endl;
++    std::cout << "CovMatrixStatus = " << fitResult->CovMatrixStatus() << std::endl;
+ 
+     if(iLastParBkg == 6 )CheckRoots(fitResult,fitTotal,3,fitTotal->GetParameter(3),fitTotal->GetParameter(4),fitTotal->GetParameter(5),fitTotal->GetParameter(6),fitOption) ;
+     if(iLastParBkg == 5 )CheckRoots(fitResult,fitTotal,2,fitTotal->GetParameter(3),fitTotal->GetParameter(4),fitTotal->GetParameter(5),0.,fitOption);
+@@ -8222,11 +8242,15 @@ void AliAnalysisMuMuJpsiResult::ProcessMinvFit(TFitResultPtr& fitResult, TF1* fi
+   //   std::cout << "//======== Refitting again =======\\" << std::endl;
+ 
+   //   fitResult = fHisto->Fit(fitTotal,Form("%sM",fitOption),"");
+-  //   std::cout << "FitResult=" << static_cast<int>(fitResult) << std::endl;
+-  //   std::cout << "CovMatrixStatus=" << fitResult->CovMatrixStatus() << std::endl;
++  //   std::cout << "FitResult = " << static_cast<int>(fitResult) << std::endl;
++  //   std::cout << "CovMatrixStatus = " << fitResult->CovMatrixStatus() << std::endl;
+   // }
+ 
+-  if ( static_cast<int>(fitResult) ||static_cast<int>(fitResult->CovMatrixStatus())!=3.) std::cout << "//-------Cannot fit properly, try something else..." << std::endl;
++  if ( static_cast<int>(fitResult) ||static_cast<int>(fitResult->CovMatrixStatus())!=3.){ 
++    std::cout << "===========================================================\\" << std::endl;
++    std::cout << "======== Cannot fit properly, try something else... =======\\" << std::endl;
++    std::cout << "===========================================================\\" << std::endl;
++  }
+ }
+ 
+ //________________________
+-- 
+2.7.4 (Apple Git-66)
+

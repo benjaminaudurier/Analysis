@@ -5,7 +5,7 @@
 ///
 
 //______________________________________________________________________________
-AliAnalysisTask* runMuMu(TString runMode, 
+AliAnalysisTask* runMuMu(TString runMode,
                         TString analysisMode,
                         TString inputName       = "Find;FileName=AliAOD.Muons.root;BasePath=/alice/sim/2016/LHC16b1/244918/p80/*;",
                         TString inputOptions    = "EMBED,AOD",
@@ -13,10 +13,10 @@ AliAnalysisTask* runMuMu(TString runMode,
                         TString softVersions    = "",
                         TString taskOptions     = "" )
 {
-    gROOT->LoadMacro(gSystem->ExpandPathName("$TASKDIR/runTaskUtilities.C"));     
-     
+    gROOT->LoadMacro(gSystem->ExpandPathName("$TASKDIR/runTaskUtilities.C"));
+
     // Macro to connect to proof. First argument useless for saf3
-    SetupAnalysis(runMode,analysisMode,inputName,inputOptions,softVersions,analysisOptions, "PWGmuon.par /Users/audurier/Documents/Analysis/LHC_15o_PbPb/MuMu/Simulation/pt=0-8/AddTaskMuMu.C",". $ALICE_ROOT/include $ALICE_PHYSICS/include");    
+    SetupAnalysis(runMode,analysisMode,inputName,inputOptions,softVersions,analysisOptions, "PWGmuon.par /Users/audurier/Documents/Analysis/LHC_15o_PbPb/MuMu/Simulation/pt=0-8/AddTaskMuMu.C",". $ALICE_ROOT/include $ALICE_PHYSICS/include");
     TString outputdir = "Analysis/LHC15o/MuMuPar/";
     if(analysisMode.Contains("grid")) AliAnalysisManager::GetAnalysisManager()->GetGridHandler()->SetGridWorkingDir(outputdir.Data());
 
@@ -25,11 +25,11 @@ AliAnalysisTask* runMuMu(TString runMode,
 
     TList* triggers = new TList; // Create pointer for trigger list
     triggers->SetOwner(kTRUE); // Give rights to trigger liser
-    
+
     if ( (isMC && inputOptions.Contains("EMBED")) || (!isMC && inputOptions.Contains("")) ) {
         triggers->Add(new TObjString("CINT7-B-NOPF-MUFAST"));// Dimuon
     }
-    
+
     // Load centrality task
     //==============================================================================
     // if(analysisOptions.Contains("NOPHYSSEL")&& analysisMode.Contains("local") ) {
@@ -44,8 +44,8 @@ AliAnalysisTask* runMuMu(TString runMode,
 
     // Start analysis
     //==============================================================================
-    StartAnalysis(runMode,analysisMode,inputName,inputOptions);     
-   
+    StartAnalysis(runMode,analysisMode,inputName,inputOptions);
+
     delete triggers;
 }
 

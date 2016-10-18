@@ -123,9 +123,11 @@ void CreateAnalysisTrain(Bool_t isMC,Bool_t Mix)
 
   TList* triggers = new TList; // Create pointer for trigger list
   triggers->SetOwner(kTRUE); // Give rights to trigger liser
-  if (!isMC) triggers->Add(new TObjString("CMSL7-B-NOPF-MUFAST"));
-  if (!isMC) triggers->Add(new TObjString("CMUL7-B-NOPF-MUFAST"));
-  
+   if ( !isMC ) {
+    triggers->Add(new TObjString("CMSL7-B-NOPF-MUFAST"));
+    triggers->Add(new TObjString("CMUL7-B-NOPF-MUFAST"));
+    triggers->Add(new TObjString("CMUL7-B-NOPF-MUFAST||CMLL7-B-NOPF-MUFAST"));
+  }
   TString output =  Form("%s",AliAnalysisManager::GetCommonFileName());
   gROOT->LoadMacro("AddTaskMuMu.C");
   AliAnalysisTaskMuMu* TaskMuMu = AddTaskMuMu(output.Data(),triggers,"PbPb2015",isMC);

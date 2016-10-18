@@ -1,0 +1,529 @@
+From a2286872aa4cee46eda4929f996bd5ec4c114b94 Mon Sep 17 00:00:00 2001
+From: baudurie <benjamin.audurier@cern.ch>
+Date: Fri, 17 Jun 2016 11:23:58 +0200
+Subject: [PATCH 26/36] Change the way we select weight distributions in
+ AliAnalysisMuMuMinv
+
+---
+ PWG/muon/AliAnalysisMuMuMinv.cxx | 411 ++++++++++++++++++++++++---------------
+ PWG/muon/AliAnalysisMuMuMinv.h   |  21 +-
+ 2 files changed, 269 insertions(+), 163 deletions(-)
+
+diff --git a/PWG/muon/AliAnalysisMuMuMinv.cxx b/PWG/muon/AliAnalysisMuMuMinv.cxx
+index be58d5b..83a0aab 100644
+--- a/PWG/muon/AliAnalysisMuMuMinv.cxx
++++ b/PWG/muon/AliAnalysisMuMuMinv.cxx
+@@ -16,6 +16,7 @@
+  */
+ 
+ #include "TH2F.h"
++#include "TF1.h"
+ #include "AliLog.h"
+ #include "TObjArray.h"
+ #include "AliAnalysisMuMuBinning.h"
+@@ -43,7 +44,11 @@ fMinvBinSize(0.025),
+ fMinvMin(0.0),
+ fMinvMax(16.0),
+ fmcptcutmin(0.0),
+-fmcptcutmax(12.0)
++fmcptcutmax(12.0),
++fPtFuncOld(0x0),
++fPtFuncNew(0x0),
++fYFuncOld(0x0),
++fYFuncNew(0x0)
+ {
+   // FIXME ? find the AccxEff histogram from HistogramCollection()->Histo("/EXCHANGE/JpsiAccEff") 
+   
+@@ -863,8 +868,16 @@ Double_t AliAnalysisMuMuMinv::WeightPairDistribution(Double_t pt,Double_t rapidi
+   //Return a weight for a dimuon pt and y, which depend on the varied distributions.
+   // FIXME: hard coded, find a clean way to fix the distribution parameters from outside
+   
+-  if (!HasMC() ) return 1.;
+-  if (fWeightMuon ) return 1.;
++  if ( !HasMC() )    return 1.;
++  if ( fWeightMuon ) return 1.;
++  if ( !fPtFuncOld ) return 1.;
++  if ( !fPtFuncNew ) return 1.;
++  if ( !fYFuncOld )  return 1.;
++  if ( !fYFuncNew )  return 1.;
++
++  Double_t weight = fPtFuncNew->Eval(pt) / fPtFuncOld->Eval(pt) * fYFuncNew->Eval(rapidity) / fYFuncOld->Eval(rapidity); 
++  return weight;
++
+ 
+   //================ p-Pb ==============//
+   //value for input distribution: this is the nominal pt and y distribution
+@@ -895,177 +908,177 @@ Double_t AliAnalysisMuMuMinv::WeightPairDistribution(Double_t pt,Double_t rapidi
+   //================ p-Pb ==============//
+   //value for input distribution: obtain with GenTuner
+   
+-  Double_t paryPPB[2]  = {2.35349, 0.220533};
+-  Double_t parptPPB[3] = {0.306327, 0.0234257, 7.53826};
++  // Double_t paryPPB[2]  = {2.35349, 0.220533};
++  // Double_t parptPPB[3] = {0.306327, 0.0234257, 7.53826};
+ 
+-  Double_t paryHardPPB = paryPPB[1]-0.04;
+-  Double_t parySoftPPB = paryPPB[1]+0.04;
++  // Double_t paryHardPPB = paryPPB[1]-0.04;
++  // Double_t parySoftPPB = paryPPB[1]+0.04;
+ 
+-  Double_t par1ptHardPPB = parptPPB[1]-0.004; 
+-  Double_t par2ptHardPPB = parptPPB[2]-0.05;
++  // Double_t par1ptHardPPB = parptPPB[1]-0.004; 
++  // Double_t par2ptHardPPB = parptPPB[2]-0.05;
+ 
+-  Double_t par1ptSoftPPB = parptPPB[1]+0.004;; 
+-  Double_t par2ptSoftPPB = parptPPB[2]+0.05;
++  // Double_t par1ptSoftPPB = parptPPB[1]+0.004;; 
++  // Double_t par2ptSoftPPB = parptPPB[2]+0.05;
+ 
+-  //systematic 1: hardest in y  x softest in pt
+-  Double_t pary1[2] = {2.35349,paryHardPPB};
+-  Double_t parpt1[3] = {0.306327,par1ptSoftPPB,par2ptSoftPPB};
+-  //systematic 2: hardest in y x hardest in pt
+-  Double_t pary2[2] = {2.35349,paryHardPPB};
+-  Double_t parpt2[3] = {0.306327,par1ptHardPPB,par2ptHardPPB};
+-  //systematic 3: softest in y  x softest in pt
+-  Double_t pary3[2] = {2.35349, parySoftPPB};
+-  Double_t parpt3[3] = {0.306327,par1ptSoftPPB,par2ptSoftPPB};
+-  //systematic 4: softest in y  x hardest in pt
+-  Double_t pary4[2] = {2.35349,parySoftPPB};
+-  Double_t parpt4[3] = {0.306327,par1ptHardPPB,par2ptHardPPB};
++  // //systematic 1: hardest in y  x softest in pt
++  // Double_t pary1[2] = {2.35349,paryHardPPB};
++  // Double_t parpt1[3] = {0.306327,par1ptSoftPPB,par2ptSoftPPB};
++  // //systematic 2: hardest in y x hardest in pt
++  // Double_t pary2[2] = {2.35349,paryHardPPB};
++  // Double_t parpt2[3] = {0.306327,par1ptHardPPB,par2ptHardPPB};
++  // //systematic 3: softest in y  x softest in pt
++  // Double_t pary3[2] = {2.35349, parySoftPPB};
++  // Double_t parpt3[3] = {0.306327,par1ptSoftPPB,par2ptSoftPPB};
++  // //systematic 4: softest in y  x hardest in pt
++  // Double_t pary4[2] = {2.35349,parySoftPPB};
++  // Double_t parpt4[3] = {0.306327,par1ptHardPPB,par2ptHardPPB};
+   
+-  Double_t funcptvalPPB = powerLaw3Par(&pt,parptPPB);
+-  Double_t funcyvalPPB = normPol12Par(&rapidity,paryPPB);
++  // Double_t funcptvalPPB = powerLaw3Par(&pt,parptPPB);
++  // Double_t funcyvalPPB = normPol12Par(&rapidity,paryPPB);
+ 
+   
+   //================ Pb-p ==============//
+   //value for input distribution
+-  Double_t paryPBP[2] = {1.0,0.189};
+-  Double_t parptPBP[3] = {1.0,0.0592,3.92};
+-  
+-  Double_t paryHardPBP = 0.1517, parySoftPBP = 0.2191;
+-  Double_t par1ptHardPBP = 5.58e-2, par2ptHardPBP = 3.83,
+-  par1ptSoftPBP = 5.59e-2, par2ptSoftPBP = 4.31;
+-  //systematic 5: hardest in y  x softest in pt
+-  Double_t pary5[2] = {1.0,paryHardPBP};
+-  Double_t parpt5[3] = {1.0,par1ptSoftPBP,par2ptSoftPBP};
+-  //systematic 6: hardest in y x hardest in pt
+-  Double_t pary6[2] = {1.0,paryHardPBP};
+-  Double_t parpt6[3] = {1.0,par1ptHardPBP,par2ptHardPBP};
+-  //systematic 7: softest in y  x softest in pt
+-  Double_t pary7[2] = {1.0, parySoftPBP};
+-  Double_t parpt7[3] = {1.0,par1ptSoftPBP,par2ptSoftPBP};
+-  //systematic 8: softest in y  x hardest in pt
+-  Double_t pary8[2] = {1.0,parySoftPBP};
+-  Double_t parpt8[3] = {1.0,par1ptHardPBP,par2ptHardPBP};
+-  
+-  Double_t funcptvalPBP = powerLaw3Par(&pt,parptPBP);
+-  Double_t funcyvalPBP = normPol12Par(&rapidity,paryPBP);
++  // Double_t paryPBP[2] = {1.0,0.189};
++  // Double_t parptPBP[3] = {1.0,0.0592,3.92};
++  
++  // Double_t paryHardPBP = 0.1517, parySoftPBP = 0.2191;
++  // Double_t par1ptHardPBP = 5.58e-2, par2ptHardPBP = 3.83,
++  // par1ptSoftPBP = 5.59e-2, par2ptSoftPBP = 4.31;
++  // //systematic 5: hardest in y  x softest in pt
++  // Double_t pary5[2] = {1.0,paryHardPBP};
++  // Double_t parpt5[3] = {1.0,par1ptSoftPBP,par2ptSoftPBP};
++  // //systematic 6: hardest in y x hardest in pt
++  // Double_t pary6[2] = {1.0,paryHardPBP};
++  // Double_t parpt6[3] = {1.0,par1ptHardPBP,par2ptHardPBP};
++  // //systematic 7: softest in y  x softest in pt
++  // Double_t pary7[2] = {1.0, parySoftPBP};
++  // Double_t parpt7[3] = {1.0,par1ptSoftPBP,par2ptSoftPBP};
++  // //systematic 8: softest in y  x hardest in pt
++  // Double_t pary8[2] = {1.0,parySoftPBP};
++  // Double_t parpt8[3] = {1.0,par1ptHardPBP,par2ptHardPBP};
++  
++  // Double_t funcptvalPBP = powerLaw3Par(&pt,parptPBP);
++  // Double_t funcyvalPBP = normPol12Par(&rapidity,paryPBP);
+   
+   //================ pp ==============//
+   //value for input distribution
+-  Double_t paryPP[2] = {3.0,0.514/3.};
+-  Double_t parptPP[3] = {1.0,0.0546,3.90};
+-  
+-  Double_t paryHardPP = 0.4125/3., parySoftPP = 0.5958/3.;
+-  Double_t par1ptHardPP = 4.78e-2, par2ptHardPP = 3.65,//4.84e-2/3.45
+-  par1ptSoftPP = 6.12e-2, par2ptSoftPP = 4.31;//5.47e-2//4.29
+-  //systematic 9: hardest in y  x softest in pt
+-  Double_t pary9[2] = {3.0,paryHardPP};
+-  Double_t parpt9[3] = {1.0,par1ptSoftPP,par2ptSoftPP};
+-  //systematic 10: hardest in y x hardest in pt
+-  Double_t pary10[2] = {3.0,paryHardPP};
+-  Double_t parpt10[3] = {1.0,par1ptHardPP,par2ptHardPP};
+-  //systematic 11: softest in y  x softest in pt
+-  Double_t pary11[2] = {3.0, parySoftPP};
+-  Double_t parpt11[3] = {1.0,par1ptSoftPP,par2ptSoftPP};
+-  //systematic 12: softest in y  x hardest in pt
+-  Double_t pary12[2] = {3.0,parySoftPP};
+-  Double_t parpt12[3] = {1.0,par1ptHardPP,par2ptHardPP};
+-  
+-  Double_t funcptvalPP = powerLaw3Par(&pt,parptPP);
+-  Double_t funcyvalPP = normPol12Par(&rapidity,paryPP);
+-
+-  //______
+-  Double_t weight(1.),funcptsyst(0.),funcysyst(0.);
+-  switch ( fsystLevel )
+-  {
+-    case 0:
+-      weight = 1;
+-      break;
+-    case 1:
+-      funcptsyst = powerLaw3Par(&pt,parpt1);
+-      if ( funcptvalPPB > 0 && funcptsyst > 0 ) weight = funcptsyst/funcptvalPPB;
+-      else  weight = 1;
+-      funcysyst = normPol12Par(&rapidity,pary1);
+-      if ( funcyvalPPB > 0 && funcysyst > 0 ) weight *= funcysyst/funcyvalPPB;
+-      break;
+-    case 2:
+-      funcptsyst = powerLaw3Par(&pt,parpt2);
+-      if ( funcptvalPPB > 0 && funcptsyst > 0 ) weight = funcptsyst/funcptvalPPB;
+-      else  weight = 1;
+-      funcysyst = normPol12Par(&rapidity,pary2);
+-      if ( funcyvalPPB > 0 && funcysyst > 0 ) weight *= funcysyst/funcyvalPPB;
+-      break;
+-    case 3:
+-      funcptsyst = powerLaw3Par(&pt,parpt3);
+-      if ( funcptvalPPB > 0 && funcptsyst > 0 ) weight = funcptsyst/funcptvalPPB;
+-      else  weight = 1;
+-      funcysyst = normPol12Par(&rapidity,pary3);
+-      if ( funcyvalPPB > 0 && funcysyst > 0 ) weight *= funcysyst/funcyvalPPB;
+-      break;
+-    case 4:
+-      funcptsyst = powerLaw3Par(&pt,parpt4);
+-      if ( funcptvalPPB > 0 && funcptsyst > 0 ) weight = funcptsyst/funcptvalPPB;
+-      else  weight = 1;
+-      funcysyst = normPol12Par(&rapidity,pary4);
+-      if ( funcyvalPPB > 0 && funcysyst > 0 ) weight *= funcysyst/funcyvalPPB;
+-      break;
+-    case 5:
+-      funcptsyst = powerLaw3Par(&pt,parpt5);
+-      if ( funcptvalPBP > 0 && funcptsyst > 0 ) weight = funcptsyst/funcptvalPBP;
+-      else  weight = 1;
+-      funcysyst = normPol12Par(&rapidity,pary5);
+-      if ( funcyvalPBP > 0 && funcysyst > 0 ) weight *= funcysyst/funcyvalPBP;
+-      break;
+-    case 6:
+-      funcptsyst = powerLaw3Par(&pt,parpt6);
+-      if ( funcptvalPBP > 0 && funcptsyst > 0 ) weight = funcptsyst/funcptvalPBP;
+-      else  weight = 1;
+-      funcysyst = normPol12Par(&rapidity,pary6);
+-      if ( funcyvalPBP > 0 && funcysyst > 0 ) weight *= funcysyst/funcyvalPBP;
+-      break;
+-    case 7:
+-      funcptsyst = powerLaw3Par(&pt,parpt7);
+-      if ( funcptvalPBP > 0 && funcptsyst > 0 ) weight = funcptsyst/funcptvalPBP;
+-      else  weight = 1;
+-      funcysyst = normPol12Par(&rapidity,pary7);
+-      if ( funcyvalPBP > 0 && funcysyst > 0 ) weight *= funcysyst/funcyvalPBP;
+-      break;
+-    case 8:
+-      funcptsyst = powerLaw3Par(&pt,parpt8);
+-      if ( funcptvalPBP > 0 && funcptsyst > 0 ) weight = funcptsyst/funcptvalPBP;
+-      else  weight = 1;
+-      funcysyst = normPol12Par(&rapidity,pary8);
+-      if ( funcyvalPBP > 0 && funcysyst > 0 ) weight *= funcysyst/funcyvalPBP;
+-      break;
+-    case 9:
+-      funcptsyst = powerLaw3Par(&pt,parpt9);
+-      if ( funcptvalPP > 0 && funcptsyst > 0 ) weight = funcptsyst/funcptvalPP;
+-      else  weight = 1;
+-      funcysyst = normPol12Par(&rapidity,pary9);
+-      if ( funcyvalPP > 0 && funcysyst > 0 ) weight *= funcysyst/funcyvalPP;
+-      break;
+-    case 10:
+-      funcptsyst = powerLaw3Par(&pt,parpt10);
+-      if ( funcptvalPP > 0 && funcptsyst > 0 ) weight = funcptsyst/funcptvalPP;
+-      else  weight = 1;
+-      funcysyst = normPol12Par(&rapidity,pary10);
+-      if ( funcyvalPP > 0 && funcysyst > 0 ) weight *= funcysyst/funcyvalPP;
+-      break;
+-    case 11:
+-      funcptsyst = powerLaw3Par(&pt,parpt11);
+-      if ( funcptvalPP > 0 && funcptsyst > 0 ) weight = funcptsyst/funcptvalPP;
+-      else  weight = 1;
+-      funcysyst = normPol12Par(&rapidity,pary11);
+-      if ( funcyvalPP > 0 && funcysyst > 0 ) weight *= funcysyst/funcyvalPP;
+-      break;
+-    case 12:
+-      funcptsyst = powerLaw3Par(&pt,parpt12);
+-      if ( funcptvalPP > 0 && funcptsyst > 0 ) weight = funcptsyst/funcptvalPP;
+-      else  weight = 1;
+-      funcysyst = normPol12Par(&rapidity,pary12);
+-      if ( funcyvalPP > 0 && funcysyst > 0 ) weight *= funcysyst/funcyvalPP;
+-      break;
+-  }
++  // Double_t paryPP[2] = {3.0,0.514/3.};
++  // Double_t parptPP[3] = {1.0,0.0546,3.90};
+   
+-  return weight;
++  // Double_t paryHardPP = 0.4125/3., parySoftPP = 0.5958/3.;
++  // Double_t par1ptHardPP = 4.78e-2, par2ptHardPP = 3.65,//4.84e-2/3.45
++  // par1ptSoftPP = 6.12e-2, par2ptSoftPP = 4.31;//5.47e-2//4.29
++  // //systematic 9: hardest in y  x softest in pt
++  // Double_t pary9[2] = {3.0,paryHardPP};
++  // Double_t parpt9[3] = {1.0,par1ptSoftPP,par2ptSoftPP};
++  // //systematic 10: hardest in y x hardest in pt
++  // Double_t pary10[2] = {3.0,paryHardPP};
++  // Double_t parpt10[3] = {1.0,par1ptHardPP,par2ptHardPP};
++  // //systematic 11: softest in y  x softest in pt
++  // Double_t pary11[2] = {3.0, parySoftPP};
++  // Double_t parpt11[3] = {1.0,par1ptSoftPP,par2ptSoftPP};
++  // //systematic 12: softest in y  x hardest in pt
++  // Double_t pary12[2] = {3.0,parySoftPP};
++  // Double_t parpt12[3] = {1.0,par1ptHardPP,par2ptHardPP};
++  
++  // Double_t funcptvalPP = powerLaw3Par(&pt,parptPP);
++  // Double_t funcyvalPP = normPol12Par(&rapidity,paryPP);
++
++  // //______
++  // Double_t weight(1.),funcptsyst(0.),funcysyst(0.);
++  // switch ( fsystLevel )
++  // {
++  //   case 0:
++  //     weight = 1;
++  //     break;
++    // case 1:
++    //   funcptsyst = powerLaw3Par(&pt,parpt1);
++    //   if ( funcptvalPPB > 0 && funcptsyst > 0 ) weight = funcptsyst/funcptvalPPB;
++    //   else  weight = 1;
++    //   funcysyst = normPol12Par(&rapidity,pary1);
++    //   if ( funcyvalPPB > 0 && funcysyst > 0 ) weight *= funcysyst/funcyvalPPB;
++    //   break;
++    // case 2:
++    //   funcptsyst = powerLaw3Par(&pt,parpt2);
++    //   if ( funcptvalPPB > 0 && funcptsyst > 0 ) weight = funcptsyst/funcptvalPPB;
++    //   else  weight = 1;
++    //   funcysyst = normPol12Par(&rapidity,pary2);
++    //   if ( funcyvalPPB > 0 && funcysyst > 0 ) weight *= funcysyst/funcyvalPPB;
++    //   break;
++    // case 3:
++    //   funcptsyst = powerLaw3Par(&pt,parpt3);
++    //   if ( funcptvalPPB > 0 && funcptsyst > 0 ) weight = funcptsyst/funcptvalPPB;
++    //   else  weight = 1;
++    //   funcysyst = normPol12Par(&rapidity,pary3);
++    //   if ( funcyvalPPB > 0 && funcysyst > 0 ) weight *= funcysyst/funcyvalPPB;
++    //   break;
++    // case 4:
++    //   funcptsyst = powerLaw3Par(&pt,parpt4);
++    //   if ( funcptvalPPB > 0 && funcptsyst > 0 ) weight = funcptsyst/funcptvalPPB;
++    //   else  weight = 1;
++    //   funcysyst = normPol12Par(&rapidity,pary4);
++    //   if ( funcyvalPPB > 0 && funcysyst > 0 ) weight *= funcysyst/funcyvalPPB;
++    //   break;
++    // case 5:
++    //   funcptsyst = powerLaw3Par(&pt,parpt5);
++    //   if ( funcptvalPBP > 0 && funcptsyst > 0 ) weight = funcptsyst/funcptvalPBP;
++    //   else  weight = 1;
++    //   funcysyst = normPol12Par(&rapidity,pary5);
++    //   if ( funcyvalPBP > 0 && funcysyst > 0 ) weight *= funcysyst/funcyvalPBP;
++    //   break;
++    // case 6:
++    //   funcptsyst = powerLaw3Par(&pt,parpt6);
++    //   if ( funcptvalPBP > 0 && funcptsyst > 0 ) weight = funcptsyst/funcptvalPBP;
++    //   else  weight = 1;
++    //   funcysyst = normPol12Par(&rapidity,pary6);
++    //   if ( funcyvalPBP > 0 && funcysyst > 0 ) weight *= funcysyst/funcyvalPBP;
++    //   break;
++    // case 7:
++    //   funcptsyst = powerLaw3Par(&pt,parpt7);
++    //   if ( funcptvalPBP > 0 && funcptsyst > 0 ) weight = funcptsyst/funcptvalPBP;
++    //   else  weight = 1;
++    //   funcysyst = normPol12Par(&rapidity,pary7);
++    //   if ( funcyvalPBP > 0 && funcysyst > 0 ) weight *= funcysyst/funcyvalPBP;
++    //   break;
++    // case 8:
++    //   funcptsyst = powerLaw3Par(&pt,parpt8);
++    //   if ( funcptvalPBP > 0 && funcptsyst > 0 ) weight = funcptsyst/funcptvalPBP;
++    //   else  weight = 1;
++    //   funcysyst = normPol12Par(&rapidity,pary8);
++    //   if ( funcyvalPBP > 0 && funcysyst > 0 ) weight *= funcysyst/funcyvalPBP;
++    //   break;
++    // case 9:
++    //   funcptsyst = powerLaw3Par(&pt,parpt9);
++    //   if ( funcptvalPP > 0 && funcptsyst > 0 ) weight = funcptsyst/funcptvalPP;
++    //   else  weight = 1;
++    //   funcysyst = normPol12Par(&rapidity,pary9);
++    //   if ( funcyvalPP > 0 && funcysyst > 0 ) weight *= funcysyst/funcyvalPP;
++    //   break;
++    // case 10:
++    //   funcptsyst = powerLaw3Par(&pt,parpt10);
++    //   if ( funcptvalPP > 0 && funcptsyst > 0 ) weight = funcptsyst/funcptvalPP;
++    //   else  weight = 1;
++    //   funcysyst = normPol12Par(&rapidity,pary10);
++    //   if ( funcyvalPP > 0 && funcysyst > 0 ) weight *= funcysyst/funcyvalPP;
++    //   break;
++    // case 11:
++    //   funcptsyst = powerLaw3Par(&pt,parpt11);
++    //   if ( funcptvalPP > 0 && funcptsyst > 0 ) weight = funcptsyst/funcptvalPP;
++    //   else  weight = 1;
++    //   funcysyst = normPol12Par(&rapidity,pary11);
++    //   if ( funcyvalPP > 0 && funcysyst > 0 ) weight *= funcysyst/funcyvalPP;
++    //   break;
++    // case 12:
++    //   funcptsyst = powerLaw3Par(&pt,parpt12);
++    //   if ( funcptvalPP > 0 && funcptsyst > 0 ) weight = funcptsyst/funcptvalPP;
++    //   else  weight = 1;
++    //   funcysyst = normPol12Par(&rapidity,pary12);
++    //   if ( funcyvalPP > 0 && funcysyst > 0 ) weight *= funcysyst/funcyvalPP;
++    //   break;
++  // }
++  
++  // return weight;
+ }
+ 
+ //________________________________________________________________________
+@@ -1145,3 +1158,79 @@ void AliAnalysisMuMuMinv::SetBinsToFill(const char* particle, const char* bins)
+   delete fBinsToFill;
+   fBinsToFill = Binning()->CreateBinObjArray(particle,bins,"");
+ }
++
++//________________________________________________________________________
++void AliAnalysisMuMuMinv::SetOriginPtFunc(TString formula, const Double_t *param,Double_t xMin, Double_t xMax)
++{
++  /// Create the original function with the parameters used in simulation to generate the pT distribution.
++  /// It must be in the form [0]*(...) to allow for global normalization.
++  /// The [xMin,xMax] range is used to normalized the function.
++  /// Some parameters can be fixed when fitting the generated distribution for cross-check.
++  
++  assert(param);
++  
++  delete fPtFuncOld;
++  fPtFuncOld = new TF1("fPtFuncOld", formula.Data(), xMin, xMax);
++  fPtFuncOld->SetParameters(param);  
++  NormFunc(fPtFuncOld, xMin, xMax);
++  
++}
++
++//________________________________________________________________________
++void AliAnalysisMuMuMinv::SetNewPtFunc(TString formula, const Double_t *param,Double_t xMin, Double_t xMax)
++{
++  /// Create the new function with its initial parameters to fit the generated/weighted pT distribution.
++  /// It must be in the form [0]*(...) to allow for global normalization.
++  /// The [xMin,xMax] range is used to normalized the function.
++  /// Some parameters can be fixed when fitting the generated distribution.
++  
++  assert(param);
++  
++  delete fPtFuncNew;
++  fPtFuncNew = new TF1("fPtFuncNew", formula.Data(), xMin, xMax);
++  fPtFuncNew->SetParameters(param);  
++  NormFunc(fPtFuncNew, xMin, xMax);
++  
++}
++
++//________________________________________________________________________
++void AliAnalysisMuMuMinv::SetOriginYFunc(TString formula, const Double_t *param,Double_t xMin, Double_t xMax)
++{
++  /// Create the original function with the parameters used in simulation to generate the y distribution.
++  /// It must be in the form [0]*(...) to allow for global normalization.
++  /// The [xMin,xMax] range is used to normalized the function.
++  /// Some parameters can be fixed when fitting the generated distribution for cross-check.
++  
++  assert(param);
++  
++  delete fYFuncOld;
++  fYFuncOld = new TF1("fYFuncOld", formula.Data(), xMin, xMax);
++  fYFuncOld->SetParameters(param);  
++  NormFunc(fYFuncOld, xMin, xMax);
++  
++}
++
++//________________________________________________________________________
++void AliAnalysisMuMuMinv::SetNewYFunc(TString formula, const Double_t *param, Double_t xMin, Double_t xMax)
++{
++  /// Create the new function with its initial parameters to fit the generated/weighted y distribution.
++  /// It must be in the form [0]*(...) to allow for global normalization.
++  /// The [xMin,xMax] range is used to normalized the function.
++  /// Some parameters can be fixed when fitting the generated distribution.
++  
++  assert(param);
++  
++  delete fYFuncNew;
++  fYFuncNew = new TF1("fYFuncNew", formula.Data(), xMin, xMax);
++  fYFuncNew->SetParameters(param);  
++  NormFunc(fYFuncNew, xMin, xMax);
++  
++}
++
++//________________________________________________________________________
++void AliAnalysisMuMuMinv::NormFunc(TF1 *f, Double_t min, Double_t max)
++{
++  /// normalize the function to its integral in the given range
++  Double_t integral = f->Integral(min, max);
++  if (integral != 0.) f->SetParameter(0, f->GetParameter(0)/integral);
++}
+diff --git a/PWG/muon/AliAnalysisMuMuMinv.h b/PWG/muon/AliAnalysisMuMuMinv.h
+index 2012f45..ee49c2a 100644
+--- a/PWG/muon/AliAnalysisMuMuMinv.h
++++ b/PWG/muon/AliAnalysisMuMuMinv.h
+@@ -43,6 +43,16 @@ public:
+ 
+   void SetBinsToFill(const char* particle, const char* bins);
+ 
++  // create the original function with the parameters used in simulation to generate the pT distribution
++  void SetOriginPtFunc(TString formula, const Double_t *param, Double_t xMin, Double_t xMax);
++  // create the new function with its initial parameters to fit the generated/weighted pT distribution
++  void SetNewPtFunc(TString formula, const Double_t *param, Double_t xMin, Double_t xMax);
++  
++  // create the original function with the parameters used in simulation to generate the y distribution
++  void SetOriginYFunc(TString formula, const Double_t *param, Double_t xMin, Double_t xMax);
++  // create the new function with its initial parameters to fit the generated/weighted y distribution
++  void SetNewYFunc(TString formula, const Double_t *param, Double_t xMin, Double_t xMax);
++
+   void DefineMinvRange(Double_t minvMin, Double_t minvMax, Double_t minvBinSize);
+ 
+ protected:
+@@ -62,6 +72,9 @@ private:
+ 
+   void CreateMinvHistograms(const char* eventSelection, const char* triggerClassName, const char* centrality);
+ 
++  // normalize the function to its integral in the given range
++  void NormFunc(TF1 *f, Double_t min, Double_t max);
++
+   TString GetMinvHistoName(const AliAnalysisMuMuBinning::Range& r, Bool_t accEffCorrected) const;
+ 
+   Double_t GetAccxEff(Double_t pt,Double_t rapidity);
+@@ -79,9 +92,13 @@ private:
+ private:
+   Bool_t fcomputeMeanPt;
+   Bool_t fWeightMuon;
+-  TH2F* fAccEffHisto;
++  TH2F     * fAccEffHisto;
+   TString fMinvBinSeparator;
+   Int_t fsystLevel;
++  TF1      *fPtFuncOld;              ///< original generated pT function with original parameters
++  TF1      *fPtFuncNew;              ///< new generated pT fit function with new parameters
++  TF1      *fYFuncOld;               ///< original generated y function with original parameters
++  TF1      *fYFuncNew;               ///< new generated y fit function with new parameters
+   TObjArray* fBinsToFill;
+   Double_t fMinvBinSize;
+   Double_t fMinvMin;
+@@ -89,7 +106,7 @@ private:
+   Double_t fmcptcutmin;
+   Double_t fmcptcutmax;
+ 
+-  ClassDef(AliAnalysisMuMuMinv,7) // implementation of AliAnalysisMuMuBase for muon pairs
++  ClassDef(AliAnalysisMuMuMinv,8) // implementation of AliAnalysisMuMuBase for muon pairs
+ };
+ 
+ #endif
+-- 
+2.7.4 (Apple Git-66)
+
