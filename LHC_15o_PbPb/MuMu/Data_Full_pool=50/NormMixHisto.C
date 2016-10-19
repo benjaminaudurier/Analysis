@@ -12,6 +12,7 @@
 #include <TObjArray.h>
 #include <TObjString.h>
 #include <AliAnalysisMuMu.h>
+#include <AliAnalysisMuMuBinning.h>
 #include <TROOT.h>
 #include <TSystem.h>
 #include <TFile.h>
@@ -29,6 +30,8 @@ TString dir       = "/Users/audurier/Documents/Analysis/LHC_15o_PbPb/MuMu/Data_F
 Bool_t acceffcorr = kFALSE;
 Double_t Mmin = 2.0;
 Double_t Mmax = 5.0;
+
+void GetBinningFromFile(TString sdir);
 
 //_____________________________________________________________________________
 void NormMixHisto( const char* bintype = "pt,y",const char* flavour="BENJ", int debug =0)
@@ -61,8 +64,8 @@ void NormMixHisto( const char* bintype = "pt,y",const char* flavour="BENJ", int 
         printf("\n");
         printf("\n ----> Looking for results in %s/%s\n", dir.Data(),sdirs->String().Data() );
          ++i;
-         if ( i > dirs->GetEntries()/2 ) continue;
-         // if ( i <= 50) continue;
+         if ( i > dirs->GetEntries()/2  ) continue;
+         // if ( i <= 20) continue;
 
         if ( gSystem->AccessPathName(gSystem->ExpandPathName(Form("%s/%s/%s",dir.Data(),sdirs->String().Data(),sfile.Data()))) ) {
             printf("\n Error : file '%s/%s/%s' doesn't exists !\n",dir.Data(),sdirs->String().Data(),sfile.Data());
@@ -72,9 +75,10 @@ void NormMixHisto( const char* bintype = "pt,y",const char* flavour="BENJ", int 
         // main object
         AliAnalysisMuMu analysis(Form("%s/%s/%s",dir.Data(),sdirs->String().Data(),sfile.Data()),sasso.Data(),sasso2.Data(),config.Data());
 	    if(!analysis.OC()) continue;
+        if(!analysis.BIN()){ GetBinningFromFile(sdirs->String()); analysis.Update();}
 
         // Clean
-        analysis.CleanAllSpectra();
+        // analysis.CleanAllSpectra();
 
         //_____ Fit
         nextbintype.Reset();
@@ -82,11 +86,24 @@ void NormMixHisto( const char* bintype = "pt,y",const char* flavour="BENJ", int 
             if(sbintype->String().Contains("integrated")){
                 analysis.NormMixedMinv("integrated","psi","",acceffcorr,Mmin,Mmax);
             } else {
-                analysis.NormMixedMinv(sbintype->String().Data(),"psi",flavour);
+                analysis.NormMixedMinv(sbintype->String().Data(),"psi",flavour,acceffcorr,Mmin,Mmax);
             }
         }
-
     }
 }
 
+//_____________________________________________________________________________
+void GetBinningFromFile(TString sdir)
+{
+    AliAnalysisMuMu a("/Users/audurier/Documents/Analysis/LHC_15o_PbPb/MuMu/Data_Full_pool=50/AnalysisResultsMergeAtSafLevel.root",sasso.Data(),sasso2.Data(),config.Data());
+    AliAnalysisMuMuBinning* b =static_cast<AliAnalysisMuMuBinning*>(a.BIN()->Clone());
+    TFile* f= TFile::Open(Form("%s/%s/%s",dir.Data(),sdir.Data(),sfile.Data()),"UPDATE");
+    if (f) b->Write();
+    else {
+        printf("Could not update the binning\n");
+        f->Close();
+        return;
+    }
+    f->Close();
+}
 

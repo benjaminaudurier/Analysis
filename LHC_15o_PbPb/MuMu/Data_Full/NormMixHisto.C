@@ -54,7 +54,6 @@ void NormMixHisto( const char* bintype = "pt", int debug =0)
     TObjString* sdirs;
     nextdirs.Reset();
 
-    AliAnalysisMuMu *analysis(0x0);
 
     int i=0;
     // loop over all directories
@@ -68,19 +67,19 @@ void NormMixHisto( const char* bintype = "pt", int debug =0)
         }
 
         // main object
-        analysis= new AliAnalysisMuMu(Form("%s/%s/%s",dir.Data(),sdirs->String().Data(),sfile.Data()),sasso.Data(),sasso2.Data(),config.Data());
-	    if(!analysis->OC()) continue;
+        AliAnalysisMuMu analysis(Form("%s/%s/%s",dir.Data(),sdirs->String().Data(),sfile.Data()),sasso.Data(),sasso2.Data(),config.Data());
+	    if(!analysis.OC()) continue;
 
         // Clean
-        analysis->CleanAllSpectra();
+        analysis.CleanAllSpectra();
 
         //_____ Fit
         nextbintype.Reset();
         while ( ( sbintype = static_cast<TObjString*>(nextbintype()) ) ){
             if(sbintype->String().Contains("integrated")){
-                analysis->NormMixedMinv("integrated");
+                analysis.NormMixedMinv("integrated");
             } else {
-                analysis->NormMixedMinv(sbintype->String().Data(),"psi","BENJ");
+                analysis.NormMixedMinv(sbintype->String().Data(),"psi","BENJ");
             }
         }
     }

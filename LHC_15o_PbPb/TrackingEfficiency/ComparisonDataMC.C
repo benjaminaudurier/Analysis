@@ -587,7 +587,7 @@ void ComparisonDataMC(TString fileNameData = "Data/efficiency_new.root", TString
 //  }
   
   //Load the mapping for the DE histos
-  AliCDBManager::Instance()->SetDefaultStorage("local://$ALICE_ROOT/OCDB");
+  AliCDBManager::Instance()->SetDefaultStorage("local://~/alice/ali-master/AliRoot/OCDB");
   AliCDBManager::Instance()->SetRun(0);
   AliMUONCDB::LoadMapping();
   AliMpDEIterator deit;

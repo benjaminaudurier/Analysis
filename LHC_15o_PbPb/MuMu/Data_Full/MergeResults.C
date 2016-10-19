@@ -54,7 +54,6 @@ void MergeResults()
 
     AliMergeableCollection* oc      = 0x0;
     AliCounterCollection*   cc      = 0x0;
-    AliAnalysisMuMuBinning* binning = 0x0;
 
     TObjArray* ocCollection = new TObjArray();
     TObjArray* ccCollection = new TObjArray();
@@ -95,7 +94,6 @@ void MergeResults()
     TFile f(Form("%s/mergeResults/AnalysisResults.root",dir.Data()),"recreate");
     if(oc)      oc->Write();
      if(cc)      cc->Write();
-    // if(binning) binning->Write();
 
     f.Close();
 }
