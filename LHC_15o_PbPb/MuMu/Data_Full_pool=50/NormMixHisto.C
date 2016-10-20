@@ -64,7 +64,7 @@ void NormMixHisto( const char* bintype = "pt,y",const char* flavour="BENJ", int 
         printf("\n");
         printf("\n ----> Looking for results in %s/%s\n", dir.Data(),sdirs->String().Data() );
          ++i;
-         if ( i > dirs->GetEntries()/2  ) continue;
+         // if ( i > dirs->GetEntries()/2  ) continue;
          // if ( i <= 20) continue;
 
         if ( gSystem->AccessPathName(gSystem->ExpandPathName(Form("%s/%s/%s",dir.Data(),sdirs->String().Data(),sfile.Data()))) ) {
@@ -75,12 +75,12 @@ void NormMixHisto( const char* bintype = "pt,y",const char* flavour="BENJ", int 
         // main object
         AliAnalysisMuMu analysis(Form("%s/%s/%s",dir.Data(),sdirs->String().Data(),sfile.Data()),sasso.Data(),sasso2.Data(),config.Data());
 	    if(!analysis.OC()) continue;
-        if(!analysis.BIN()){ GetBinningFromFile(sdirs->String()); analysis.Update();}
+        // if(!analysis.BIN()){ GetBinningFromFile(sdirs->String()); analysis.Update();}
 
         // Clean
         // analysis.CleanAllSpectra();
 
-        //_____ Fit
+        // //_____ Fit
         nextbintype.Reset();
         while ( ( sbintype = static_cast<TObjString*>(nextbintype()) ) ){
             if(sbintype->String().Contains("integrated")){
