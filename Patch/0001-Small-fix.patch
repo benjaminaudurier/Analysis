@@ -1,0 +1,86 @@
+From 2a96a6c4d1293db2dcf80f91f5ce325e90375f8a Mon Sep 17 00:00:00 2001
+From: Benjamin Audurier <benjamin.audurier@subatech.in2p3.fr>
+Date: Fri, 21 Oct 2016 10:08:05 +0200
+Subject: [PATCH] Small fix
+
+---
+ PWG/muondep/AliAnalysisMuMu.cxx | 35 ++++++++++++++++++-----------------
+ 1 file changed, 18 insertions(+), 17 deletions(-)
+
+diff --git a/PWG/muondep/AliAnalysisMuMu.cxx b/PWG/muondep/AliAnalysisMuMu.cxx
+index 55971ed..697b2fb 100644
+--- a/PWG/muondep/AliAnalysisMuMu.cxx
++++ b/PWG/muondep/AliAnalysisMuMu.cxx
+@@ -700,13 +700,6 @@ void AliAnalysisMuMu::DivideRawMixHisto(const char* binType, const char* particl
+     TObjString* sTriggerMix;
+     TObjString* seventTypeMix;
+ 
+-    // Pointers
+-    TH1* hTableMinv[6] = {0x0,0x0,0x0,0x0,0x0,0x0};
+-    //                      {hMinvPM,hMinvPP,hMinvMM,hMinvMixPM,hMinvMixPP,hMinvMixMM};
+-    TH1* hTableDistRaw[6] = {0x0,0x0,0x0,0x0,0x0,0x0};
+-    //                      {hpT,hpTPP,hpTMM,hY,hYPP,hYMM};
+-    TH1* hTableDistMix[6] = {0x0,0x0,0x0,0x0,0x0,0x0};
+-    //                      {hpTMix,hpTMixPP,hpTMixMM,hYMix,hYMixPP,hYMixMM};
+ 
+     // For the loop comming
+     TString signFlagMinv[3] ={"","PlusPlus","MinusMinus"};
+@@ -714,7 +707,6 @@ void AliAnalysisMuMu::DivideRawMixHisto(const char* binType, const char* particl
+ 
+     THnSparse* n        =0x0;
+     TObject* o          =0x0;
+-    TH1* hRCoef;
+ 
+     // Get Binning
+     AliAnalysisMuMuBinning* binning(0x0);
+@@ -764,6 +756,14 @@ void AliAnalysisMuMu::DivideRawMixHisto(const char* binType, const char* particl
+                   {
+                     AliDebug(1,Form("-------BIN %s",sbinType->String().Data()));
+ 
++                    // Pointers
++                    TH1* hTableMinv[6] = {0x0,0x0,0x0,0x0,0x0,0x0};
++    //                      {hMinvPM,hMinvPP,hMinvMM,hMinvMixPM,hMinvMixPP,hMinvMixMM};
++                    TH1* hTableDistRaw[6] = {0x0,0x0,0x0,0x0,0x0,0x0};
++    //                      {hpT,hpTPP,hpTMM,hY,hYPP,hYMM};
++                    TH1* hTableDistMix[6] = {0x0,0x0,0x0,0x0,0x0,0x0};
++    //                      {hpTMix,hpTMixPP,hpTMixMM,hYMix,hYMixPP,hYMixMM};
++
+                     // Get binning
+                     if ( fBinning && sbinType->String().Length() > 0 ) binning = fBinning->Project(particle,sbinType->String().Data(),flavour);
+                     else  {
+@@ -779,6 +779,7 @@ void AliAnalysisMuMu::DivideRawMixHisto(const char* binType, const char* particl
+                     TObjArray* bins = binning->CreateBinObjArray(particle);
+                     if (!bins){
+                       AliError(Form("Did not get any bin for particle %s",particle));
++                      delete binning;
+                       continue;
+                     }
+ 
+@@ -811,15 +812,15 @@ void AliAnalysisMuMu::DivideRawMixHisto(const char* binType, const char* particl
+ 
+                       // Get Dist Histo
+                       for (int j = 0; j < 3; ++j) {
+-                        // TString hnamePt = corrected ? Form("Pt%s_AccEffCorr_proj_0_%.2f_%.2f",signFlagDist[j].Data(),Mmin,Mmax) : Form("Pt%s_proj_0_%.2f_%.2f",signFlagDist[j].Data(),Mmin,Mmax);
+-                        TString hnamePt = corrected ? Form("Pt%s_AccEffCorr",signFlagDist[j].Data()) : Form("Pt%s",signFlagDist[j].Data());
+-                        // TString hnameY  = corrected ? Form("Y%s_AccEffCorr_proj_0_%.2f_%.2f",signFlagDist[j].Data(),Mmin,Mmax) : Form("Y%s_proj_0_%.2f_%.2f",signFlagDist[j].Data(),Mmin,Mmax);
+-                        TString hnameY  = corrected ? Form("Y%s_AccEffCorr",signFlagDist[j].Data()) : Form("Y%s",signFlagDist[j].Data());
+-
+-                        // TString hnamePtMix = corrected ? Form("PtMix%s_AccEffCorr_proj_0_%.2f_%.2f",signFlagDist[j].Data(),Mmin,Mmax) : Form("PtMix%s_proj_0_%.2f_%.2f",signFlagDist[j].Data(),Mmin,Mmax);
+-                        TString hnamePtMix = corrected ? Form("PtMix%s_AccEffCorr",signFlagDist[j].Data()) : Form("PtMix%s",signFlagDist[j].Data());
+-                        // TString hnameYMix  = corrected ? Form("YMix%s_AccEffCorr_proj_0_%.2f_%.2f",signFlagDist[j].Data(),Mmin,Mmax) : Form("YMix%s_proj_0_%.2f_%.2f",signFlagDist[j].Data(),Mmin,Mmax);
+-                        TString hnameYMix  = corrected ? Form("YMix%s_AccEffCorr",signFlagDist[j].Data()) : Form("YMix%s",signFlagDist[j].Data());
++                        TString hnamePt = corrected ? Form("Pt%s_AccEffCorr_proj_0_%.2f_%.2f",signFlagDist[j].Data(),Mmin,Mmax) : Form("Pt%s_proj_0_%.2f_%.2f",signFlagDist[j].Data(),Mmin,Mmax);
++                        // TString hnamePt = corrected ? Form("Pt%s_AccEffCorr",signFlagDist[j].Data()) : Form("Pt%s",signFlagDist[j].Data());
++                        TString hnameY  = corrected ? Form("Y%s_AccEffCorr_proj_0_%.2f_%.2f",signFlagDist[j].Data(),Mmin,Mmax) : Form("Y%s_proj_0_%.2f_%.2f",signFlagDist[j].Data(),Mmin,Mmax);
++                        // TString hnameY  = corrected ? Form("Y%s_AccEffCorr",signFlagDist[j].Data()) : Form("Y%s",signFlagDist[j].Data());
++
++                        TString hnamePtMix = corrected ? Form("PtMix%s_AccEffCorr_proj_0_%.2f_%.2f",signFlagDist[j].Data(),Mmin,Mmax) : Form("PtMix%s_proj_0_%.2f_%.2f",signFlagDist[j].Data(),Mmin,Mmax);
++                        // TString hnamePtMix = corrected ? Form("PtMix%s_AccEffCorr",signFlagDist[j].Data()) : Form("PtMix%s",signFlagDist[j].Data());
++                        TString hnameYMix  = corrected ? Form("YMix%s_AccEffCorr_proj_0_%.2f_%.2f",signFlagDist[j].Data(),Mmin,Mmax) : Form("YMix%s_proj_0_%.2f_%.2f",signFlagDist[j].Data(),Mmin,Mmax);
++                        // TString hnameYMix  = corrected ? Form("YMix%s_AccEffCorr",signFlagDist[j].Data()) : Form("YMix%s",signFlagDist[j].Data());
+ 
+                         // Pointer to the histo from histo collection (Yes it is discusting )
+                         if ( OC()->GetObject(idDist.Data(),hnamePt.Data()) ){
+-- 
+2.8.4 (Apple Git-73)
+
