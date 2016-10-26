@@ -1,0 +1,64 @@
+From 50f13675ad3c921279d9d79ff95123ca947a3a1e Mon Sep 17 00:00:00 2001
+From: Benjamin Audurier <benjamin.audurier@subatech.in2p3.fr>
+Date: Wed, 26 Oct 2016 12:13:03 +0200
+Subject: [PATCH] Add protections on DivideMixRaw()
+
+---
+ PWG/muondep/AliAnalysisMuMu.cxx | 27 +++++++++++++++++++++++----
+ 1 file changed, 23 insertions(+), 4 deletions(-)
+
+diff --git a/PWG/muondep/AliAnalysisMuMu.cxx b/PWG/muondep/AliAnalysisMuMu.cxx
+index 697b2fb..ff2a508 100644
+--- a/PWG/muondep/AliAnalysisMuMu.cxx
++++ b/PWG/muondep/AliAnalysisMuMu.cxx
+@@ -855,6 +855,15 @@ void AliAnalysisMuMu::DivideRawMixHisto(const char* binType, const char* particl
+ 
+                       for (int i = 0; i < 3; ++i) {
+                         if ( i==0 ) {
++                          // Make errors by hands in case of empty entries
++                          for (int j = 0; j < hTableMinv[i]->GetEntries(); ++j){
++                            Double_t binContent = hTableMinv[i]->GetBinContent(j);
++                            Double_t binError   = hTableMinv[i]->GetBinError(j);
++                            if(binContent  == 0. && binError==0. ){
++                              hTableMinv[i]->SetBinContent(j,0.);
++                              hTableMinv[i]->SetBinError(j,1.);
++                            }
++                          }
+                           hTableMinv[i]->Add(hTableMinv[i+3],-1); // Norm MinvMix histo
+                           hTableMinv[i]->SetName(Form("%s_wbck",hTableMinv[i]->GetName())); // Norm MinvMix histo
+                         }
+@@ -2808,8 +2817,13 @@ void AliAnalysisMuMu::NormMixedMinv(const char* binType, const char* particle, c
+                       for (int j = 0; j < nEntries ; j++) {
+                         Double_t binContent = hMinvMixPPCopy->GetBinContent(j);
+                         Double_t binError   = hMinvMixPPCopy->GetBinError(j);
+-                        if( binContent !=0 ) hMinvMixPPCopy->SetBinContent(j,TMath::Sqrt(binContent));
+-                        if( binContent !=0 && binError !=0 ) hMinvMixPPCopy->SetBinError(j,TMath::Sqrt(binContent)*(binError/binContent));
++                        if( binContent !=0 && binError !=0 ){
++                          hMinvMixPPCopy->SetBinContent(j,TMath::Sqrt(binContent));
++                          hMinvMixPPCopy->SetBinError(j,TMath::Sqrt(binContent)*(binError/binContent));
++                        }/* else {
++                          hMinvMixPPCopy->SetBinContent(j,0.);
++                          hMinvMixPPCopy->SetBinError(j,0.);
++                        }*/
+                       }
+ 
+                       // Final R Factor
+@@ -2844,8 +2858,13 @@ void AliAnalysisMuMu::NormMixedMinv(const char* binType, const char* particle, c
+                       for (int i = 0; i < nEntries ; i++){
+                         Double_t binContent = hMinvPPCopy->GetBinContent(i);
+                         Double_t binError   = hMinvPPCopy->GetBinError(i);
+-                        if( binContent !=0 )                 hMinvPPCopy->SetBinContent(i,TMath::Sqrt(binContent));
+-                        if( binContent !=0 && binError !=0 ) hMinvPPCopy->SetBinError(i,TMath::Sqrt(binContent)*(binError/binContent));
++                        if( binContent !=0 && binError !=0 ){
++                          hMinvPPCopy->SetBinContent(i,TMath::Sqrt(binContent));
++                          hMinvPPCopy->SetBinError(i,TMath::Sqrt(binContent)*(binError/binContent));
++                        } /*else {
++                          hMinvPPCopy->SetBinContent(i,0.);
++                          hMinvPPCopy->SetBinError(i,0.);
++                        }*/
+                       }
+ 
+                       // Multiply by 2R
+-- 
+2.8.4 (Apple Git-73)
+
