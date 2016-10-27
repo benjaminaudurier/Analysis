@@ -229,15 +229,7 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
   }
 
   // v0 centrality binning
-  binning->AddBin("centrality","V0M",0.,10.);
-  binning->AddBin("centrality","V0M",10.,20.);
-  binning->AddBin("centrality","V0M",20.,30.);
-  binning->AddBin("centrality","V0M",30.,40.);
-  binning->AddBin("centrality","V0M",40.,50.);
-  binning->AddBin("centrality","V0M",50.,60.);
-  binning->AddBin("centrality","V0M",60.,70.);
-  binning->AddBin("centrality","V0M",70.,80.);
-  binning->AddBin("centrality","V0M",80.,90.);
+  binning->AddBin("centrality","pp");
 
   // add the configured task to the analysis manager
   mgr->AddTask(task);

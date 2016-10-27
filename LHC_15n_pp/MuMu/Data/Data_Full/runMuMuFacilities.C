@@ -26,7 +26,7 @@
   Int_t maxMergeStages      = 2;
 
   // --- saf3 specific setup ---
-  Bool_t splitDataset = kTRUE;
+  Bool_t splitDataset = kFALSE;
 
 //______________________________________________________________________________
 void runMuMuFacilities(TString smode = "local", TString inputFileName = "AliAOD.Muons.root", Bool_t isMC = kFALSE)

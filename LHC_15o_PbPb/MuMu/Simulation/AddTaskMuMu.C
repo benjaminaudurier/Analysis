@@ -62,11 +62,14 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
   AliAnalysisMuMuCutElement * eventTrue           = cr->AddEventCut(*eventCutter,"IsTrue","const AliVEvent&","");
   AliAnalysisMuMuCutElement * triggerSelection    = cr->AddTriggerClassCut(*eventCutter,"SelectTriggerClass","const TString&,TString&,UInt_t,UInt_t,UInt_t","");
   AliAnalysisMuMuCutElement * ps                  = eventTrue;
+  AliAnalysisMuMuCutElement * ps1                  = eventTrue;
 
   ps  = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedINT7","const AliInputEventHandler&","");
+  ps1  = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedINT7inMUON","const AliInputEventHandler&","");
 
   cr->AddCutCombination(eventTrue,triggerSelection);
   cr->AddCutCombination(ps,triggerSelection);
+  cr->AddCutCombination(ps1,triggerSelection);
 
 
   if ( singleAnalysis ){
