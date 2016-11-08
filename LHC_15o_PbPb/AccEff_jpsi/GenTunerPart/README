@@ -1,0 +1,31 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Note sur le dossier AccEff
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+Dans ce dossier se trouve les macro / task  pour calculer l'AccEff et la systématique associée.
+Nous allons expliquer brievement la procédure et les différentes parties :
+
+----------------
+Dossier DataPart :
+----------------
+
+runMuMu.C doit être configuré pour tourner sur les donnée pour fournir les histogrammes de références pour l'AccEff. Ces histo sont stockés dans le fichier ROOT AnalysisResultReference.root.
+A FAIRE TOURNER EN PREMIER !
+
+
+----------------
+Dossier GenTuner :
+----------------
+
+Dedans se trouve la task et les macro associées pour obtenir les bons paramètres pour les fonctions de générations du J/psi dans les MC. Cette task prend les histo de référence (data)
+dans AnalysisResultReference.root.
+
+----------------
+Dossier MCPart :
+----------------
+
+Une fois les paramètres obtenus, c'est dans le dossier MCPart que se trouve de quoi avoir la syst. de l'AccEff. le runMuMu.C est configuré pour tourner sur les MC et obtenir les spectres
+de masse invariantes :
+	-J/psi générés
+	-Muons reconstruit
