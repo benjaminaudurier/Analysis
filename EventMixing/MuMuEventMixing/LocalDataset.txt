@@ -1,3 +1,0 @@
-~/Documents/Analysis/EventMixing/MuMuEventMixing/AliAOD.Muons.root
-~/Documents/Analysis/EventMixing/MuMuEventMixing/AliAOD.Muons.0002.root
-~/Documents/Analysis/EventMixing/MuMuEventMixing/AliAOD.Muons.04.root

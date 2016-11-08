@@ -29,7 +29,7 @@
   Bool_t splitDataset = kFALSE;
 
 //______________________________________________________________________________
-void runMuMuFacilities(TString smode = "local", TString inputFileName = "AliAOD.Muons.root", Bool_t isMC = kFALSE)
+void runMuMuFacilities(TString smode = "local", TString inputFileName = "AliAOD.Muons.root", Bool_t isMC = kTRUE)
 {
   /// Fill counters with triggered events
 
@@ -38,6 +38,7 @@ void runMuMuFacilities(TString smode = "local", TString inputFileName = "AliAOD.
   fileList.Add(new TObjString( "runMuMuFacilities.C" ));
   fileList.Add(new TObjString( "AddTaskMuMu.C" ));
   fileList.Add(new TObjString( "PWGmuon.par" ));
+  fileList.Add(new TObjString( "AccEffCorr.root" ));
 
   // Automatically generate parfile
   TObjString* Obj=0x0;
@@ -81,14 +82,9 @@ void CreateAnalysisTrain(Bool_t isMC)
       return;
   }
 
-  // Load centrality task
-  // gROOT->LoadMacro("$ALICE_PHYSICS/OADB/COMMON/MULTIPLICITY/macros/AddTaskMultSelection.C");
-  // AliMultSelectionTask* task = AddTaskMultSelection(kFALSE); // user
-  // task->SetAlternateOADBforEstimators("LHC15o");              // only if run locally
-
   TString output =  Form("%s",AliAnalysisManager::GetCommonFileName());
   gROOT->LoadMacro("AddTaskMuMu.C");
-  AliAnalysisTaskMuMu*         TaskMuMu = AddTaskMuMu(output.Data(),"PbPb2015",isMC);
+  AliAnalysisTaskMuMu*         TaskMuMu = AddTaskMuMu(output.Data(),"pp2015",isMC);
 
 }
 

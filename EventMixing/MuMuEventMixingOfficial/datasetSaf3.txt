@@ -1,3 +1,0 @@
-Find;BasePath=/alice/data/2015/LHC15o/000246994/muon_calo_pass1/AOD175/*;FileName=AliAOD.Muons.root;Mode=cache;;Mode=cache
-Find;BasePath=/alice/data/2015/LHC15o/000246991/muon_calo_pass1/AOD175/*;FileName=AliAOD.Muons.root;Mode=cache;;Mode=cache
-Find;BasePath=/alice/data/2015/LHC15o/000246989/muon_calo_pass1/AOD175/*;FileName=AliAOD.Muons.root;Mode=cache;;Mode=cache

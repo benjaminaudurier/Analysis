@@ -26,7 +26,10 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
 
   TList* triggers = new TList;
   triggers->SetOwner(kTRUE);
-  triggers->Add(new TObjString("CINT7-B-NOPF-MUFAST"));
+  triggers->Add(new TObjString("ANY"));
+  triggers->Add(new TObjString("MB1"));
+  triggers->Add(new TObjString("C0T0A"));
+  triggers->Add(new TObjString("MULow"));
 
   // ========= Configure inputmaps (Default on is in AliMuonEventCuts) ========
 
@@ -47,7 +50,25 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
   AliAnalysisTaskMuMu  * task             = new AliAnalysisTaskMuMu; // Call the task
   AliAnalysisMuMuSingle* singleAnalysis   = new AliAnalysisMuMuSingle;// Analysis dealing with single muon
   AliAnalysisMuMuMinv  * minvAnalysis     = new AliAnalysisMuMuMinv;// Analysis creating invariant mass spectrum
+
+  // Get the AccEff Histogram
+  TFile* f =TFile::Open("AccEffCorr.root");
+  if(!f) {
+    printf("Cannot open file \n");
+    return;
+  }
+
+  TH2* AccEff2D =0x0;
+  f->GetObject("ANY-ALL-pALLPAIRYPAIRPTIN0.0-12.0RABSMATCHLOWETA-PP",AccEff2D);
+  if(!AccEff2D){
+    printf("Cannot get AccEff Histogram\n");
+    return;
+  }
+
+  AliAnalysisMuMuMinv  * minvAnalysis     = new AliAnalysisMuMuMinv(AccEff2D);// Analysis creating invariant mass spectrum
+  minvAnalysis->FillMeanPtHisto();
   task->SetBeamYear(beamYear);
+  f->Close();
 
   // =========
 
@@ -61,16 +82,8 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
 
   AliAnalysisMuMuCutElement * eventTrue           = cr->AddEventCut(*eventCutter,"IsTrue","const AliVEvent&","");
   AliAnalysisMuMuCutElement * triggerSelection    = cr->AddTriggerClassCut(*eventCutter,"SelectTriggerClass","const TString&,TString&,UInt_t,UInt_t,UInt_t","");
-  AliAnalysisMuMuCutElement * ps                  = eventTrue;
-  AliAnalysisMuMuCutElement * ps1                  = eventTrue;
-
-  ps  = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedINT7","const AliInputEventHandler&","");
-  ps1  = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedINT7inMUON","const AliInputEventHandler&","");
 
   cr->AddCutCombination(eventTrue,triggerSelection);
-  cr->AddCutCombination(ps,triggerSelection);
-  cr->AddCutCombination(ps1,triggerSelection);
-
 
   if ( singleAnalysis ){
 
@@ -135,7 +148,7 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
 
     // pt binning
     binning->AddBin("psi","pt", 0.0, 1.0,"BENJ");
-    binning->AddBin("psi","pt", 0.3, 1.0,"BENJ_PTCUT");
+    binning->AddBin("psi","pt", 0.3, 1.0,"BENJ");
     binning->AddBin("psi","pt", 1.0, 2.0,"BENJ");
     binning->AddBin("psi","pt", 2.0, 3.0,"BENJ");
     binning->AddBin("psi","pt", 3.0, 4.0,"BENJ");
@@ -148,6 +161,7 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
     binning->AddBin("psi","pt", 10.0, 12.0,"BENJ");
 
     binning->AddBin("psi","pt", 0.3, 12.0,"INT_PUTCUT");
+    binning->AddBin("psi","pt", 0.0, 8.0,"INT");
 
      // y binning
      binning->AddBin("psi","y",-4,-3.75,"BENJ");
@@ -161,7 +175,7 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
      binning->AddBin("psi","yvspt",0,1,-4,-3.25 ,"BENJ");
 
     binning->AddBin("psi","yvspt", 0.0, 1.0,-4,-3.25,"2DBIN1");
-    binning->AddBin("psi","yvspt", 0.3, 1.0,-4,-3.25,"2DBIN1_PTCUT");
+    binning->AddBin("psi","yvspt", 0.3, 1.0,-4,-3.25,"2DBIN1");
     binning->AddBin("psi","yvspt", 1.0, 2.0,-4,-3.25,"2DBIN1");
     binning->AddBin("psi","yvspt", 2.0, 3.0,-4,-3.25,"2DBIN1");
     binning->AddBin("psi","yvspt", 3.0, 4.0,-4,-3.25,"2DBIN1");
@@ -172,7 +186,7 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
     binning->AddBin("psi","yvspt", 8.0, 12.0,-4,-3.25,"2DBIN1");
 
     binning->AddBin("psi","yvspt", 0.0, 1.0,-3.25,-2.5,"2DBIN2");
-    binning->AddBin("psi","yvspt", 0.3, 1.0,-3.25,-2.5,"2DBIN2_PTCUT");
+    binning->AddBin("psi","yvspt", 0.3, 1.0,-3.25,-2.5,"2DBIN2");
     binning->AddBin("psi","yvspt", 1.0, 2.0,-3.25,-2.5,"2DBIN2");
     binning->AddBin("psi","yvspt", 2.0, 3.0,-3.25,-2.5,"2DBIN2");
     binning->AddBin("psi","yvspt", 3.0, 4.0,-3.25,-2.5,"2DBIN2");
@@ -181,19 +195,31 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
     binning->AddBin("psi","yvspt", 6.0, 7.0,-3.25,-2.5,"2DBIN2");
     binning->AddBin("psi","yvspt", 7.0, 8.0,-3.25,-2.5,"2DBIN2");
     binning->AddBin("psi","yvspt", 8.0, 12.0,-3.25,-2.5,"2DBIN2");
+
+
+    binning->AddBin("psi","yvspt", 0.0, 1.0,-4,-3.25,"2DBIN");
+    binning->AddBin("psi","yvspt", 1.0, 2.0,-4,-3.25,"2DBIN");
+    binning->AddBin("psi","yvspt", 2.0, 3.0,-4,-3.25,"2DBIN");
+    binning->AddBin("psi","yvspt", 3.0, 4.0,-4,-3.25,"2DBIN");
+    binning->AddBin("psi","yvspt", 4.0, 5.0,-4,-3.25,"2DBIN");
+    binning->AddBin("psi","yvspt", 5.0, 6.0,-4,-3.25,"2DBIN");
+    binning->AddBin("psi","yvspt", 6.0, 7.0,-4,-3.25,"2DBIN");
+    binning->AddBin("psi","yvspt", 7.0, 8.0,-4,-3.25,"2DBIN");
+    binning->AddBin("psi","yvspt", 8.0, 12.0,-4,-3.25,"2DBIN");
+
+    binning->AddBin("psi","yvspt", 0.0, 1.0,-3.25,-2.5,"2DBIN");
+    binning->AddBin("psi","yvspt", 1.0, 2.0,-3.25,-2.5,"2DBIN");
+    binning->AddBin("psi","yvspt", 2.0, 3.0,-3.25,-2.5,"2DBIN");
+    binning->AddBin("psi","yvspt", 3.0, 4.0,-3.25,-2.5,"2DBIN");
+    binning->AddBin("psi","yvspt", 4.0, 5.0,-3.25,-2.5,"2DBIN");
+    binning->AddBin("psi","yvspt", 5.0, 6.0,-3.25,-2.5,"2DBIN");
+    binning->AddBin("psi","yvspt", 6.0, 7.0,-3.25,-2.5,"2DBIN");
+    binning->AddBin("psi","yvspt", 7.0, 8.0,-3.25,-2.5,"2DBIN");
+    binning->AddBin("psi","yvspt", 8.0, 12.0,-3.25,-2.5,"2DBIN");
   }
 
   // v0 centrality binning
-  binning->AddBin("centrality","V0M",0.,90.);
-  binning->AddBin("centrality","V0M",0.,10.);
-  binning->AddBin("centrality","V0M",10.,20.);
-  binning->AddBin("centrality","V0M",20.,30.);
-  binning->AddBin("centrality","V0M",30.,40.);
-  binning->AddBin("centrality","V0M",40.,50.);
-  binning->AddBin("centrality","V0M",50.,60.);
-  binning->AddBin("centrality","V0M",60.,70.);
-  binning->AddBin("centrality","V0M",70.,80.);
-  binning->AddBin("centrality","V0M",80.,90.);
+  binning->AddBin("centrality","pp");
 
   // add the configured task to the analysis manager
   mgr->AddTask(task);

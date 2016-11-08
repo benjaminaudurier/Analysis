@@ -59,7 +59,7 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
   AliAnalysisMuMuSingle* singleAnalysis   = new AliAnalysisMuMuSingle;// Analysis dealing with single muon
   AliAnalysisMuMuMinv  * minvAnalysis     = new AliAnalysisMuMuMinv;// Analysis creating invariant mass spectrum
   task->SetBeamYear(beamYear);
-  task->SetPoolSize(50);
+  task->SetPoolSize(20);
 
   // =========
 
