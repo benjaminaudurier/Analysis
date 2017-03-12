@@ -26,15 +26,15 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
 
   TList* triggers = new TList;
   triggers->SetOwner(kTRUE);
-  triggers->Add(new TObjString("CMSL7-B-NOPF-MUFAST"));
+  // triggers->Add(new TObjString("CMSL7-B-NOPF-MUFAST"));
   triggers->Add(new TObjString("CMUL7-B-NOPF-MUFAST"));
-  triggers->Add(new TObjString("CMUL7-B-NOPF-MUFAST||CMLL7-B-NOPF-MUFAST"));
+  // triggers->Add(new TObjString("CMUL7-B-NOPF-MUFAST||CMLL7-B-NOPF-MUFAST"));
 
   // --- Pool trigger ---
 
-  TList* triggersmix = new TList;
-  triggersmix->SetOwner(kTRUE);
-  triggersmix->Add(new TObjString("CMSL7-B-NOPF-MUFAST"));
+//  TList* triggersmix = new TList;
+// triggersmix->SetOwner(kTRUE);
+//  triggersmix->Add(new TObjString("CMSL7-B-NOPF-MUFAST"));
 
   // =========
 
@@ -59,7 +59,7 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
   AliAnalysisMuMuSingle* singleAnalysis   = new AliAnalysisMuMuSingle;// Analysis dealing with single muon
   AliAnalysisMuMuMinv  * minvAnalysis     = new AliAnalysisMuMuMinv;// Analysis creating invariant mass spectrum
   task->SetBeamYear(beamYear);
-  task->SetPoolSize(20);
+  // task->SetPoolSize(20);
 
   // =========
 
@@ -73,34 +73,34 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
 
   AliAnalysisMuMuCutElement * eventTrue           = cr->AddEventCut(*eventCutter,"IsTrue","const AliVEvent&","");
   AliAnalysisMuMuCutElement * triggerSelection    = cr->AddTriggerClassCut(*eventCutter,"SelectTriggerClass","const TString&,TString&,UInt_t,UInt_t,UInt_t","");
-  AliAnalysisMuMuCutElement * ps                  = eventTrue;
+  // AliAnalysisMuMuCutElement * ps                  = eventTrue;
   AliAnalysisMuMuCutElement * ps1                 = eventTrue;
-  AliAnalysisMuMuCutElement * ps2                 = eventTrue;
+  // AliAnalysisMuMuCutElement * ps2                 = eventTrue;
 
   if (!simulations){
-    ps  = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedMSL","const AliInputEventHandler&","");
+    // ps  = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedMSL","const AliInputEventHandler&","");
     ps1 = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedMUL","const AliInputEventHandler&","");
-    ps2 = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedMULORMLL","const AliInputEventHandler&","");
+    // ps2 = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedMULORMLL","const AliInputEventHandler&","");
   }
 
-  cr->AddCutCombination(ps,triggerSelection);
+  // cr->AddCutCombination(ps,triggerSelection);
   cr->AddCutCombination(ps1,triggerSelection);
-  cr->AddCutCombination(ps2,triggerSelection);
+  // cr->AddCutCombination(ps2,triggerSelection);
 
   // --- mix Analysis ---
 
-  AliAnalysisMuMuEventCutter* eventCutterMix      = new AliAnalysisMuMuEventCutter(triggersmix,triggerInputsMap); // To handle cuts on event
-  AliAnalysisMuMuCutRegistry* crmix               = task->CutRegistryMix(); // Set CutRegistry
+  // AliAnalysisMuMuEventCutter* eventCutterMix      = new AliAnalysisMuMuEventCutter(triggersmix,triggerInputsMap); // To handle cuts on event
+  // AliAnalysisMuMuCutRegistry* crmix               = task->CutRegistryMix(); // Set CutRegistry
 
-  AliAnalysisMuMuCutElement * eventTrue           = crmix->AddEventCut(*eventCutterMix,"IsTrue","const AliVEvent&","");
-  AliAnalysisMuMuCutElement * triggerSelectionmix = crmix->AddTriggerClassCut(*eventCutterMix,"SelectTriggerClass","const TString&,TString&,UInt_t,UInt_t,UInt_t","");
-  AliAnalysisMuMuCutElement * ps3                 = eventTrue;
+  // AliAnalysisMuMuCutElement * eventTrue           = crmix->AddEventCut(*eventCutterMix,"IsTrue","const AliVEvent&","");
+  // AliAnalysisMuMuCutElement * triggerSelectionmix = crmix->AddTriggerClassCut(*eventCutterMix,"SelectTriggerClass","const TString&,TString&,UInt_t,UInt_t,UInt_t","");
+  // AliAnalysisMuMuCutElement * ps3                 = eventTrue;
 
-  if (!simulations){
-    ps3 = crmix->AddEventCut(*eventCutterMix,"IsPhysicsSelectedMSL","const AliInputEventHandler&","");
-  }
+  // if (!simulations){
+  //   ps3 = crmix->AddEventCut(*eventCutterMix,"IsPhysicsSelectedMSL","const AliInputEventHandler&","");
+  // }
 
-  crmix->AddCutCombination(ps3,triggerSelectionmix);
+  // crmix->AddCutCombination(ps3,triggerSelectionmix);
 
   // =========
 
@@ -116,11 +116,11 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
 
 
     // --- Create combination of cuts to apply (mix) ---
-    AliAnalysisMuMuCutElement* trackTruemix = crmix->AddTrackCut(*crmix,"AlwaysTrue","const AliVParticle&",""); // Apply "AlwaysTrue" cut on AliVParticle derived from AliAnalysisMuMuSingle
-    AliAnalysisMuMuCutElement* rabsmix      = crmix->AddTrackCut(*singleAnalysis,"IsRabsOK","const AliVParticle&","");
-    AliAnalysisMuMuCutElement* matchlowmix  = crmix->AddTrackCut(*singleAnalysis,"IsMatchingTriggerLowPt","const AliVParticle&","");
-    AliAnalysisMuMuCutElement* etamix       = crmix->AddTrackCut(*singleAnalysis,"IsEtaInRange","const AliVParticle&","");
-    crmix->AddCutCombination(trackTruemix,rabsmix,matchlowmix,etamix);
+    // AliAnalysisMuMuCutElement* trackTruemix = crmix->AddTrackCut(*crmix,"AlwaysTrue","const AliVParticle&",""); // Apply "AlwaysTrue" cut on AliVParticle derived from AliAnalysisMuMuSingle
+    // AliAnalysisMuMuCutElement* rabsmix      = crmix->AddTrackCut(*singleAnalysis,"IsRabsOK","const AliVParticle&","");
+    // AliAnalysisMuMuCutElement* matchlowmix  = crmix->AddTrackCut(*singleAnalysis,"IsMatchingTriggerLowPt","const AliVParticle&","");
+    // AliAnalysisMuMuCutElement* etamix       = crmix->AddTrackCut(*singleAnalysis,"IsEtaInRange","const AliVParticle&","");
+    // crmix->AddCutCombination(trackTruemix,rabsmix,matchlowmix,etamix);
 
     // --- Disable some histo. Comment the one you want ---
     // singleAnalysis->DisableHistograms("BCX");
@@ -178,7 +178,7 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
 
     // pt binning
     binning->AddBin("psi","pt", 0.0, 1.0,"BENJ");
-    binning->AddBin("psi","pt", 0.3, 1.0,"BENJ_PTCUT");
+    binning->AddBin("psi","pt", 0.3, 1.0,"BENJ");
     binning->AddBin("psi","pt", 1.0, 2.0,"BENJ");
     binning->AddBin("psi","pt", 2.0, 3.0,"BENJ");
     binning->AddBin("psi","pt", 3.0, 4.0,"BENJ");
@@ -190,7 +190,13 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
     binning->AddBin("psi","pt", 9.0, 10.0,"BENJ");
     binning->AddBin("psi","pt", 10.0, 12.0,"BENJ");
 
-    binning->AddBin("psi","pt", 0.3, 12.0,"INT_PUTCUT");
+    binning->AddBin("psi","pt", 0.3, 12.0,"INT_PTCUT");
+    binning->AddBin("psi","pt", 0.0, 8.0,"INT");
+    binning->AddBin("psi","pt", 0.0, 2.0,"INT_VAR1");
+    binning->AddBin("psi","pt", 0.3, 2.0,"INT_VAR2");
+    binning->AddBin("psi","pt", 2.0, 5.0,"INT_VAR3");
+    binning->AddBin("psi","pt", 5.0, 8.0,"INT_VAR4");
+    binning->AddBin("psi","pt", 8.0, 12.0,"INT_VAR5");
 
      // y binning
      binning->AddBin("psi","y",-4,-3.75,"BENJ");
@@ -204,27 +210,24 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
      binning->AddBin("psi","yvspt",0,1,-4,-3.25 ,"BENJ");
 
     binning->AddBin("psi","yvspt", 0.0, 1.0,-4,-3.25,"2DBIN1");
-    binning->AddBin("psi","yvspt", 0.3, 1.0,-4,-3.25,"2DBIN1_PTCUT");
+    binning->AddBin("psi","yvspt", 0.3, 1.0,-4,-3.25,"2DBIN1");
     binning->AddBin("psi","yvspt", 1.0, 2.0,-4,-3.25,"2DBIN1");
     binning->AddBin("psi","yvspt", 2.0, 3.0,-4,-3.25,"2DBIN1");
     binning->AddBin("psi","yvspt", 3.0, 4.0,-4,-3.25,"2DBIN1");
     binning->AddBin("psi","yvspt", 4.0, 5.0,-4,-3.25,"2DBIN1");
     binning->AddBin("psi","yvspt", 5.0, 6.0,-4,-3.25,"2DBIN1");
-    binning->AddBin("psi","yvspt", 6.0, 7.0,-4,-3.25,"2DBIN1");
-    binning->AddBin("psi","yvspt", 7.0, 8.0,-4,-3.25,"2DBIN1");
+    binning->AddBin("psi","yvspt", 6.0, 8.0,-4,-3.25,"2DBIN1");
     binning->AddBin("psi","yvspt", 8.0, 12.0,-4,-3.25,"2DBIN1");
 
     binning->AddBin("psi","yvspt", 0.0, 1.0,-3.25,-2.5,"2DBIN2");
-    binning->AddBin("psi","yvspt", 0.3, 1.0,-3.25,-2.5,"2DBIN2_PTCUT");
+    binning->AddBin("psi","yvspt", 0.3, 1.0,-3.25,-2.5,"2DBIN2");
     binning->AddBin("psi","yvspt", 1.0, 2.0,-3.25,-2.5,"2DBIN2");
     binning->AddBin("psi","yvspt", 2.0, 3.0,-3.25,-2.5,"2DBIN2");
     binning->AddBin("psi","yvspt", 3.0, 4.0,-3.25,-2.5,"2DBIN2");
     binning->AddBin("psi","yvspt", 4.0, 5.0,-3.25,-2.5,"2DBIN2");
     binning->AddBin("psi","yvspt", 5.0, 6.0,-3.25,-2.5,"2DBIN2");
-    binning->AddBin("psi","yvspt", 6.0, 7.0,-3.25,-2.5,"2DBIN2");
-    binning->AddBin("psi","yvspt", 7.0, 8.0,-3.25,-2.5,"2DBIN2");
+    binning->AddBin("psi","yvspt", 6.0, 8.0,-3.25,-2.5,"2DBIN2");
     binning->AddBin("psi","yvspt", 8.0, 12.0,-3.25,-2.5,"2DBIN2");
-
 
   }
 

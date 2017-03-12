@@ -135,6 +135,43 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
       // minvAnalysis->DisableHistograms("Y");
 
       // Adding the sub analysis
+      minvAnalysis->SetMCptCut(0.,12.);
+       // MC reweighting From Cross-section analysis
+      if (simulations){
+        // Cut on generated Jpsi
+        Double_t mcGenPtCutMin =0.;
+        Double_t mcGenPtCutMax =12.;
+
+        // tune3 LHC15n jpsi
+        TString oldPtFormula    =   "[0]*x / TMath::Power([1] + TMath::Power(x,[2]),[3])";
+        Double_t oldPtParam[4]  =   {4654.3, 12.8133, 1.9647, 3.66641};
+
+        // Fit from Cross section
+        TString newPtFormula    = "[0]*x / TMath::Power([1] + TMath::Power(x,[2]),[3])";
+        Double_t newPtParam[4]  = {5.21831e+04, 1.46939e+01,1.93309, 3.93941};
+
+        // tune3 LHC15n jpsi
+        TString oldYFormula     = " [0] * ( 1 + [1]*x*x ) ";
+        Double_t oldYParam[2]   = {1.18296, -0.0405994};
+
+        TString newYFormula     = "[0] * ( 1 + [1]*x*x)";
+        Double_t newYParam[2]   =  {6.36959, -3.99165e-02};
+
+        Double_t ptRangeFunc[2] = {0., 999.};
+        Double_t yRangeFunc[2]  = {-4.2, -2.3};
+
+        //Set pt cut on Gen level
+        minvAnalysis->SetMCptCut(mcGenPtCutMin,mcGenPtCutMax);
+
+        // set the original function and parameters used in simulation
+        minvAnalysis->SetOriginPtFunc(oldPtFormula.Data(), oldPtParam, ptRangeFunc[0], ptRangeFunc[1]);
+        minvAnalysis->SetOriginYFunc(oldYFormula.Data(), oldYParam, yRangeFunc[0], yRangeFunc[1]);
+
+        // set the new function and initial parameters
+        minvAnalysis->SetNewPtFunc(newPtFormula.Data(), newPtParam, ptRangeFunc[0], ptRangeFunc[1]);
+        minvAnalysis->SetNewYFunc(newYFormula.Data(), newYParam, yRangeFunc[0], yRangeFunc[1]);
+      }
+      // Adding the sub analysis
       task->AdoptSubAnalysis(minvAnalysis);
     }
   }
@@ -160,8 +197,14 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
     binning->AddBin("psi","pt", 9.0, 10.0,"BENJ");
     binning->AddBin("psi","pt", 10.0, 12.0,"BENJ");
 
-    binning->AddBin("psi","pt", 0.3, 12.0,"INT_PUTCUT");
+    // binning->AddBin("psi","pt", 0.3, 12.0,"INT_PUTCUT");
     binning->AddBin("psi","pt", 0.0, 8.0,"INT");
+    binning->AddBin("psi","pt", 0.3, 12.0,"INT_PTCUT");
+    binning->AddBin("psi","pt", 0.0, 2.0,"INT_VAR1");
+    binning->AddBin("psi","pt", 0.3, 2.0,"INT_VAR2");
+    binning->AddBin("psi","pt", 2.0, 5.0,"INT_VAR3");
+    binning->AddBin("psi","pt", 5.0, 8.0,"INT_VAR4");
+    binning->AddBin("psi","pt", 8.0, 12.0,"INT_VAR5");
 
      // y binning
      binning->AddBin("psi","y",-4,-3.75,"BENJ");
@@ -181,8 +224,8 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
     binning->AddBin("psi","yvspt", 3.0, 4.0,-4,-3.25,"2DBIN1");
     binning->AddBin("psi","yvspt", 4.0, 5.0,-4,-3.25,"2DBIN1");
     binning->AddBin("psi","yvspt", 5.0, 6.0,-4,-3.25,"2DBIN1");
-    binning->AddBin("psi","yvspt", 6.0, 7.0,-4,-3.25,"2DBIN1");
-    binning->AddBin("psi","yvspt", 7.0, 8.0,-4,-3.25,"2DBIN1");
+    binning->AddBin("psi","yvspt", 6.0, 8.0,-4,-3.25,"2DBIN1");
+    // binning->AddBin("psi","yvspt", 8.0, 8.0,-4,-3.25,"2DBIN1");
     binning->AddBin("psi","yvspt", 8.0, 12.0,-4,-3.25,"2DBIN1");
 
     binning->AddBin("psi","yvspt", 0.0, 1.0,-3.25,-2.5,"2DBIN2");
@@ -192,30 +235,46 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
     binning->AddBin("psi","yvspt", 3.0, 4.0,-3.25,-2.5,"2DBIN2");
     binning->AddBin("psi","yvspt", 4.0, 5.0,-3.25,-2.5,"2DBIN2");
     binning->AddBin("psi","yvspt", 5.0, 6.0,-3.25,-2.5,"2DBIN2");
-    binning->AddBin("psi","yvspt", 6.0, 7.0,-3.25,-2.5,"2DBIN2");
-    binning->AddBin("psi","yvspt", 7.0, 8.0,-3.25,-2.5,"2DBIN2");
+    binning->AddBin("psi","yvspt", 6.0, 8.0,-3.25,-2.5,"2DBIN2");
+    // binning->AddBin("psi","yvspt", 7.0, 8.0,-3.25,-2.5,"2DBIN2");
     binning->AddBin("psi","yvspt", 8.0, 12.0,-3.25,-2.5,"2DBIN2");
 
 
-    binning->AddBin("psi","yvspt", 0.0, 1.0,-4,-3.25,"2DBIN");
-    binning->AddBin("psi","yvspt", 1.0, 2.0,-4,-3.25,"2DBIN");
-    binning->AddBin("psi","yvspt", 2.0, 3.0,-4,-3.25,"2DBIN");
-    binning->AddBin("psi","yvspt", 3.0, 4.0,-4,-3.25,"2DBIN");
-    binning->AddBin("psi","yvspt", 4.0, 5.0,-4,-3.25,"2DBIN");
-    binning->AddBin("psi","yvspt", 5.0, 6.0,-4,-3.25,"2DBIN");
-    binning->AddBin("psi","yvspt", 6.0, 7.0,-4,-3.25,"2DBIN");
-    binning->AddBin("psi","yvspt", 7.0, 8.0,-4,-3.25,"2DBIN");
-    binning->AddBin("psi","yvspt", 8.0, 12.0,-4,-3.25,"2DBIN");
+    // binning->AddBin("psi","yvspt", 0.0, 1.0,-4,-3.25,"2DBIN1");
+    // binning->AddBin("psi","yvspt", 0.3, 1.0,-4,-3.25,"2DBIN1");
+    // binning->AddBin("psi","yvspt", 1.0, 2.0,-4,-3.25,"2DBIN1");
+    // binning->AddBin("psi","yvspt", 2.0, 3.0,-4,-3.25,"2DBIN1");
+    // binning->AddBin("psi","yvspt", 3.0, 4.0,-4,-3.25,"2DBIN1");
+    // binning->AddBin("psi","yvspt", 4.0, 5.0,-4,-3.25,"2DBIN1");
+    // binning->AddBin("psi","yvspt", 5.0, 6.0,-4,-3.25,"2DBIN1");
+    // binning->AddBin("psi","yvspt", 6.0, 7.0,-4,-3.25,"2DBIN1");
+    // binning->AddBin("psi","yvspt", 7.0, 12.0,-4,-3.25,"2DBIN1");
 
-    binning->AddBin("psi","yvspt", 0.0, 1.0,-3.25,-2.5,"2DBIN");
-    binning->AddBin("psi","yvspt", 1.0, 2.0,-3.25,-2.5,"2DBIN");
-    binning->AddBin("psi","yvspt", 2.0, 3.0,-3.25,-2.5,"2DBIN");
-    binning->AddBin("psi","yvspt", 3.0, 4.0,-3.25,-2.5,"2DBIN");
-    binning->AddBin("psi","yvspt", 4.0, 5.0,-3.25,-2.5,"2DBIN");
-    binning->AddBin("psi","yvspt", 5.0, 6.0,-3.25,-2.5,"2DBIN");
-    binning->AddBin("psi","yvspt", 6.0, 7.0,-3.25,-2.5,"2DBIN");
-    binning->AddBin("psi","yvspt", 7.0, 8.0,-3.25,-2.5,"2DBIN");
-    binning->AddBin("psi","yvspt", 8.0, 12.0,-3.25,-2.5,"2DBIN");
+    // binning->AddBin("psi","yvspt", 0.0, 1.0,-3.25,-2.5,"2DBIN2");
+    // binning->AddBin("psi","yvspt", 0.3, 1.0,-3.25,-2.5,"2DBIN2");
+    // binning->AddBin("psi","yvspt", 1.0, 2.0,-3.25,-2.5,"2DBIN2");
+    // binning->AddBin("psi","yvspt", 2.0, 3.0,-3.25,-2.5,"2DBIN2");
+    // binning->AddBin("psi","yvspt", 3.0, 4.0,-3.25,-2.5,"2DBIN2");
+    // binning->AddBin("psi","yvspt", 4.0, 5.0,-3.25,-2.5,"2DBIN2");
+    // binning->AddBin("psi","yvspt", 5.0, 6.0,-3.25,-2.5,"2DBIN2");
+    // binning->AddBin("psi","yvspt", 6.0, 7.0,-3.25,-2.5,"2DBIN2");
+    // binning->AddBin("psi","yvspt", 7.0, 12.0,-3.25,-2.5,"2DBIN2");
+
+
+
+    Double_t dy = 0.25;
+    for (int i = 0; i < 6; ++i)
+    {
+      binning->AddBin("psi","yvspt", 0.0, 1.0,-4+i*dy,-4+dy+i*dy,"2DBINVAR");
+      binning->AddBin("psi","yvspt", 1.0, 2.0,-4+i*dy,-4+dy+i*dy,"2DBINVAR");
+      binning->AddBin("psi","yvspt", 2.0, 3.0,-4+i*dy,-4+dy+i*dy,"2DBINVAR");
+      binning->AddBin("psi","yvspt", 3.0, 4.0,-4+i*dy,-4+dy+i*dy,"2DBINVAR");
+      binning->AddBin("psi","yvspt", 4.0, 5.0,-4+i*dy,-4+dy+i*dy,"2DBINVAR");
+      binning->AddBin("psi","yvspt", 5.0, 6.0,-4+i*dy,-4+dy+i*dy,"2DBINVAR");
+      binning->AddBin("psi","yvspt", 6.0, 7.0,-4+i*dy,-4+dy+i*dy,"2DBINVAR");
+      binning->AddBin("psi","yvspt", 7.0, 8.0,-4+i*dy,-4+dy+i*dy,"2DBINVAR");
+      binning->AddBin("psi","yvspt", 8.0, 12.0,-4+i*dy,-4+dy+i*dy,"2DBINVAR");
+    }
   }
 
   // v0 centrality binning

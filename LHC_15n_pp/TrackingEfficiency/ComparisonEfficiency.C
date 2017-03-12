@@ -41,7 +41,7 @@
 #include <TSystem.h>
 #include <TString.h>
 
-//This task is intended to compare two root file from macro Comparison1Mc
+//This task is intended to compare two root file from macro CoparisonDataMC
 
 TGraphAsymmErrors* CreateRatioGraph(const char* name, const char* title, TGraphAsymmErrors& Graph1, TGraphAsymmErrors& Graph2) // Change this function as in RealEfficiency.C (value)
 {
@@ -197,14 +197,14 @@ TCanvas* DrawRatio(TString name, TString title, TGraphAsymmErrors* Graph1, TGrap
   Graph2->SetLineColor(2);
   Graph2->Draw("Psame");
    //------
-//  Graph2.Draw("same");
+ //  Graph2.Draw("same");
   TLegend *legend = new TLegend (0.8, 0.8, 0.95, 0.95);
   legend->SetTextSize(0.06);
   legend->AddEntry(Graph2, Form(" %s",Name2.Data()), "ep");
   legend->AddEntry(Graph1, Form(" %s",Name1.Data()), "ep");
   legend->Draw("same");
 
-//  GraphRatio->Draw("psamey+");
+ //  GraphRatio->Draw("psamey+");
   
   c->cd(2);
   
@@ -232,11 +232,11 @@ TCanvas* DrawRatio(TString name, TString title, TGraphAsymmErrors* Graph1, TGrap
   GraphRatio->GetYaxis()->CenterTitle(kTRUE);
   GraphRatio->GetYaxis()->SetTitleOffset(0.37);
   GraphRatio->GetYaxis()->SetLabelFont(22);
-//  GraphRatio.SetMinimum(0.86);
-//  GraphRatio.SetMaximum(1.14);
+ //  GraphRatio.SetMinimum(0.86);
+ //  GraphRatio.SetMaximum(1.14);
   GraphRatio->Draw("ap");
   //------
-//  GraphRatio.Draw("same");
+ //  GraphRatio.Draw("same");
 
   TLegend *legend2 = new TLegend (0.70, 0.3, 0.95, 0.37);
   legend2->AddEntry(GraphRatio, Form(" %s / %s ",Name1.Data(), Name2.Data()), "ep");

@@ -12,8 +12,8 @@
 
 #include <AliMergeableCollection.h>
 
-// TString sfile ="/Users/audurier/Documents/Analysis/LHC_15o_PbPb/MuMu/Data_Full_pool=50/AnalysisResults.root";
-TString sfile ="/Users/audurier/Documents/Analysis/LHC_15o_PbPb/MuMu/Data_Full_pool=50/AnalysisResultsMergeAtSafLevel.root";
+TString sfile ="/Users/audurier/Documents/Analysis/LHC_15o_PbPb/MuMu/Data_Full_pool=50/AnalysisResults.root";
+// TString sfile ="/Users/audurier/Documents/Analysis/LHC_15o_PbPb/MuMu/Data_Full_pool=50/AnalysisResultsMergeAtSafLevel.root";
 TString sasso ="";
 TString sasso2 ="";
 TString config = "/Users/audurier/Documents/Analysis/LHC_15o_PbPb/MuMu/Data_Full_pool=50/mumu.PbPb2015.full.config";
@@ -29,8 +29,8 @@ TString signFlagDist[3] ={"","PP","MM"};
 
 Bool_t corrected = kFALSE;
 
-const char* binToMerge      =  /* /V0M_00.00_10.00,V0M_10.00_20.00",V0M_20.00_30.00,V0M_30.00_40.00,*/"/V0M_40.00_50.00,V0M_50.00_60.00,V0M_60.00_70.00,V0M_70.00_80.00,V0M_80.00_90.00";
-TString mergeCentralityName =  "V0M_40.00_90.00";
+const char* binToMerge      =  "/V0M_00.00_10.00,V0M_10.00_20.00,V0M_20.00_30.00,V0M_30.00_40.00,V0M_40.00_50.00,V0M_50.00_60.00,V0M_60.00_70.00,V0M_70.00_80.00,V0M_80.00_90.00";
+TString mergeCentralityName =  "V0M_00.00_90.00";
 
 //_____________________________________________________________________________
 void MergeCentralityBins(int debug =0)
