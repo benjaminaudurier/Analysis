@@ -1,0 +1,19 @@
+                       ComputePPCrossSection
+ ================================================================
+  -------- cross section for bin YVSPT_2DBIN2_00.00_01.00_m03.25_m02.50 = 0.7506 +/- 0.0447 (stat. 6.0 %) +/- 0.0466 (uncorr. 6.2 %) +/- 0.0162 (corr. 2.2 %)  (#Delta y = 0.750000)  (#Delta pt = 1.000000) --------
+
+  -------- cross section for bin YVSPT_2DBIN2_00.30_01.00_m03.25_m02.50 = 1.0076 +/- 0.0548 (stat. 5.4 %) +/- 0.0626 (uncorr. 6.2 %) +/- 0.0218 (corr. 2.2 %)  (#Delta y = 0.750000)  (#Delta pt = 0.700000) --------
+
+  -------- cross section for bin YVSPT_2DBIN2_01.00_02.00_m03.25_m02.50 = 1.2930 +/- 0.0494 (stat. 3.8 %) +/- 0.0675 (uncorr. 5.2 %) +/- 0.0279 (corr. 2.2 %)  (#Delta y = 0.750000)  (#Delta pt = 1.000000) --------
+
+  -------- cross section for bin YVSPT_2DBIN2_02.00_03.00_m03.25_m02.50 = 1.0717 +/- 0.0445 (stat. 4.2 %) +/- 0.0509 (uncorr. 4.7 %) +/- 0.0232 (corr. 2.2 %)  (#Delta y = 0.750000)  (#Delta pt = 1.000000) --------
+
+  -------- cross section for bin YVSPT_2DBIN2_03.00_04.00_m03.25_m02.50 = 0.6259 +/- 0.0301 (stat. 4.8 %) +/- 0.0351 (uncorr. 5.6 %) +/- 0.0135 (corr. 2.2 %)  (#Delta y = 0.750000)  (#Delta pt = 1.000000) --------
+
+  -------- cross section for bin YVSPT_2DBIN2_04.00_05.00_m03.25_m02.50 = 0.2874 +/- 0.0196 (stat. 6.8 %) +/- 0.0151 (uncorr. 5.3 %) +/- 0.0062 (corr. 2.2 %)  (#Delta y = 0.750000)  (#Delta pt = 1.000000) --------
+
+  -------- cross section for bin YVSPT_2DBIN2_05.00_06.00_m03.25_m02.50 = 0.1472 +/- 0.0117 (stat. 8.0 %) +/- 0.0066 (uncorr. 4.5 %) +/- 0.0032 (corr. 2.2 %)  (#Delta y = 0.750000)  (#Delta pt = 1.000000) --------
+
+  -------- cross section for bin YVSPT_2DBIN2_06.00_08.00_m03.25_m02.50 = 0.0634 +/- 0.0052 (stat. 8.3 %) +/- 0.0027 (uncorr. 4.3 %) +/- 0.0014 (corr. 2.2 %)  (#Delta y = 0.750000)  (#Delta pt = 2.000000) --------
+
+  -------- cross section for bin YVSPT_2DBIN2_08.00_12.00_m03.25_m02.50 = 0.0089 +/- 0.0013 (stat. 14.6 %) +/- 0.0004 (uncorr. 4.3 %) +/- 0.0002 (corr. 2.2 %)  (#Delta y = 0.750000)  (#Delta pt = 4.000000) --------

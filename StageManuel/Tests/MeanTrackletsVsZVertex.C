@@ -1,0 +1,107 @@
+{
+//========= Macro generated from object: MeanTrackletsVsZVertex/Mean number of tracklets in |#eta| < 1.0 vs Z vertex
+//========= by ROOT version5.34/30
+   
+   TProfile *MeanTrackletsVsZVertex__1 = new TProfile("MeanTrackletsVsZVertex","Mean number of tracklets in |#eta| < 1.0 vs Z vertex",320,-40,40,"");
+   MeanTrackletsVsZVertex__1->SetBinEntries(122,1);
+   MeanTrackletsVsZVertex__1->SetBinEntries(128,1);
+   MeanTrackletsVsZVertex__1->SetBinEntries(132,2);
+   MeanTrackletsVsZVertex__1->SetBinEntries(139,1);
+   MeanTrackletsVsZVertex__1->SetBinEntries(140,1);
+   MeanTrackletsVsZVertex__1->SetBinEntries(148,1);
+   MeanTrackletsVsZVertex__1->SetBinEntries(149,1);
+   MeanTrackletsVsZVertex__1->SetBinEntries(153,1);
+   MeanTrackletsVsZVertex__1->SetBinEntries(157,2);
+   MeanTrackletsVsZVertex__1->SetBinEntries(158,1);
+   MeanTrackletsVsZVertex__1->SetBinEntries(160,2);
+   MeanTrackletsVsZVertex__1->SetBinEntries(165,1);
+   MeanTrackletsVsZVertex__1->SetBinEntries(167,1);
+   MeanTrackletsVsZVertex__1->SetBinEntries(169,1);
+   MeanTrackletsVsZVertex__1->SetBinEntries(170,1);
+   MeanTrackletsVsZVertex__1->SetBinEntries(175,1);
+   MeanTrackletsVsZVertex__1->SetBinEntries(176,2);
+   MeanTrackletsVsZVertex__1->SetBinEntries(183,1);
+   MeanTrackletsVsZVertex__1->SetBinEntries(187,1);
+   MeanTrackletsVsZVertex__1->SetBinEntries(198,1);
+   MeanTrackletsVsZVertex__1->SetBinContent(122,6);
+   MeanTrackletsVsZVertex__1->SetBinContent(128,42);
+   MeanTrackletsVsZVertex__1->SetBinContent(132,5);
+   MeanTrackletsVsZVertex__1->SetBinContent(139,20);
+   MeanTrackletsVsZVertex__1->SetBinContent(140,19);
+   MeanTrackletsVsZVertex__1->SetBinContent(148,17);
+   MeanTrackletsVsZVertex__1->SetBinContent(149,20);
+   MeanTrackletsVsZVertex__1->SetBinContent(153,13);
+   MeanTrackletsVsZVertex__1->SetBinContent(157,44);
+   MeanTrackletsVsZVertex__1->SetBinContent(158,19);
+   MeanTrackletsVsZVertex__1->SetBinContent(160,33);
+   MeanTrackletsVsZVertex__1->SetBinContent(165,28);
+   MeanTrackletsVsZVertex__1->SetBinContent(167,43);
+   MeanTrackletsVsZVertex__1->SetBinContent(169,25);
+   MeanTrackletsVsZVertex__1->SetBinContent(170,12);
+   MeanTrackletsVsZVertex__1->SetBinContent(175,28);
+   MeanTrackletsVsZVertex__1->SetBinContent(176,64);
+   MeanTrackletsVsZVertex__1->SetBinContent(183,54);
+   MeanTrackletsVsZVertex__1->SetBinContent(187,41);
+   MeanTrackletsVsZVertex__1->SetBinContent(198,11);
+   MeanTrackletsVsZVertex__1->SetBinError(122,6);
+   MeanTrackletsVsZVertex__1->SetBinError(128,42);
+   MeanTrackletsVsZVertex__1->SetBinError(132,4.12311);
+   MeanTrackletsVsZVertex__1->SetBinError(139,20);
+   MeanTrackletsVsZVertex__1->SetBinError(140,19);
+   MeanTrackletsVsZVertex__1->SetBinError(148,17);
+   MeanTrackletsVsZVertex__1->SetBinError(149,20);
+   MeanTrackletsVsZVertex__1->SetBinError(153,13);
+   MeanTrackletsVsZVertex__1->SetBinError(157,31.4006);
+   MeanTrackletsVsZVertex__1->SetBinError(158,19);
+   MeanTrackletsVsZVertex__1->SetBinError(160,28.4429);
+   MeanTrackletsVsZVertex__1->SetBinError(165,28);
+   MeanTrackletsVsZVertex__1->SetBinError(167,43);
+   MeanTrackletsVsZVertex__1->SetBinError(169,25);
+   MeanTrackletsVsZVertex__1->SetBinError(170,12);
+   MeanTrackletsVsZVertex__1->SetBinError(175,28);
+   MeanTrackletsVsZVertex__1->SetBinError(176,52.6308);
+   MeanTrackletsVsZVertex__1->SetBinError(183,54);
+   MeanTrackletsVsZVertex__1->SetBinError(187,41);
+   MeanTrackletsVsZVertex__1->SetBinError(198,11);
+   MeanTrackletsVsZVertex__1->SetEntries(24);
+   MeanTrackletsVsZVertex__1->SetDirectory(0);
+   
+   TPaveStats *ptstats = new TPaveStats(0.78,0.695,0.98,0.935,"brNDC");
+   ptstats->SetName("stats");
+   ptstats->SetBorderSize(1);
+   ptstats->SetFillColor(0);
+   ptstats->SetTextAlign(12);
+   ptstats->SetTextFont(42);
+   TText *text = ptstats->AddText("MeanTrackletsVsZVertex");
+   text->SetTextSize(0.0368);
+   text = ptstats->AddText("Entries = 24     ");
+   text = ptstats->AddText("Mean  = -0.5279");
+   text = ptstats->AddText("Mean y =  22.67");
+   text = ptstats->AddText("RMS   =  4.817");
+   text = ptstats->AddText("RMS y =  14.34");
+   ptstats->SetOptStat(1111);
+   ptstats->SetOptFit(0);
+   ptstats->Draw();
+   MeanTrackletsVsZVertex__1->GetListOfFunctions()->Add(ptstats);
+   ptstats->SetParent(MeanTrackletsVsZVertex__1);
+
+   Int_t ci;      // for color index setting
+   TColor *color; // for color definition with alpha
+   ci = TColor::GetColor("#000099");
+   MeanTrackletsVsZVertex__1->SetLineColor(ci);
+   MeanTrackletsVsZVertex__1->GetXaxis()->SetTitle("Z vertex");
+   MeanTrackletsVsZVertex__1->GetXaxis()->SetLabelFont(42);
+   MeanTrackletsVsZVertex__1->GetXaxis()->SetLabelSize(0.035);
+   MeanTrackletsVsZVertex__1->GetXaxis()->SetTitleSize(0.035);
+   MeanTrackletsVsZVertex__1->GetXaxis()->SetTitleFont(42);
+   MeanTrackletsVsZVertex__1->GetYaxis()->SetTitle("<N_{Tracklets}>");
+   MeanTrackletsVsZVertex__1->GetYaxis()->SetLabelFont(42);
+   MeanTrackletsVsZVertex__1->GetYaxis()->SetLabelSize(0.035);
+   MeanTrackletsVsZVertex__1->GetYaxis()->SetTitleSize(0.035);
+   MeanTrackletsVsZVertex__1->GetYaxis()->SetTitleFont(42);
+   MeanTrackletsVsZVertex__1->GetZaxis()->SetLabelFont(42);
+   MeanTrackletsVsZVertex__1->GetZaxis()->SetLabelSize(0.035);
+   MeanTrackletsVsZVertex__1->GetZaxis()->SetTitleSize(0.035);
+   MeanTrackletsVsZVertex__1->GetZaxis()->SetTitleFont(42);
+   MeanTrackletsVsZVertex__1->Draw("");
+}

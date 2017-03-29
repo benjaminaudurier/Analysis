@@ -1,0 +1,49 @@
+
+
+--- 2.5 < y < 3 ---
+
+cent 40-50  --  Raa_inc = 0.712 -- Raa_inc_ptcut = 0.704
+  -> Correction of Raa_inc       : -4.3 % (cut efficiency : 0.65 %)
+  -> Correction of Raa_inc_ptcut : -1.6 % (cut efficiency : 0.65 %)
+
+cent 50-60  --  Raa_inc = 0.812 -- Raa_inc_ptcut = 0.779
+  -> Correction of Raa_inc       : -8.8 % (cut efficiency : 0.65 %)
+  -> Correction of Raa_inc_ptcut : -3.3 % (cut efficiency : 0.65 %)
+
+cent 60-90  --  Raa_inc = 0.953 -- Raa_inc_ptcut = 0.838
+
+  -> Correction of Raa_inc       : -20.9 % (cut efficiency : 0.65 %)
+  -> Correction of Raa_inc_ptcut : -8.4 % (cut efficiency : 0.65 %)
+
+
+--- 3 < y < 3.5 ---
+
+cent 40-50  --  Raa_inc = 0.675 -- Raa_inc_ptcut = 0.662
+  -> Correction of Raa_inc       : -5.4 % (cut efficiency : 0.65 %)
+  -> Correction of Raa_inc_ptcut : -2.0 % (cut efficiency : 0.65 %)
+
+cent 50-60  --  Raa_inc = 0.703 -- Raa_inc_ptcut = 0.670
+  -> Correction of Raa_inc       : -9.6 % (cut efficiency : 0.65 %)
+  -> Correction of Raa_inc_ptcut : -3.6 % (cut efficiency : 0.65 %)
+
+cent 60-90  --  Raa_inc = 0.913 -- Raa_inc_ptcut = 0.802
+
+  -> Correction of Raa_inc       : -20.9 % (cut efficiency : 0.65 %)
+  -> Correction of Raa_inc_ptcut : -8.4 % (cut efficiency : 0.65 %)
+
+
+  --- 3.5 < y < 4 ---
+
+
+  cent 40-50  --  Raa_inc = 0.665 -- Raa_inc_ptcut = 0.659
+  -> Correction of Raa_inc       : -4.4 % (cut efficiency : 0.65 %)
+  -> Correction of Raa_inc_ptcut : -1.6 % (cut efficiency : 0.65 %)
+ 
+cent 50-60  --  Raa_inc = 0.716 -- Raa_inc_ptcut = 0.699
+  -> Correction of Raa_inc       : -6.7 % (cut efficiency : 0.65 %)
+  -> Correction of Raa_inc_ptcut : -2.4 % (cut efficiency : 0.65 %)
+ 
+cent 60-90  --  Raa_inc = 0.964 -- Raa_inc_ptcut = 0.900
+
+  -> Correction of Raa_inc       : -13.1 % (cut efficiency : 0.65 %)
+  -> Correction of Raa_inc_ptcut : -5.0 % (cut efficiency : 0.65 %)

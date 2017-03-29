@@ -1,0 +1,12 @@
+*.xcodeproj
+
+*.d
+*.o
+*.so
+*.dSYM
+myaf
+myafDict*
+.*project
+.settings
+webmaker
+

@@ -1,0 +1,80 @@
+==================
+====  Results  for 5 <pt <8 and 2.5 < y < 4 ===
+==================
+
+5 TeV
+
+bin 0-10  --  Raa_inc = 0.325 -- fb = 15.746669 % -- Fb = 0.1360
+ ---> For Raa_npromt = 0.0  ====> Raa_pro = 0.376  >>>> variation : 15.75 %
+ ---> For Raa_npromt = 0.5  ====> Raa_pro = 0.297  >>>> variation : -8.48 %
+ ---> For Raa_npromt = 1.0  ====> Raa_pro = 0.219  >>>> variation : -32.70 %
+ ---> For Raa_npromt = 1.2  ====> Raa_pro = 0.187  >>>> variation : -42.39 %
+bin 10-20  --  Raa_inc = 0.399 -- fb = 15.746669 % -- Fb = 0.1360
+ ---> For Raa_npromt = 0.0  ====> Raa_pro = 0.462  >>>> variation : 15.75 %
+ ---> For Raa_npromt = 0.5  ====> Raa_pro = 0.383  >>>> variation : -3.99 %
+ ---> For Raa_npromt = 1.0  ====> Raa_pro = 0.304  >>>> variation : -23.72 %
+ ---> For Raa_npromt = 1.2  ====> Raa_pro = 0.273  >>>> variation : -31.61 %
+bin 20-30  --  Raa_inc = 0.461 -- fb = 15.746669 % -- Fb = 0.1360
+ ---> For Raa_npromt = 0.0  ====> Raa_pro = 0.534  >>>> variation : 15.75 %
+ ---> For Raa_npromt = 0.5  ====> Raa_pro = 0.455  >>>> variation : -1.33 %
+ ---> For Raa_npromt = 1.0  ====> Raa_pro = 0.376  >>>> variation : -18.41 %
+ ---> For Raa_npromt = 1.2  ====> Raa_pro = 0.345  >>>> variation : -25.24 %
+bin 30-40  --  Raa_inc = 0.557 -- fb = 15.746669 % -- Fb = 0.1360
+ ---> For Raa_npromt = 0.0  ====> Raa_pro = 0.645  >>>> variation : 15.75 %
+ ---> For Raa_npromt = 0.5  ====> Raa_pro = 0.566  >>>> variation : 1.61 %
+ ---> For Raa_npromt = 1.0  ====> Raa_pro = 0.487  >>>> variation : -12.52 %
+ ---> For Raa_npromt = 1.2  ====> Raa_pro = 0.456  >>>> variation : -18.18 %
+bin 40-50  --  Raa_inc = 0.621 -- fb = 15.746669 % -- Fb = 0.1360
+ ---> For Raa_npromt = 0.0  ====> Raa_pro = 0.719  >>>> variation : 15.75 %
+ ---> For Raa_npromt = 0.5  ====> Raa_pro = 0.640  >>>> variation : 3.07 %
+ ---> For Raa_npromt = 1.0  ====> Raa_pro = 0.561  >>>> variation : -9.61 %
+ ---> For Raa_npromt = 1.2  ====> Raa_pro = 0.530  >>>> variation : -14.68 %
+bin 50-60  --  Raa_inc = 0.715 -- fb = 15.746669 % -- Fb = 0.1360
+ ---> For Raa_npromt = 0.0  ====> Raa_pro = 0.828  >>>> variation : 15.75 %
+ ---> For Raa_npromt = 0.5  ====> Raa_pro = 0.749  >>>> variation : 4.74 %
+ ---> For Raa_npromt = 1.0  ====> Raa_pro = 0.670  >>>> variation : -6.28 %
+ ---> For Raa_npromt = 1.2  ====> Raa_pro = 0.639  >>>> variation : -10.68 %
+bin 60-90  --  Raa_inc = 0.794 -- fb = 15.746669 % -- Fb = 0.1360
+ ---> For Raa_npromt = 0.0  ====> Raa_pro = 0.919  >>>> variation : 15.75 %
+ ---> For Raa_npromt = 0.5  ====> Raa_pro = 0.840  >>>> variation : 5.83 %
+ ---> For Raa_npromt = 1.0  ====> Raa_pro = 0.762  >>>> variation : -4.09 %
+ ---> For Raa_npromt = 1.2  ====> Raa_pro = 0.730  >>>> variation : -8.05 %
+
+
+Ratio 5 TeV / 2.76 TeV
+
+bin 0-10  --  r_inc = 1.161 -- fb2 = 12.4104% -- Fb2 = 0.1104
+ ---> For Raa_npromt = 0.0  ====> r_pro = 1.195  >>>> variation : 2.97 %
+ ---> For Raa_npromt = 0.5  ====> r_pro = 1.177  >>>> variation : 1.41 %
+ ---> For Raa_npromt = 1.0  ====> r_pro = 1.147  >>>> variation : -1.16 %
+ ---> For Raa_npromt = 1.2  ====> r_pro = 1.129  >>>> variation : -2.73 %
+bin 10-20  --  r_inc = 1.415 -- fb2 = 12.4104% -- Fb2 = 0.1104
+ ---> For Raa_npromt = 0.0  ====> r_pro = 1.457  >>>> variation : 2.97 %
+ ---> For Raa_npromt = 0.5  ====> r_pro = 1.503  >>>> variation : 6.20 %
+ ---> For Raa_npromt = 1.0  ====> r_pro = 1.578  >>>> variation : 11.52 %
+ ---> For Raa_npromt = 1.2  ====> r_pro = 1.624  >>>> variation : 14.74 %
+bin 20-30  --  r_inc = 1.124 -- fb2 = 12.4104% -- Fb2 = 0.1104
+ ---> For Raa_npromt = 0.0  ====> r_pro = 1.158  >>>> variation : 2.97 %
+ ---> For Raa_npromt = 0.5  ====> r_pro = 1.140  >>>> variation : 1.43 %
+ ---> For Raa_npromt = 1.0  ====> r_pro = 1.117  >>>> variation : -0.67 %
+ ---> For Raa_npromt = 1.2  ====> r_pro = 1.105  >>>> variation : -1.75 %
+bin 30-40  --  r_inc = 1.031 -- fb2 = 12.4104% -- Fb2 = 0.1104
+ ---> For Raa_npromt = 0.0  ====> r_pro = 1.062  >>>> variation : 2.97 %
+ ---> For Raa_npromt = 0.5  ====> r_pro = 1.039  >>>> variation : 0.69 %
+ ---> For Raa_npromt = 1.0  ====> r_pro = 1.009  >>>> variation : -2.18 %
+ ---> For Raa_npromt = 1.2  ====> r_pro = 0.995  >>>> variation : -3.55 %
+bin 40-50  --  r_inc = 1.174 -- fb2 = 12.4104% -- Fb2 = 0.1104
+ ---> For Raa_npromt = 0.0  ====> r_pro = 1.209  >>>> variation : 2.97 %
+ ---> For Raa_npromt = 0.5  ====> r_pro = 1.202  >>>> variation : 2.37 %
+ ---> For Raa_npromt = 1.0  ====> r_pro = 1.193  >>>> variation : 1.62 %
+ ---> For Raa_npromt = 1.2  ====> r_pro = 1.189  >>>> variation : 1.26 %
+bin 50-60  --  r_inc = 1.218 -- fb2 = 12.4104% -- Fb2 = 0.1104
+ ---> For Raa_npromt = 0.0  ====> r_pro = 1.254  >>>> variation : 2.97 %
+ ---> For Raa_npromt = 0.5  ====> r_pro = 1.253  >>>> variation : 2.84 %
+ ---> For Raa_npromt = 1.0  ====> r_pro = 1.251  >>>> variation : 2.69 %
+ ---> For Raa_npromt = 1.2  ====> r_pro = 1.250  >>>> variation : 2.62 %
+bin 60-90  --  r_inc = 1.233 -- fb2 = 12.4104% -- Fb2 = 0.1104
+ ---> For Raa_npromt = 0.0  ====> r_pro = 1.270  >>>> variation : 2.97 %
+ ---> For Raa_npromt = 0.5  ====> r_pro = 1.270  >>>> variation : 2.97 %
+ ---> For Raa_npromt = 1.0  ====> r_pro = 1.270  >>>> variation : 2.98 %
+ ---> For Raa_npromt = 1.2  ====> r_pro = 1.270  >>>> variation : 2.98 %

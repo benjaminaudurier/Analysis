@@ -1,0 +1,5 @@
+Find;BasePath=/alice/sim/2016/LHC16e2/244918/p20/AOD/*;FileName=AliAOD.Muons.root;Tree=/aodTree;
+Find;BasePath=/alice/sim/2016/LHC16e2/244980/p20/AOD/*;FileName=AliAOD.Muons.root;Tree=/aodTree;
+Find;BasePath=/alice/sim/2016/LHC16e2/244982/p20/AOD/*;FileName=AliAOD.Muons.root;Tree=/aodTree;
+Find;BasePath=/alice/sim/2016/LHC16e2/244983/p20/AOD/*;FileName=AliAOD.Muons.root;Tree=/aodTree;
+Find;BasePath=/alice/sim/2016/LHC16e2/245064/p20/AOD/*;FileName=AliAOD.Muons.root;Tree=/aodTree;

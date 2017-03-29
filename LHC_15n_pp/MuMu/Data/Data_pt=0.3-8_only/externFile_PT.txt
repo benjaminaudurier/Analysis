@@ -1,0 +1,5 @@
+#intervalLow intervalHight  sysMC(%)   TrajEffError(%)  TriggerError(%)  matchingError(%)  
+0.3         08             2.0    	   1.0              1.0             1.0
+
+
+ 
