@@ -46,7 +46,7 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
   // You need to give it the MeanTrackletsVsZVertex TProfile to use the data-driven multiplicity correction method
 
 
-  // TFile* f =TFile::Open("test_distribution.root");
+  // TFile* f =TFile::Open("MeanTrkVsVertex.root");
   // if(!f) {
   //   printf("Cannot open file \n");
   //   return;
@@ -74,14 +74,14 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
   // Raw Tracklets sub-analysis. The first configuration is meant to produce multiplicity QA plots and stuff (First run)
   // For the second run, you can use the second conf. providing the MeanTrackletsVsZVertex from the first run output file.
   AliAnalysisMuMuNch* nch              = new AliAnalysisMuMuNch(0x0,0x0,-1.,etaMin,etaMax,zMin,zMax,kFALSE);//
-  // AliAnalysisMuMuNch* nch              = new AliAnalysisMuMuNch(0x0,hT,29.82,etaMin,etaMax,zMin,zMax,kFALSE);//Raw Tracklets Analysis
+  // AliAnalysisMuMuNch* nch              = new AliAnalysisMuMuNch(0x0,hT,14.4,etaMin,etaMax,zMin,zMax,kFALSE);//Raw Tracklets Analysis
 
   // Inv. Mass sub-analysis. For the first run, you can leave it to NULL, and only plug it for the second run.
   AliAnalysisMuMuMinv* minvAnalysis    =  0x0; // Call the task
-  // AliAnalysisMuMuMinv* minvAnalysis    =  new AliAnalysisMuMuMinv; // Call the task
+  // AliAnalysisMuMuMinv* minvAnalysis    =  new AliAnalysisMuMuMinv(); // Call the task
 
   // Single muon sub-analysis. Provides the cut methods for single muons, never unplug
-  AliAnalysisMuMuSingle* singleAnalysis= new AliAnalysisMuMuSingle;
+  AliAnalysisMuMuSingle* singleAnalysis= new AliAnalysisMuMuSingle();
   task->SetBeamYear(beamYear);
 
 
@@ -102,6 +102,8 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
   AliAnalysisMuMuCutElement* triggerSelection    = cr->AddTriggerClassCut(*eventCutter,"SelectTriggerClass","const TString&,TString&,UInt_t,UInt_t,UInt_t","");
   AliAnalysisMuMuCutElement* cutHasSPD           = cr->AddEventCut(*eventCutter,"HasSPDVertex","const AliVEvent&","");
   AliAnalysisMuMuCutElement* cutZQA              = cr->AddEventCut(*eventCutter,"IsSPDzQA","const AliVEvent&,Double_t,Double_t","0.25,0.5");
+  AliAnalysisMuMuCutElement* SPDPileUp           = cr->AddEventCut(*eventCutter,"IsSPDPileUp","AliVEvent&","");
+  AliAnalysisMuMuCutElement* NoSPDPileUp         = cr->Not(*SPDPileUp);
 
 
   // Here you can change the physic selction as you want, see AliAnalysisMuMuEventCutter.h. It is similar to SetCollisionCandidates()
@@ -112,8 +114,9 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
   }
 
   // Add a combination to the cut registry. This is your actual event cuts. You can use several combination at the same time
+  cr->AddCutCombination(ps1,cutHasSPD,cutZQA,cutSPDZ10,NoSPDPileUp,triggerSelection);
   cr->AddCutCombination(ps1,cutHasSPD,cutZQA,cutSPDZ10,triggerSelection);
-  // cr->AddCutCombination(ps1,cutHasSPD,cutZQA,triggerSelection);
+  // cr->AddCutCombination(ps1,triggerSelection);
 
 
   // ========= Configure sub-analysis =========
@@ -126,25 +129,6 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
     AliAnalysisMuMuCutElement* matchlow  = cr->AddTrackCut(*singleAnalysis,"IsMatchingTriggerLowPt","const AliVParticle&","");
     AliAnalysisMuMuCutElement* eta       = cr->AddTrackCut(*singleAnalysis,"IsEtaInRange","const AliVParticle&","");
     cr->AddCutCombination(trackTrue,rabs,matchlow,eta);
-
-    // --- Disable some histo. Comment the one you want ---
-    // singleAnalysis->DisableHistograms("BCX");
-    // singleAnalysis->DisableHistograms("EtaRapidityMu*");
-    // singleAnalysis->DisableHistograms("PtEtaMu*");
-    // singleAnalysis->DisableHistograms("PtRapidityMu*");
-    // singleAnalysis->DisableHistograms("PEtaMu*");
-    // singleAnalysis->DisableHistograms("PtPhiMu*");
-    // singleAnalysis->DisableHistograms("Chi2Mu*");
-    // singleAnalysis->DisableHistograms("dcaP23Mu*");
-    // singleAnalysis->DisableHistograms("dcaPwPtCut23Mu*");
-    // singleAnalysis->DisableHistograms("dcaP310Mu*");
-    // singleAnalysis->DisableHis∏git stattograms("dcaPwPtCut310Mu*");
-
-    // --- separate positive and negative muons ---
-    // singleAnalysis->ShouldSeparatePlusAndMinus(kTRUE);
-
-    // Adding the sub analysis
-    task->AdoptSubAnalysis(singleAnalysis);
 
     if ( minvAnalysis ){
 
@@ -166,8 +150,8 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
 
       // --- Disable some histo. Comment the one you want ---
       minvAnalysis->DisableHistograms("Eta");
-      // minvAnalysis->DisableHistograms("Pt");
-      // minvAnalysis->DisableHistograms("Y");
+      minvAnalysis->DisableHistograms("Pt");
+      minvAnalysis->DisableHistograms("Y");
 
       // Adding the sub analysis
       task->AdoptSubAnalysis(minvAnalysis);
@@ -200,26 +184,26 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
   // binning->AddBin("psi","pt",15.0,25.0,"");
 
   // Last arguments ("DH2" here) is just to add a term to Histo name to help differentiation in case of several binnings.
-  // binning->AddBin("psi","ntrcorr",-1.5,-0.5,"D2H"); // 1 - 8
-  // binning->AddBin("psi","ntrcorr",-0.5,0.5,"D2H"); // 1 - 8
-  // binning->AddBin("psi","ntrcorr",0.5,8.5,"D2H"); // 1 - 8
-  // binning->AddBin("psi","ntrcorr",8.5,13.5,"D2H"); // 9 - 14
-  // binning->AddBin("psi","ntrcorr",13.5,16.5,"D2H"); // 20 - 24
-  // binning->AddBin("psi","ntrcorr",16.5,20.5,"D2H"); // 25 - 33
-  // binning->AddBin("psi","ntrcorr",20.5,24.5,"D2H"); // 34 - 41
-  // binning->AddBin("psi","ntrcorr",24.5,28.5,"D2H"); // 34 - 41
-  // binning->AddBin("psi","ntrcorr",28.5,32.5,"D2H"); // 42 - 50
-  // binning->AddBin("psi","ntrcorr",32.5,38.5,"D2H"); // 51 - 59
-  // binning->AddBin("psi","ntrcorr",38.5,44.5,"D2H"); // 51 - 59
-  // binning->AddBin("psi","ntrcorr",44.5,54.5,"D2H"); // 51 - 59
-  // binning->AddBin("psi","ntrcorr",54.5,74.5,"D2H"); // 100 - 199
-  // binning->AddBin("psi","ntrcorr",74.5,140.5,"D2H"); // 100 - 199
+  // binning->AddBin("psi","ntrcorr",-1.5,-0.5,"BENJ"); // 1 - 8
+  // binning->AddBin("psi","ntrcorr",-0.5,0.5,"BENJ"); // 1 - 8
+  // binning->AddBin("psi","ntrcorr",0.5,8.5,"BENJ"); // 1 - 8
+  // binning->AddBin("psi","ntrcorr",8.5,13.5,"BENJ"); // 9 - 14
+  // binning->AddBin("psi","ntrcorr",13.5,16.5,"BENJ"); // 20 - 24
+  // binning->AddBin("psi","ntrcorr",16.5,20.5,"BENJ"); // 25 - 33
+  // binning->AddBin("psi","ntrcorr",20.5,24.5,"BENJ"); // 34 - 41
+  // binning->AddBin("psi","ntrcorr",24.5,28.5,"BENJ"); // 34 - 41
+  // binning->AddBin("psi","ntrcorr",28.5,32.5,"BENJ"); // 42 - 50
+  // binning->AddBin("psi","ntrcorr",32.5,38.5,"BENJ"); // 51 - 59
+  // binning->AddBin("psi","ntrcorr",38.5,44.5,"BENJ"); // 51 - 59
+  // binning->AddBin("psi","ntrcorr",44.5,54.5,"BENJ"); // 51 - 59
+  // binning->AddBin("psi","ntrcorr",54.5,74.5,"BENJ"); // 100 - 199
+  // binning->AddBin("psi","ntrcorr",74.5,140.5,"BENJ"); // 100 - 199
 
   // binning->AddBin("psi","ntrcorr",140.5,200.0,"D2H"); // 100 - 199 // Only to check that FNorm matches with previous analysis
 
   // --- Centrality binning ---
   // You won't have to modify it i guess
-  binning->AddBin("centrality","v0a");
+  binning->AddBin("centrality","PP");
 
 
   // add the configured task to the analysis manager
@@ -235,7 +219,7 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
   mgr->CreateContainer("CC",AliCounterCollection::Class(),AliAnalysisManager::kOutputContainer,outputname);
 
   AliAnalysisDataContainer* cparam =
-  mgr->CreateContainer("BIN", AliAnalysisMuMuBinning::Class(),AliAnalysisManager::kParamContainer,outputname);
+  mgr->CreateContainer("BIN", AliAnalysisMuMuBinning::Class(),AliAnalysisManager::kOutputContainer,outputname);
 
   // Connect input/output
   mgr->ConnectInput(task, 0, cinput);

@@ -114,14 +114,6 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
     AliAnalysisMuMuCutElement* eta       = cr->AddTrackCut(*singleAnalysis,"IsEtaInRange","const AliVParticle&","");
     cr->AddCutCombination(trackTrue,rabs,matchlow,eta);
 
-
-    // --- Create combination of cuts to apply (mix) ---
-    // AliAnalysisMuMuCutElement* trackTruemix = crmix->AddTrackCut(*crmix,"AlwaysTrue","const AliVParticle&",""); // Apply "AlwaysTrue" cut on AliVParticle derived from AliAnalysisMuMuSingle
-    // AliAnalysisMuMuCutElement* rabsmix      = crmix->AddTrackCut(*singleAnalysis,"IsRabsOK","const AliVParticle&","");
-    // AliAnalysisMuMuCutElement* matchlowmix  = crmix->AddTrackCut(*singleAnalysis,"IsMatchingTriggerLowPt","const AliVParticle&","");
-    // AliAnalysisMuMuCutElement* etamix       = crmix->AddTrackCut(*singleAnalysis,"IsEtaInRange","const AliVParticle&","");
-    // crmix->AddCutCombination(trackTruemix,rabsmix,matchlowmix,etamix);
-
     // --- Disable some histo. Comment the one you want ---
     // singleAnalysis->DisableHistograms("BCX");
     // singleAnalysis->DisableHistograms("EtaRapidityMu*");
@@ -133,7 +125,7 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
     // singleAnalysis->DisableHistograms("dcaP23Mu*");
     // singleAnalysis->DisableHistograms("dcaPwPtCut23Mu*");
     // singleAnalysis->DisableHistograms("dcaP310Mu*");
-    // singleAnalysis->DisableHis∏git stattograms("dcaPwPtCut310Mu*");
+    // singleAnalysis->DisableHistograms("dcaPwPtCut310Mu*");
 
     // --- separate positive and negative muons ---
     // singleAnalysis->ShouldSeparatePlusAndMinus(kTRUE);

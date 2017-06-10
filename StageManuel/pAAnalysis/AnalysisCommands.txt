@@ -1,0 +1,58 @@
+## Create AliAnalysisMuMu object
+- Create AliAnalysisMuMu object. Inputs are the data file and MC file (to get tail parameters) obtained from the analysis with AliAnalysisMuMu* classes:
+> AliAnalysisMuMu m(“filenameData.root”,”filenameMC.root);
+
+Note: The fitting procedure has to be performed in MC before, to have the fits and use the tails during the data fits. (I do not remember if I automatised that or not so MC fits are done automatically if they are not there…)
+Note: The following operations will add the produced plots to the mergeable collection in the data file.
+
+### Fitting:
+- Perform differential (in ntrcorr bins) fits of yield (first ‘1’) and mPt (second ‘1’) (you can also fit <pt^2> setting the 5th argument to ‘1’):
+> m.Jpsi("ntrcorr","D2H",1,1,0) ; > FitsBins.txt
+
+-Perform integrated fits of yield and mPt:
+> m.Jpsi("integrated","",1,1,0) ; > FitsInt.txt
+
+### Computation of di-mu->MB normalisation factors
+- Integrated Fnorm computed from counters (with pile up correction):
+> m.ComputeIntFnormFromCounters("pileupfactor.lhc13de.txt") ; > IntFNormCounters.txt
+
+- Differential Fnorm from counters:
+> m.ComputeDiffFnormFromCounters("pileupfactor.lhc13de.txt"); > BinsFNormCounters.txt
+
+- Differential Fnorm obtained from scaling the Integrated Fnorm computed from counters:
+> m.ComputeDiffFnormFromGlobal(); > BinsFNormGlobal.txt
+
+- Compute average differential Fnorm (the one used in the analysis) from counters and scaling methods:
+> m.ComputeMeanFnorm(0); > BinsFNormMean.txt
+
+Note: This last line will give you also the systematic uncertainty (from the difference of the two methods)
+
+
+### Computation of relative yields and relative mpts and signal extraction systematics:
+
+- For the yield:
+>m.ComputeRelativeValueAndSESystematics("ntrcorr","D2H","yield","NTRCORR_D2H_m1.50_m0.50,NTRCORR_D2H_m0.50_00.50,NTRCORR_D2H_140.50_200.00"); > YieldRelSyst.txt
+> m.OC()->Histo("/TESTSYST/PSALL/PSALLHASSPDSPDZQA_RES0.25_ZDIF0.50SPDABSZLT10.00/yield_Systematics")->DrawClone()
+
+- For the mean pT:
+>m.ComputeRelativeValueAndSESystematics("ntrcorr","D2H","mpt","NTRCORR_D2H_m1.50_m0.50,NTRCORR_D2H_m0.50_00.50,NTRCORR_D2H_140.50_200.00"); > MptRelSyst.txt
+> m.OC()->Histo("/TESTSYST/PSALL/PSALLHASSPDSPDZQA_RES0.25_ZDIF0.50SPDABSZLT10.00/mpt_Systematics")->DrawClone()
+
+Note: “ntrcorr” and “D2H” are the name and tag of the binning you wish to fit (Defined on the AddTaskMuMu.C). “yield” and “mpt” indicates what you want to fit. The other input are the bins that you want to EXCLUDE from the fitting (due to not enough stats for example)
+
+
+## Examples to print an spectra and plot and specific result:
+> AliAnalysisMuMuSpectra* s = m.OC()->GetObject("/PSALLHASSPDSPDZQA_RES0.25_ZDIF0.50SPDABSZLT10.00/CMUL7-B-NOPF-MUON/V0A/pRABSETAPDCAMATCHLOWPAIRYPAIRPTIN0.0-15.0/PSI-NTRCORR-AccEffCorr")->Clone()
+> s->Print("full")
+
+> AliAnalysisMuMuBinning* bin = s->Binning()
+> TObjArray* a = bin->CreateBinObjArray()
+> a->Print()
+> AliAnalysisMuMuBinning::Range* b = a->At(12)
+> AliAnalysisMuMuResult* r = s->GetResultForBin(*b)
+> r->Print("full")
+> AliAnalysisMuMuJpsiResult* sr = r->SubResult("CB2VWG_BKGMPTPOL2_2.2_4.7(Sig:2.2_4.7_SP0.9)")
+> sr->DrawClone()
+
+
+> m.OC()->Histo("/PSALLHASSPDSPDZQA_RES0.25_ZDIF0.50SPDABSZLT10.00/CMUL7-B-NOPF-MUON/V0A/pRABSETAPDCAMATCHLOWPAIRYPAIRPTIN0.0-15.0/MinvUSNTRCORR_D2H_44.50_54.50_AccEffCorr")->DrawClone()

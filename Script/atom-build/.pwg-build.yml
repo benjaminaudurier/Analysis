@@ -1,0 +1,11 @@
+cmd: "aliBuild-aliphysics.sh"
+args:
+  - PWG
+sh: true,
+errorMatch:
+  - ^regexp1$
+  - ^regexp2$
+warningMatch:
+  - ^regexp1$
+  - ^regexp2$
+atomCommandName: alibuild:pwg

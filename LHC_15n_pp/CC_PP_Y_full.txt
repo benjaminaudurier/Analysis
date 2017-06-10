@@ -1,0 +1,49 @@
+root [7] a.ComputePPCrossSection("PSI-PTVSY-INT_PT_CUT","../externFile/externFile_Y_3BIN.txt","../externFile/externFile_CENT.txt",true)
+ ================================================================
+                       ComputePPCrossSection
+ ================================================================
+
+CorrNofJPsi               = 8768.493704 +/- 278.233798
+NofJPsi                   = 1747.885275 +/- 55.306088 (3.164171 %)+/- 65.941203 (3.772628 %)
+AccEff                    = 0.199337
+
+ cross section for bin PTVSY_INT_PT_CUT_m4.00_m3.50_000.30_012.00 = 2.7686 +/- 0.0876 (stat. 3.2 %) +/- 0.1461 (uncorr. 5.3 %)  --------
+
+
+CorrNofJPsi               = 11913.142841 +/- 236.983854
+NofJPsi                   = 4375.152236 +/- 86.830651 (1.984632 %)+/- 134.304771 (3.069717 %)
+AccEff                    = 0.367254
+
+ cross section for bin PTVSY_INT_PT_CUT_m3.50_m3.00_000.30_012.00 = 3.7615 +/- 0.0747 (stat. 2.0 %) +/- 0.1435 (uncorr. 3.8 %)  --------
+
+
+CorrNofJPsi               = 14123.466586 +/- 391.886666
+NofJPsi                   = 2434.042528 +/- 67.351603 (2.767068 %)+/- 90.563614 (3.720708 %)
+AccEff                    = 0.172340
+
+ cross section for bin PTVSY_INT_PT_CUT_m3.00_m2.50_000.30_012.00 = 4.4594 +/- 0.1234 (stat. 2.8 %) +/- 0.2392 (uncorr. 5.4 %)  --------
+
+
+root [8] a.ComputePPCrossSection("PSI-Y-INT","../externFile/externFile_Y_3BIN.txt","../externFile/externFile_CENT.txt",true)
+ ================================================================
+                       ComputePPCrossSection
+ ================================================================
+CorrNofJPsi				  = 8952.094422 +/- 290.280635
+NofJPsi                   = 1778.399942 +/- 57.513005 (3.233975 %)+/- 66.800156 (3.756194 %)
+AccEff                    = 0.198657
+
+cross section for bin Y_INT_m4.00_m3.50 = 2.8266 +/- 0.0914 (stat. 3.2 %) +/- 0.1488 (uncorr. 5.3 %) +/- 0.0611 (corr. 2.2 %) --------
+
+
+CorrNofJPsi				  = 12110.479467 +/- 249.693286
+NofJPsi                   = 4444.304603 +/- 91.437177 (2.057401 %)+/- 137.816480 (3.100968 %)
+AccEff                    = 0.366980
+
+cross section for bin Y_INT_m3.50_m3.00 = 3.8238 +/- 0.0787 (stat. 2.1 %) +/- 0.1469 (uncorr. 3.8 %) +/- 0.0826 (corr. 2.2 %) --------
+
+
+CorrNofJPsi				  = 14361.705054 +/- 396.145599
+NofJPsi                   = 2466.706357 +/- 67.853136 (2.750759 %)+/- 92.129796 (3.734932 %)
+AccEff                    = 0.171756
+
+cross section for bin Y_INT_m3.00_m2.50 = 4.5346 +/- 0.1247 (stat. 2.8 %) +/- 0.2437 (uncorr. 5.4 %) +/- 0.0980 (corr. 2.2 %) --------

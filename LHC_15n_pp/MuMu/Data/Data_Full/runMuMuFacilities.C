@@ -7,7 +7,7 @@
   // --- general analysis setup ---
   TString rootVersion       = "";
   TString alirootVersion    = "";
-  TString aliphysicsVersion = "vAN-20160926-1";
+  TString aliphysicsVersion = "vAN-20170326-1";
   TString extraLibs         ="";
   TString extraIncs         ="include";
   TString extraTasks        ="";
@@ -19,7 +19,7 @@
   TString dataPattern       = "*AliAOD.Muons.root";
   TString runFormat         = "%d";
   TString outDir            = "Sim/LHC15n/JPsiTune1/VtxShift/AccEff";
-  TString analysisMacroName = "TrgCount";
+  TString analysisMacroName = "MuMu";
   Int_t ttl                 = 30000;
   Int_t maxFilesPerJob      = 20;
   Int_t maxMergeFiles       = 10;
@@ -92,7 +92,7 @@ void CreateAndCopyParFile(TString parfile)
 {
   ///Create and copy ParFiles locally
 
-  TString aliceBuildDir = gSystem->ExpandPathName("$ALICE_WORK_DIR/BUILD/AliPhysics-latest-ali-master/AliPhysics");
+  TString aliceBuildDir = gSystem->ExpandPathName("$ALICE_WORK_DIR/BUILD/AliPhysics-latest-mumu/AliPhysics");
   TString command = "";
   TString workDirFull = gSystem->pwd();
 

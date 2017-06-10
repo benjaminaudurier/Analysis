@@ -1,0 +1,32 @@
+ ================================================================
+                       ComputePPCrossSection
+ ================================================================
+
+
+ 	=== 3 Y BINS ===
+
+
+	0.3 < pt < 12
+
+ 	cross section for bin Y_4.00_3.50 = 2.7693 +/- 0.0876 (stat. 3.2 %) +/- 0.1461 (uncorr. 5.3 %) +/- 0.0598 (corr. 2.2 %)
+ 	cross section for bin Y_3.50_3.00 = 3.7622 +/- 0.0747 (stat. 2.0 %) +/- 0.1436 (uncorr. 3.8 %) +/- 0.0813 (corr. 2.2 %)
+ 	cross section for bin Y_3.00_2.50 = 4.4589 +/- 0.1234 (stat. 2.8 %) +/- 0.2392 (uncorr. 5.4 %) +/- 0.0964 (corr. 2.2 %)
+
+	pt < 12
+
+	cross section for bin Y_4.00_3.50 = 2.7770 +/- 0.0898 (stat. 3.2 %) +/- 0.1462 (uncorr. 5.3 %) +/- 0.0600 (corr. 2.2 %)
+	cross section for bin Y_3.50_3.00 = 3.7559 +/- 0.0773 (stat. 2.1 %) +/- 0.1443 (uncorr. 3.8 %) +/- 0.0812 (corr. 2.2 %)
+	cross section for bin Y_3.00_2.50 = 4.4508 +/- 0.1224 (stat. 2.8 %) +/- 0.2392 (uncorr. 5.4 %) +/- 0.0962 (corr. 2.2 %)
+
+
+
+	=== Full ===
+
+	0.3 < pt < 12
+
+	cross section for bin Y_4.00_3.75 = 2.4597 +/- 0.1725 (stat. 7.0 %) +/- 0.1420 (uncorr. 5.8 %) +/- 0.0532 (corr. 2.2 %)
+	cross section for bin Y_3.75_3.50 = 3.0293 +/- 0.1104 (stat. 3.6 %) +/- 0.1210 (uncorr. 4.0 %) +/- 0.0655 (corr. 2.2 %)
+	cross section for bin Y_3.50_3.25 = 3.6001 +/- 0.1061 (stat. 2.9 %) +/- 0.1420 (uncorr. 3.9 %) +/- 0.0778 (corr. 2.2 %)
+	cross section for bin Y_3.25_3.00 = 3.9622 +/- 0.1102 (stat. 2.8 %) +/- 0.1670 (uncorr. 4.2 %) +/- 0.0856 (corr. 2.2 %)
+	cross section for bin Y_3.00_2.75 = 4.2972 +/- 0.1340 (stat. 3.1 %) +/- 0.1912 (uncorr. 4.4 %) +/- 0.0929 (corr. 2.2 %)
+	cross section for bin Y_2.75_2.50 = 4.5775 +/- 0.2661 (stat. 5.8 %) +/- 0.2881 (uncorr. 6.3 %) +/- 0.0989 (corr. 2.2 %)

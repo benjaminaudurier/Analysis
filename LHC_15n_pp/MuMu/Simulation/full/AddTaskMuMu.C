@@ -240,26 +240,6 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
     binning->AddBin("psi","yvspt", 8.0, 12.0,-3.25,-2.5,"2DBIN2");
 
 
-    // binning->AddBin("psi","yvspt", 0.0, 1.0,-4,-3.25,"2DBIN1");
-    // binning->AddBin("psi","yvspt", 0.3, 1.0,-4,-3.25,"2DBIN1");
-    // binning->AddBin("psi","yvspt", 1.0, 2.0,-4,-3.25,"2DBIN1");
-    // binning->AddBin("psi","yvspt", 2.0, 3.0,-4,-3.25,"2DBIN1");
-    // binning->AddBin("psi","yvspt", 3.0, 4.0,-4,-3.25,"2DBIN1");
-    // binning->AddBin("psi","yvspt", 4.0, 5.0,-4,-3.25,"2DBIN1");
-    // binning->AddBin("psi","yvspt", 5.0, 6.0,-4,-3.25,"2DBIN1");
-    // binning->AddBin("psi","yvspt", 6.0, 7.0,-4,-3.25,"2DBIN1");
-    // binning->AddBin("psi","yvspt", 7.0, 12.0,-4,-3.25,"2DBIN1");
-
-    // binning->AddBin("psi","yvspt", 0.0, 1.0,-3.25,-2.5,"2DBIN2");
-    // binning->AddBin("psi","yvspt", 0.3, 1.0,-3.25,-2.5,"2DBIN2");
-    // binning->AddBin("psi","yvspt", 1.0, 2.0,-3.25,-2.5,"2DBIN2");
-    // binning->AddBin("psi","yvspt", 2.0, 3.0,-3.25,-2.5,"2DBIN2");
-    // binning->AddBin("psi","yvspt", 3.0, 4.0,-3.25,-2.5,"2DBIN2");
-    // binning->AddBin("psi","yvspt", 4.0, 5.0,-3.25,-2.5,"2DBIN2");
-    // binning->AddBin("psi","yvspt", 5.0, 6.0,-3.25,-2.5,"2DBIN2");
-    // binning->AddBin("psi","yvspt", 6.0, 7.0,-3.25,-2.5,"2DBIN2");
-    // binning->AddBin("psi","yvspt", 7.0, 12.0,-3.25,-2.5,"2DBIN2");
-
 
 
     Double_t dy = 0.25;

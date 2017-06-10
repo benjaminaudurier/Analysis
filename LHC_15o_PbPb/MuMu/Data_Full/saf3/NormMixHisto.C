@@ -26,7 +26,7 @@ TString sfile     ="AnalysisResults.root";
 TString sasso     ="";
 TString sasso2    ="";
 TString config    = "mumu.PbPb2015.full.config";
-TString dir       = "/Users/audurier/Documents/Analysis/LHC_15o_PbPb/MuMu/Data_Full/results";
+TString dir       = "/Users/audurier/Documents/Analysis/LHC_15o_PbPb/MuMu/Data_Full/saf3/results";
 
 
 //_____________________________________________________________________________

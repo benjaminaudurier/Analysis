@@ -40,9 +40,10 @@ const char* configFileMc="mumu.lptapt.config";
 int debug=0;
 
 // ranges
-Double_t ptrange[] = {0.,1.,2.,3.,4.,5.,6.,7.,8.,9.,10.,11.,12.};
-// Double_t etarange[] = {-4.,-3.5,-3.0,-2.5};
-Double_t etarange[] = {-4.,-3.70,-3.40,-3.10,-2.80,-2.5};
+// Double_t ptrange[] = {0.,1.,2.,3.,4.,5.,6.,7.,8.,9.,10.,11.,12.};
+Double_t ptrange[] = {0.,12.};
+Double_t etarange[] = {-4.,-3.5,-3.0,-2.5};
+// Double_t etarange[] = {-4.,-3.70,-3.40,-3.10,-2.80,-2.5};
 // Double_t etarange[] = {-4.,-3.85,-3.70,-3.55,-3.40,-3.25,-3.10,-2.95,-2.80,-2.65,-2.5};
 // Double_t etarange[] = {-3.25,-2.5};
 // Double_t etarange[] = {-4.,-3.};

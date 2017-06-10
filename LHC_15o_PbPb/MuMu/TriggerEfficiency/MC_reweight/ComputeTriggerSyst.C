@@ -37,8 +37,9 @@ int debug=0;
 
 
 // Double_t ptBins[] = {0.,2.,5.,8.,12.};
-Double_t ptBins[] = {0.,12.};
-// Double_t ptBins[] = {0.,1.,2.,3.,4.,5.,6.,8.,12.};
+// Double_t ptBins[] = {0.,12.};
+// Double_t ptBins[] = {0.,1.,2.,3.,4.,5.,12.};
+Double_t ptBins[] = {0.,1.,2.,3.,4.,5.,6.,8.,9.,10.,11.,12.};
 Double_t rapidityBins[] = {-4.,-3.5,-3,-2.5};
 // Double_t rapidityBins[] = {-4.,-3.75,-3.5,-3.25,-3.00,-2.75,-2.5};
 // Double_t rapidityBins[] = {-4.,-3.85,-3.70,-3.55,-3.40,-3.25,-3.10,-2.95,-2.80,-2.65,-2.5};
@@ -49,9 +50,9 @@ Double_t rapidityBins[] = {-4.,-3.5,-3,-2.5};
 Int_t nRapidityBins = sizeof(rapidityBins)/sizeof(rapidityBins[0]) - 1;
 Int_t nPtBins = sizeof(ptBins)/sizeof(ptBins[0]) - 1;
 
-const int projection_axis = 2; // 1 = pt, 2 = eta;
-const TString centrality  ="V0M_00.00_90.00";
-// const TString centrality  ="V0M_00.00_10.00,V0M_10.00_20.00,V0M_20.00_30.00,V0M_30.00_40.00,V0M_40.00_90.00,V0M_00.00_90.00";
+const int projection_axis = 1; // 1 = pt, 2 = eta;
+// const TString centrality  ="V0M_00.00_90.00";
+const TString centrality  ="V0M_00.00_10.00,V0M_10.00_20.00,V0M_20.00_30.00,V0M_30.00_40.00,V0M_40.00_90.00,V0M_00.00_90.00";
 
 TH1* GetHistoFromTH2(TH2* h2=0x0);
 void CleanAllHisto(AliAnalysisMuMu* Data,AliAnalysisMuMu* MC);

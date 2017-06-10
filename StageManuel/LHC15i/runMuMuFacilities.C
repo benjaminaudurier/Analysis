@@ -7,11 +7,12 @@
   // --- general analysis setup ---
   TString rootVersion       = "";
   TString alirootVersion    = "";
-  TString aliphysicsVersion = "vAN-20160926-1";
+  TString aliphysicsVersion = "vAN-20170519-1";
   TString extraLibs         ="";
   TString extraIncs         ="include";
   TString extraTasks        ="";
-  TString extraPkgs         =""/*"PWGmuon"*/;
+  TString extraPkgs         ="";
+  // TString extraPkgs         ="PWGmuon";
   TString dataType          ="AOD";
 
   // --- grid specific setup ---
@@ -19,14 +20,14 @@
   TString dataPattern       = "*AliAOD.Muons.root";
   TString runFormat         = "%d";
   TString outDir            = "Sim/LHC15n/JPsiTune1/VtxShift/AccEff";
-  TString analysisMacroName = "TrgCount";
+  TString analysisMacroName = "MuMu";
   Int_t ttl                 = 30000;
   Int_t maxFilesPerJob      = 20;
   Int_t maxMergeFiles       = 10;
   Int_t maxMergeStages      = 2;
 
   // --- saf3 specific setup ---
-  Bool_t splitDataset = kTRUE;
+  Bool_t splitDataset = kFALSE;
 
 //______________________________________________________________________________
 void runMuMuFacilities(TString smode = "local", TString inputFileName = "AliAOD.Muons.root", Bool_t isMC = kFALSE)
@@ -37,6 +38,7 @@ void runMuMuFacilities(TString smode = "local", TString inputFileName = "AliAOD.
   TList fileList; fileList.SetOwner();
   fileList.Add(new TObjString( "runMuMuFacilities.C" ));
   fileList.Add(new TObjString( "AddTaskMuMu.C" ));
+  fileList.Add(new TObjString( "MeanTrkVsVertex.root" ));
   // fileList.Add(new TObjString( "PWGmuon.par" ));
 
   // Automatically generate parfile
@@ -81,13 +83,6 @@ void CreateAnalysisTrain(Bool_t isMC)
       return;
   }
 
-  // gROOT->LoadMacro("$ALICE_PHYSICS/OADB/macros/AddTaskPhysicsSelection.C");
-  // AddTaskPhysicsSelection(isMC);
-  // gROOT->LoadMacro("$ALICE_PHYSICS/OADB/COMMON/MULTIPLICITY/macros/AddTaskMultSelection.C");
-  // AddTaskMultSelection(kFALSE);
-
-
-
   TString output =  Form("%s",AliAnalysisManager::GetCommonFileName());
   gROOT->LoadMacro("AddTaskMuMu.C");
   AliAnalysisTaskMuMu*         TaskMuMu = AddTaskMuMu(output.Data(),"PbPb2015",isMC);
@@ -99,7 +94,9 @@ void CreateAndCopyParFile(TString parfile)
 {
   ///Create and copy ParFiles locally
 
-  TString aliceBuildDir = gSystem->ExpandPathName("$ALICE_WORK_DIR/BUILD/AliPhysics-latest-ali-master/AliPhysics");
+  if (gSystem->GetFromPipe("hostname") == "nansafmaster3.in2p3.fr") return; // saf3 specific
+
+  TString aliceBuildDir = gSystem->ExpandPathName("$ALICE_WORK_DIR/BUILD/AliPhysics-latest-mumu/AliPhysics");
   TString command = "";
   TString workDirFull = gSystem->pwd();
 

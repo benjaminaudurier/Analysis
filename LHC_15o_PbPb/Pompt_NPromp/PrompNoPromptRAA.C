@@ -43,56 +43,56 @@ namespace
   {
     {75,147,140,98,57,35,22,12.1,8.2,5.2,3.2,2.2,1.6,0.9},    // y 2.5-3
     {60,123,113,75,44,26,14.9,9.4,5.3,3.4,2.0,1.5,0.9,0.6},   // y 3-3.5
-    {41,82,71,48,28,15.6,8.6,5.5,3.2,1.8,1.2,0.6,0.3}  // y 3.5-4
+    {41,82,71,48,28,15.6,8.6,5.5,3.2,1.8,1.2,0.6,0.3}         // y 3.5-4
   };
 
   const Double_t estatcc_npromp_7TeV[3][14] =
   {
     {4,4,3,2,1,1,1,0.5,0.4,0.3,0.2,0.2,0.2,0.1},  // y 2.5-3
     {2,3,2,2,1,1,0.6,0.4,0.3,0.2,0.2,0.2,0.1,0.1},// y 3-3.5
-    {2,2,2,1,1,0.7,0.4,0.3,0.3,0.2,0.2,0.1,0.1}   // y 3.5-4;
+    {2,2,2,1,1,0.7,0.4,0.3,0.3,0.2,0.2,0.1,0.1}   // y 3.5-4
   };
 
   const Double_t esystcc_npromp_7TeV[3][14] =
   {
-    {12,4,3,2,2,1,1,0.6,0.8,0.1,0.1,0.1,0.1,0.1},// y 2.5-3
+    {12,4,3,2,2,1,1,0.6,0.8,0.1,0.1,0.1,0.1,0.1}, // y 2.5-3
     {4,2,2,2,1,1,0.5,0.3,0.1,0.1,0.1,0.1,0.1,0.1},// y 3-3.5
-    {2,2,2,1,1,0.7,0.3,0.2,0.1,0.1,0.1,0.1,0.1}
-  };// y 3.5-4;
+    {2,2,2,1,1,0.7,0.3,0.2,0.1,0.1,0.1,0.1,0.1}   // y 3.5-4
+  };
 
   // taking the no polarisation value
 
   const Double_t cc_promp_7TeV[3][14]      =
   {
-    {844,1490,1214,719,392,206,104,57,31,17.4,9.8,5.9,3.5,2.6},
-    {749,1376,1053,611,325,167,82,44,23,12.6,7.8,4.5,2.9,1.3},
-    {614,1101,839,471,244,119,59,29,15.9,8.2,4.9,2.6,1.2}
+    {844,1490,1214,719,392,206,104,57,31,17.4,9.8,5.9,3.5,2.6}, // y 2.5-3
+    {749,1376,1053,611,325,167,82,44,23,12.6,7.8,4.5,2.9,1.3},  // y 3-3.5
+    {614,1101,839,471,244,119,59,29,15.9,8.2,4.9,2.6,1.2}       // y 3.5-4
   };
 
   const Double_t estatcc_promp_7TeV[3][14] =
   {
-    {13,12,9,6,3,2,1,1,1,0.5,0.4,0.3,0.2,0.2},
-    {7,8,7,5,3,2,1,1,1,0.4,0.3,0.3,0.2,0.2},
-    {6,7,6,4,3,2,1,1,0.5,0.4,0.3,0.2,0.1}
+    {13,12,9,6,3,2,1,1,1,0.5,0.4,0.3,0.2,0.2},// y 2.5-3
+    {7,8,7,5,3,2,1,1,1,0.4,0.3,0.3,0.2,0.2},  // y 3-3.5
+    {6,7,6,4,3,2,1,1,0.5,0.4,0.3,0.2,0.1}     // y 3.5-4
   };
 
   const Double_t esystcc_promp_7TeV[3][14] =
   {
-    {133,39,24,18,12,8,4,3,1,0.2,0.1,0.1,0.1,0.1},
-    {46,26,19,14,9,5,3,1,1,0.1,0.1,0.1,0.1,0.1},
-    {23,23,19,13,7,5,2,1,0.1,0.1,0.1,0.1,0.1}
+    {133,39,24,18,12,8,4,3,1,0.2,0.1,0.1,0.1,0.1},// y 2.5-3
+    {46,26,19,14,9,5,3,1,1,0.1,0.1,0.1,0.1,0.1},  // y 3-3.5
+    {23,23,19,13,7,5,2,1,0.1,0.1,0.1,0.1,0.1}     // y 3.5-4
   };
 
   // pt/y integrated fb
   const Double_t Fb276TeV = 7.7;
-  const Double_t Fb5TeV = 9.77;
-  const Double_t Fb7TeV = 10.67;
+  const Double_t Fb5TeV   = 9.77;
+  const Double_t Fb7TeV   = 10.67;
 
 }
 
 // range to integrate the function
-const int xbinrange[2] = {0,7}; // 0 = 0-1 , 1 = 1-2 ... 13 = 13-14
-const int ybinrange[2] = {0,2}; // 0 = 2.5-3 ; 1 = 3-3.5 ; 2 = 3.5-4
+const int xbinrange[2] = {0,11}; // 0 = 0-1 , 1 = 1-2 ... 13 = 13-14
+const int ybinrange[2] = {2,2}; // 0 = 2.5-3 ; 1 = 3-3.5 ; 2 = 3.5-4
 
 // Raa nprompt guess
 // Watch out the ouputs !!!
@@ -114,7 +114,6 @@ Double_t Getfb_pty(TString* bin,double xmin, double xmax,double scalerF);
 void PrompNoPromptRAA(const char* input="RAA.txt")
 {
 
-
   ifstream in(input);
   char line[1024];
 
@@ -135,7 +134,7 @@ void PrompNoPromptRAA(const char* input="RAA.txt")
 
     sscanf(line,"%s %e-%e %e %e ",bin,&a,&b,&value,&value2);
 
-    printf("%s %.0e-%.0e %.2e %.2e \n",bin,a,b,value,value2);
+    printf("%s %.2e-%.2e %.2e %.2e \n",bin,a,b,value,value2);
 
     x.push_back(a);
     y.push_back(value);
@@ -203,7 +202,7 @@ void PrompNoPromptRAA(const char* input="RAA.txt")
     Double_t variation2 = (Raapro[2][i] - y[i] )*100/y[i];
     Double_t variation3 = (Raapro[3][i] - y[i] )*100/y[i];
 
-    printf(" %.0f-%.0f  &  %.3f &  %0.4f &  %0.2f \\%% &  %0.2f \\%% & %0.2f \\%%&  %0.2f \\%% \\\\\n",x[i],x[i+1],y[i],fb[i]/(1+fb[i]),variation0,variation1,variation2,variation3);
+    printf(" %.2f-%.2f  &  %.3f &  %0.4f &  %0.2f \\%% &  %0.2f \\%% & %0.2f \\%%&  %0.2f \\%% \\\\\n",x[i],x[i+1],y[i],fb[i]/(1+fb[i]),variation0,variation1,variation2,variation3);
 
   }
 
@@ -227,7 +226,7 @@ void PrompNoPromptRAA(const char* input="RAA.txt")
     Double_t variation2 = (r_pro2 - r_inc )*100/(r_inc);
     Double_t variation3 = (r_pro3 - r_inc )*100/(r_inc);
 
-    printf(" %.0f-%.0f  &  %.3f &  %0.4f & %0.4f &  %0.2f \\%% &  %0.2f \\%% & %0.2f \\%%&  %0.2f \\%% \\\\\n",x[i],x[i+1],r_inc,fb[i]/(1+fb[i]),fb2[i]/(1+fb2[i]),variation0,variation1,variation2,variation3);
+    printf(" %.2f-%.2f  &  %.3f &  %0.4f & %0.4f &  %0.2f \\%% &  %0.2f \\%% & %0.2f \\%%&  %0.2f \\%% \\\\\n",x[i],x[i+1],r_inc,fb[i]/(1+fb[i]),fb2[i]/(1+fb2[i]),variation0,variation1,variation2,variation3);
 
   }
 
@@ -262,16 +261,12 @@ Double_t Getfb(double scalerF)
     // loop over pt
     for (int j = ybinrange[0]; j < ybinrange[1] + 1; ++j)
     {
-      //   printf("add cc_promp_7TeV = %f \n",cc_promp_7TeV[j][i]);
-      //   printf("add cc_npromp_7TeV = %f \n",cc_npromp_7TeV[j][i]);
-      //   printf(" --- \n");
       cc_prompt_tot    += cc_promp_7TeV[j][i];
       cc_nonprompt_tot += cc_npromp_7TeV[j][i];
     }
   }
 
   fb = scalerF*(cc_nonprompt_tot/cc_prompt_tot);
-  // printf("fb = %f \n", fb);
   return fb;
 
 }
@@ -285,16 +280,11 @@ Double_t Getfb_pty(TString* bin,double xmin, double xmax,double scalerF )
   double cc_prompt_tot    =0.;
   double cc_nonprompt_tot =0.;
 
-
   if(bin->Contains("pt"))
   {
     int x1 = xmin;
     int x2 = xmax;
     int dx   = x2-x1;
-
-    // printf("x1 = %d\n",x1);
-    // printf("x2 = %d\n",x2);
-    // printf("dx = %d\n",dx);
 
     // protection
     if(ybinrange[0] < 0 ||  ybinrange[1] > 2 ){
@@ -304,20 +294,11 @@ Double_t Getfb_pty(TString* bin,double xmin, double xmax,double scalerF )
     // loop over y
     for (int j = ybinrange[0]; j < ybinrange[1] + 1; ++j)
     {
-
       // in case a bin is bigger than 1
       for (int k = 0; k < dx; ++k)
       {
-        // printf("x1 = %d\n",x1 );
-        // printf("x1 + k = %d\n",x1 + k );
-
-        // printf("add cc_promp_7TeV = %f \n",cc_promp_7TeV[j][x1+k]);
-        // printf("add cc_npromp_7TeV = %f \n",cc_npromp_7TeV[j][x1+k]);
-        // printf(" --- \n");
-
         cc_prompt_tot    += cc_promp_7TeV[j][x1+k];
         cc_nonprompt_tot += cc_npromp_7TeV[j][x1+k];
-
       }
     }
     fb = scalerF*(cc_nonprompt_tot/cc_prompt_tot);
@@ -326,8 +307,36 @@ Double_t Getfb_pty(TString* bin,double xmin, double xmax,double scalerF )
   }
   else if(bin->Contains("y"))
   {
-    return -1;
 
+    // Convert rapidty bin into int for the table
+    int y1 = 0;
+    if(xmin >= 3.0 ) y1 = 1;
+    if(xmin >= 3.5 ) y1 = 2;
+
+    int             y2 = 1;
+    if(xmax > 3.0 ) y2 = 2;
+    if(xmax > 3.5 ) y2 = 3;
+
+    int dy   = y2-y1;
+
+    // protection
+    if(xbinrange[0] < 0 ||  xbinrange[1] > 13 ){
+      printf(" range in y should be between 0 and 13 \n");
+      return -1;
+    }
+    // loop over pt
+    for (int j = xbinrange[0]; j < xbinrange[1] + 1; ++j)
+    {
+      // in case a bin is bigger than 1
+      for (int k = 0; k < dy; ++k)
+      {
+        cc_prompt_tot    += cc_promp_7TeV[y1+k][j];
+        cc_nonprompt_tot += cc_npromp_7TeV[y1+k][j];
+      }
+    }
+    fb = scalerF*(cc_nonprompt_tot/cc_prompt_tot);
+    printf("fb = %f \n", fb);
+    return fb;
   }
 
 }
