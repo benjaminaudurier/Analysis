@@ -92,7 +92,7 @@ namespace
 
 // range to integrate the function
 const int xbinrange[2] = {0,11}; // 0 = 0-1 , 1 = 1-2 ... 13 = 13-14
-const int ybinrange[2] = {2,2}; // 0 = 2.5-3 ; 1 = 3-3.5 ; 2 = 3.5-4
+const int ybinrange[2] = {0,2}; // 0 = 2.5-3 ; 1 = 3-3.5 ; 2 = 3.5-4
 
 // Raa nprompt guess
 // Watch out the ouputs !!!
@@ -134,7 +134,7 @@ void PrompNoPromptRAA(const char* input="RAA.txt")
 
     sscanf(line,"%s %e-%e %e %e ",bin,&a,&b,&value,&value2);
 
-    printf("%s %.2e-%.2e %.2e %.2e \n",bin,a,b,value,value2);
+    // printf("%s %.2e-%.2e %.2e %.2e \n",bin,a,b,value,value2);
 
     x.push_back(a);
     y.push_back(value);
@@ -285,6 +285,9 @@ Double_t Getfb_pty(TString* bin,double xmin, double xmax,double scalerF )
     int x1 = xmin;
     int x2 = xmax;
     int dx   = x2-x1;
+    printf("x1 = %d\n",x1 );
+    printf("x2 = %d\n",x2 );
+    printf("dx = %d\n",dx );
 
     // protection
     if(ybinrange[0] < 0 ||  ybinrange[1] > 2 ){
@@ -302,7 +305,7 @@ Double_t Getfb_pty(TString* bin,double xmin, double xmax,double scalerF )
       }
     }
     fb = scalerF*(cc_nonprompt_tot/cc_prompt_tot);
-    printf("fb = %f \n", fb);
+    // printf("fb = %f \n", fb);
     return fb;
   }
   else if(bin->Contains("y"))
