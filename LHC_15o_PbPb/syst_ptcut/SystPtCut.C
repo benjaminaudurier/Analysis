@@ -74,9 +74,9 @@ void SystPtCut(const char* input="RAA.txt")
 
     printf("%s %.0f-%.0f  --  Raa_inc = %.3f -- Raa_inc_ptcut = %.3f \n",bin,a,b,value,value_ptcut);
 
-    corr       =  ( 1./ cutEff_2015 ) * ((Fpp_5TeV_03_1*value_ptcut -value)/value);
-    // corr       =  ( Fpp_5TeV_03_1 / (Fpp_5TeV_03_1 - 1 + cutEff_2015) ) * ((value_ptcut -value)/value);
-    corr_ptcut = ( ( 1 - cutEff_2015 ) / ( Fpp_5TeV_03_1 * cutEff_2015 ) ) * ( ( Fpp_5TeV_03_1*value_ptcut - value ) / value_ptcut );
+    corr       =  ( 1./ cutEff_2015 ) * ((Fpp_5TeV_03_1_y_325_4*value_ptcut -value)/value);
+    // corr       =  ( Fpp_5TeV_03_1_y_325_4 / (Fpp_5TeV_03_1_y_325_4 - 1 + cutEff_2015) ) * ((value_ptcut -value)/value);
+    corr_ptcut = ( ( 1 - cutEff_2015 ) / ( Fpp_5TeV_03_1_y_325_4 * cutEff_2015 ) ) * ( ( Fpp_5TeV_03_1_y_325_4*value_ptcut - value ) / value_ptcut );
 
     printf("  -> Correction of Raa_inc       : %.1f %% (cut efficiency : %.02f %%)\n",corr*100,cutEff_2015);
     printf("  -> Correction of Raa_inc_ptcut : %.1f %% (cut efficiency : %.02f %%)\n\n",corr_ptcut*100,cutEff_2015);

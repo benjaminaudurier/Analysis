@@ -11,3 +11,18 @@ pt 0-1  --  Raa_inc = 0.728 -- Raa_inc_ptcut = 0.697
 pt 0-12  --  Raa_inc = 0.777 -- Raa_inc_ptcut = 0.725
   -> Correction of Raa_inc       : -21.9 % (cut efficiency : 0.65 %)
   -> Correction of Raa_inc_ptcut : -8.9 % (cut efficiency : 0.65 %)
+
+
+
+--- Centrality 40-90% /  2.5 < y < 3.25---
+
+pt 0-1  --  Raa_inc = 0.909 -- Raa_inc_ptcut = 0.644 
+  -> Correction of Raa_inc       : -57.1 % (cut efficiency : 0.65 %)
+  -> Correction of Raa_inc_ptcut : -31.7 % (cut efficiency : 0.65 %)
+
+
+--- Centrality 40-90% /  3.25 < y < 4---
+
+pt 0-1  --  Raa_inc = 0.919 -- Raa_inc_ptcut = 0.741 
+  -> Correction of Raa_inc       : -44.7 % (cut efficiency : 0.65 %)
+  -> Correction of Raa_inc_ptcut : -22.0 % (cut efficiency : 0.65 %)
