@@ -7,7 +7,7 @@
   // --- general analysis setup ---
   TString rootVersion       = "";
   TString alirootVersion    = "";
-  TString aliphysicsVersion = "vAN-20170526-1";
+  TString aliphysicsVersion = "vAN-20170801-1";
   TString extraLibs         ="";
   TString extraIncs         ="include";
   TString extraTasks        ="";
@@ -107,4 +107,3 @@ void CreateAndCopyParFile(TString parfile)
   printf("Executing: %s\n", command.Data());
   gSystem->Exec(command.Data());
 }
-

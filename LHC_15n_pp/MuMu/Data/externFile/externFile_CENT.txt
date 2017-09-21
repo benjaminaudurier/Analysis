@@ -1,2 +1,2 @@
 #centrality Low  High  lumi.  lumi (stat)  lumi (syst. %)   Trigg  Trigg (local board)   Traj.err.(%)  MC Input (%)  Matching(%)  AccEff  dAccEff  NofJpsi Stat.Jpsi SystJpsi
-  PP        PP   PP    106.28   0.09         2.1             2.9    1.5                    1.           2.5           1.            0.0     0.0      0.0     0.0        0.0
+  PP        PP   PP    106.28   0.09         2.1             1.0    1.5                    1.           2.0           1.            0.0     0.0      0.0     0.0        0.0

@@ -32,9 +32,9 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
 
   // --- Pool trigger ---
 
-  // TList* triggersmix = new TList;
-  // triggersmix->SetOwner(kTRUE);
-  // triggersmix->Add(new TObjString("CMSL7-B-NOPF-MUFAST"));
+  TList* triggersmix = new TList;
+  triggersmix->SetOwner(kTRUE);
+  triggersmix->Add(new TObjString("CMSL7-B-NOPF-MUFAST"));
 
   // =========
 
@@ -177,67 +177,62 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
     binning->AddBin("psi","integrated");
 
     // pt binning
-    // binning->AddBin("psi","pt", 0.0, 1.0,"BENJ");
-    // binning->AddBin("psi","pt", 0.3, 1.0,"BENJ");
-    // binning->AddBin("psi","pt", 1.0, 2.0,"BENJ");
-    // binning->AddBin("psi","pt", 2.0, 3.0,"BENJ");
-    // binning->AddBin("psi","pt", 3.0, 4.0,"BENJ");
-    // binning->AddBin("psi","pt", 4.0, 5.0,"BENJ");
-    // binning->AddBin("psi","pt", 5.0, 6.0,"BENJ");
-    // binning->AddBin("psi","pt", 6.0, 7.0,"BENJ");
-    // binning->AddBin("psi","pt", 7.0, 8.0,"BENJ");
-    // binning->AddBin("psi","pt", 8.0, 9.0,"BENJ");
-    // binning->AddBin("psi","pt", 9.0, 10.0,"BENJ");
-    // binning->AddBin("psi","pt", 10.0, 12.0,"BENJ");
+    binning->AddBin("psi","pt", 0.0, 1.0,"BENJ");
+    binning->AddBin("psi","pt", 0.3, 1.0,"BENJ");
+    binning->AddBin("psi","pt", 1.0, 2.0,"BENJ");
+    binning->AddBin("psi","pt", 2.0, 3.0,"BENJ");
+    binning->AddBin("psi","pt", 3.0, 4.0,"BENJ");
+    binning->AddBin("psi","pt", 4.0, 5.0,"BENJ");
+    binning->AddBin("psi","pt", 5.0, 6.0,"BENJ");
+    binning->AddBin("psi","pt", 6.0, 7.0,"BENJ");
+    binning->AddBin("psi","pt", 7.0, 8.0,"BENJ");
+    binning->AddBin("psi","pt", 8.0, 9.0,"BENJ");
+    binning->AddBin("psi","pt", 9.0, 10.0,"BENJ");
+    binning->AddBin("psi","pt", 10.0, 12.0,"BENJ");
 
-    // binning->AddBin("psi","pt", 0.3, 12.0,"INT_PUTCUT");
-    // binning->AddBin("psi","pt", 0.0, 8.0,"INT");
+    binning->AddBin("psi","pt", 0.3, 12.0,"INT_PTCUT");
+    binning->AddBin("psi","pt", 0.0, 8.0,"INT");
+    binning->AddBin("psi","pt", 0.0, 2.0,"INT_VAR1");
+    binning->AddBin("psi","pt", 0.3, 2.0,"INT_VAR2");
+    binning->AddBin("psi","pt", 2.0, 5.0,"INT_VAR3");
+    binning->AddBin("psi","pt", 5.0, 8.0,"INT_VAR4");
+    binning->AddBin("psi","pt", 8.0, 12.0,"INT_VAR5");
 
      // y binning
-    //  binning->AddBin("psi","y",-4,-3.75,"BENJ");
-    //  binning->AddBin("psi","y",-3.75,-3.5,"BENJ");
-    //  binning->AddBin("psi","y",-3.5,-3.25,"BENJ");
-    //  binning->AddBin("psi","y",-3.25,-3,"BENJ");
-    //  binning->AddBin("psi","y",-3,-2.75,"BENJ");
-    //  binning->AddBin("psi","y",-2.75,-2.5,"BENJ");
+     binning->AddBin("psi","y",-4,-3.75,"BENJ");
+     binning->AddBin("psi","y",-3.75,-3.5,"BENJ");
+     binning->AddBin("psi","y",-3.5,-3.25,"BENJ");
+     binning->AddBin("psi","y",-3.25,-3,"BENJ");
+     binning->AddBin("psi","y",-3,-2.75,"BENJ");
+     binning->AddBin("psi","y",-2.75,-2.5,"BENJ");
 
-    // binning->AddBin("psi","yvspt", 0.0, 1.0,-4,-3.25,"2DBIN1");
-    // binning->AddBin("psi","yvspt", 0.3, 1.0,-4,-3.25,"2DBIN1");
-    // binning->AddBin("psi","yvspt", 1.0, 2.0,-4,-3.25,"2DBIN1");
-    // binning->AddBin("psi","yvspt", 2.0, 3.0,-4,-3.25,"2DBIN1");
-    // binning->AddBin("psi","yvspt", 3.0, 4.0,-4,-3.25,"2DBIN1");
-    // binning->AddBin("psi","yvspt", 4.0, 5.0,-4,-3.25,"2DBIN1");
-    // binning->AddBin("psi","yvspt", 5.0, 6.0,-4,-3.25,"2DBIN1");
-    // binning->AddBin("psi","yvspt", 6.0, 7.0,-4,-3.25,"2DBIN1");
-    // binning->AddBin("psi","yvspt", 7.0, 8.0,-4,-3.25,"2DBIN1");
-    // binning->AddBin("psi","yvspt", 8.0, 12.0,-4,-3.25,"2DBIN1");
 
-    // binning->AddBin("psi","yvspt", 0.0, 1.0,-3.25,-2.5,"2DBIN2");
-    // binning->AddBin("psi","yvspt", 0.3, 1.0,-3.25,-2.5,"2DBIN2");
-    // binning->AddBin("psi","yvspt", 1.0, 2.0,-3.25,-2.5,"2DBIN2");
-    // binning->AddBin("psi","yvspt", 2.0, 3.0,-3.25,-2.5,"2DBIN2");
-    // binning->AddBin("psi","yvspt", 3.0, 4.0,-3.25,-2.5,"2DBIN2");
-    // binning->AddBin("psi","yvspt", 4.0, 5.0,-3.25,-2.5,"2DBIN2");
-    // binning->AddBin("psi","yvspt", 5.0, 6.0,-3.25,-2.5,"2DBIN2");
-    // binning->AddBin("psi","yvspt", 6.0, 7.0,-3.25,-2.5,"2DBIN2");
-    // binning->AddBin("psi","yvspt", 7.0, 8.0,-3.25,-2.5,"2DBIN2");
-    // binning->AddBin("psi","yvspt", 8.0, 12.0,-3.25,-2.5,"2DBIN2");
+     binning->AddBin("psi","yvspt",0,1,-4,-3.25 ,"BENJ");
+
+    binning->AddBin("psi","yvspt", 0.0, 1.0,-4,-3.25,"2DBIN1");
+    binning->AddBin("psi","yvspt", 0.3, 1.0,-4,-3.25,"2DBIN1");
+    binning->AddBin("psi","yvspt", 1.0, 2.0,-4,-3.25,"2DBIN1");
+    binning->AddBin("psi","yvspt", 2.0, 3.0,-4,-3.25,"2DBIN1");
+    binning->AddBin("psi","yvspt", 3.0, 4.0,-4,-3.25,"2DBIN1");
+    binning->AddBin("psi","yvspt", 4.0, 5.0,-4,-3.25,"2DBIN1");
+    binning->AddBin("psi","yvspt", 5.0, 6.0,-4,-3.25,"2DBIN1");
+    binning->AddBin("psi","yvspt", 6.0, 8.0,-4,-3.25,"2DBIN1");
+    binning->AddBin("psi","yvspt", 8.0, 12.0,-4,-3.25,"2DBIN1");
+
+    binning->AddBin("psi","yvspt", 0.0, 1.0,-3.25,-2.5,"2DBIN2");
+    binning->AddBin("psi","yvspt", 0.3, 1.0,-3.25,-2.5,"2DBIN2");
+    binning->AddBin("psi","yvspt", 1.0, 2.0,-3.25,-2.5,"2DBIN2");
+    binning->AddBin("psi","yvspt", 2.0, 3.0,-3.25,-2.5,"2DBIN2");
+    binning->AddBin("psi","yvspt", 3.0, 4.0,-3.25,-2.5,"2DBIN2");
+    binning->AddBin("psi","yvspt", 4.0, 5.0,-3.25,-2.5,"2DBIN2");
+    binning->AddBin("psi","yvspt", 5.0, 6.0,-3.25,-2.5,"2DBIN2");
+    binning->AddBin("psi","yvspt", 6.0, 8.0,-3.25,-2.5,"2DBIN2");
+    binning->AddBin("psi","yvspt", 8.0, 12.0,-3.25,-2.5,"2DBIN2");
 
   }
 
   // v0 centrality binning
-  binning->AddBin("centrality","V0Mminus05",0.,20.);
-  binning->AddBin("centrality","V0Mminus05",20.,40.);
-  binning->AddBin("centrality","V0Mminus05",40.,90.);
-  binning->AddBin("centrality","V0Mminus05",40.,60.);
-  binning->AddBin("centrality","V0Mminus05",60.,90.);  
-
-  binning->AddBin("centrality","V0Mplus05",0.,20.);
-  binning->AddBin("centrality","V0Mplus05",20.,40.);
-  binning->AddBin("centrality","V0Mplus05",40.,90.);
-  binning->AddBin("centrality","V0Mplus05",40.,60.);
-  binning->AddBin("centrality","V0Mplus05",60.,90.);
-
+  binning->AddBin("centrality","pp");
 
   // add the configured task to the analysis manager
   mgr->AddTask(task);

@@ -21,19 +21,19 @@ void calcPromptRAA() {
 	Bool_t bPrintAN = kTRUE;
 //	Bool_t bPrintAN = kFALSE; // Print for twiki instead
 
-	Double_t incRAA276 = 0.58;
-	Double_t Fb276 = 0.0713;
-	Double_t incRAA = 0.69;
-	Double_t Fb5 = 0.0889;
-	Double_t Fb7 = 0.1008;
-	Double_t minNPRAA276 = 0.;
-	Double_t intNPRAA276 = 0.5;
-	Double_t maxNPRAA276 = 1.;
+	Double_t incRAA276 		= 0.58;
+	Double_t incRAA502 		= 0.69;
+	Double_t Fb276 				= 0.0713;
+	Double_t Fb5 					= 0.0889;
+	Double_t Fb7 					= 0.1008;
+	Double_t minNPRAA276 	= 0.;
+	Double_t intNPRAA276 	= 0.5;
+	Double_t maxNPRAA276 	= 1.;
 	Double_t maxxNPRAA276 = 1.2;
-	Double_t minNPRAA = 0.;
-	Double_t intNPRAA = 0.5;
-	Double_t maxNPRAA = 1.;
-	Double_t maxxNPRAA = 1.2;
+	Double_t minNPRAA 		= 0.;
+	Double_t intNPRAA 		= 0.5;
+	Double_t maxNPRAA 		= 1.;
+	Double_t maxxNPRAA 		= 1.2;
 
 	const Int_t ncent = 9;
 	const Int_t npt276 = 7;

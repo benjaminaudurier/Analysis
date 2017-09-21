@@ -1,5 +1,6 @@
 #include "Riostream.h"
 #include "TH1.h"
+#include "TH1F.h"
 #include <vector>
 #include "TMath.h"
 #include "TF1.h"
@@ -10,6 +11,7 @@
 #include "TMinuit.h"
 #include "TCanvas.h"
 #include "TFitResult.h"
+#include "TObjString.h"
 #include "TStyle.h"
 #include "TMatrixD.h"
 
@@ -47,10 +49,14 @@ TH1* FitPt(const char* input="dsigmadydpt_PbPb020.txt", Bool_t norm = kFALSE, In
 // range to integrate the function
 Double_t xmin          = 0.;
 Double_t xmax          = 8.;
-Double_t cutefficiency = 0.8;
+
+// Constant
+Double_t cutefficiency = 0.8; // fraction of photo-produced J/psi in pt 0-0.5 over pt 0-1
+Double_t frac_NJpsi_h  = 0.;  // fraction of hadronic J/psi in pt 0-0.5 over pt 0.5-1
+// Double_t frac_NJpsi_h  = 0.37; // fraction of hadronic J/psi in pt 0-0.5 over pt 0.5-1 frop pp@5TeV
 
 
-void FitPt(const char* input="dsigmadydpt_pp.txt" , const char* inputbis ="NJpsi_05to1.txt", Bool_t norm = kFALSE, Int_t errorType = 0, Double_t delta = 0.1);
+void FitPt(const char* input="dsigmadydpt_pp.txt" , const char* inputbis ="NJpsi_05to1.txt", Bool_t norm = kFALSE, Int_t errorType = 2, Double_t delta = 0.1);
 Double_t MeanPtVsp0(Double_t *x, Double_t *p);
 Double_t MeanPtVsn(Double_t *x, Double_t *p);
 Double_t MeanPt2Vsp0(Double_t *x, Double_t *p);
@@ -59,7 +65,7 @@ Double_t MeanPt2Vsn(Double_t *x, Double_t *p);
 
 
 //------------------------------------------------------------------
-void FitPtLoop(const char* directory="YieldPbPb_2015" , const char* inputbis = "NJpsi_05to1.txt", Bool_t norm = kFALSE, Int_t errorType = 0, Double_t delta = 0.1)
+void FitPtLoop(const char* directory="YieldPbPb_2015" , const char* inputbis = "NJpsi_05to1.txt", Bool_t norm = kFALSE, Int_t errorType = 2, Double_t delta = 0.1)
 {
   // norm = kTRUE if yields have been divided by pT
   // errorType: stat = 0, sys = 1, all = other int
@@ -92,7 +98,7 @@ void FitPtLoop(const char* directory="YieldPbPb_2015" , const char* inputbis = "
 }
 
 //------------------------------------------------------------------
-void FitPt(const char* input ,const char* inputbis , Bool_t norm , Int_t errorType , Double_t delta )
+void FitPt(const char* input ,const char* inputbis  , Bool_t norm , Int_t errorType , Double_t delta )
 {
   // norm = kTRUE if yields have been divided by pT
   // errorType: stat = 0, sys = 1, all = other int
@@ -108,6 +114,8 @@ void FitPt(const char* input ,const char* inputbis , Bool_t norm , Int_t errorTy
   std::vector<double> x;
   std::vector<double> y;
   std::vector<double> yerr;
+  std::vector<double> yerrstat;
+  std::vector<double> yerrsyst;
 
   while (in.getline(line,1023,'\n'))
   {
@@ -124,14 +132,16 @@ void FitPt(const char* input ,const char* inputbis , Bool_t norm , Int_t errorTy
       sys        *= s;
     }
 
-    if (errorType == 1) stat=0;
-    else if (errorType == 0) sys=0;
 
     // printf("%e-%e %e %e %e\n",a,b,value,stat,sys);
 
     x.push_back(a);
     y.push_back(value);
+    yerrstat.push_back(stat);
+    yerrsyst.push_back(sys);
 
+    if (errorType == 1) stat=0;
+    else if (errorType == 0) sys=0;
     Double_t error = TMath::Sqrt(stat*stat/value/value+sys*sys/value/value)*value;
     yerr.push_back(error);
 
@@ -161,12 +171,16 @@ void FitPt(const char* input ,const char* inputbis , Bool_t norm , Int_t errorTy
   //  f->FixParameter(1,4.32592e+00);
   f->SetParameter(2,10);
 
-  // TFitResultPtr r = h->Fit(f,"0QIRS","",h->GetXaxis()->GetXmin(),h->GetXaxis()->GetXmax());
   TFitResultPtr r = h->Fit(f,"0QISE","",0.5,12);
 
 
   float centlow,centhigh;
-  float value_05_1,value_0_1;
+  float value_0_05,value_0_05_stat,value_0_05_syst,value_05_1,value_05_1_stat,value_05_1_syst;
+  std::vector<double> vNJpsi_h_05_1;
+  std::vector<double> vNJpsi_h_05_1_stat;
+  std::vector<double> vNJpsi_05_1;
+  std::vector<double> vNJpsi_05_1_syst;
+
   std::vector<double> centlowvector;
   std::vector<double> centhighvector;
   std::vector<double> corrfactor;
@@ -179,17 +193,25 @@ void FitPt(const char* input ,const char* inputbis , Bool_t norm , Int_t errorTy
 
     if (strstr(linebis, "//")) continue;
 
-    sscanf(linebis,"%e-%e %e %e",&centlow,&centhigh,&value_05_1,&value_0_1);
-    // printf("%e-%e %e %e\n",centlow,centhigh,value_05_1,value_0_1);
+    sscanf(linebis,"%e-%e %e-%e-%e %e-%e-%e",&centlow,&centhigh,&value_0_05,&value_0_05_stat,&value_0_05_syst,&value_05_1,&value_05_1_stat,&value_05_1_syst);
+    // printf("%e-%e %e-%e-%e %e-%e-%e\n",centlow,centhigh,value_0_05,value_0_05_stat,value_0_05_syst,value_05_1,value_05_1_stat,value_05_1_syst);
 
-    // double NJpsi_h =  value_05_1 - ((1-cutefficiency)/cutefficiency)*(value_0_1-value_05_1)*(1-f->Integral(0,0.5)/h->GetBinContent(1)/0.5);
-    double NJpsi_h =  value_05_1 - ((1-cutefficiency)/cutefficiency)*(value_0_1-value_05_1);
-    printf("NJpsi_h = %f\n",NJpsi_h );
-    printf("f->Integral(0,0.5)/0.5 = %f\n",f->Integral(0,0.5)/0.5 );
-    printf("h->GetBinContent(1) = %f\n",h->GetBinContent(1) );
-    double factor  = NJpsi_h/value_05_1;
-    printf("factor = %f\n",factor );
+    double NJpsi_h_05_1 =  value_05_1 - ((1-cutefficiency)/cutefficiency)*(value_0_05);
+    double correction   = 1.-frac_NJpsi_h*(1-cutefficiency)/cutefficiency;
+    NJpsi_h_05_1        =  NJpsi_h_05_1/correction ;
 
+    double NJpsi_h_05_1_stat = sqrt(
+      pow(value_05_1_stat/correction,2)
+      + pow(value_0_05_stat,2)*pow((1-cutefficiency)/cutefficiency/correction,2));
+
+    double factor  = NJpsi_h_05_1/value_05_1;
+
+    printf("cent %.0f-%.0f \n => NJpsi_h_0_05 = %.0f +- %.0f \n  => NJpsi_05_1 = %.0f \n -- factor : %.2f \n",centlow,centhigh,NJpsi_h_05_1,NJpsi_h_05_1_stat,value_05_1,factor );
+
+    vNJpsi_h_05_1.push_back(NJpsi_h_05_1);
+    vNJpsi_h_05_1_stat.push_back(NJpsi_h_05_1_stat);
+    vNJpsi_05_1.push_back(value_05_1);
+    vNJpsi_05_1_syst.push_back(value_05_1_syst);
     centlowvector.push_back(centlow);
     centhighvector.push_back(centhigh);
     corrfactor.push_back(factor);
@@ -197,7 +219,7 @@ void FitPt(const char* input ,const char* inputbis , Bool_t norm , Int_t errorTy
   }
 
 
-  TH1* h_effcut = new TH1F("pt_effcut","pt_effcut",x.size()-1,&x[0]);
+  TH1F* h_effcut = new TH1F("pt_effcut","pt_effcut",x.size()-1,&x[0]);
 
   for ( Int_t i = 1; i <= h_effcut->GetXaxis()->GetNbins(); ++i )
   {
@@ -211,9 +233,26 @@ void FitPt(const char* input ,const char* inputbis , Bool_t norm , Int_t errorTy
         // printf("%.0f-%.0f\n",centlowvector[j],centhighvector[j]);
         if( sinput.Contains(Form("%.0fto%.0f",centlowvector[j],centhighvector[j])) )
         {
-          // printf("corrfactor = %f\n",corrfactor[j]);
-          h_effcut->SetBinContent(i,corrfactor[j]*y[i-1]);
-          h_effcut->SetBinError(i,corrfactor[j]*yerr[i-1]);
+          printf("corrfactor for cent %.0f-%.0f = %.2f\n",centlowvector[j],centhighvector[j],(1+corrfactor[j]));
+
+          double Yield_h      = corrfactor[j]*y[i-1];
+
+          double Yield_h_stat = y[i-1]*vNJpsi_h_05_1_stat[j]/vNJpsi_05_1[j];
+
+          double Yield_h_syst = corrfactor[j]* yerrsyst[i-1];
+
+          printf("yield_y = %.3f +- %.3f +- %.3f \n",Yield_h,Yield_h_stat,Yield_h_syst );
+
+          double Yield_h_full = sqrt(Yield_h_stat*Yield_h_stat +Yield_h_syst*Yield_h_syst);
+
+          double Yield_h_full_legacy = corrfactor[j]*yerr[i-1];
+
+          h_effcut->SetBinContent(i,Yield_h);
+          if(errorType==0)     h_effcut->SetBinError(i,Yield_h_stat);
+          else if(errorType==1)h_effcut->SetBinError(i,Yield_h_syst);
+          else                 h_effcut->SetBinError(i,Yield_h_full);
+          // else                 h_effcut->SetBinError(i,Yield_h_full_legacy);
+
         }
       }
     } else {
@@ -285,8 +324,8 @@ void FitPt(const char* input ,const char* inputbis , Bool_t norm , Int_t errorTy
   Double_t meanpt2val_effcut = f_effcut->Moment(2,xmin,xmax);
   std::cout << Form("<pT2> with efficiency correction   = %e (%f,%f)",meanpt2val_effcut,xmin,xmax) << std::endl;
   std::cout << std::endl;
-  std::cout << Form("<pT> variation                     = %f",(meanptval-meanptval_effcut)/meanptval*100) << std::endl;
-  std::cout << Form("<pT2> variation                    = %f",(meanpt2val-meanpt2val_effcut)/meanpt2val*100) << std::endl;
+  std::cout << Form("<pT> variation                     = %f %%",(meanptval_effcut-meanptval)/meanptval*100) << std::endl;
+  std::cout << Form("<pT2> variation                    = %f %%",(meanpt2val_effcut-meanpt2val)/meanpt2val*100) << std::endl;
   std::cout << std::endl;
 
 

@@ -44,10 +44,10 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
 
   // ========= Create task and subtask =========
 
-  AliAnalysisTaskMuMu  * task             = new AliAnalysisTaskMuMu(); // Call the task
-  AliAnalysisMuMuAccxEff* accxeffAnalysis = new AliAnalysisMuMuAccxEff();// Analysis dealing with single muon
-  AliAnalysisMuMuSingle* singleAnalysis   = new AliAnalysisMuMuSingle();// Analysis dealing with single muon
-  AliAnalysisMuMuMinv  * minvAnalysis     = new AliAnalysisMuMuMinv();// Analysis creating invariant mass spectrum
+  AliAnalysisTaskMuMu  * task             = new AliAnalysisTaskMuMu();   // Call the task
+  AliAnalysisMuMuAccxEff* accxeffAnalysis = new AliAnalysisMuMuAccxEff();// Analysis dealing with Accxeff
+  AliAnalysisMuMuSingle* singleAnalysis   = new AliAnalysisMuMuSingle(); // Analysis dealing with single muon
+  AliAnalysisMuMuMinv  * minvAnalysis     = new AliAnalysisMuMuMinv();   // Analysis creating invariant mass spectrum
   task->SetBeamYear(beamYear);
 
   // =========
@@ -80,7 +80,7 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
 
       // --- Array of cut elements ---
       TObjArray cutElements;
-      // TObjArray cutElementspdca;
+      TObjArray cutElementspdca;
 
       // --- Cuts on track level ---
       AliAnalysisMuMuCutElement* pairTrue = cr->AddTrackPairCut(*cr,"AlwaysTrue","const AliVParticle&,const AliVParticle&","");// Apply "AlwaysTrue" cut on AliVParticle derived from AliAnalysisMuMuMinv
@@ -108,7 +108,7 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
 
       // Adding the sub analysis
       // task->AdoptSubAnalysis(singleAnalysis);
-      task->AdoptSubAnalysis(minvAnalysis);
+      // task->AdoptSubAnalysis(minvAnalysis);
     }
   }
 
@@ -120,10 +120,10 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
   Double_t oldYParam[3] = {1.09886e6, 0., 2.12568};
 
   // Set original generated sim functions
-  accxeffAnalysis->SetOriginPtFunc(oldPtFormula,oldPtParam,0.,12.);
-  accxeffAnalysis->SetOriginYFunc(oldYFormula,oldYParam,-4,-2.5);
+  accxeffAnalysis->SetOriginPtFunc(oldPtFormula,oldPtParam);
+  accxeffAnalysis->SetOriginYFunc(oldYFormula,oldYParam);
 
-  // Add functions to task
+  // Add weight functions to task
   TObjArray* functionArray = new TObjArray();
   functionArray->Add(new TObjString("V0M_00.00_10.00&[0]*x/TMath::Power(1.+TMath::Power(x/[1],[2]),[3])&0.3622:2.6572:2.6875:2.3173&[0]*[0]*TMath::Exp(-0.5*((x-[1])/[2])**2)&1.0000:0.0000:2.2721"));
   functionArray->Add(new TObjString("V0M_10.00_20.00&[0]*x/TMath::Power(1.+TMath::Power(x/[1],[2]),[3])&0.3421:2.6832:2.6631:2.2200&[0]*[0]*TMath::Exp(-0.5*((x-[1])/[2])**2)&1.0000:0.0000:2.2835"));
@@ -139,6 +139,16 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
 
   // Configure sub analysis
   AliAnalysisMuMuBinning* binning = task->Binning(); // Create and set the "binning manager"
+
+  // v0 centrality binning
+  binning->AddBin("centrality","V0M",0.,10.);
+  binning->AddBin("centrality","V0M",10.,20.);
+  binning->AddBin("centrality","V0M",20.,30.);
+  binning->AddBin("centrality","V0M",30.,40.);
+  binning->AddBin("centrality","V0M",40.,50.);
+  binning->AddBin("centrality","V0M",50.,60.);
+  binning->AddBin("centrality","V0M",60.,90.);
+
 
   // v0 centrality binning
   binning->AddBin("centrality","V0M",0.,10.);

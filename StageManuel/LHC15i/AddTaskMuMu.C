@@ -23,8 +23,8 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
   // --- Your trigger list, could be what you want ---
   TList* triggers = new TList;
   triggers->SetOwner(kTRUE);
-  triggers->Add(new TObjString("CMUL7-B-NOPF-MUFAST"));
-  // triggers->Add(new TObjString("CINT7-B-NOPF-MUFAST"));
+  // triggers->Add(new TObjString("CMUL7-B-NOPF-MUFAST"));
+  triggers->Add(new TObjString("CINT7-B-NOPF-MUFAST"));
 
 
   // ========= Configure inputmaps (Default on is in AliMuonEventCuts). Do not touch it for pp@13TeV Analysis ========
@@ -46,18 +46,18 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
   // You need to give it the MeanTrackletsVsZVertex TProfile to use the data-driven multiplicity correction method
 
 
-  // TFile* f =TFile::Open("MeanTrkVsVertex.root");
-  // if(!f) {
-  //   printf("Cannot open file \n");
-  //   return;
-  // }
+  TFile* f =TFile::Open("MeanTrkVsVertex.root");
+  if(!f) {
+    printf("Cannot open file \n");
+    return;
+  }
 
-  // TProfile* hT =0x0;
-  // f->GetObject("MeanTrackletsVsZVertex",hT);
-  // if(!hT){
-  //   printf("Cannot get MeanTrackletsVsZVertex Histogram\n");
-  //   return;
-  // }
+  TProfile* hT =0x0;
+  f->GetObject("MeanTrackletsVsZVertex",hT);
+  if(!hT){
+    printf("Cannot get MeanTrackletsVsZVertex Histogram\n");
+    return;
+  }
 
 
   // cut to fill histo from the task
@@ -69,18 +69,19 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
 
 
   //General task that contains all the sub-task analysis
-  AliAnalysisTaskMuMu* task            = new AliAnalysisTaskMuMu;
+  AliAnalysisTaskMuMu* task            = new AliAnalysisTaskMuMu();
 
   // Raw Tracklets sub-analysis. The first configuration is meant to produce multiplicity QA plots and stuff (First run)
   // For the second run, you can use the second conf. providing the MeanTrackletsVsZVertex from the first run output file.
-  AliAnalysisMuMuNch* nch              = new AliAnalysisMuMuNch(0x0,0x0,-1.,etaMin,etaMax,zMin,zMax,kFALSE);//
-  // AliAnalysisMuMuNch* nch              = new AliAnalysisMuMuNch(0x0,hT,14.4,etaMin,etaMax,zMin,zMax,kFALSE);//Raw Tracklets Analysis
+  // AliAnalysisMuMuNch* nch              = new AliAnalysisMuMuNch(0x0,0x0,-1.,etaMin,etaMax,zMin,zMax,kFALSE);//
+  AliAnalysisMuMuNch* nch              = new AliAnalysisMuMuNch(0x0,hT,8.239,etaMin,etaMax,zMin,zMax,kFALSE);//Raw Tracklets Analysis
 
   // Inv. Mass sub-analysis. For the first run, you can leave it to NULL, and only plug it for the second run.
-  AliAnalysisMuMuMinv* minvAnalysis    =  0x0; // Call the task
-  // AliAnalysisMuMuMinv* minvAnalysis    =  new AliAnalysisMuMuMinv(); // Call the task
+  // AliAnalysisMuMuMinv* minvAnalysis    =  0x0; // Call the task
+  AliAnalysisMuMuMinv* minvAnalysis    =  new AliAnalysisMuMuMinv(); // Call the task
 
   // Single muon sub-analysis. Provides the cut methods for single muons, never unplug
+  // AliAnalysisMuMuSingle* singleAnalysis= 0x0;
   AliAnalysisMuMuSingle* singleAnalysis= new AliAnalysisMuMuSingle();
   task->SetBeamYear(beamYear);
 
@@ -104,19 +105,24 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
   AliAnalysisMuMuCutElement* cutZQA              = cr->AddEventCut(*eventCutter,"IsSPDzQA","const AliVEvent&,Double_t,Double_t","0.25,0.5");
   AliAnalysisMuMuCutElement* SPDPileUp           = cr->AddEventCut(*eventCutter,"IsSPDPileUp","AliVEvent&","");
   AliAnalysisMuMuCutElement* NoSPDPileUp         = cr->Not(*SPDPileUp);
+  AliAnalysisMuMuCutElement* clusterBKG          = cr->AddEventCut(*eventCutter,"IsSPDClusterVsTrackletBackground","const AliVEvent&","");
+  AliAnalysisMuMuCutElement* noClusterBKG        = cr->Not(*clusterBKG);
 
 
   // Here you can change the physic selction as you want, see AliAnalysisMuMuEventCutter.h. It is similar to SetCollisionCandidates()
-  AliAnalysisMuMuCutElement * ps1                 = eventTrue;
-  if (!simulations)
-  {
-    ps1 = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedMUL","const AliInputEventHandler&","");
-  }
+  AliAnalysisMuMuCutElement * ps                 = eventTrue;
+  if (!simulations) ps = cr->AddEventCut(*eventCutter,"IsPhysicsSelectedANY","const AliInputEventHandler&","");
 
   // Add a combination to the cut registry. This is your actual event cuts. You can use several combination at the same time
-  cr->AddCutCombination(ps1,cutHasSPD,cutZQA,cutSPDZ10,NoSPDPileUp,triggerSelection);
-  cr->AddCutCombination(ps1,cutHasSPD,cutZQA,cutSPDZ10,triggerSelection);
-  // cr->AddCutCombination(ps1,triggerSelection);
+  TObjArray cutElementsEvent;
+  cutElementsEvent.Add(ps);
+  cutElementsEvent.Add(cutHasSPD);
+  cutElementsEvent.Add(cutZQA);
+  cutElementsEvent.Add(cutSPDZ10);
+  cutElementsEvent.Add(NoSPDPileUp);
+  cutElementsEvent.Add(noClusterBKG);
+  cutElementsEvent.Add(triggerSelection);
+  cr->AddCutCombination(cutElementsEvent);
 
 
   // ========= Configure sub-analysis =========
@@ -128,13 +134,13 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
     AliAnalysisMuMuCutElement* rabs      = cr->AddTrackCut(*singleAnalysis,"IsRabsOK","const AliVParticle&","");
     AliAnalysisMuMuCutElement* matchlow  = cr->AddTrackCut(*singleAnalysis,"IsMatchingTriggerLowPt","const AliVParticle&","");
     AliAnalysisMuMuCutElement* eta       = cr->AddTrackCut(*singleAnalysis,"IsEtaInRange","const AliVParticle&","");
-    cr->AddCutCombination(trackTrue,rabs,matchlow,eta);
+    AliAnalysisMuMuCutElement* pdca       = cr->AddTrackCut(*singleAnalysis,"IsPDCAOK","const AliVParticle&","");
+    cr->AddCutCombination(trackTrue,rabs,matchlow,eta,pdca);
 
     if ( minvAnalysis ){
 
       // --- Array of cut elements ---
       TObjArray cutElements;
-      TObjArray cutElementsmix;
 
       // --- Cuts on muon pairs level ---
       AliAnalysisMuMuCutElement* pairTrue = cr->AddTrackPairCut(*cr,"AlwaysTrue","const AliVParticle&,const AliVParticle&","");// Apply "AlwaysTrue" cut on AliVParticle derived from AliAnalysisMuMuMinv
@@ -185,19 +191,11 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
 
   // Last arguments ("DH2" here) is just to add a term to Histo name to help differentiation in case of several binnings.
   // binning->AddBin("psi","ntrcorr",-1.5,-0.5,"BENJ"); // 1 - 8
-  // binning->AddBin("psi","ntrcorr",-0.5,0.5,"BENJ"); // 1 - 8
-  // binning->AddBin("psi","ntrcorr",0.5,8.5,"BENJ"); // 1 - 8
-  // binning->AddBin("psi","ntrcorr",8.5,13.5,"BENJ"); // 9 - 14
-  // binning->AddBin("psi","ntrcorr",13.5,16.5,"BENJ"); // 20 - 24
-  // binning->AddBin("psi","ntrcorr",16.5,20.5,"BENJ"); // 25 - 33
-  // binning->AddBin("psi","ntrcorr",20.5,24.5,"BENJ"); // 34 - 41
-  // binning->AddBin("psi","ntrcorr",24.5,28.5,"BENJ"); // 34 - 41
-  // binning->AddBin("psi","ntrcorr",28.5,32.5,"BENJ"); // 42 - 50
-  // binning->AddBin("psi","ntrcorr",32.5,38.5,"BENJ"); // 51 - 59
-  // binning->AddBin("psi","ntrcorr",38.5,44.5,"BENJ"); // 51 - 59
-  // binning->AddBin("psi","ntrcorr",44.5,54.5,"BENJ"); // 51 - 59
-  // binning->AddBin("psi","ntrcorr",54.5,74.5,"BENJ"); // 100 - 199
-  // binning->AddBin("psi","ntrcorr",74.5,140.5,"BENJ"); // 100 - 199
+  binning->AddBin("psi","ntrcorr",-0.5,0.5,"BENJ"); // 1 - 8
+  binning->AddBin("psi","ntrcorr",0.5,9.5,"BENJ"); // 1 - 8
+  binning->AddBin("psi","ntrcorr",9.5,19.5,"BENJ"); // 9 - 14
+  binning->AddBin("psi","ntrcorr",19.5,29.5,"BENJ"); // 20 - 24
+  binning->AddBin("psi","ntrcorr",29.5,39.5,"BENJ"); // 25 - 33
 
   // binning->AddBin("psi","ntrcorr",140.5,200.0,"D2H"); // 100 - 199 // Only to check that FNorm matches with previous analysis
 

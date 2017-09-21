@@ -42,11 +42,11 @@ namespace
 
   //Fpp for a bin = cross-section for a bin with the pt cut  / cross-section of the bin without pt cut
   const double Fpp_5TeV_03_8          = 0.993;  // from PbPb@5TeV A.N :
-  const double Fpp_5TeV_03_12         = 0.993;  // from PbPb@5TeV A.N :
+  const double Fpp_5TeV_03_12         = 0.979;  // from PbPb@5TeV A.N :
   const double Fpp_5TeV_03_2          = 0.969;  // from PbPb@5TeV A.N :
   const double Fpp_5TeV_03_1          = 0.919;  // from PbPb@5TeV A.N :
-  const double Fpp_5TeV_03_1_y_25_325 = 0.888;  // from PbPb@5TeV A.N :
-  const double Fpp_5TeV_03_1_y_325_4  = 0.880;  // from PbPb@5TeV A.N :
+  const double Fpp_5TeV_03_1_y_25_325 = 0.934;  // from PbPb@5TeV A.N :
+  const double Fpp_5TeV_03_1_y_325_4  = 0.888;  // from PbPb@5TeV A.N :
   const double Fpp_5TeV_03_12_y_25_3  = 0.983;  // from PbPb@5TeV A.N :
   const double Fpp_5TeV_03_12_y_3_35  = 0.984;  // from PbPb@5TeV A.N :
   const double Fpp_5TeV_03_12_y_35_4  = 0.980;  // from PbPb@5TeV A.N :
@@ -74,9 +74,9 @@ void SystPtCut(const char* input="RAA.txt")
 
     printf("%s %.0f-%.0f  --  Raa_inc = %.3f -- Raa_inc_ptcut = %.3f \n",bin,a,b,value,value_ptcut);
 
-    corr       =  ( 1./ cutEff_2015 ) * ((Fpp_5TeV_03_1_y_325_4*value_ptcut -value)/value);
-    // corr       =  ( Fpp_5TeV_03_1_y_325_4 / (Fpp_5TeV_03_1_y_325_4 - 1 + cutEff_2015) ) * ((value_ptcut -value)/value);
-    corr_ptcut = ( ( 1 - cutEff_2015 ) / ( Fpp_5TeV_03_1_y_325_4 * cutEff_2015 ) ) * ( ( Fpp_5TeV_03_1_y_325_4*value_ptcut - value ) / value_ptcut );
+    corr       =  ( 1./ cutEff_2015 ) * ((Fpp_5TeV_03_12_y_35_4*value_ptcut -value)/value);
+    // corr       =  ( Fpp_5TeV_03_12_y_35_4 / (Fpp_5TeV_03_12_y_35_4 - 1 + cutEff_2015) ) * ((value_ptcut -value)/value);
+    corr_ptcut = ( ( 1 - cutEff_2015 ) / ( Fpp_5TeV_03_12_y_35_4 * cutEff_2015 ) ) * ( ( Fpp_5TeV_03_12_y_35_4*value_ptcut - value ) / value_ptcut );
 
     printf("  -> Correction of Raa_inc       : %.1f %% (cut efficiency : %.02f %%)\n",corr*100,cutEff_2015);
     printf("  -> Correction of Raa_inc_ptcut : %.1f %% (cut efficiency : %.02f %%)\n\n",corr_ptcut*100,cutEff_2015);

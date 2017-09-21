@@ -1,0 +1,20 @@
+ ================================================================
+                       ComputePPCrossSection
+ ================================================================
+
+   -------- cross section for bin PT_BENJ_00.30_01.00 = 0.8529 +/- 0.0333 (stat. 3.9 %) +/- 0.0439 (uncorr. 5.2 %) +/- 0.0184 (corr. 2.2 %)  (#Delta y = 1.500000)  (#Delta pt = 0.700000) --------
+
+     -------- cross section for bin PT_INT_VAR1_00.00_02.00 = 0.9161 +/- 0.0202 (stat. 2.2 %) +/- 0.0418 (uncorr. 4.6 %) +/- 0.0198 (corr. 2.2 %)  (#Delta y = 1.500000)  (#Delta pt = 2.000000) --------
+  --------  sum of all systematics = 0.0462 (corrFull. 5.0 %)  --------
+
+    -------- cross section for bin PT_INT_VAR2_00.30_02.00 = 1.0439 +/- 0.0232 (stat. 2.2 %) +/- 0.0477 (uncorr. 4.6 %) +/- 0.0226 (corr. 2.2 %)  (#Delta y = 1.500000)  (#Delta pt = 1.700000) --------
+  --------  sum of all systematics = 0.0528 (corrFull. 5.1 %)  --------
+
+   -------- cross section for bin PT_INT_VAR3_02.00_05.00 = 0.5527 +/- 0.0122 (stat. 2.2 %) +/- 0.0250 (uncorr. 4.5 %) +/- 0.0119 (corr. 2.2 %)  (#Delta y = 1.500000)  (#Delta pt = 3.000000) --------
+  --------  sum of all systematics = 0.0277 (corrFull. 5.0 %)  --------
+
+   -------- cross section for bin PT_INT_VAR4_05.00_08.00 = 0.0732 +/- 0.0034 (stat. 4.7 %) +/- 0.0028 (uncorr. 3.9 %) +/- 0.0016 (corr. 2.2 %)  (#Delta y = 1.500000)  (#Delta pt = 3.000000) --------
+  --------  sum of all systematics = 0.0033 (corrFull. 4.5 %)  --------
+
+    -------- cross section for bin PT_INT_VAR5_08.00_12.00 = 0.0080 +/- 0.0008 (stat. 10.4 %) +/- 0.0003 (uncorr. 3.6 %) +/- 0.0002 (corr. 2.2 %)  (#Delta y = 1.500000)  (#Delta pt = 4.000000) --------
+  --------  sum of all systematics = 0.0003 (corrFull. 4.2 %)  --------

@@ -60,7 +60,7 @@ namespace
     {2,2,2,1,1,0.7,0.3,0.2,0.1,0.1,0.1,0.1,0.1}   // y 3.5-4
   };
 
-  // taking the no polarisation value
+  // taking the non polarised value
 
   const Double_t cc_promp_7TeV[3][14]      =
   {
@@ -100,7 +100,7 @@ const int nRaaprompt = 4 ;
 Double_t Raanpromt[nRaaprompt] = {0,0.5,1,1.2} ;
 
 // Scaling factor applyed to the nprompt/prompt ratio for LHC_b_7TeV
-// For intance, if we look at 5TeV data : scaleFactor = Fb5TeV/Fb7TeV
+// For instance, if we look at 5TeV data : scaleFactor = Fb5TeV/Fb7TeV
 
 double scaleFactor = Fb5TeV/Fb7TeV;
 double scaleFactor2 = Fb276TeV/Fb7TeV;
@@ -129,11 +129,9 @@ void PrompNoPromptRAA(const char* input="RAA.txt")
   std::cout << std::endl;
   while (in.getline(line,1023,'\n'))
   {
-
     if (strstr(line, "//")) continue;
 
     sscanf(line,"%s %e-%e %e %e ",bin,&a,&b,&value,&value2);
-
     // printf("%s %.2e-%.2e %.2e %.2e \n",bin,a,b,value,value2);
 
     x.push_back(a);
@@ -167,11 +165,15 @@ void PrompNoPromptRAA(const char* input="RAA.txt")
   {
       fb[i]=0.;
       fb2[i]=0.;
-      if(sbin.Contains("cent")&& y[i]!=0.) fb[i] = Getfb(scaleFactor);
-      else if( (sbin.Contains("pt") || sbin.Contains("y")) && y[i]!=0.  ) fb[i] = Getfb_pty(&sbin,x[i],x[i+1],scaleFactor);
+      if(sbin.Contains("cent")&& y[i]!=0.)
+        fb[i] = Getfb(scaleFactor);
+      else if( (sbin.Contains("pt") || sbin.Contains("y")) && y[i]!=0.  )
+        fb[i] = Getfb_pty(&sbin,x[i],x[i+1],scaleFactor);
 
-      if(sbin.Contains("cent") && y2[i]!=0.) fb2[i] = Getfb(scaleFactor2);
-      else if( (sbin.Contains("pt") || sbin.Contains("y")) && y2[i]!=0. ) fb2[i] = Getfb_pty(&sbin,x[i],x[i+1],scaleFactor2);
+      if(sbin.Contains("cent") && y2[i]!=0.)
+        fb2[i] = Getfb(scaleFactor2);
+      else if( (sbin.Contains("pt") || sbin.Contains("y")) && y2[i]!=0. )
+        fb2[i] = Getfb_pty(&sbin,x[i],x[i+1],scaleFactor2);
   }
 
   // Compute Raapro
@@ -262,9 +264,13 @@ Double_t Getfb(double scalerF)
     for (int j = ybinrange[0]; j < ybinrange[1] + 1; ++j)
     {
       cc_prompt_tot    += cc_promp_7TeV[j][i];
+      printf("cc_promp_7TeV[%d][%d] = %.1f\n",j,i,cc_promp_7TeV[j][i] );
       cc_nonprompt_tot += cc_npromp_7TeV[j][i];
+      printf("cc_npromp_7TeV[%d][%d] = %.1f\n\n",j,i,cc_npromp_7TeV[j][i] );
     }
   }
+  printf(" --- cc_prompt_tot = %.4f\n",cc_prompt_tot );
+  printf(" --- cc_nonprompt_tot = %.4f\n\n\n",cc_nonprompt_tot );
 
   fb = scalerF*(cc_nonprompt_tot/cc_prompt_tot);
   return fb;
@@ -301,11 +307,15 @@ Double_t Getfb_pty(TString* bin,double xmin, double xmax,double scalerF )
       for (int k = 0; k < dx; ++k)
       {
         cc_prompt_tot    += cc_promp_7TeV[j][x1+k];
+        printf("cc_promp_7TeV[%d][%d] = %.1f\n",j,x1+k,cc_promp_7TeV[j][x1+k] );
         cc_nonprompt_tot += cc_npromp_7TeV[j][x1+k];
+        printf("cc_npromp_7TeV[%d][%d] = %.1f\n\n",j,x1+k,cc_npromp_7TeV[j][x1+k] );
       }
     }
+    printf("--- cc_prompt_tot = %.4f\n",cc_prompt_tot);
+    printf("---- cc_nonprompt_tot = %.4f\n\n",cc_nonprompt_tot);
     fb = scalerF*(cc_nonprompt_tot/cc_prompt_tot);
-    // printf("fb = %f \n", fb);
+    printf("fb = %f \n", fb);
     return fb;
   }
   else if(bin->Contains("y"))
@@ -321,6 +331,12 @@ Double_t Getfb_pty(TString* bin,double xmin, double xmax,double scalerF )
     if(xmax > 3.5 ) y2 = 3;
 
     int dy   = y2-y1;
+    //
+    // printf("xmin = %f\n",xmin );
+    // printf("xmax = %f\n",xmax );
+    // printf("y1 = %d\n",y1 );
+    // printf("y2 = %d\n",y2 );
+    // printf("dy = %d\n",dy );
 
     // protection
     if(xbinrange[0] < 0 ||  xbinrange[1] > 13 ){
@@ -334,15 +350,16 @@ Double_t Getfb_pty(TString* bin,double xmin, double xmax,double scalerF )
       for (int k = 0; k < dy; ++k)
       {
         cc_prompt_tot    += cc_promp_7TeV[y1+k][j];
+        printf("cc_promp_7TeV[%d][%d] = %.1f\n",y1+k,j,cc_promp_7TeV[y1+k][j] );
         cc_nonprompt_tot += cc_npromp_7TeV[y1+k][j];
+        printf("cc_npromp_7TeV[%d][%d] = %.1f\n\n",y1+k,j,cc_npromp_7TeV[y1+k][j] );
       }
     }
+    printf("--- cc_prompt_tot = %.4f\n",cc_prompt_tot);
+    printf("---- cc_nonprompt_tot = %.4f\n\n",cc_nonprompt_tot);
     fb = scalerF*(cc_nonprompt_tot/cc_prompt_tot);
     printf("fb = %f \n", fb);
     return fb;
   }
 
 }
-
-
-

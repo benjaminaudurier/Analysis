@@ -6,7 +6,7 @@
 
 # printenv
 
-cd $HOME/alice/sw/BUILD/AliPhysics-latest-mumu/AliPhysics/$1
+cd $HOME/alice/sw/BUILD/AliPhysics-latest/AliPhysics/$1
 
 if [ $# -eq 2 ]; then
   cd $2

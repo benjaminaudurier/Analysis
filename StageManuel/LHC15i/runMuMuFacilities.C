@@ -39,7 +39,7 @@ void runMuMuFacilities(TString smode = "local", TString inputFileName = "AliAOD.
   fileList.Add(new TObjString( "runMuMuFacilities.C" ));
   fileList.Add(new TObjString( "AddTaskMuMu.C" ));
   fileList.Add(new TObjString( "MeanTrkVsVertex.root" ));
-  // fileList.Add(new TObjString( "PWGmuon.par" ));
+  fileList.Add(new TObjString( "PWGmuon.par" ));
 
   // Automatically generate parfile
   TObjString* Obj=0x0;
@@ -107,4 +107,3 @@ void CreateAndCopyParFile(TString parfile)
   printf("Executing: %s\n", command.Data());
   gSystem->Exec(command.Data());
 }
-

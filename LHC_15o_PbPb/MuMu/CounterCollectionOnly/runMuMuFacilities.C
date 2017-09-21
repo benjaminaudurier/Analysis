@@ -7,26 +7,26 @@
   // --- general analysis setup ---
   TString rootVersion       = "";
   TString alirootVersion    = "";
-  TString aliphysicsVersion = "vAN-20161126-1";
+  TString aliphysicsVersion = "vAN-20170424-1";
   TString extraLibs         ="";
   TString extraIncs         ="include";
   TString extraTasks        ="";
-  TString extraPkgs         ="PWGmuon";
+  TString extraPkgs         ="";
   TString dataType          ="AOD";
 
   // --- grid specific setup ---
-  TString dataDir           = "/alice/data/2015/LHC15o";
-  TString dataPattern       = "/muon_calo_pass1/AOD175/*/AliAOD.Muons.root";
-  TString runFormat         = "000%d";
-  TString outDir            = "Analysis/LHC15o/TAA_syst";
-  TString analysisMacroName = "MuMuTaa";
-  Int_t ttl                 = 54000;
-  Int_t maxFilesPerJob      = 30;
+  TString dataDir           = "/alice/cern.ch/user/p/ppillot/Sim/LHC15n/JPsiTune1/VtxShift/results";
+  TString dataPattern       = "*AliAOD.Muons.root";
+  TString runFormat         = "%d";
+  TString outDir            = "Sim/LHC15n/JPsiTune1/VtxShift/AccEff";
+  TString analysisMacroName = "TrgCount";
+  Int_t ttl                 = 30000;
+  Int_t maxFilesPerJob      = 20;
   Int_t maxMergeFiles       = 10;
-  Int_t maxMergeStages      = 5;
+  Int_t maxMergeStages      = 2;
 
   // --- saf3 specific setup ---
-  Bool_t splitDataset = kFALSE;
+  Bool_t splitDataset = kTRUE;
 
 //______________________________________________________________________________
 void runMuMuFacilities(TString smode = "local", TString inputFileName = "AliAOD.Muons.root", Bool_t isMC = kFALSE)
@@ -37,7 +37,7 @@ void runMuMuFacilities(TString smode = "local", TString inputFileName = "AliAOD.
   TList fileList; fileList.SetOwner();
   fileList.Add(new TObjString( "runMuMuFacilities.C" ));
   fileList.Add(new TObjString( "AddTaskMuMu.C" ));
-  fileList.Add(new TObjString( "PWGmuon.par" ));
+  // fileList.Add(new TObjString( "PWGmuon.par" ));
 
   // Automatically generate parfile
   TObjString* Obj=0x0;
