@@ -124,16 +124,43 @@ AliAnalysisTaskMuMu* AddTaskMuMu(const char* outputname,
   accxeffAnalysis->SetOriginYFunc(oldYFormula,oldYParam);
 
   // Add weight functions to task
-  TObjArray* functionArray = new TObjArray();
-  functionArray->Add(new TObjString("V0M_00.00_10.00&[0]*x/TMath::Power(1.+TMath::Power(x/[1],[2]),[3])&0.3622:2.6572:2.6875:2.3173&[0]*[0]*TMath::Exp(-0.5*((x-[1])/[2])**2)&1.0000:0.0000:2.2721"));
-  functionArray->Add(new TObjString("V0M_10.00_20.00&[0]*x/TMath::Power(1.+TMath::Power(x/[1],[2]),[3])&0.3421:2.6832:2.6631:2.2200&[0]*[0]*TMath::Exp(-0.5*((x-[1])/[2])**2)&1.0000:0.0000:2.2835"));
-  functionArray->Add(new TObjString("V0M_20.00_30.00&[0]*x/TMath::Power(1.+TMath::Power(x/[1],[2]),[3])&0.3152:2.6309:2.8670:1.9650&[0]*[0]*TMath::Exp(-0.5*((x-[1])/[2])**2)&1.0000:0.0000:2.1410"));
-  functionArray->Add(new TObjString("V0M_30.00_40.00&[0]*x/TMath::Power(1.+TMath::Power(x/[1],[2]),[3])&0.3115:3.1424:2.3526:2.6296&[0]*[0]*TMath::Exp(-0.5*((x-[1])/[2])**2)&1.0000:0.0000:2.4098"));
-  functionArray->Add(new TObjString("V0M_40.00_50.00&[0]*x/TMath::Power(1.+TMath::Power(x/[1],[2]),[3])&0.2833:2.6862:2.9693:1.8001&[0]*[0]*TMath::Exp(-0.5*((x-[1])/[2])**2)&1.0000:0.0000:2.2950"));
-  functionArray->Add(new TObjString("V0M_50.00_60.00&[0]*x/TMath::Power(1.+TMath::Power(x/[1],[2]),[3])&0.3169:3.0985:2.2779:2.6041&[0]*[0]*TMath::Exp(-0.5*((x-[1])/[2])**2)&1.0000:0.0000:2.2457"));
-  functionArray->Add(new TObjString("V0M_60.00_90.00&[0]*x/TMath::Power(1.+TMath::Power(x/[1],[2]),[3])&0.3045:3.1222:2.3487:2.5652&[0]*[0]*TMath::Exp(-0.5*((x-[1])/[2])**2)&1.0000:0.0000:2.6233"));
+  // TObjArray* functionArray_pt = new TObjArray();
+  //
+  // functionArray_pt->Add(new TF1("V0M_00.00_10.00","[0]*x/TMath::Power(1.+TMath::Power(x/[1],[2]),[3])",0.3622,2.6572,2.6875,2.3173));
+  // functionArray_pt->Add(new TF1("V0M_10.00_20.00","[0]*x/TMath::Power(1.+TMath::Power(x/[1],[2]),[3])",0.3421,2.6832,2.6631,2.2200));
+  // functionArray_pt->Add(new TF1("V0M_20.00_30.00","[0]*x/TMath::Power(1.+TMath::Power(x/[1],[2]),[3])",0.3152,2.6309,2.8670,1.9650));
+  // functionArray_pt->Add(new TF1("V0M_30.00_40.00","[0]*x/TMath::Power(1.+TMath::Power(x/[1],[2]),[3])",0.3115,3.1424,2.3526,2.6296));
+  // functionArray_pt->Add(new TF1("V0M_40.00_50.00","[0]*x/TMath::Power(1.+TMath::Power(x/[1],[2]),[3])",0.2833,2.6862,2.9693,1.8001));
+  // functionArray_pt->Add(new TF1("V0M_50.00_60.00","[0]*x/TMath::Power(1.+TMath::Power(x/[1],[2]),[3])",0.3169,3.0985,2.2779,2.6041));
+  // functionArray_pt->Add(new TF1("V0M_60.00_90.00","[0]*x/TMath::Power(1.+TMath::Power(x/[1],[2]),[3])",0.3045,3.1222,2.3487,2.5652));
 
-  accxeffAnalysis->SetFunctionList(functionArray);
+  accxeffAnalysis->AddWeighFunction("pt","V0M_00.00_10.00","[0]*x/TMath::Power(1.+TMath::Power(x/[1],[2]),[3])",new TString("0.3622,2.6572,2.6875,2.3173"));
+  accxeffAnalysis->AddWeighFunction("pt","V0M_10.00_20.00","[0]*x/TMath::Power(1.+TMath::Power(x/[1],[2]),[3])",new TString("0.3421,2.6832,2.6631,2.2200"));
+  accxeffAnalysis->AddWeighFunction("pt","V0M_20.00_30.00","[0]*x/TMath::Power(1.+TMath::Power(x/[1],[2]),[3])",new TString("0.3152,2.6309,2.8670,1.9650"));
+  accxeffAnalysis->AddWeighFunction("pt","V0M_30.00_40.00","[0]*x/TMath::Power(1.+TMath::Power(x/[1],[2]),[3])",new TString("0.3115,3.1424,2.3526,2.6296"));
+  accxeffAnalysis->AddWeighFunction("pt","V0M_40.00_50.00","[0]*x/TMath::Power(1.+TMath::Power(x/[1],[2]),[3])",new TString("0.2833,2.6862,2.9693,1.8001"));
+  accxeffAnalysis->AddWeighFunction("pt","V0M_50.00_60.00","[0]*x/TMath::Power(1.+TMath::Power(x/[1],[2]),[3])",new TString("0.3169,3.0985,2.2779,2.6041"));
+  accxeffAnalysis->AddWeighFunction("pt","V0M_60.00_90.00","[0]*x/TMath::Power(1.+TMath::Power(x/[1],[2]),[3])",new TString("0.3045,3.1222,2.3487,2.5652"));
+
+  // TObjArray* functionArray_y = new TObjArray();
+  //
+  // functionArray_y->Add(new TF1("V0M_00.00_10.00","[0]*[0]*TMath::Exp(-0.5*((x-[1])/[2])**2)",1.0000,0.0000,2.2721));
+  // functionArray_y->Add(new TF1("V0M_10.00_20.00","[0]*[0]*TMath::Exp(-0.5*((x-[1])/[2])**2)",1.0000,0.0000,2.2835));
+  // functionArray_y->Add(new TF1("V0M_20.00_30.00","[0]*[0]*TMath::Exp(-0.5*((x-[1])/[2])**2)",1.0000,0.0000,2.1410));
+  // functionArray_y->Add(new TF1("V0M_30.00_40.00","[0]*[0]*TMath::Exp(-0.5*((x-[1])/[2])**2)",1.0000,0.0000,2.4098));
+  // functionArray_y->Add(new TF1("V0M_40.00_50.00","[0]*[0]*TMath::Exp(-0.5*((x-[1])/[2])**2)",1.0000,0.0000,2.2950));
+  // functionArray_y->Add(new TF1("V0M_50.00_60.00","[0]*[0]*TMath::Exp(-0.5*((x-[1])/[2])**2)",1.0000,0.0000,2.2457));
+  // functionArray_y->Add(new TF1("V0M_60.00_90.00","[0]*[0]*TMath::Exp(-0.5*((x-[1])/[2])**2)",1.0000,0.0000,2.6233));
+  //
+
+  accxeffAnalysis->AddWeighFunction("y","V0M_00.00_10.00","[0]*[0]*TMath::Exp(-0.5*((x-[1])/[2])**2)",new TString("1.0000,0.0000,2.2721"));
+  accxeffAnalysis->AddWeighFunction("y","V0M_10.00_20.00","[0]*[0]*TMath::Exp(-0.5*((x-[1])/[2])**2)",new TString("1.0000,0.0000,2.2835"));
+  accxeffAnalysis->AddWeighFunction("y","V0M_20.00_30.00","[0]*[0]*TMath::Exp(-0.5*((x-[1])/[2])**2)",new TString("1.0000,0.0000,2.1410"));
+  accxeffAnalysis->AddWeighFunction("y","V0M_30.00_40.00","[0]*[0]*TMath::Exp(-0.5*((x-[1])/[2])**2)",new TString("1.0000,0.0000,2.4098"));
+  accxeffAnalysis->AddWeighFunction("y","V0M_40.00_50.00","[0]*[0]*TMath::Exp(-0.5*((x-[1])/[2])**2)",new TString("1.0000,0.0000,2.2950"));
+  accxeffAnalysis->AddWeighFunction("y","V0M_50.00_60.00","[0]*[0]*TMath::Exp(-0.5*((x-[1])/[2])**2)",new TString("1.0000,0.0000,2.2457"));
+  accxeffAnalysis->AddWeighFunction("y","V0M_60.00_90.00","[0]*[0]*TMath::Exp(-0.5*((x-[1])/[2])**2)",new TString("1.0000,0.0000,2.6233"));
+
 
   task->AdoptSubAnalysis(accxeffAnalysis);
 

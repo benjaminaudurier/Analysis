@@ -7,7 +7,7 @@
   // --- general analysis setup ---
   TString rootVersion       = "";
   TString alirootVersion    = "";
-  TString aliphysicsVersion = "vAN-20170801-1";
+  TString aliphysicsVersion = "vAN-20170915-1";
   TString extraLibs         ="";
   TString extraIncs         ="include";
   TString extraTasks        ="";

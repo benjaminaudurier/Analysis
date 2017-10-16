@@ -25,7 +25,9 @@ double dTaa_276TeV 	=  0.21;
 void LoadStyle();
 void NormalizeCrossSection(int nbin, Double_t * x_axis_5TeV, Double_t * x_axis_5TeV_syst,Double_t * x_axis_276TeV, Double_t * x_axis_276TeV_syst, Bool_t print );
 void PlotCCBarCrossSection();
+// void GetWeightRaa(Double_t* RAA_w_200GeV_mid,Double_t* RAA_w_200GeV_syst_mid);
 
+//______________________________________________
 void PlotRaaVsCCbarDensity(Bool_t sigmaccbar_only = kTRUE, Bool_t print = kTRUE)
 {
 
@@ -45,7 +47,6 @@ void PlotRaaVsCCbarDensity(Bool_t sigmaccbar_only = kTRUE, Bool_t print = kTRUE)
 	for (size_t i = 0; i < npoints; i++) x_axis_276TeV_syst[i] = 0.5e+07;
 
 	PlotCCBarCrossSection();
-	return;
 
 
 	// // Correctly init error
@@ -59,6 +60,25 @@ void PlotRaaVsCCbarDensity(Bool_t sigmaccbar_only = kTRUE, Bool_t print = kTRUE)
 	// }
 
 	if (!sigmaccbar_only) NormalizeCrossSection(npoints,x_axis_5TeV,x_axis_5TeV_syst,x_axis_276TeV,x_axis_276TeV_syst,print);
+
+	Double_t RAA_w_200GeV_mid[1] = {0.};
+	Double_t RAA_w_200GeV_syst_mid[1] ={0.};
+
+	double sumw 		= 0.;
+	double sum 			= 0.;
+	double sumerr2 	= 0.;
+	double errsq 		= 0.;
+	for (int i = 0; i < 8; i++)
+	{
+		sum 		= sum + Raa_200_GeV_mid[i]*Ncoll_200_GeV[i];
+		errsq   = Raa_stat_200_GeV_mid[i]*Raa_stat_200_GeV_mid[i] + Raa_syst_200_GeV_mid[i]*Raa_syst_200_GeV_mid[i];
+		sumerr2 = sumerr2 + Ncoll_200_GeV[i]*Ncoll_200_GeV[i]*errsq;
+		sumw 		= sumw + Ncoll_200_GeV[i];
+	}
+	RAA_w_200GeV_mid[0] 			=  sum/sumw;
+	RAA_w_200GeV_syst_mid[0] 	=  sqrt(sumerr2)/sumw;
+
+
 
 	// Data points and error stat.
 	TGraphAsymmErrors *gData_5_stat = new TGraphAsymmErrors(npoints,x_axis_5TeV,Raa_5TeV,x_axis_5TeV_syst,x_axis_5TeV_syst,Raa_stat_5TeV,Raa_stat_5TeV);
@@ -103,6 +123,13 @@ void PlotRaaVsCCbarDensity(Bool_t sigmaccbar_only = kTRUE, Bool_t print = kTRUE)
 	gData_276_mid_syst->SetMarkerSize(0.5);
 	gData_276_mid_syst->SetFillStyle(0);
 
+	TGraphAsymmErrors *gData_200GeV_mid_full = new TGraphAsymmErrors(1,sigccbar_200GeV_mid,RAA_w_200GeV_mid,x_axis_276TeV_syst,x_axis_276TeV_syst,RAA_w_200GeV_syst_mid,RAA_w_200GeV_syst_mid);
+	gData_200GeV_mid_full->SetMarkerStyle(20);
+	gData_200GeV_mid_full->SetMarkerColor(1);
+	gData_200GeV_mid_full->SetLineColor(1);
+	gData_200GeV_mid_full->SetMarkerSize(0.5);
+	gData_200GeV_mid_full->SetFillStyle(0);
+
 	// Config. Legend
 	TLegend*leg0 = new TLegend(0.12,0.55,.4,.8,NULL,"brNDC");
 	leg0->SetBorderSize(0);
@@ -115,8 +142,10 @@ void PlotRaaVsCCbarDensity(Bool_t sigmaccbar_only = kTRUE, Bool_t print = kTRUE)
 	leg0->AddEntry(gData_5_syst,"syst. uncert. for R_{AA} (global 3.9%) ","f");
 	leg0->AddEntry(gData_276_stat," PbPb@2.76TeV 0-90% #it{p}_{T} < 8 GeV/#it{c} ","PE");
 	leg0->AddEntry(gData_276_syst,"syst. uncert. for R_{AA} (global 8%)","f");
-	// leg0->AddEntry(gData_276_mid_stat," PbPb@2.76TeV 0-90% #it{p}_{T} < 8 GeV/#it{c}; y < |0.8| ","PE");
-	// leg0->AddEntry(gData_276_mid_syst,"syst. uncert. for R_{AA}","f");
+	leg0->AddEntry(gData_276_mid_stat," PbPb@2.76TeV 0-90% #it{p}_{T} < 8 GeV/#it{c}; y < |0.8| ","PE");
+	leg0->AddEntry(gData_276_mid_syst,"syst. uncert. for R_{AA}","f");
+	leg0->AddEntry(gData_200GeV_mid_full," AuAu@0.2TeV 0-92% #it{p}_{T} < 7 GeV/#it{c}; y < |0.35| (global 12%) ","f");
+
 
 
 
@@ -154,10 +183,10 @@ void PlotRaaVsCCbarDensity(Bool_t sigmaccbar_only = kTRUE, Bool_t print = kTRUE)
 	gData_5_syst->Draw("E2same");
 	gData_276_stat->Draw("PEsame");
 	gData_276_syst->Draw("E2Psame");
-	// gData_276_mid_stat->Draw("PEsame");
-	// gData_276_mid_syst->Draw("E2Psame");
+	gData_276_mid_stat->Draw("PEsame");
+	gData_276_mid_syst->Draw("E2Psame");
+	gData_200GeV_mid_full->Draw("E2Psame");
 	leg0->Draw("same");
-
 
 }
 
@@ -236,6 +265,12 @@ void PlotCCBarCrossSection()
 
 }
 
+
+// //______________________________________________
+// void GetWeightRaa(Double_t* RAA_w_200GeV_mid,Double_t* RAA_w_200GeV_syst_mid);
+// {
+//
+// }
 
 //______________________________________________
 void LoadStyle(){

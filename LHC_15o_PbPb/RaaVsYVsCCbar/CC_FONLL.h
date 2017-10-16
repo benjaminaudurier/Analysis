@@ -79,6 +79,25 @@
 // # cross section is ds/dy (pb)
 // # y       central      min       max       min_sc     max_sc     min_mass   max_mass
 //    0.0000 3.2370e+08 1.1754e+08 7.5051e+08 1.2880e+08 7.4260e+08 2.5650e+08 4.0550e+08
+//
+//
+//    # Job started on: Tue Oct  3 16:56:48 CEST 2017 .
+// # FONLL heavy quark hadroproduction cross section, calculated on Tue Oct  3 16:56:50 CEST 2017
+// # FONLL version and perturbative order: ## FONLL v1.3.2 fonll [ds/dpt^2dy (pb/GeV^2)]
+// # quark = charm
+// # final state = quark
+// # ebeam1 = 100, ebeam2 = 100
+// # PDF set = CTEQ6.6
+// # ptmin = 0
+// # ptmax = 7
+// # ymin  = -0.35
+// # ymax  = 0.35
+// # Uncertainties from scales, masses combined quadratically
+// # cross section is ds/dy (pb)
+// # y       central      min       max       min_sc     max_sc     min_mass   max_mass
+//   -0.3500 5.8550e+07 2.7251e+07 1.4629e+08 3.3910e+07 1.4110e+08 3.9250e+07 8.8280e+07
+//    0.0000 5.9600e+07 2.7798e+07 1.4865e+08 3.4540e+07 1.4340e+08 4.0020e+07 8.9710e+07
+//    0.3500 5.8550e+07 2.7251e+07 1.4629e+08 3.3910e+07 1.4110e+08 3.9250e+07 8.8280e+07
 
 
 
@@ -96,5 +115,8 @@
 	//                                         -----y < |0.8|----
 
 	Double_t sigccbar_276TeV_mid[1] = {3.2370e+08};
+	//                                         -----y < |0.8|----
+
+	Double_t sigccbar_200GeV_mid[1] = {5.9600e+07};
 
 #endif
